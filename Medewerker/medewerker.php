@@ -14,7 +14,7 @@ $result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefo
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cliënten</title>
+    <title>Medewerker/title>
 </head>
 
 <body>
