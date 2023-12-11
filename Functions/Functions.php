@@ -1,7 +1,7 @@
 <?php
 
 function convertNumToBool($numbers, $index=0): ?bool {
-    if ($index <= mb_strlen($numbers)) {
+    if ($index < mb_strlen($numbers)) {
         $num = str_split($numbers)[$index];
 
         if ($num == 1) {
@@ -23,7 +23,6 @@ function convertNumToBoolArray($numbers): array {
             $boolArr[] = true;
             continue;
         }
-
         $boolArr[] = false;
     }
 
