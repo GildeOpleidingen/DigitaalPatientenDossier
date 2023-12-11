@@ -28,3 +28,11 @@ function convertNumToBoolArray($numbers): array {
 
     return $boolArr;
 }
+
+function convertBoolArrayToString($boolArr): string {
+    $numbers = '';
+    foreach ($boolArr as $bool) {
+        $numbers .= $bool ? '1' : '0';
+    }
+    return $numbers;
+}
