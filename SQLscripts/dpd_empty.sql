@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 04 dec 2023 om 16:32
+-- Gegenereerd op: 11 dec 2023 om 11:08
 -- Serverversie: 10.4.22-MariaDB
 -- PHP-versie: 8.0.13
 
@@ -36,12 +36,15 @@ CREATE TABLE `client` (
   `woonplaats` varchar(35) NOT NULL,
   `telefoonnummer` varchar(12) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
+  `geboortedatum` date NOT NULL,
   `reanimatiestatus` tinyint(1) NOT NULL,
   `nationaliteit` varchar(25) NOT NULL,
   `afdeling` varchar(10) DEFAULT NULL,
   `burgelijkestaat` varchar(15) DEFAULT NULL,
   `foto` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 
 -- --------------------------------------------------------
 
@@ -75,7 +78,7 @@ CREATE TABLE `medewerker` (
   `wachtwoord` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
+
 
 --
 -- Tabelstructuur voor tabel `medischoverzicht`
@@ -245,7 +248,7 @@ CREATE TABLE `patroon04activiteiten` (
   `hobbys_bestedingstijd` tinytext DEFAULT NULL,
   `activiteiten_weggevallen` tinyint(1) NOT NULL,
   `activiteiten_weggevallen_welke` tinytext DEFAULT NULL,
-  `observaties` varchar(11) NOT NULL
+  `observatie` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -269,7 +272,7 @@ CREATE TABLE `patroon05slaaprust` (
   `dromen_nachtmerries` tinyint(1) NOT NULL,
   `rustperiodes_overdag` tinyint(1) NOT NULL,
   `gemakkelijk_ontspannen` tinyint(1) NOT NULL,
-  `observaties` varchar(1) NOT NULL
+  `observatie` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -333,8 +336,7 @@ CREATE TABLE `patroon07zelfbeleving` (
   `gevoel_momenteel` varchar(3) NOT NULL,
   `lichamelijke_energie` varchar(3) NOT NULL,
   `zelfverzorging` tinytext DEFAULT NULL,
-  `observaties` varchar(11) NOT NULL,
-  `sdf` int(11) NOT NULL
+  `observatie` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -760,7 +762,7 @@ ALTER TABLE `zorgplan`
 -- AUTO_INCREMENT voor een tabel `client`
 --
 ALTER TABLE `client`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT voor een tabel `clientverhaal`
@@ -772,7 +774,7 @@ ALTER TABLE `clientverhaal`
 -- AUTO_INCREMENT voor een tabel `medewerker`
 --
 ALTER TABLE `medewerker`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT voor een tabel `medischoverzicht`
@@ -892,7 +894,7 @@ ALTER TABLE `samenstelling`
 -- AUTO_INCREMENT voor een tabel `verzorgerregel`
 --
 ALTER TABLE `verzorgerregel`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT voor een tabel `vragenlijst`
