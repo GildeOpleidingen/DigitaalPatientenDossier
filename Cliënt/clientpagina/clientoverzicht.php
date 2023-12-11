@@ -1,18 +1,8 @@
 <?php 
-session_start();
-
-$dbhost = "localhost";
-$dbuser = "root";
-$dbpass = "";
-$dbname = "dpd";
-
-
-$conn=mysqli_connect($dbhost,$dbuser,$dbpass,"$dbname");
-  if(!$conn){
-      die('Could not Connect MySql Server:' .mysqli_connect_error());
-    }
-
-    $result = mysqli_query($conn, "SELECT id, naam, woonplaats, geboortedatum FROM client;");
+include '../../Database/DatabaseConnection.php';
+$result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;");
+  
+    
 
 ?>
 
