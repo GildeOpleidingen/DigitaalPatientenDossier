@@ -4,10 +4,14 @@ include './Database/DatabaseConnection.php';
 
 //createNewMedewerker("Test", "11", imgData, "test@gmail.com", "310600000000", "test");
 function createNewMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwoord): bool {
-    $result = DatabaseConnection::getConn()->query("SELECT * FROM `medewerker` WHERE naam='${naam}'")->fetch_all();
+    $conn = DatabaseConnection::getConn();
+    $conn->query("UPDATE `medewerker` SET `naam`='${naam}',`klas`='${klas}',`foto`='${foto}',`email`='${email}',`telefoonnummer`='${telefoonnummer}',`wachtwoord`='${wachtwoord}' WHERE `naam`='${naam}';");
 
-    if (sizeof($result) == 0) {
-        DatabaseConnection::getConn()->query("INSERT INTO `medewerker`(`naam`, `klas`, `foto`, `email`, `telefoonnummer`, `wachtwoord`) VALUES ('${naam}','${klas}','${foto}','${email}','${telefoonnummer}','${wachtwoord}')");
+    if ($conn->affected_rows == 1)
+        return true;
+
+    if ($conn->affected_rows < 0) {
+        $conn->query("INSERT INTO `medewerker`(`naam`, `klas`, `foto`, `email`, `telefoonnummer`, `wachtwoord`) VALUES ('${naam}','${klas}','${foto}','${email}','${telefoonnummer}','${wachtwoord}')");
         return true;
     }
 
