@@ -38,9 +38,26 @@
 }
 
 .cpr{
-    color: white;
+    height: 60px;
     padding: 20px;
-    background-color: green;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.cpr-btn{
+    color: white;
+    cursor: pointer;
+    border: none;
+    background-color: #17C542;
+}
+
+.cpr div{
+    height: 40px;
+}
+
+.cpr img{
+    height: 40px;
 }
 
 ul{

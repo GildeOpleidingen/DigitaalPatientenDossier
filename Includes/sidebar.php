@@ -16,9 +16,9 @@
                         <p id="birth">00-00-0000 (00 Jaar)</p>
                     </div>
                 </div>
-                    <div class="cpr">
-                        <p>Wel reanimeren</p>
-                    </div>
+                    <button class="cpr-btn"><div class="cpr">
+                        <div><img src="Images\wel_reanimeren.png"></div><p>Wel reanimeren</p>
+                    </div></button> 
                 
                 <ul>
                     <a href="#">Overzicht</a>

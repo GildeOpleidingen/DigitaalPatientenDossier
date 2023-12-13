@@ -37,3 +37,7 @@ a{
     text-decoration: none;
     list-style-type: none;
 }
+
+a:hover{
+    color: #DD0069;
+}
