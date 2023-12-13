@@ -3,7 +3,7 @@
 include './Database/DatabaseConnection.php';
 
 //createNewMedewerker("Test", "11", imgData, "test@gmail.com", "310600000000", "test");
-function createNewMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwoord): bool {
+function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwoord): bool {
     $conn = DatabaseConnection::getConn();
     $conn->query("UPDATE `medewerker` SET `naam`='${naam}',`klas`='${klas}',`foto`='${foto}',`email`='${email}',`telefoonnummer`='${telefoonnummer}',`wachtwoord`='${wachtwoord}' WHERE `naam`='${naam}';");
 
