@@ -12,9 +12,9 @@
                 </div>
                 <div class="navbar">
                     <ul>
-                        <li><a href="#">Dashboard</a></li>
-                        <li><a href="#">Cliënt</a></li>
-                        <li><a href="#">Medewerker</a></li>
+                        <li><a href="./Dashboard/dashboard.php">Dashboard</a></li>
+                        <li><a href="./Cliënt/cliënt.php">Cliënt</a></li>
+                        <li><a href="./Medewerker/medewerker.php">Medewerker</a></li>
                     </ul>
                 </div>
             </header>
