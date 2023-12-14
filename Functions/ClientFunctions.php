@@ -1,6 +1,6 @@
 <?php
 
-include_once './Database/DatabaseConnection.php';
+include_once '../Database/DatabaseConnection.php';
 
 function updateClient($naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto): bool {
     $conn = DatabaseConnection::getConn();
@@ -19,4 +19,20 @@ function updateClient($naam, $geslacht, $adres, $postcode, $woonplaats, $telefoo
     }
 
     return false;
+}
+
+function getClientById($id) {
+    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE id = ?;");
+    $result->bind_param("i", $id);
+    $result->execute();
+
+    return $result->get_result()->fetch_array();
+}
+
+function getClientByName($name) {
+    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE naam = ?;");
+    $result->bind_param("s", $name);
+    $result->execute();
+
+    return $result->get_result()->fetch_array();
 }
