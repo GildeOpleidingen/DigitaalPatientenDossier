@@ -19,7 +19,7 @@ function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwo
 }
 
 function checkIfMedewerkerExistsById($id) {
-    $result = DatabaseConnection::getConn()->query("SELECT * FROM `medewerker` WHERE id='${id}';")->fetch_array();
+    $result = getMedewerkerById($id);
     if (sizeof($result) == 0) {
         return false;
     }
@@ -28,7 +28,7 @@ function checkIfMedewerkerExistsById($id) {
 }
 
 function checkIfMedewerkerExistsByName($name) {
-    $result = DatabaseConnection::getConn()->query("SELECT * FROM `medewerker` WHERE naam='${name}';")->fetch_array();
+    $result = getMedewerkerByName($name);
     if (sizeof($result) == 0) {
         return false;
     }
