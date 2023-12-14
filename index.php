@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($row['wachtwoord'] == $password) {
                 $_SESSION['id'] = $row['id'];
                 $_SESSION['naam'] = $row['naam'];
+                header("Location: homepage.php");
             } else {
                 $error = "Het wachtwoord is onjuist.";
             }
