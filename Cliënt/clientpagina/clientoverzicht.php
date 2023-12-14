@@ -9,13 +9,22 @@ $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geb
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cliënten</title>
+    <link rel="stylesheet" href="clientoverzicht.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+<div  class="main">
+    <?php
+        include '../../Includes/header.php';
+        include '../../Includes/sidebar.php';
+    ?>
+<div class="content">
     <form action="patientenzoeken.php" method="post">
-        Search <input type="text" name ="search">
-        <input type ="submit">
+        <input type="text" placeholder="Search.." name="search">
+        <button type="submit"><i class="fa fa-search"></i></button>
     </form>
     <center>
+    <div class="backdrop">
         <table>
             <tr>
                 <th>id</th>
@@ -32,18 +41,10 @@ $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geb
             </tr>
             <?php endwhile;?>
         </table>
+    </div>
+    </center>
+</div>
+
+</div>
 </body>
 </html>
-
-<style> 
-th {
-  border: 1px solid black;
-  border-radius: 10px;
-  width: 150px;
-}
-
-.row1{
-  border: 1px solid black;
-  border-radius: 10px;
-}
-</style>
