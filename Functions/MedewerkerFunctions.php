@@ -37,9 +37,17 @@ function checkIfMedewerkerExistsByName($name) {
 }
 
 function getMedewerkerById($id) {
-    return DatabaseConnection::getConn()->query("SELECT * FROM `medewerker` WHERE id='${id}';")->fetch_array();
+    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE id = ?;");
+    $result->bind_param("s", $id);
+    $result->execute();
+
+    return $result->get_result()->fetch_array();
 }
 
 function getMedewerkerByName($name) {
-    return DatabaseConnection::getConn()->query("SELECT * FROM `medewerker` WHERE naam='${name}';")->fetch_array();
+    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE naam = ?;");
+    $result->bind_param("s", $name);
+    $result->execute();
+
+    return $result->get_result()->fetch_array();
 }
