@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (isset($_SESSION['id'])) {
+    header("Location: homepage.php");
+}
 include 'Database/DatabaseConnection.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($_POST['e-mail']) && !empty($_POST['password'])) {
