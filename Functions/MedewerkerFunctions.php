@@ -14,9 +14,8 @@ function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwo
         if (sizeof($result) == 0) {
             $conn->query("INSERT INTO `medewerker`(`naam`, `klas`, `foto`, `email`, `telefoonnummer`, `wachtwoord`) VALUES ('${naam}','${klas}','${foto}','${email}','${telefoonnummer}','${wachtwoord}')");
             return true;
-
         }
     }
-
+  
     return false;
 }
