@@ -18,7 +18,7 @@ function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwo
     return false;
 }
 
-function checkIfMedewerkerExistsById($id) {
+function checkIfMedewerkerExistsById($id): bool {
     $result = getMedewerkerById($id);
     if (sizeof($result) == 0) {
         return false;
@@ -27,7 +27,7 @@ function checkIfMedewerkerExistsById($id) {
     return true;
 }
 
-function checkIfMedewerkerExistsByName($name) {
+function checkIfMedewerkerExistsByName($name): bool {
     $result = getMedewerkerByName($name);
     if (sizeof($result) == 0) {
         return false;
@@ -36,7 +36,7 @@ function checkIfMedewerkerExistsByName($name) {
     return true;
 }
 
-function getMedewerkerById($id) {
+function getMedewerkerById($id): array{
     $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE id = ?;");
     $result->bind_param("s", $id);
     $result->execute();
@@ -44,7 +44,7 @@ function getMedewerkerById($id) {
     return $result->get_result()->fetch_array();
 }
 
-function getMedewerkerByName($name) {
+function getMedewerkerByName($name): array {
     $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE naam = ?;");
     $result->bind_param("s", $name);
     $result->execute();
