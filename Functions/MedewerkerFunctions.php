@@ -6,7 +6,6 @@ function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwo
     $conn = DatabaseConnection::getConn();
     $conn->query("UPDATE `medewerker` SET `naam`='${naam}',`klas`='${klas}',`foto`='${foto}',`email`='${email}',`telefoonnummer`='${telefoonnummer}',`wachtwoord`='${wachtwoord}' WHERE `naam`='${naam}';");
 
-    echo $conn->affected_rows;
     if ($conn->affected_rows == 1)
         return true;
 
@@ -15,9 +14,8 @@ function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwo
         if (sizeof($result) == 0) {
             $conn->query("INSERT INTO `medewerker`(`naam`, `klas`, `foto`, `email`, `telefoonnummer`, `wachtwoord`) VALUES ('${naam}','${klas}','${foto}','${email}','${telefoonnummer}','${wachtwoord}')");
             return true;
-
         }
     }
-
+  
     return false;
 }
