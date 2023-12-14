@@ -18,6 +18,10 @@ $result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefo
 </head>
 
 <body>
+    <form action="medewerkeropzoeken.php" method="post">
+        Search <input type="text" name="search">
+        <input type="submit">
+    </form>
     <center>
         <table>
             <tr>
