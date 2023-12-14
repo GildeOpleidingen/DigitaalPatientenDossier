@@ -1,6 +1,8 @@
 <?php 
 include '../../Database/DatabaseConnection.php';
 $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;");
+session_start();
+
 ?>
 
 <!DOCTYPE html>
@@ -26,12 +28,13 @@ $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geb
             <?php while($row1 = mysqli_fetch_array($result)):;?>
             <tr>
                 <td class="row1"><?php echo $row1[0];?></td>
-                <td class="row1"><?php echo $row1[1];?></td>
+                <td class="row1"><a href="clientpagina.php?id=<?php echo $row1[0];?>"><?php echo $row1[1];?></a></td>
                 <td class="row1"><?php echo $row1[2];?></td>
                 <td class="row1"><?php echo $row1[3];?></td>
             </tr>
             <?php endwhile;?>
         </table>
+        
 </body>
 </html>
 
@@ -45,5 +48,15 @@ th {
 .row1{
   border: 1px solid black;
   border-radius: 10px;
+}
+
+a{
+text-decoration: none;
+color: black;
+}
+
+a:visited{
+text-decoration: none;
+color: black; 
 }
 </style>
