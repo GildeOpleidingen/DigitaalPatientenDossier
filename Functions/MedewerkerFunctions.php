@@ -18,6 +18,24 @@ function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwo
     return false;
 }
 
+function checkIfMedewerkerExistsById($id) {
+    $result = DatabaseConnection::getConn()->query("SELECT * FROM `medewerker` WHERE id='${id}';")->fetch_array();
+    if (sizeof($result) == 0) {
+        return false;
+    }
+
+    return true;
+}
+
+function checkIfMedewerkerExistsByName($name) {
+    $result = DatabaseConnection::getConn()->query("SELECT * FROM `medewerker` WHERE naam='${name}';")->fetch_array();
+    if (sizeof($result) == 0) {
+        return false;
+    }
+
+    return true;
+}
+
 function getMedewerkerById($id) {
     return DatabaseConnection::getConn()->query("SELECT * FROM `medewerker` WHERE id='${id}';")->fetch_array();
 }
