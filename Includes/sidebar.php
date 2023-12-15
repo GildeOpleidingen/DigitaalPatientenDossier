@@ -21,13 +21,24 @@
                     </div></button> 
                 
                 <ul>
-                    <a href="#">Overzicht</a>
-                    <a href="#">Patiëntgegevens</a>
-                    <a href="#">Anamnese</a>
-                    <a href="#">Zorgplan</a>
-                    <a href="#">Rapportage</a>
-                    <a href="#">Metingen</a>
-                    <a href="#">Formulieren</a>
+                    <?php
+                    $pages = array(
+                            "overzicht" => "Overzicht",
+                            "patiëntgegevens" => "Patiëntgegevens",
+                            "anamnese" => "Anamnese",
+                            "zorgplan" => "Zorgplan",
+                            "rapportage" => "Rapportage",
+                            "metingen" => "Metingen",
+                            "formulieren" => "Formulieren"
+                    );
+
+                    $currentPage = basename($_SERVER['PHP_SELF'], ".php");
+
+                    foreach ($pages as $key => $value) {
+                        $selected = ($key === $currentPage) ? "selected" : "";
+                        echo "<a href='Cliënt/$value/$key.php' class='$selected' id='$key'>$value</a>";
+                    }
+                    ?>
                 </ul>
             </div>
         </div>
