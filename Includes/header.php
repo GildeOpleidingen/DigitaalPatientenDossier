@@ -57,9 +57,18 @@
                 </div>
                 <div class="navbar">
                     <ul>
-                        <li><a href="#">Dashboard</a></li>
-                        <li><a href="#">Cliënt</a></li>
-                        <li><a href="#">Medewerker</a></li>
+                        <?php
+                        $pages = array("dashboard" => "Dashboard",
+                        "cliënt" => "Cliënt",
+                        "medewerker" => "Medewerker");
+
+                        $currentPage = basename($_SERVER['PHP_SELF'], ".php");
+
+                        foreach ($pages as $key => $value) {
+                            $selected = ($key === $currentPage) ? "selected" : "";
+                            echo "<li><a href='$value/$key.php' class='$selected' id='$key'>$value</a></li>";
+                        }
+                        ?>
                     </ul>
                 </div>
             </header>

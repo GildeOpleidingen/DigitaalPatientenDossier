@@ -73,3 +73,8 @@ a{
     text-decoration: none;
     list-style-type: none;
 }
+
+.selected{
+    color: #DD0069;
+    font-weight: bold;
+}
