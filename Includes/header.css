@@ -41,3 +41,8 @@ a{
 a:hover{
     color: #DD0069;
 }
+
+.selected{
+    color: #DD0069;
+    font-weight: bold;
+}
