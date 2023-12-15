@@ -1,6 +1,7 @@
 <?php 
 include '../../Database/DatabaseConnection.php';
 $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;");
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -13,38 +14,36 @@ $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geb
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<div  class="main">
-    <?php
-        include '../../Includes/header.php';
-        include '../../Includes/sidebar.php';
-    ?>
-<div class="content">
-    <form action="patientenzoeken.php" method="post">
-        <input type="text" placeholder="Search.." name="search">
-        <button type="submit"><i class="fa fa-search"></i></button>
-    </form>
-    <center>
-    <div class="backdrop">
-        <table>
-            <tr>
-                <th>id</th>
-                <th>naam</th>
-                <th>woonplaats</th>
-                <th>geboortedatum</th>
-            </tr>
-            <?php while($row1 = mysqli_fetch_array($result)):;?>
-            <tr>
-                <td class="row1"><?php echo $row1[0];?></td>
-                <td class="row1"><?php echo $row1[1];?></td>
-                <td class="row1"><?php echo $row1[2];?></td>
-                <td class="row1"><?php echo $row1[3];?></td>
-            </tr>
-            <?php endwhile;?>
-        </table>
-    </div>
-    </center>
-</div>
+    <?php 
+    include '../../Includes/header.php';
+?>
 
+<div  class="main">
+    
+        <div class="content">
+        <div class="content2">
+            <form action="patientenzoeken.php" method="post">
+                <input type="text" placeholder="Search.." name="search">
+                <button type="submit"><i class="fa fa-search"></i></button> 
+            </form>
+                <table>
+                    <tr>
+                        <th>id</th>
+                        <th>naam</th>
+                        <th>woonplaats</th>
+                        <th>geboortedatum</th>
+                    </tr>
+                    <?php while($row1 = mysqli_fetch_array($result)):;?>
+                    <tr>
+                        <td class="row1"><?php echo $row1[0];?></td>
+                        <td class="row1"><a href="clientpagina.php?id=<?php echo $row1[0];?>"><?php echo $row1[1];?></a></td>
+                        <td class="row1"><?php echo $row1[2];?></td>
+                        <td class="row1"><?php echo $row1[3];?></td>
+                    </tr>
+                    <?php endwhile;?>
+                </table>
+        </div>
+        </div>
 </div>
 </body>
 </html>
