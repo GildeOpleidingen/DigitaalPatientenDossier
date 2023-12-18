@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['id'])) {
-    header("Location: Dashboard/dashboard.php");
+    header("Location: Dashboard/dashboard.php?id={$_SESSION['id']}");
 }
 include 'Database/DatabaseConnection.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($row['wachtwoord'] == $password) {
                 $_SESSION['id'] = $row['id'];
                 $_SESSION['naam'] = $row['naam'];
-                header("Location: Dashboard/dashboard.php");
+                header("Location: Dashboard/dashboard.php?id={$row['id']}");
             } else {
                 $error = "Het wachtwoord is onjuist.";
             }
