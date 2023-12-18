@@ -8,12 +8,8 @@ $result = DatabaseConnection::getConn()->prepare("SELECT naam, klas, email, tele
 
 $result->bind_param("s",$search);
 $result->execute();
-$result = $result->get_result();
-
-if ($result ->num_rows > 0){
-    while($row = mysqli_fetch_array($result) ){
-        //echo $row["id"]."  ".$row["naam"]."  ".$row["woonplaats"]."  ".$row["geboortedatum"]."<br>";
-        ?>
+$result = $result->get_result()->fetch_all(MYSQLI_ASSOC);
+if (count($result) > 0){ ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,13 +29,14 @@ if ($result ->num_rows > 0){
                     <th>E-mail</th>
                     <th>Telefoonnummer</th>
                 </tr>
+                <?php foreach($result as $row) {?>
                 <tr>
-                    <td class="row1"><?php echo $row[0];?></td>
-                    <td class="row1"><?php echo $row[1];?></td>
-                    <td class="row1"><?php echo $row[2];?></td>
-                    <td class="row1"><?php echo $row[3];?></td>
+                    <td class="row1"><?php echo $row['naam'];?></td>
+                    <td class="row1"><?php echo $row['klas'];?></td>
+                    <td class="row1"><?php echo $row['email'];?></td>
+                    <td class="row1"><?php echo $row['telefoonnummer'];?></td>
                 </tr>
-
+                <?php } ?>
             </table>
         </center>
     </form>
@@ -50,7 +47,6 @@ if ($result ->num_rows > 0){
 
 </html>
 <?php
-    }
     }else{
         echo "Medewerker niet gevonden! Controleer of de naam goed ingevuld is!";
         echo "<br>";
