@@ -3,7 +3,7 @@
 // TODO: Medewerker hoofdpagina
 include '../Database/DatabaseConnection.php';
 
-$result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker");
+$result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker;");
 ?>
 <!DOCTYPE html>
 <html lang="en">
