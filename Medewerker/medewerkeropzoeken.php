@@ -1,10 +1,14 @@
 <?php 
-$search = $_POST['search'];
+$search = "%$search%";
 
 
 include '../Database/DatabaseConnection.php';
 
-$result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker WHERE naam like '%$search%';");
+$result = DatabaseConnection::getConn()->prepare("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker WHERE naam like ?");
+
+$result->bind_param("s",$search);
+$result->execute();
+$client = $result->get_result()->fetch_assoc();
 
 if ($result ->num_rows > 0){
     while($row = mysqli_fetch_array($result) ){
