@@ -28,10 +28,10 @@ if ($result ->num_rows > 0){
         <center>
             <table>
                 <tr>
-                    <th>id</th>
-                    <th>naam</th>
-                    <th>woonplaats</th>
-                    <th>geboortedatum</th>
+                    <th>Naam</th>
+                    <th>Klas</th>
+                    <th>E-mail</th>
+                    <th>Telefoonnummer</th>
                 </tr>
                 <tr>
                     <td class="row1"><?php echo $row[0];?></td>
