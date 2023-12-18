@@ -4,7 +4,7 @@ $search = "%".$search."%";
 
 include '../Database/DatabaseConnection.php';
 
-$result = DatabaseConnection::getConn()->prepare("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker WHERE naam like ?");
+$result = DatabaseConnection::getConn()->prepare("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker WHERE naam like ?;");
 
 $result->bind_param("s",$search);
 $result->execute();
