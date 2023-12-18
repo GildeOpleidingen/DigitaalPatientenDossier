@@ -1,13 +1,13 @@
 <?php 
+
 $search = $_POST['search'];
 
 
 include '../../Database/DatabaseConnection.php';
 
-$result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client WHERE naam like '%$search%';");
-
-if ($result ->num_rows > 0){
-    while($row = mysqli_fetch_array($result) ){
+$result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client WHERE naam like '%$search%';")->fetch_all();
+if (sizeof($result) > 0){
+    
         ?>
        <!DOCTYPE html>
        <html lang="en">
@@ -15,8 +15,17 @@ if ($result ->num_rows > 0){
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Cliënten</title>
+        <link rel="stylesheet" href="patientenzoeken.css">
        </head>
        <body>
+        <?php
+        include '../../Includes/header.php';
+        
+        ?>
+        <div class="main">
+        
+    <div class="content">
+        <div class="content2">
         <form>
     <center>
         <table>
@@ -26,23 +35,26 @@ if ($result ->num_rows > 0){
                 <th>woonplaats</th>
                 <th>geboortedatum</th>
             </tr>
+            <?php foreach($result as $row){ ?>
             <tr>
                 <td class="row1"><?php echo $row[0];?></td>
-                <td class="row1"><a href="clientpagina.php" ><?php echo $row[1];?></a></td>
+                <td class="row1"><a href="clientpagina.php?id=<?php echo $row[1];?>"><?php echo $row[1];?></a></td>
                 <td class="row1"><?php echo $row[2];?></td>
                 <td class="row1"><?php echo $row[3];?></td>
             </tr>
-            
+            <?php } ?>
         </table>
     </center>
         </form>
         <a href="clientoverzicht.php">
             <button>terug naar overzicht</button>
         </a>
+        </div>
+        </div>
+        </div> 
 </body>
        </html>
-       <?php
-    }
+       <?php 
     }else{
         echo "Cliënt niet gevonden! controleer of de naam goed ingevuld is!";
         echo "<br>";
@@ -50,35 +62,3 @@ if ($result ->num_rows > 0){
     }
 
 ?>
-<style> 
-th {
-  border: 1px solid black;
-  border-radius: 10px;
-  width: 150px;
-}
-
-.row1{
-  border: 1px solid black;
-  border-radius: 10px;
-  text-decoration: none;
-  color: black;
-  
-}
-
-.row1:visited{
-    text-decoration: none;
-  color: black;
-}
-
-a{
-text-decoration: none;
-color: black;
-}
-
-a:visited{
-text-decoration: none;
-color: black; 
-}
-
-
-</style>
