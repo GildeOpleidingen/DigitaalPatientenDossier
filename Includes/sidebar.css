@@ -1,0 +1,80 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;}
+
+
+.sidebar{
+    height: 100vh;
+    width: 200px;
+    padding-top: 80px;
+    background-color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: #00365E;
+    overflow: auto;
+}
+
+.personal-information{
+    font-weight: bold;
+}
+
+#birth{
+    font-weight: normal;
+}
+
+.profile-img{
+    height: 200px;
+    padding: 20px;
+}
+
+.profile-img img{
+    height: 160px;
+    border-radius: 50%;
+    border: 1px solid #00365E;
+}
+
+.cpr{
+    height: 60px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.cpr-btn{
+    color: white;
+    cursor: pointer;
+    border: none;
+    background-color: #17C542;
+}
+
+.cpr div{
+    height: 40px;
+}
+
+.cpr img{
+    height: 40px;
+}
+
+ul{
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    gap: 20px;
+    list-style-type: none;
+}
+
+a{
+    color: #00365E;
+    text-decoration: none;
+    list-style-type: none;
+}
+
+.selected{
+    color: #DD0069;
+    font-weight: bold;
+}
