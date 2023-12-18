@@ -1,6 +1,6 @@
 <?php 
-$search = "%$search%";
-
+$search = $_POST['search'];
+$search = "%".$search."%";
 
 include '../Database/DatabaseConnection.php';
 
@@ -8,7 +8,7 @@ $result = DatabaseConnection::getConn()->prepare("SELECT naam, klas, email, tele
 
 $result->bind_param("s",$search);
 $result->execute();
-$client = $result->get_result()->fetch_assoc();
+$result = $result->get_result();
 
 if ($result ->num_rows > 0){
     while($row = mysqli_fetch_array($result) ){
