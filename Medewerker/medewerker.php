@@ -3,7 +3,7 @@
 // TODO: Medewerker hoofdpagina
 include '../Database/DatabaseConnection.php';
 
-$result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker;");
+$result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all(MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,15 +27,14 @@ $result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefo
                 <th>E-mail</th>
                 <th>Telefoonnummer</th>
             </tr>
-            <?php while($row1 = mysqli_fetch_array($result)):;?>
+            <?php foreach($result as $row) {?>
             <tr>
-                <td><?php echo $row1[0];?></td>
-                <td><?php echo $row1[1];?></td>
-                <td><?php echo $row1[2];?></td>
-                <td><?php echo $row1[3];?></td>
-                <!-- // <td><?php echo $row1[4];?></td> //Foto -->
+                <td><?php echo $row['naam'];?></td>
+                <td><?php echo $row['klas'];?></td>
+                <td><?php echo $row['email'];?></td>
+                <td><?php echo $row['telefoonnummer'];?></td>
             </tr>
-            <?php endwhile;?>
+            <?php } ?>
         </table>
     </center>
 </body>
