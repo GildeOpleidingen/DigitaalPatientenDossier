@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['id'])) {
+if (isset($_SESSION['loggedin_id'])) {
     header("Location: Dashboard/dashboard.php");
 }
 include 'Database/DatabaseConnection.php';
@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result->num_rows > 0) {
             $row = mysqli_fetch_array($result);
             if ($row['wachtwoord'] == $password) {
-                $_SESSION['id'] = $row['id'];
-                $_SESSION['naam'] = $row['naam'];
+                $_SESSION['loggedin_id'] = $row['id'];
+                $_SESSION['loggedin_naam'] = $row['naam'];
                 header("Location: Dashboard/dashboard.php");
             } else {
                 $error = "Het wachtwoord is onjuist.";
