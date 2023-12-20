@@ -87,7 +87,7 @@
             <?php 
             $id = $_SESSION['id'] = $_GET['id'];
             include_once '../../Database/DatabaseConnection.php';
-            
+
             $result = DatabaseConnection::getConn()->query("SELECT naam, geboortedatum, reanimatiestatus, foto FROM client WHERE id = '$id'");
             $row1 = mysqli_fetch_array($result);
            

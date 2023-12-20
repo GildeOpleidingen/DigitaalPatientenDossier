@@ -35,6 +35,7 @@
                 padding: 20px;
                 flex-direction: row;
                 list-style-type: none;
+                gap: 20px;
             }
 
             a{
@@ -46,7 +47,11 @@
                 color: #DD0069;
             }
 
-            </style>
+            .selected{
+                color: #DD0069;
+                font-weight: bold;
+            }
+        </style>
 	</head>
   
 	<body>
