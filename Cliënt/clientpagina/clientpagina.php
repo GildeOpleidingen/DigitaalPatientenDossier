@@ -1,15 +1,12 @@
 <?php
     include_once '../../Database/DatabaseConnection.php';
 
-    if(isset($_GET['id'])) {
-        $id = $_GET['id'];
-        $_SESSION['clientId'] = $_GET['id'];
-    }
-
-    if (!isset($id)) {
+    if(!isset($_GET['id'])) {
         header("Location: clientoverzicht.php");
     }
 
+    $id = $_GET['id'];
+    $_SESSION['clientId'] = $_GET['id'];
  ?>
 <!DOCTYPE html>
 <html lang="en">
