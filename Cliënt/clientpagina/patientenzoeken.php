@@ -1,11 +1,12 @@
-<?php 
-
-$search = $_POST['search'];
-
-
+<?php
+$search = "%".$_POST['search']."%";
 include '../../Database/DatabaseConnection.php';
 
-$result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client WHERE naam like '%$search%';")->fetch_all();
+$result = DatabaseConnection::getConn()->prepare("SELECT id, naam, woonplaats, geboortedatum FROM client WHERE naam like ?");
+$result->bind_param("s", $search);
+$result->execute();
+$result = $result->get_result()->fetch_all();
+
 if (sizeof($result) > 0){
     
         ?>
