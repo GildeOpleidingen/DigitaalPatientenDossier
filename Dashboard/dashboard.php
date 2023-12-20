@@ -1,7 +1,8 @@
 <?php
     include_once '../Database/DatabaseConnection.php';
+    $id = $_GET['id'];
+    $_SESSION['id'] = $_GET['id'];
 
-    $id = $_SESSION['id'] = $_GET['id'];
     $result = DatabaseConnection::getConn()->prepare("SELECT clientid FROM verzorgerregel WHERE medewerkerid = ?");
     $result->bind_param("s", $id);
     $result->execute();
