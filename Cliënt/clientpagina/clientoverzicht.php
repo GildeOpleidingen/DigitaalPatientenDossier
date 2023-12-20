@@ -1,7 +1,6 @@
 <?php 
 include '../../Database/DatabaseConnection.php';
 $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;");
-session_start();
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +18,6 @@ session_start();
 ?>
 
 <div  class="main">
-    
         <div class="content">
         <div class="content2">
             <form action="patientenzoeken.php" method="post">

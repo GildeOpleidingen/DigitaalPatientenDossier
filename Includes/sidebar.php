@@ -84,14 +84,12 @@
   
 	<body>
             <div class="sidebar">
-            <?php 
-            $id = $_SESSION['id'] = $_GET['id'];
+            <?php
             include_once '../../Database/DatabaseConnection.php';
+            $id = $_SESSION['clientId'];
 
             $result = DatabaseConnection::getConn()->query("SELECT naam, geboortedatum, reanimatiestatus, foto FROM client WHERE id = '$id'");
             $row1 = mysqli_fetch_array($result);
-           
-
 ?>
                 <div class="profile">
                     <div class="profile-img">

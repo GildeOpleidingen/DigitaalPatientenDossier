@@ -1,6 +1,5 @@
 <?php
 
-// TODO: Medewerker hoofdpagina
 include '../Database/DatabaseConnection.php';
 
 $result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all(MYSQLI_ASSOC);
