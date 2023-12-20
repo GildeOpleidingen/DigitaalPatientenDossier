@@ -53,8 +53,39 @@ function getMedischOverzichtByClientId($id): array {
     return (array) $result->get_result()->fetch_array();
 }
 
-function insertClientStory($medischoverzichtid, $foto, $introductie, $familie, $hobbys, $omgang): void {
-    $result = DatabaseConnection::getConn()->prepare("INSERT INTO `clientverhaal`(`id`, `medischoverzichtid`, `foto`, `introductie`, `gezinfamilie`, `belangrijkeinfo`, `hobbies`) VALUES (NULL, ?, ?, ?, ?, ?, ?);");
-    $result->bind_param("ibssss", $medischoverzichtid, $foto, $introductie, $familie, $hobbys, $omgang);
+function getClientStoryByClientId($id): array {
+    $medischOverzicht = getMedischOverzichtByClientId($id);
+
+    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `clientverhaal` WHERE medischoverzichtid = ?;");
+    $result->bind_param("i", $medischOverzicht['id']);
     $result->execute();
+
+    return (array) $result->get_result()->fetch_array();
+}
+
+function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies): void {
+    $medischOverzicht = getMedischOverzichtByClientId($clientid);
+    if(!checkIfClientStoryExistsByClientId($clientid)){
+        $result = DatabaseConnection::getConn()->prepare("INSERT INTO `clientverhaal`(`id`, `medischoverzichtid`, `foto`, `introductie`, `gezinfamilie`, `belangrijkeinfo`, `hobbies`) VALUES (NULL, ?, ?, ?, ?, ?, ?);");
+        $result->bind_param("ibssss", $medischOverzicht['id'], $foto, $introductie, $familie, $belangrijkeinfo, $hobbies);
+        $result->execute();
+    } else {    
+        $result = DatabaseConnection::getConn()->prepare("UPDATE `clientverhaal` SET `foto`=?,`introductie`=?,`gezinfamilie`=?,`belangrijkeinfo`=?,`hobbies`=? WHERE medischoverzichtid = ?;");
+        $result->bind_param("bssssi", $foto, $introductie, $familie, $belangrijkeinfo, $hobbies, $medischOverzicht['id']);
+        $result->execute();
+    }
+}
+
+function checkIfClientStoryExistsByClientId($id): bool {
+    $medischOverzicht = getMedischOverzichtByClientId($id);
+
+    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `clientverhaal` WHERE medischoverzichtid = ?;");
+    $result->bind_param("i", $medischOverzicht['id']);
+    $result->execute();
+
+    if($result->get_result()->num_rows > 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
