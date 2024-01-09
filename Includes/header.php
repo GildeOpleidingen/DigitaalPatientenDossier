@@ -63,15 +63,35 @@
                 <div class="navbar">
                     <ul>
                         <?php
-                        $pages = array("dashboard" => "Dashboard",
-                        "cliënt" => "Cliënt",
-                        "medewerker" => "Medewerker");
+                        $header = array(
+                            "dashboard" => "Dashboard",
+                            "cliënt" => "Cliënt",
+                            "medewerker" => "Medewerker",
+                        );
+
+                        $sidebar = array(
+                            "overzicht" => "Overzicht",
+                            "patiëntgegevens" => "Patiëntgegevens",
+                            "anamnese" => "Anamnese",
+                            "zorgplan" => "Zorgplan",
+                            "rapportage" => "Rapportage",
+                            "metingen" => "Metingen",
+                            "formulieren" => "Formulieren"
+                        );
 
                         $currentPage = basename($_SERVER['PHP_SELF'], ".php");
+                        $currentDir = basename(getcwd());
 
-                        foreach ($pages as $key => $value) {
+                        foreach ($header as $key => $value) {
                             $selected = ($key === $currentPage) ? "selected" : "";
-                            echo "<li><a href='$value/$key.php' class='$selected' id='$key'>$value</a></li>";
+                            $dir = "..";
+                            foreach ($sidebar as $key2 => $value2) {
+                                if ($value2 === $currentDir) {
+                                    $dir = "...";
+                                    break;
+                                }
+                            }
+                            echo "<li><a href='$dir/$value/$key.php' class='$selected' id='$key'>$value</a></li>";
                         }
                         ?>
                     </ul>
