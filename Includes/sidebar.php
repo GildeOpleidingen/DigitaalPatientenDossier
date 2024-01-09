@@ -132,7 +132,7 @@
 
                     foreach ($pages as $key => $value) {
                         $selected = ($key === $currentPage) ? "selected" : "";
-                        echo "<a href='Cliënt/$value/$key.php' class='$selected' id='$key'>$value</a>";
+                        echo "<a href='../$value/$key.php' class='$selected' id='$key'>$value</a>";
                     }
                     ?>
                 </ul>
