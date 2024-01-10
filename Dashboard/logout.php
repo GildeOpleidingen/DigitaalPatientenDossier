@@ -5,5 +5,5 @@ if (!isset($_SESSION['loggedin_id'])) {
 }
 include 'Database/DatabaseConnection.php';
 session_destroy();
-header("Location: index.php");
+header("Location: ../index.php");
 ?>
