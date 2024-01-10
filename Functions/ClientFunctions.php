@@ -1,4 +1,5 @@
 <?php
+// Om deze functies te gebruiken moet je op de pagina waar je ze wilt gebruiken de databaseConnection includen en deze file includen
 function updateClient($naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto): bool {
     $conn = DatabaseConnection::getConn();
     $conn->query("UPDATE `client` SET `naam`='$naam',`geslacht`='$geslacht',`adres`='$adres',`postcode`='$postcode',`woonplaats`='$woonplaats',`telefoonnummer`='$telefoonnummer',`email`='$email',`reanimatiestatus`='$reanimatiestatus',`nationaliteit`='$nationaliteit',`afdeling`='$afdeling',`burgelijkestaat`='$burgelijkestaat',`foto`='$foto' WHERE `naam`='$naam';");
@@ -67,18 +68,17 @@ function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijk
     $medischOverzicht = getMedischOverzichtByClientId($clientid);
     if(!checkIfClientStoryExistsByClientId($clientid)){
         $result = DatabaseConnection::getConn()->prepare("INSERT INTO `clientverhaal`(`id`, `medischoverzichtid`, `foto`, `introductie`, `gezinfamilie`, `belangrijkeinfo`, `hobbies`) VALUES (NULL, ?, ?, ?, ?, ?, ?);");
-        $result->bind_param("ibssss", $medischOverzicht['id'], $foto, $introductie, $familie, $belangrijkeinfo, $hobbies);
+        $result->bind_param("isssss", $medischOverzicht['id'], $foto, $introductie, $familie, $belangrijkeinfo, $hobbies);
         $result->execute();
     } else {    
         $result = DatabaseConnection::getConn()->prepare("UPDATE `clientverhaal` SET `foto`=?,`introductie`=?,`gezinfamilie`=?,`belangrijkeinfo`=?,`hobbies`=? WHERE medischoverzichtid = ?;");
-        $result->bind_param("bssssi", $foto, $introductie, $familie, $belangrijkeinfo, $hobbies, $medischOverzicht['id']);
+        $result->bind_param("sssssi", $foto, $introductie, $familie, $belangrijkeinfo, $hobbies, $medischOverzicht['id']);
         $result->execute();
     }
 }
 
 function checkIfClientStoryExistsByClientId($id): bool {
     $medischOverzicht = getMedischOverzichtByClientId($id);
-
     $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `clientverhaal` WHERE medischoverzichtid = ?;");
     $result->bind_param("i", $medischOverzicht['id']);
     $result->execute();
