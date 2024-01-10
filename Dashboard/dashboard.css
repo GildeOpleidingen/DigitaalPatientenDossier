@@ -1,7 +1,12 @@
+header {
+    z-index: 2;
+}
+
 .main{
     height: 100vh;
     width: 100%;
     background-color: #00365E;
+    z-index: 1;
 }
 
 .users {
@@ -10,7 +15,8 @@
     left: 2em;
     height: 48.5em;
     width: 116em;
-    background-color: white;;
+    background-color: white;
+    z-index: 0;
 }
 
 .list {
@@ -23,7 +29,7 @@
 
 .user {
     position: relative;
-    top: 1em;
+    margin-bottom: 1em;
     margin-left: 1em;
     float: left;
     background-color: #c4c4c4;
