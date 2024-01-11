@@ -87,8 +87,11 @@
                             $dir = "..";
                             foreach ($sidebar as $key2 => $value2) {
                                 if ($value2 === $currentDir) {
-                                    $dir = "...";
+                                    $dir = "../..";
                                     break;
+                                }
+                                else if ($currentDir === "clientpagina"){
+                                    $dir = "../..";
                                 }
                             }
                             echo "<li><a href='$dir/$value/$key.php' class='$selected' id='$key'>$value</a></li>";
