@@ -57,12 +57,12 @@
 
                         $client = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM client WHERE id=$link[0]")->fetch_array();
                         if ($client[2] == null) {
-                            echo "<div class='user'><a class='username' href='../Cliënt/clientpagina/clientpagina.php?id=$client[0]'>$client[1]</a><div class='img'>no image found</div></div>";
+                            echo "<div class='user'><a class='username' href='../Cliënt/Overzicht/overzicht.php?id=$client[0]'>$client[1]</a><div class='img'>no image found</div></div>";
                             $size++;
                             continue;
                         }
 
-                        echo "<div class='user'><a class='username' href='../Cliënt/clientpagina/clientpagina.php?id=$client[0]'>$client[1]</a><img class='img' src='data:image/jpeg;base64," . base64_encode($client[2]) . "'/></div>";
+                        echo "<div class='user'><a class='username' href='../Cliënt/Overzicht/overzicht.php?id=$client[0]'>$client[1]</a><img class='img' src='data:image/jpeg;base64," . base64_encode($client[2]) . "'/></div>";
                         $size++;
                     }
                 }

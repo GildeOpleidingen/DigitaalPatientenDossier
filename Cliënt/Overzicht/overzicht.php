@@ -31,7 +31,7 @@ include_once '../../Includes/header.php';
     include_once '../../Includes/sidebar.php';
     ?>
     <div class="main2">
-        <div class="client">
+        <div class  ="client">
             <?php
             echo "<div class='data'><pre class='datakey'>Geslacht</pre><div class='datavalue'</div>${client['geslacht']}</div></div>";
             echo "<div class='data'><pre class='datakey'>Geboortedatum</pre><div class='datavalue'</div>${client['geboortedatum']}</div></div>";
