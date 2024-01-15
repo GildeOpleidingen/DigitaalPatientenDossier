@@ -1,13 +1,13 @@
 <?php
-    include_once '../../Database/DatabaseConnection.php';
+include_once '../../Database/DatabaseConnection.php';
 
-    if(!isset($_GET['id'])) {
-        header("Location: clientoverzicht.php");
-    }
+if(!isset($_GET['id'])) {
+    header("Location: ../cliënt.php");
+}
 
-    $id = $_GET['id'];
-    $_SESSION['clientId'] = $_GET['id'];
- ?>
+$id = $_GET['id'];
+$_SESSION['clientId'] = $_GET['id'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,17 +18,17 @@
 </head>
 <body>
 <?php
-    include_once '../../Includes/header.php';
-       
-    ?>
-    <div class="main">
+include_once '../../Includes/header.php';
+
+?>
+<div class="main">
     <?php
 
     include_once '../../Includes/sidebar.php';
     ?>
     <div class="main2">
-        
+
     </div>
-    </div>
+</div>
 </body>
 </html>

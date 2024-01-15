@@ -47,7 +47,7 @@ if (sizeof($result) > 0){
         </table>
     </center>
         </form>
-        <a href="clientoverzicht.php">
+        <a href="../cliënt.php">
             <button>terug naar overzicht</button>
         </a>
         </div>
@@ -59,7 +59,7 @@ if (sizeof($result) > 0){
     }else{
         echo "Cliënt niet gevonden! controleer of de naam goed ingevuld is!";
         echo "<br>";
-        echo "<a href='clientoverzicht.php'><button>terug naar overzicht</button></a>";
+        echo "<a href='../cliënt.php'><button>terug naar overzicht</button></a>";
     }
 
 ?>
