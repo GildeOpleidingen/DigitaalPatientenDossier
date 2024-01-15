@@ -6,28 +6,3 @@
 .main2{
     width: 100%;
 }
-
-.data {
-    position: relative;
-    margin-bottom: 1em;
-    margin-left: 1em;
-    float: left;
-    background-color: #c4c4c4;
-    height: 15em;
-    width: 15em;
-    border-radius: 25px;
-    text-align: center;
-}
-
-.datakey {
-    position: relative;
-    top: 25px;
-    color: black;
-}
-
-.datavalue {
-    position: absolute;
-    top: 4em;
-    left: 3.5em;
-    border-radius: 10px;
-}
