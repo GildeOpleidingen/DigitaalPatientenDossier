@@ -63,6 +63,8 @@
                 <div class="navbar">
                     <ul>
                         <?php
+                        $id = $_GET['id'];
+
                         $header = array(
                             "dashboard" => "Dashboard",
                             "cliënt" => "Cliënt",
@@ -81,9 +83,10 @@
 
                         $currentPage = basename($_SERVER['PHP_SELF'], ".php");
                         $currentDir = basename(getcwd());
+                        $parentDir = basename(dirname(getcwd()));
 
                         foreach ($header as $key => $value) {
-                            $selected = ($key === $currentPage) ? "selected" : "";
+                            $selected = ($key === $currentPage || $value == $parentDir) ? "selected" : "";
                             $dir = "..";
                             foreach ($sidebar as $key2 => $value2) {
                                 if ($value2 === $currentDir) {
@@ -94,7 +97,7 @@
                                     $dir = "../..";
                                 }
                             }
-                            echo "<li><a href='$dir/$value/$key.php' class='$selected' id='$key'>$value</a></li>";
+                            echo "<li><a href='$dir/$value/$key.php?id=$id' class='$selected' id='$key'>$value</a></li>";
                         }
                         ?>
                     </ul>
