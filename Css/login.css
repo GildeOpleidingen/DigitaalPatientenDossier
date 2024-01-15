@@ -33,6 +33,10 @@ button{
     font-size: x-large;
     border-radius: 5px;
     border: none;
+    cursor: pointer;
+}
+button:hover{
+    background-color: #FF0080;
 }
 
 img{

@@ -35,6 +35,7 @@
                 padding: 20px;
                 flex-direction: row;
                 list-style-type: none;
+                gap: 20px;
             }
 
             a{
@@ -46,7 +47,11 @@
                 color: #DD0069;
             }
 
-            </style>
+            .selected{
+                color: #DD0069;
+                font-weight: bold;
+            }
+        </style>
 	</head>
   
 	<body>
@@ -58,15 +63,41 @@
                 <div class="navbar">
                     <ul>
                         <?php
-                        $pages = array("dashboard" => "Dashboard",
-                        "cliënt" => "Cliënt",
-                        "medewerker" => "Medewerker");
+                        $id = $_GET['id'];
+
+                        $header = array(
+                            "dashboard" => "Dashboard",
+                            "cliënt" => "Cliënt",
+                            "medewerker" => "Medewerker",
+                        );
+
+                        $sidebar = array(
+                            "overzicht" => "Overzicht",
+                            "patiëntgegevens" => "Patiëntgegevens",
+                            "anamnese" => "Anamnese",
+                            "zorgplan" => "Zorgplan",
+                            "rapportage" => "Rapportage",
+                            "metingen" => "Metingen",
+                            "formulieren" => "Formulieren"
+                        );
 
                         $currentPage = basename($_SERVER['PHP_SELF'], ".php");
+                        $currentDir = basename(getcwd());
+                        $parentDir = basename(dirname(getcwd()));
 
-                        foreach ($pages as $key => $value) {
-                            $selected = ($key === $currentPage) ? "selected" : "";
-                            echo "<li><a href='$value/$key.php' class='$selected' id='$key'>$value</a></li>";
+                        foreach ($header as $key => $value) {
+                            $selected = ($key === $currentPage || $value == $parentDir) ? "selected" : "";
+                            $dir = "..";
+                            foreach ($sidebar as $key2 => $value2) {
+                                if ($value2 === $currentDir) {
+                                    $dir = "../..";
+                                    break;
+                                }
+                                else if ($currentDir === "clientpagina"){
+                                    $dir = "../..";
+                                }
+                            }
+                            echo "<li><a href='$dir/$value/$key.php?id=$id' class='$selected' id='$key'>$value</a></li>";
                         }
                         ?>
                     </ul>
