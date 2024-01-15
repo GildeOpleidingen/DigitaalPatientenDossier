@@ -34,7 +34,7 @@ $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geb
                     <?php while($row1 = mysqli_fetch_array($result)):;?>
                     <tr>
                         <td class="row1"><?php echo $row1[0];?></td>
-                        <td class="row1"><a href="clientpagina/clientpagina.php?id=<?php echo $row1[0];?>"><?php echo $row1[1];?></a></td>
+                        <td class="row1"><a href="Overzicht/overzicht.php?id=<?php echo $row1[0];?>"><?php echo $row1[1];?></a></td>
                         <td class="row1"><?php echo $row1[2];?></td>
                         <td class="row1"><?php echo $row1[3];?></td>
                     </tr>
