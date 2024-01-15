@@ -18,7 +18,7 @@ $client = $result->get_result()->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="clientpagina.css">
+    <link rel="stylesheet" href="overzicht.css">
     <title>Overzicht van <?= $client['naam']; ?></title>
 </head>
 <body>
