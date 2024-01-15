@@ -47,5 +47,6 @@ include_once '../../Includes/header.php';
         </div>
     </div>
     </div>
+</div>
 </body>
 </html>
