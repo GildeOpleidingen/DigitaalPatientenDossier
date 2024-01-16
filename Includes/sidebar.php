@@ -85,7 +85,7 @@
 	<body>
             <div class="sidebar">
             <?php
-            include_once '../../Database/DatabaseConnection.php';
+            include_once '../Database/DatabaseConnection.php';
             $id = $_SESSION['clientId'];
 
             $result = DatabaseConnection::getConn()->query("SELECT naam, geboortedatum, reanimatiestatus, foto FROM client WHERE id = '$id'");
