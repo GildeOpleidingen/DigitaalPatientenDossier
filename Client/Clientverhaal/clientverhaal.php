@@ -2,23 +2,19 @@
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/ClientFunctions.php';
 
-if (!isset($_GET['id'])) {
+if (!isset($_GET['id']) || !checkIfClientExistsById($_GET['id']) || !getMedischOverzichtByClientId($_GET['id'])) {
     header("Location: ../../index.php");
     exit;
 }
 
-if (checkIfClientExistsById($_GET['id'])) {
-    if (isset($_SESSION['client'])) {
-        unset($_SESSION['client']);
-    }
-    $client = $_SESSION['client'] = getClientById($_GET['id']);
-    if (checkIfClientStoryExistsByClientId($client['id'])) {
-        $clientStory = getClientStoryByClientId($client['id']);
-    }
-} else {
-    header("Location: ../../index.php");
-    exit;
+if (isset($_SESSION['client'])) {
+    unset($_SESSION['client']);
 }
+$client = $_SESSION['client'] = getClientById($_GET['id']);
+if (checkIfClientStoryExistsByClientId($client['id'])) {
+    $clientStory = getClientStoryByClientId($client['id']);
+}
+
 
 if (isset($_POST['submit'])) {
     if ($_FILES != null) {
@@ -51,9 +47,9 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../Includes/header.css">
-    <link rel="Stylesheet" href="cliëntverhaal.css">
+    <link rel="Stylesheet" href="clientverhaal.css">
 
-    <title>Clientverhaal invullen</title>
+    <title>Cliëntverhaal invullen</title>
 </head>
 <?php include '../../Includes/header.php'; ?>
 
@@ -61,7 +57,13 @@ if (isset($_POST['submit'])) {
     <main>
         <form method="POST" enctype="multipart/form-data">
             <div>Foto:</div>
-            <div><input type="file" name="foto" accept=".png" value=""></div>
+            Klik op de foto om het te veranderen
+            
+            <label>
+                <img id="image" src="data:image/png;base64,<?= base64_encode($clientStory['foto']) ?? "" ?>" alt=" " width="200" height="200">
+                <input type="file" name="image" accept=".png" value="" style="<?= $clientStory['foto'] ? "display:none" : "" ?>">
+            </label>
+            
             <div>Introductie: </div><input type="text" name="introductie" value=<?= $clientStory['introductie'] ?? "" ?>>
             <div>Gezin en familie: </div><input type="text" name="gezinfamilie" value=<?= $clientStory['gezinfamilie'] ?? "" ?>>
             <div>Hobby's: </div><input type="text" name="hobbys" value=<?= $clientStory['hobbies'] ?? "" ?>>
