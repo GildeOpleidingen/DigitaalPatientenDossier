@@ -71,7 +71,7 @@
 
                         $header = array(
                             "dashboard" => "Dashboard",
-                            "cliënt" => "Cliënt",
+                            "client" => "Cliënt",
                             "medewerker" => "Medewerker",
                         );
 
