@@ -1,6 +1,12 @@
 <?php 
 include '../Database/DatabaseConnection.php';
 $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;");
+
+if(isset($_GET["id"])){
+    header("Refresh: 0; url=client.php");
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +15,7 @@ $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geb
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cliënten</title>
-    <link rel="stylesheet" href="cliënt.css">
+    <link rel="stylesheet" href="client.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>

@@ -63,7 +63,11 @@
                 <div class="navbar">
                     <ul>
                         <?php
-                        $id = $_GET['id'];
+                        if(isset($_GET["id"])){
+                            $id = $_GET['id'];
+
+                        };
+                        $id=0;
 
                         $header = array(
                             "dashboard" => "Dashboard",
