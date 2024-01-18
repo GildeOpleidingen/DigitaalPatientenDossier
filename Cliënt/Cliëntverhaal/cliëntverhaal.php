@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../Includes/header.css">
-    <link rel="Stylesheet" href="clientverhaal.css">
+    <link rel="Stylesheet" href="cliëntverhaal.css">
 
     <title>Cliëntverhaal invullen</title>
 </head>
@@ -61,7 +61,7 @@ if (isset($_POST['submit'])) {
             
             <label>
                 <img id="image" src="data:image/png;base64,<?= base64_encode($clientStory['foto']) ?? "" ?>" alt=" " width="200" height="200">
-                <input type="file" name="image" accept=".png" value="" style="<?= $clientStory['foto'] ? "display:none" : "" ?>">
+                <input type="file" name="image" accept=".png" style="<?= $clientStory['foto'] ? "display:none" : "" ?>">
             </label>
             
             <div>Introductie: </div><input type="text" name="introductie" value=<?= $clientStory['introductie'] ?? "" ?>>
@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
             <div>Hobby's: </div><input type="text" name="hobbys" value=<?= $clientStory['hobbies'] ?? "" ?>>
             <div>Belangrijke informatie voor omgang: </div><input type="text" name="belangrijkeinfo" value=<?= $clientStory['belangrijkeinfo'] ?? "" ?>>
 
-            <input type="submit" name="submit">
+            <input type="submit" name="submit" class="button" value="Update clientverhaal">
         </form>
     </main>
 
