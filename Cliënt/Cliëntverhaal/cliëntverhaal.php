@@ -30,8 +30,8 @@ if (isset($_POST['submit'])) {
                 $_SESSION['error'] = "Er is geen foto geupload.";
             }
 
-            // Omdat wij een BLOB gebruiken is de maximale size voor een foto maar 64kb dus als het groter is dan dat dan word de foto niet helemaal opgeslagen
-            if ($_FILES["foto"]["size"] > 64000) {
+            // Check of de foto niet groter is dan 16 mb omdat een mediumblob maximaal 16 mb kan zijn
+            if ($_FILES["foto"]["size"] > 16000000) {
                 $foto = null;
                 $_SESSION['error'] = "Het bestand is te groot, het bestand mag maximaal 64kb groot zijn.";
             }
