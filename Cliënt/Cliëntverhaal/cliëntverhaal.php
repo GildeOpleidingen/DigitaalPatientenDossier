@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/ClientFunctions.php';
 
@@ -7,36 +8,43 @@ if (!isset($_GET['id']) || !checkIfClientExistsById($_GET['id']) || !getMedischO
     exit;
 }
 
-if (isset($_SESSION['client'])) {
+if(isset($_SESSION['client'])) {
     unset($_SESSION['client']);
 }
+
 $client = $_SESSION['client'] = getClientById($_GET['id']);
 if (checkIfClientStoryExistsByClientId($client['id'])) {
     $clientStory = getClientStoryByClientId($client['id']);
 }
 
-
 if (isset($_POST['submit'])) {
     if ($_FILES != null) {
-        $file = $_FILES["foto"]["tmp_name"];
+        $file = $_FILES["foto"]["tmp_name"] ?? "";
 
         if (isset($file) && $file != "") {
-            $foto = file_get_contents($_FILES['foto']['tmp_name']);
-            $foto_size = getimagesize($_FILES['foto']['tmp_name']);
+            $foto = file_get_contents($file);
+            $foto_size = getimagesize($file);
 
             if ($foto_size == FALSE) { // Als de foto geen foto is dan wordt $foto leeg gemaakt
-                $foto = "";
+                $foto = null;
+                $_SESSION['error'] = "Er is geen foto geupload.";
+            }
+
+            // Omdat wij een BLOB gebruiken is de maximale size voor een foto maar 64kb dus als het groter is dan dat dan word de foto niet helemaal opgeslagen
+            if($_FILES["foto"]["size"] > 64000){
+                $foto = null;
+                $_SESSION['error'] = "Het bestand is te groot, het bestand mag maximaal 64kb groot zijn.";
             }
         }
     }
-
+    
     $introductie = $_POST['introductie'];
     $gezinfamilie = $_POST['gezinfamilie'];
     $hobbies = $_POST['hobbys'];
     $belangrijkeinfo = $_POST['belangrijkeinfo'];
-
+    
     insertClientStory($client['id'], $foto ?? $clientStory['foto'], $introductie, $gezinfamilie, $belangrijkeinfo, $hobbies);
-    header("Refresh:0");
+    $clientStory = getClientStoryByClientId($client['id']); // Update de informatie van de clientstory
 }
 ?>
 
@@ -56,19 +64,22 @@ if (isset($_POST['submit'])) {
 <body>
     <main>
         <form method="POST" enctype="multipart/form-data">
-            <div>Foto:</div>
-            Klik op de foto om het te veranderen
-            
+            <?php if($clientStory['foto'] != "") { ?>
+                <p>Klik op de foto om het te veranderen</p>
+            <?php } else  {?>
+                <p>Foto:</p>
+            <?php } ?>
             <label>
                 <img id="image" src="data:image/png;base64,<?= base64_encode($clientStory['foto']) ?? "" ?>" alt=" " width="200" height="200">
-                <input type="file" name="image" accept=".png" style="<?= $clientStory['foto'] ? "display:none" : "" ?>">
+                <input type="file" name="foto" accept="image/png, image/jpg, image/jpeg" style="<?= $clientStory['foto'] ? "display:none" : "" ?>">
             </label>
             
-            <div>Introductie: </div><input type="text" name="introductie" value=<?= $clientStory['introductie'] ?? "" ?>>
-            <div>Gezin en familie: </div><input type="text" name="gezinfamilie" value=<?= $clientStory['gezinfamilie'] ?? "" ?>>
-            <div>Hobby's: </div><input type="text" name="hobbys" value=<?= $clientStory['hobbies'] ?? "" ?>>
-            <div>Belangrijke informatie voor omgang: </div><input type="text" name="belangrijkeinfo" value=<?= $clientStory['belangrijkeinfo'] ?? "" ?>>
-
+            <p>Introductie: </p><input type="text" name="introductie" value=<?= $clientStory['introductie'] ?? "" ?>>
+            <p>Gezin en familie: </p><input type="text" name="gezinfamilie" value=<?= $clientStory['gezinfamilie'] ?? "" ?>>
+            <p>Hobby's: </p><input type="text" name="hobbys" value=<?= $clientStory['hobbies'] ?? "" ?>>
+            <p>Belangrijke informatie voor omgang: </p><input type="text" name="belangrijkeinfo" value=<?= $clientStory['belangrijkeinfo'] ?? "" ?>>
+            <p style="color:red;"><?= $_SESSION['error'] ?? "" ?></p>
+            <?php unset($_SESSION['error']) ?>
             <input type="submit" name="submit" class="button" value="Update clientverhaal">
         </form>
     </main>
