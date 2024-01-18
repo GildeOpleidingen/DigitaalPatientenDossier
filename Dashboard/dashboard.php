@@ -1,4 +1,5 @@
 <?php
+    session_start();
     include_once '../Database/DatabaseConnection.php';
     $id = $_GET['id'];
 

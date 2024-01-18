@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once '../../Database/DatabaseConnection.php';
 
 if(!isset($_GET['id'])) {

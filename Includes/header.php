@@ -1,5 +1,4 @@
 <?php
-    session_start();
     include_once '../Database/DatabaseConnection.php';
     if (!isset($_SESSION['loggedin_id'])) {
         header("Location: ../index.php");
