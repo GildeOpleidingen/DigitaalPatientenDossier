@@ -8,7 +8,7 @@ if (!isset($_GET['id']) || !checkIfClientExistsById($_GET['id']) || !getMedischO
     exit;
 }
 
-if(isset($_SESSION['client'])) {
+if (isset($_SESSION['client'])) {
     unset($_SESSION['client']);
 }
 
@@ -31,18 +31,18 @@ if (isset($_POST['submit'])) {
             }
 
             // Omdat wij een BLOB gebruiken is de maximale size voor een foto maar 64kb dus als het groter is dan dat dan word de foto niet helemaal opgeslagen
-            if($_FILES["foto"]["size"] > 64000){
+            if ($_FILES["foto"]["size"] > 64000) {
                 $foto = null;
                 $_SESSION['error'] = "Het bestand is te groot, het bestand mag maximaal 64kb groot zijn.";
             }
         }
     }
-    
+
     $introductie = $_POST['introductie'];
     $gezinfamilie = $_POST['gezinfamilie'];
     $hobbies = $_POST['hobbys'];
     $belangrijkeinfo = $_POST['belangrijkeinfo'];
-    
+
     insertClientStory($client['id'], $foto ?? $clientStory['foto'], $introductie, $gezinfamilie, $belangrijkeinfo, $hobbies);
     $clientStory = getClientStoryByClientId($client['id']); // Update de informatie van de clientstory
 }
@@ -64,16 +64,16 @@ if (isset($_POST['submit'])) {
 <body>
     <main>
         <form method="POST" enctype="multipart/form-data">
-            <?php if($clientStory['foto'] != "") { ?>
+            <?php if ($clientStory['foto'] != "") { ?>
                 <p>Klik op de foto om het te veranderen</p>
-            <?php } else  {?>
+            <?php } else { ?>
                 <p>Foto:</p>
             <?php } ?>
             <label>
                 <img id="image" src="data:image/png;base64,<?= base64_encode($clientStory['foto']) ?? "" ?>" alt=" " width="200" height="200">
                 <input type="file" name="foto" accept="image/png, image/jpg, image/jpeg" style="<?= $clientStory['foto'] ? "display:none" : "" ?>">
             </label>
-            
+
             <p>Introductie: </p><input type="text" name="introductie" value=<?= $clientStory['introductie'] ?? "" ?>>
             <p>Gezin en familie: </p><input type="text" name="gezinfamilie" value=<?= $clientStory['gezinfamilie'] ?? "" ?>>
             <p>Hobby's: </p><input type="text" name="hobbys" value=<?= $clientStory['hobbies'] ?? "" ?>>
