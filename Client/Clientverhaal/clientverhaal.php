@@ -55,11 +55,13 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../Includes/header.css">
-    <link rel="Stylesheet" href="cliëntverhaal.css">
+    <link rel="Stylesheet" href="../../Includes/sidebar.css">
+    <link rel="Stylesheet" href="clientverhaal.css">
 
     <title>Cliëntverhaal invullen</title>
 </head>
 <?php include '../../Includes/header.php'; ?>
+<?php include '../../Includes/sidebar.php'; ?>
 
 <body>
     <main>
