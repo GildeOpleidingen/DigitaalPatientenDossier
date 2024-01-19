@@ -61,30 +61,32 @@ if (isset($_POST['submit'])) {
     <title>Cliëntverhaal invullen</title>
 </head>
 <?php include '../../Includes/header.php'; ?>
-<?php include '../../Includes/sidebar.php'; ?>
 
 <body>
-    <main>
-        <form method="POST" enctype="multipart/form-data">
-            <?php if ($clientStory['foto'] != "") { ?>
-                <p>Klik op de foto om het te veranderen</p>
-            <?php } else { ?>
-                <p>Foto:</p>
-            <?php } ?>
-            <label>
-                <img id="image" src="data:image/png;base64,<?= base64_encode($clientStory['foto']) ?? "" ?>" alt=" " width="200" height="200">
-                <input type="file" name="foto" accept="image/png, image/jpg, image/jpeg" style="<?= $clientStory['foto'] ? "display:none" : "" ?>">
-            </label>
+    <div class="main">
+        <?php include '../../Includes/sidebar.php'; ?>
+        <div class="main2">
+            <form class="invulformulier" method="POST" enctype="multipart/form-data">
+                <?php if ($clientStory['foto'] != "") { ?>
+                    <p>Klik op de foto om het te veranderen</p>
+                <?php } else { ?>
+                    <p>Foto:</p>
+                <?php } ?>
+                <label>
+                    <img id="image" src="data:image/png;base64,<?= base64_encode($clientStory['foto']) ?? "" ?>" alt=" " width="200" height="200">
+                    <input type="file" name="foto" accept="image/png, image/jpg, image/jpeg" style="<?= $clientStory['foto'] ? "display:none" : "" ?>">
+                </label>
 
-            <p>Introductie: </p><input type="text" name="introductie" value=<?= $clientStory['introductie'] ?? "" ?>>
-            <p>Gezin en familie: </p><input type="text" name="gezinfamilie" value=<?= $clientStory['gezinfamilie'] ?? "" ?>>
-            <p>Hobby's: </p><input type="text" name="hobbys" value=<?= $clientStory['hobbies'] ?? "" ?>>
-            <p>Belangrijke informatie voor omgang: </p><input type="text" name="belangrijkeinfo" value=<?= $clientStory['belangrijkeinfo'] ?? "" ?>>
-            <p style="color:red;"><?= $_SESSION['error'] ?? "" ?></p>
-            <?php unset($_SESSION['error']) ?>
-            <input type="submit" name="submit" class="button" value="Update clientverhaal">
-        </form>
-    </main>
+                <p>Introductie: </p><input type="text" name="introductie" value=<?= $clientStory['introductie'] ?? "" ?>>
+                <p>Gezin en familie: </p><input type="text" name="gezinfamilie" value=<?= $clientStory['gezinfamilie'] ?? "" ?>>
+                <p>Hobby's: </p><input type="text" name="hobbys" value=<?= $clientStory['hobbies'] ?? "" ?>>
+                <p>Belangrijke informatie voor omgang: </p><input type="text" name="belangrijkeinfo" value=<?= $clientStory['belangrijkeinfo'] ?? "" ?>>
+                <p style="color:red;"><?= $_SESSION['error'] ?? "" ?></p>
+                <?php unset($_SESSION['error']) ?>
+                <input type="submit" name="submit" class="button" value="Update clientverhaal">
+            </form>
+        </div>
+    </div>
 
     <script>
         if (window.history.replaceState) {
