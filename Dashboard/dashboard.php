@@ -1,7 +1,7 @@
 <?php
     session_start();
     include_once '../Database/DatabaseConnection.php';
-    $id = $_GET['id'];
+    $id = $_SESSION['loggedin_id'];
 
     if ($id == null) {
         header("Location: ../index.php");
