@@ -1,12 +1,6 @@
 <?php 
 include '../Database/DatabaseConnection.php';
 $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;");
-
-if(isset($_GET["id"])){
-    header("Refresh: 0; url=client.php");
-}
-
-
 ?>
 
 <!DOCTYPE html>
