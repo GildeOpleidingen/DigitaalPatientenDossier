@@ -91,7 +91,7 @@
 
                     <ul>
                         <?php
-                        $id = $_GET['id'];
+                        //$id = $_GET['id'];
 
                         $header = array(
                             "dashboard" => "Dashboard",
