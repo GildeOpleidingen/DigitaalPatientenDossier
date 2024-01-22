@@ -1,3 +1,7 @@
+<?php
+session_start();
+include '../../Database/DatabaseConnection.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +12,11 @@
 </head>
 <body>
         <?php
-            include 'Includes/header.php';
+            include '../../Includes/header.php';
         ?>
     <div class="main">
         <?php
-            include 'Includes/sidebar.php';
+            include '../../Includes/sidebar.php';
         ?>
 
         <div class="content">
