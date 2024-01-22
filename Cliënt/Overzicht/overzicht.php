@@ -9,10 +9,24 @@ if(!isset($_GET['id'])) {
 $id = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
 
-$result = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$result->bind_param("s", $id);
-$result->execute();
-$client = $result->get_result()->fetch_assoc();
+$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
+$client->bind_param("s", $id);
+$client->execute();
+$client = $client->get_result()->fetch_assoc();
+
+$clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
+$clientRelations->bind_param("s", $id);
+$clientRelations->execute();
+$clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$verzorgers = [];
+foreach ($clientRelations as $relation) {
+    $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
+    $verzorger->bind_param("s", $relation['medewerkerid']);
+    $verzorger->execute();
+    $verzorger = $verzorger->get_result()->fetch_assoc();
+    array_push($verzorgers, $verzorger);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,6 +58,11 @@ include_once '../../Includes/header.php';
             echo "<div class='data'><pre class='datakey'>Afdeling</pre><div class='datavalue'>${client['afdeling']}</div></div>";
             echo "<div class='data'><pre class='datakey'>Nationaliteit</pre><div class='datavalue'>${client['nationaliteit']}</div></div>";
             echo "<div class='data'><pre class='datakey'>Burgerlijke staat</pre><div class='datavalue'>${client['burgelijkestaat']}</div></div>";
+            echo "<div class='data'><pre class='datakey'>Verzorger(s)</pre><div class='datavalue'>";
+            foreach ($verzorgers as $verzorger) {
+                echo $verzorger['naam'] . "<br>";
+            }
+            echo "</div></div>";
             ?>
         </div>
     </div>
