@@ -2,8 +2,9 @@
 include_once '../../Database/DatabaseConnection.php';
 
 if(!isset($_GET['id'])) {
-    header("Location: ../cliënt.php");
+   header("Location: ../client.php");
 }
+
 
 $id = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
