@@ -7,7 +7,7 @@
 
 .sidebar{
     height: 100vh;
-    width: 200px;
+    width: 400px;
     padding-top: 80px;
     background-color: white;
     text-align: center;
@@ -77,4 +77,10 @@ a{
 .copyright {
     font-size: 10px;
     color: rgba(53, 79, 99, 0.6);
+
+}
+
+.selected {
+    color: #DD0069;
+    font-weight: bold;
 }
