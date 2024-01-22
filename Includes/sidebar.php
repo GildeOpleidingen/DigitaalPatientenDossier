@@ -85,7 +85,6 @@
 	<body>
             <div class="sidebar">
             <?php
-            include_once '../../Database/DatabaseConnection.php';
             $id = $_SESSION['clientId'];
 
             $result = DatabaseConnection::getConn()->query("SELECT naam, geboortedatum, reanimatiestatus, foto FROM client WHERE id = '$id'");
@@ -118,6 +117,8 @@
                 
                 <ul>
                     <?php
+                    $id = $_GET['id'];
+
                     $pages = array(
                             "overzicht" => "Overzicht",
                             "patiëntgegevens" => "Patiëntgegevens",
@@ -132,7 +133,7 @@
 
                     foreach ($pages as $key => $value) {
                         $selected = ($key === $currentPage) ? "selected" : "";
-                        echo "<a href='../$value/$key.php' class='$selected' id='$key'>$value</a>";
+                        echo "<a href='../$value/$key.php?id=$id' class='$selected' id='$key'>$value</a>";
                     }
                     ?>
                 </ul>

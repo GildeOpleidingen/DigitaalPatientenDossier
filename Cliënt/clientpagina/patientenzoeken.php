@@ -39,7 +39,7 @@ if (sizeof($result) > 0){
             <?php foreach($result as $row){ ?>
             <tr>
                 <td class="row1"><?php echo $row[0];?></td>
-                <td class="row1"><a href="clientpagina.php?id=<?php echo $row[1];?>"><?php echo $row[1];?></a></td>
+                <td class="row1"><a href="Overzicht/overzicht.php?id=<?php echo $row[1];?>"><?php echo $row[1];?></a></td>
                 <td class="row1"><?php echo $row[2];?></td>
                 <td class="row1"><?php echo $row[3];?></td>
             </tr>
@@ -47,7 +47,7 @@ if (sizeof($result) > 0){
         </table>
     </center>
         </form>
-        <a href="clientoverzicht.php">
+        <a href="../cliënt.php">
             <button>terug naar overzicht</button>
         </a>
         </div>
@@ -59,7 +59,7 @@ if (sizeof($result) > 0){
     }else{
         echo "Cliënt niet gevonden! controleer of de naam goed ingevuld is!";
         echo "<br>";
-        echo "<a href='clientoverzicht.php'><button>terug naar overzicht</button></a>";
+        echo "<a href='../cliënt.php'><button>terug naar overzicht</button></a>";
     }
 
 ?>
