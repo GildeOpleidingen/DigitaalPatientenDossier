@@ -29,6 +29,7 @@
                     <a href="#">Metingen</a>
                     <a href="#">Formulieren</a>
                 </ul>
+                <p class="copyright">©copyright 2023 Gildezorgcollege</p>
             </div>
         </div>
 	</body>
