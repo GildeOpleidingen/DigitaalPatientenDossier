@@ -1,0 +1,67 @@
+<?php
+session_start();
+include_once '../../Database/DatabaseConnection.php';
+
+if(!isset($_GET['id'])) {
+    header("Location: ../cliënt.php");
+}
+
+$id = $_GET['id'];
+$_SESSION['clientId'] = $_GET['id'];
+
+$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
+$client->bind_param("s", $id);
+$client->execute();
+$client = $client->get_result()->fetch_assoc();
+
+$clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
+$clientRelations->bind_param("s", $id);
+$clientRelations->execute();
+$clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$verzorgers = [];
+foreach ($clientRelations as $relation) {
+    $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
+    $verzorger->bind_param("s", $relation['medewerkerid']);
+    $verzorger->execute();
+    $verzorger = $verzorger->get_result()->fetch_assoc();
+    array_push($verzorgers, $verzorger);
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="overzicht.css">
+    <title>Verzorgers van <?= $client['naam']; ?></title>
+</head>
+<body>
+<?php
+include_once '../../Includes/header.php';
+
+?>
+<div class="main">
+    <?php
+    include_once '../../Includes/sidebar.php';
+    ?>
+    <div class="main2">
+        <div class="client">
+            <form method="POST" action="Verzorger/verwijder.php">
+                <input type="hidden" value="<?= $client['id']; ?>" name="clientId">
+                <?php
+                foreach ($verzorgers as $verzorger) {
+                    echo "<div class='data'><pre class='datakey'>" . $verzorger['naam'] . "</pre><div class='datavalue'><input type='checkbox' name='verwijder[${verzorger["id"]}]'></div></div>";
+                }
+                ?>
+
+                <button type="submit">Verwijder van client</button>
+            </form>
+        </div>
+
+
+    </div>
+</div>
+</div>
+</body>
+</html>

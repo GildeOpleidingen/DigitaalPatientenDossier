@@ -58,11 +58,11 @@ include_once '../../Includes/header.php';
             echo "<div class='data'><pre class='datakey'>Afdeling</pre><div class='datavalue'>${client['afdeling']}</div></div>";
             echo "<div class='data'><pre class='datakey'>Nationaliteit</pre><div class='datavalue'>${client['nationaliteit']}</div></div>";
             echo "<div class='data'><pre class='datakey'>Burgerlijke staat</pre><div class='datavalue'>${client['burgelijkestaat']}</div></div>";
-            echo "<div class='data'><pre class='datakey'>Verzorger(s)</pre><div class='datavalue'>";
+            echo "<a href='verzorgers.php?id=${_GET['id']}'><div class='data'><pre class='datakey'>Verzorger(s)</pre><div class='datavalue'>";
             foreach ($verzorgers as $verzorger) {
                 echo $verzorger['naam'] . "<br>";
             }
-            echo "</div></div>";
+            echo "</div></div></a>";
             ?>
         </div>
     </div>
