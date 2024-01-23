@@ -60,7 +60,9 @@ include_once '../../Includes/header.php';
                     <?php
                     $result = DatabaseConnection::getConn()->query("SELECT id, naam FROM medewerker;");
                     while ($row = $result->fetch_array()) {
-                        echo "<option value='$row[0]'>$row[1]</option>";
+                        if (!in_array($row[0], array_column($verzorgers, 'id'))) {
+                            echo "<option value='$row[0]'>$row[1]</option>";
+                        }
                     }
 
                     ?>
