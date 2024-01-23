@@ -47,7 +47,7 @@ include_once '../../Includes/header.php';
     ?>
     <div class="main2">
         <div class="client">
-            <form method="POST" action="Verzorger/verwijder.php">
+            <form method="POST">
                 <input type="hidden" value="<?= $client['id']; ?>" name="clientId">
                 <?php
                 foreach ($verzorgers as $verzorger) {
@@ -55,7 +55,19 @@ include_once '../../Includes/header.php';
                 }
                 ?>
 
-                <button type="submit">Verwijder van client</button>
+                <select name="medewerkerId">
+                    <option value="" disabled selected>Selecteer een verzorger</option>
+                    <?php
+                    $result = DatabaseConnection::getConn()->query("SELECT id, naam FROM medewerker;");
+                    while ($row = $result->fetch_array()) {
+                        echo "<option value='$row[0]'>$row[1]</option>";
+                    }
+
+                    ?>
+                </select>
+
+                <button type="submit" formaction="Verzorger/voegtoe.php">Voeg toe aan client</button>
+                <button type="submit" formaction="Verzorger/verwijder.php">Verwijder van client</button>
             </form>
         </div>
 
