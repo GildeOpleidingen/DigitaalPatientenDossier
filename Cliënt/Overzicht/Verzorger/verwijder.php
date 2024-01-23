@@ -10,6 +10,11 @@ $id = $_SESSION['loggedin_id'];
 $clientId = $_POST['clientId'];
 $omteVerwijderen = $_POST['verwijder'];
 
+if (!$omteVerwijderen) {
+    header("Location: ../overzicht.php?id=$clientId");
+    return;
+}
+
 foreach ($omteVerwijderen as $key => $value) {
     if ($value == 'on') {
         $result = DatabaseConnection::getConn()->prepare("DELETE FROM verzorgerregel WHERE medewerkerid = ? AND clientid = ?");
