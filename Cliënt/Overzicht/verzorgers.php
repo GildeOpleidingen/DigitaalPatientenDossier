@@ -14,13 +14,13 @@ $client->bind_param("s", $id);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
 
-$clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
-$clientRelations->bind_param("s", $id);
-$clientRelations->execute();
-$clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
+$clientRelaties = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
+$clientRelaties->bind_param("s", $id);
+$clientRelaties->execute();
+$clientRelaties = $clientRelaties->get_result()->fetch_all(MYSQLI_ASSOC);
 
 $verzorgers = [];
-foreach ($clientRelations as $relation) {
+foreach ($clientRelaties as $relation) {
     $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
     $verzorger->bind_param("s", $relation['medewerkerid']);
     $verzorger->execute();
