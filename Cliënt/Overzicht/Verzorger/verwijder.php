@@ -9,7 +9,6 @@ if (!isset($_SESSION['loggedin_id'])) {
 $id = $_SESSION['loggedin_id'];
 $clientId = $_POST['clientId'];
 $omteVerwijderen = $_POST['verwijder'];
-print_r($omteVerwijderen);
 
 foreach ($omteVerwijderen as $key => $value) {
     if ($value == 'on') {
