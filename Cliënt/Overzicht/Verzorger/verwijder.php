@@ -17,4 +17,6 @@ foreach ($omteVerwijderen as $key => $value) {
         $result->execute();
     }
 }
+
+header("Location: ../overzicht.php?id=$clientId");
 ?>
