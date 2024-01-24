@@ -160,6 +160,5 @@
                 </ul>
                 <p class="copyright">©copyright 2023 Gildezorgcollege</p>
             </div>
-        </div>
 	</body>
 </html>
