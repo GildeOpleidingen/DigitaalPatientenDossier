@@ -96,7 +96,7 @@
 
                         $header = array(
                             "dashboard" => "Dashboard",
-                            "cliënt" => "Cliënt",
+                            "cliënt" => "Client",
                             "medewerker" => "Medewerker",
                         );
 
