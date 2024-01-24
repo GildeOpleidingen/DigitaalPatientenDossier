@@ -9,7 +9,7 @@ function updateClient($naam, $geslacht, $adres, $postcode, $woonplaats, $telefoo
 
     if ($conn->affected_rows <= 0) {
         $result = $conn->query("SELECT * FROM `client` WHERE naam='$naam'")->fetch_all();
-        if (sizeof($result) == 0)    {
+        if (sizeof($result) == 0) {
             $conn->query("INSERT INTO `client`(`naam`, `geslacht`, `adres`, `postcode`, `woonplaats`, `telefoonnummer`, `email`, `reanimatiestatus`, `nationaliteit`, `afdeling`, `burgelijkestaat`, `foto`) VALUES ('$naam','$geslacht','$adres','$postcode','$woonplaats','$telefoonnummer','$email','$reanimatiestatus','$nationaliteit','$afdeling','$burgelijkestaat','$foto');");
             return true;
         }
