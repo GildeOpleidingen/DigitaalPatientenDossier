@@ -16,7 +16,7 @@ if (!$omtoeTeVoegen) {
 }
 
 $result = DatabaseConnection::getConn()->prepare("INSERT INTO verzorgerregel (medewerkerid, clientid) VALUES (?, ?)");
-$result->bind_param("ss", $omtoeTeVoegen, $clientId);
+$result->bind_param("ii", $omtoeTeVoegen, $clientId);
 $result->execute();
 
 header("Location: ../overzicht.php?id=$clientId");

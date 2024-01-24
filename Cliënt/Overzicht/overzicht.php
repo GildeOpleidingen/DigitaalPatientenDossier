@@ -10,19 +10,19 @@ $id = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
 
 $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("s", $id);
+$client->bind_param("i", $id);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
 
 $clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
-$clientRelations->bind_param("s", $id);
+$clientRelations->bind_param("i", $id);
 $clientRelations->execute();
 $clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
 
 $verzorgers = [];
 foreach ($clientRelations as $relation) {
     $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
-    $verzorger->bind_param("s", $relation['medewerkerid']);
+    $verzorger->bind_param("i", $relation['medewerkerid']);
     $verzorger->execute();
     $verzorger = $verzorger->get_result()->fetch_assoc();
     array_push($verzorgers, $verzorger);

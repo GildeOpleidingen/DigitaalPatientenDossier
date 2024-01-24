@@ -18,7 +18,7 @@ if (!$omteVerwijderen) {
 foreach ($omteVerwijderen as $key => $value) {
     if ($value == 'on') {
         $result = DatabaseConnection::getConn()->prepare("DELETE FROM verzorgerregel WHERE medewerkerid = ? AND clientid = ?");
-        $result->bind_param("ss", $key, $clientId);
+        $result->bind_param("ii", $key, $clientId);
         $result->execute();
     }
 }
