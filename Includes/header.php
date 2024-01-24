@@ -73,6 +73,7 @@
                 color: #DD0069;
                 font-weight: bold;
             }
+
         </style>
 	</head>
 

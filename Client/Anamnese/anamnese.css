@@ -1,0 +1,110 @@
+.main{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100%;
+}
+
+.content{
+    height: 100%;
+    width: 100%;
+    background-color: #00365E;
+    padding: 20px;
+    padding-top: 100px;
+}
+
+.form-content{
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.pages{
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+    background-color: #DD0069;
+}
+
+.form{
+    height: 100%;
+    width: 100%;
+    background-color: rgb(240, 240, 240);
+    border-radius: 5px;
+    overflow: auto;
+}
+
+.questionnaire{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    color: #00365E;
+}
+
+.question{
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.questions, .results{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+input[type="text"] {
+    width: 300px;
+    height: 0px;
+    padding: 10px;
+    border: 2px solid #00365E;
+    border-radius: 3px;
+} 
+
+.checkboxes{
+    display: flex;
+    gap: 20px;
+}
+
+.observation{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.observe{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.submit{
+    width: 100%;
+    gap: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.submit button {
+    border: 0px;
+    border-radius: 3px;
+    padding: 5px;
+    height: 40px;
+    width: 100px;
+    background-color: #00365E;
+    color: white;
+    cursor: pointer;
+}
