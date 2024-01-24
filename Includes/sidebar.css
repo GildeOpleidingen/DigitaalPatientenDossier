@@ -7,7 +7,7 @@
 
 .sidebar{
     height: 100vh;
-    width: 200px;
+    width: 400px;
     padding-top: 80px;
     background-color: white;
     text-align: center;
@@ -72,4 +72,9 @@ a{
     color: #00365E;
     text-decoration: none;
     list-style-type: none;
+}
+
+.selected{
+    color: #DD0069;
+    font-weight: bold;
 }

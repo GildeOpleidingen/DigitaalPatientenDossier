@@ -33,14 +33,14 @@ if (isset($_POST['submit'])) {
             // Check of de foto niet groter is dan 16 mb omdat een mediumblob maximaal 16 mb kan zijn
             if ($_FILES["foto"]["size"] > 16000000) {
                 $foto = null;
-                $_SESSION['error'] = "Het bestand is te groot, het bestand mag maximaal 64kb groot zijn.";
+                $_SESSION['error'] = "Het bestand is te groot, het bestand mag maximaal 16mb groot zijn.";
             }
         }
     }
 
     $introductie = $_POST['introductie'];
     $gezinfamilie = $_POST['gezinfamilie'];
-    $hobbies = $_POST['hobbys'];
+    $hobbies = $_POST['hobbies'];
     $belangrijkeinfo = $_POST['belangrijkeinfo'];
 
     insertClientStory($client['id'], $foto ?? $clientStory['foto'], $introductie, $gezinfamilie, $belangrijkeinfo, $hobbies);
@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
 
                 <p>Introductie: </p><input type="text" name="introductie" value=<?= $clientStory['introductie'] ?? "" ?>>
                 <p>Gezin en familie: </p><input type="text" name="gezinfamilie" value=<?= $clientStory['gezinfamilie'] ?? "" ?>>
-                <p>Hobby's: </p><input type="text" name="hobbys" value=<?= $clientStory['hobbies'] ?? "" ?>>
+                <p>Hobbies: </p><input type="text" name="hobbies" value=<?= $clientStory['hobbies'] ?? "" ?>>
                 <p>Belangrijke informatie voor omgang: </p><input type="text" name="belangrijkeinfo" value=<?= $clientStory['belangrijkeinfo'] ?? "" ?>>
                 <p style="color:red;"><?= $_SESSION['error'] ?? "" ?></p>
                 <?php unset($_SESSION['error']) ?>

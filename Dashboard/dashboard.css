@@ -1,0 +1,53 @@
+header {
+    z-index: 2;
+}
+
+.main{
+    height: 100vh;
+    width: 100%;
+    background-color: #00365E;
+    z-index: 1;
+}
+
+.users {
+    position: relative;
+    top: 7em;
+    left: 2em;
+    height: 48.5em;
+    width: 116em;
+    background-color: white;
+    z-index: 0;
+}
+
+.list {
+    position: relative;
+    top: 1em;
+    left: 1em;
+    height: 46em;
+    width: 113.5em;
+}
+
+.user {
+    position: relative;
+    margin-bottom: 1em;
+    margin-left: 1em;
+    float: left;
+    background-color: #c4c4c4;
+    height: 15em;
+    width: 15em;
+    border-radius: 25px;
+    text-align: center;
+}
+
+.username {
+    position: relative;
+    top: 25px;
+    color: black;
+}
+
+.img {
+    position: absolute;
+    top: 4em;
+    left: 3.5em;
+    border-radius: 10px;
+}
