@@ -8,7 +8,7 @@
     }
 
     $result = DatabaseConnection::getConn()->prepare("SELECT clientid FROM verzorgerregel WHERE medewerkerid = ?");
-    $result->bind_param("s", $id);
+    $result->bind_param("i", $id);
     $result->execute();
     $links = $result->get_result()->fetch_all();
     ?>
