@@ -5,7 +5,7 @@
     $id = $_SESSION['loggedin_id'];
 
     $result = DatabaseConnection::getConn()->prepare("SELECT naam, foto FROM medewerker WHERE id = ?");
-    $result->bind_param("s", $id);
+    $result->bind_param("i", $id);
     $result->execute();
     $medewerker = $result->get_result()->fetch_assoc();
     ?>
@@ -95,7 +95,7 @@
 
                         $header = array(
                             "dashboard" => "Dashboard",
-                            "cliënt" => "Cliënt",
+                            "cliënt" => "Client",
                             "medewerker" => "Medewerker",
                         );
 
