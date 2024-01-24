@@ -11,10 +11,12 @@ include '../../Database/DatabaseConnection.php';
     <title>Formulieren</title>
 </head>
 <body>
+    <div class="main">
+    <div class="main-content">
         <?php
             include '../../Includes/header.php';
         ?>
-    <div class="main">
+
         <?php
             include '../../Includes/sidebar.php';
         ?>
@@ -35,6 +37,7 @@ include '../../Database/DatabaseConnection.php';
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 </body>

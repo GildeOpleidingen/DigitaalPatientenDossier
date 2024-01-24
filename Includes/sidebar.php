@@ -7,7 +7,24 @@
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
-                font-family: 'Poppins', sans-serif;}
+                font-family: 'Poppins', sans-serif;
+            }
+
+            ::-webkit-scrollbar {
+                width: 10px;
+            }
+            
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                background: #888;
+            }
+            
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
 
 
             .sidebar{
@@ -77,6 +94,10 @@
                 color: #00365E;
                 text-decoration: none;
                 list-style-type: none;
+            }
+
+            .copyright{
+                font-size: 10px;
             }
 
             </style>
