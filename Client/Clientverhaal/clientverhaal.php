@@ -6,8 +6,8 @@ include '../../Functions/ClientFunctions.php';
 if (!isset($_GET['id']) || !checkIfClientExistsById($_GET['id']) || !getMedischOverzichtByClientId($_GET['id'])) {
     header("Location: ../../index.php");
     exit;
-}else{
-    if(!isset($_SESSION['clientId'])){
+} else {
+    if (!isset($_SESSION['clientId'])) {
         $_SESSION['clientId'] = $_GET['id'];
     }
 }
@@ -87,29 +87,29 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
     <?php unset($_SESSION['error']) ?>
-    
+
     <script>
         const status = document.getElementById('status');
         const output = document.getElementById('image');
         if (window.FileList && window.File && window.FileReader) {
             document.getElementById('file-selector').addEventListener('change', event => {
-            output.src = '';
-            status.textContent = '';
-            const file = event.target.files[0];
-            if (!file.type) {
-                status.textContent = 'Het bestand die je probeert te gebruiken is geen .jpg, .jpeg of .png';
-                return;
-            }
-            if (!file.type.match('image.*')) {
-                status.textContent = 'Het bestand die je probeert te gebruiken is geen foto';
-                return;
-            }
-            const reader = new FileReader();
-            reader.addEventListener('load', event => {
-                output.src = event.target.result;
+                output.src = '';
+                status.textContent = '';
+                const file = event.target.files[0];
+                if (!file.type) {
+                    status.textContent = 'Het bestand die je probeert te gebruiken is geen .jpg, .jpeg of .png';
+                    return;
+                }
+                if (!file.type.match('image.*')) {
+                    status.textContent = 'Het bestand die je probeert te gebruiken is geen foto';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.addEventListener('load', event => {
+                    output.src = event.target.result;
+                });
+                reader.readAsDataURL(file);
             });
-            reader.readAsDataURL(file);
-            }); 
         }
 
         if (window.history.replaceState) {
