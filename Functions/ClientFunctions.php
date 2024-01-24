@@ -89,9 +89,14 @@ function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijk
 }
 
 function checkIfClientStoryExistsByClientId($id): bool {
-    $medischOverzicht = getMedischOverzichtByClientId($id);
-    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `clientverhaal` WHERE medischoverzichtid = ?;");
-    $result->bind_param("i", $medischOverzicht['id']);
+    $result = DatabaseConnection::getConn()->prepare("
+    SELECT cv.*
+    FROM client c
+    JOIN medischoverzicht mo on mo.clientid = c.id 
+    join clientverhaal cv on cv.medischoverzichtid = mo.id
+    where c.id = ?
+    ");
+    $result->bind_param("i", $id);
     $result->execute();
 
     if($result->get_result()->num_rows > 0) {

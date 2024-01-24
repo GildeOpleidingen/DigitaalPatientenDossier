@@ -13,6 +13,5 @@
             include 'Includes/sidebar.php';
         ?>
     </div>
-
 </body>
 </html>
