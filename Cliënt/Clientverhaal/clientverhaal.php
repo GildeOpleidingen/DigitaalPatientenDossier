@@ -6,7 +6,10 @@ include '../../Functions/ClientFunctions.php';
 if (!isset($_GET['id']) || !checkIfClientExistsById($_GET['id']) || !getMedischOverzichtByClientId($_GET['id'])) {
     header("Location: ../../index.php");
     exit;
+}else{
+    $_SESSION['clientId'] = $_GET['id'];
 }
+
 
 if (isset($_SESSION['client'])) {
     unset($_SESSION['client']);
@@ -67,28 +70,47 @@ if (isset($_POST['submit'])) {
         <?php include '../../Includes/sidebar.php'; ?>
         <div class="main2">
             <form class="invulformulier" method="POST" enctype="multipart/form-data">
-                <?php if ($clientStory['foto'] != "") { ?>
-                    <p>Klik op de foto om het te veranderen</p>
-                <?php } else { ?>
-                    <p>Foto:</p>
-                <?php } ?>
-                <label>
+                <p>Foto:</p>
+                <label class="img-flex">
                     <img id="image" src="data:image/png;base64,<?= base64_encode($clientStory['foto']) ?? "" ?>" alt=" " width="200" height="200">
-                    <input type="file" name="foto" accept="image/png, image/jpg, image/jpeg" style="<?= $clientStory['foto'] ? "display:none" : "" ?>">
+                    <p id="status" style="color:red"><?= $_SESSION['error'] ?? "" ?></p>
+                    <input type="file" id="file-selector" name="foto" accept="image/png, image/jpg, image/jpeg">
                 </label>
 
-                <p>Introductie: </p><input type="text" name="introductie" value=<?= $clientStory['introductie'] ?? "" ?>>
-                <p>Gezin en familie: </p><input type="text" name="gezinfamilie" value=<?= $clientStory['gezinfamilie'] ?? "" ?>>
-                <p>Hobbies: </p><input type="text" name="hobbies" value=<?= $clientStory['hobbies'] ?? "" ?>>
-                <p>Belangrijke informatie voor omgang: </p><input type="text" name="belangrijkeinfo" value=<?= $clientStory['belangrijkeinfo'] ?? "" ?>>
-                <p style="color:red;"><?= $_SESSION['error'] ?? "" ?></p>
-                <?php unset($_SESSION['error']) ?>
+                <p>Introductie: </p><textarea name="introductie"><?= $clientStory['introductie'] ?? "" ?></textarea>
+                <p>Gezin en familie: </p><textarea name="gezinfamilie"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
+                <p>Hobbies: </p><textarea name="hobbies"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
+                <p>Belangrijke informatie voor omgang: </p><textarea name="belangrijkeinfo"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
                 <input type="submit" name="submit" class="button" value="Update clientverhaal">
             </form>
         </div>
     </div>
-
+    <?php unset($_SESSION['error']) ?>
+    
     <script>
+        const status = document.getElementById('status');
+        const output = document.getElementById('image');
+        if (window.FileList && window.File && window.FileReader) {
+            document.getElementById('file-selector').addEventListener('change', event => {
+            output.src = '';
+            status.textContent = '';
+            const file = event.target.files[0];
+            if (!file.type) {
+                status.textContent = 'Het bestand die je probeert te gebruiken is geen .jpg, .jpeg of .png';
+                return;
+            }
+            if (!file.type.match('image.*')) {
+                status.textContent = 'Het bestand die je probeert te gebruiken is geen foto';
+                return;
+            }
+            const reader = new FileReader();
+            reader.addEventListener('load', event => {
+                output.src = event.target.result;
+            });
+            reader.readAsDataURL(file);
+            }); 
+        }
+
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
