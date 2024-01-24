@@ -46,7 +46,7 @@ function getMedewerkerById($id): array{
 
 function getMedewerkerByName($name): array {
     $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE naam = ?;");
-    $result->bind_param("i", $name);
+    $result->bind_param("s", $name);
     $result->execute();
 
     return $result->get_result()->fetch_array();
