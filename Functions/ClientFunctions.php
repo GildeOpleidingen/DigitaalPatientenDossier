@@ -47,7 +47,13 @@ function getClientByName($name): array {
 }
 
 function getMedischOverzichtByClientId($id): array {
-    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `medischoverzicht` WHERE clientid = ?;");
+    $result = DatabaseConnection::getConn()->prepare("
+    SELECT mo.*
+    FROM client c
+    JOIN medischoverzicht mo on mo.clientid = c.id 
+    where c.id = ?
+    ");
+    
     $result->bind_param("i", $id);
     $result->execute();
 
@@ -55,10 +61,15 @@ function getMedischOverzichtByClientId($id): array {
 }
 
 function getClientStoryByClientId($id): array {
-    $medischOverzicht = getMedischOverzichtByClientId($id);
+    $result = DatabaseConnection::getConn()->prepare("
+    SELECT cv.*
+    FROM client c
+    JOIN medischoverzicht mo on mo.clientid = c.id 
+    join clientverhaal cv on cv.medischoverzichtid = mo.id
+    where c.id = ?
+    ");
 
-    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `clientverhaal` WHERE medischoverzichtid = ?;");
-    $result->bind_param("i", $medischOverzicht['id']);
+    $result->bind_param("i", $id);
     $result->execute();
 
     return (array) $result->get_result()->fetch_array();
