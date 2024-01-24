@@ -7,9 +7,10 @@ if (!isset($_GET['id']) || !checkIfClientExistsById($_GET['id']) || !getMedischO
     header("Location: ../../index.php");
     exit;
 }else{
-    $_SESSION['clientId'] = $_GET['id'];
+    if(!isset($_SESSION['clientId'])){
+        $_SESSION['clientId'] = $_GET['id'];
+    }
 }
-
 
 if (isset($_SESSION['client'])) {
     unset($_SESSION['client']);
