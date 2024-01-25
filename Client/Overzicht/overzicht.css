@@ -1,34 +1,69 @@
 .main{
     display: flex;
     flex-direction: row;
-}
-
-.main2{
+    height: 100vh;
     width: 100%;
-    padding-top: 5%; /* Dit is een hacky af fix */
 }
 
-.data {
-    position: relative;
-    margin-bottom: 1em;
-    margin-left: 1em;
-    float: left;
-    background-color: #c4c4c4;
-    height: 15em;
-    width: 15em;
-    border-radius: 25px;
-    text-align: center;
+.content{
+    height: 100%;
+    width: 100%;
+    background-color: #00365E;
+    padding: 20px;
+    padding-top: 100px;
 }
 
-.datakey {
-    position: relative;
-    top: 25px;
-    color: black;
+input{
+    width: 300px;
+    height: 30px;
+    padding: 10px;
+    border: 2px solid #00365E;
+    border-radius: 3px;
 }
 
-.datavalue {
-    position: absolute;
-    top: 4em;
-    left: 3.5em;
+select{
+    width: 70px;
+    height: 30px;
+    border: 2px solid #00365E;
+    border-radius: 3px;
+    color: #00365E;
+    border: 2px solid #00365E;
+}
+
+.inputs{
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    color: #00365E;
+    font-weight: 600;
+}
+
+.inputs div{
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.overzicht{
+    width: 100%;
+    min-height: 130px;
+    background-color: rgb(240, 240, 240);
     border-radius: 10px;
+    padding: 20px;
+    padding-left: 40px;
+    align-items: center;
+}
+
+.overzicht-content{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+}
+
+strong {
+    font-size: 20px;
+    color: #00365E;
 }
