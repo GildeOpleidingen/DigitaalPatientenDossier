@@ -4,27 +4,24 @@ header {
 
 .main{
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
     width: 100%;
     background-color: #00365E;
-    z-index: 1;
+}
+
+.main-content{
+    height: 100%;
+    width: 100%;
+    padding: 20px;
 }
 
 .users {
-    position: relative;
-    top: 7em;
-    left: 2em;
-    height: 48.5em;
-    width: 116em;
+    height: 100%;
+    width: 100%;
     background-color: white;
     z-index: 0;
-}
-
-.list {
-    position: relative;
-    top: 1em;
-    left: 1em;
-    height: 46em;
-    width: 113.5em;
 }
 
 .user {

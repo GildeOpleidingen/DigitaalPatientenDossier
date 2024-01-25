@@ -21,10 +21,11 @@
     <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
+<div  class="main" id="main">
 <?php
     include_once '../Includes/header.php';
 ?>
-<div  class="main" id="main">
+<div  class="main-content">
     <div class="users" id="users">
         <div class="list">
             <?php
@@ -69,6 +70,7 @@
                 }
             ?>
         </div>
+    </div>
     </div>
 </div>
 </body>

@@ -23,31 +23,34 @@ $client = $result->get_result()->fetch_assoc();
     <title>Overzicht van <?= $client['naam']; ?></title>
 </head>
 <body>
-<?php
-include_once '../../Includes/header.php';
-
-?>
-<div class="main">
+    <div class="main">
     <?php
-    include_once '../../Includes/sidebar.php';
-    ?>
-    <div class="main2">
-        <div class="client">
+        include_once '../../Includes/header.php';
+
+        ?>
+        <div class="main-content">
             <?php
-            echo "<div class='data'><pre class='datakey'>Geslacht</pre><div class='datavalue'>${client['geslacht']}</div></div>";
-            echo "<div class='data'><pre class='datakey'>Geboortedatum</pre><div class='datavalue'>${client['geboortedatum']}</div></div>";
-            echo "<div class='data'><pre class='datakey'>Adres</pre><div class='datavalue'>${client['adres']}</div></div>";
-            echo "<div class='data'><pre class='datakey'>Postcode</pre><div class='datavalue'>${client['postcode']}</div></div>";
-            echo "<div class='data'><pre class='datakey'>Woonplaats</pre><div class='datavalue'>${client['woonplaats']}</div></div>";
-            echo "<div class='data'><pre class='datakey'>Telefoonnummer</pre><div class='datavalue'>${client['telefoonnummer']}</div></div>";
-            echo "<div class='data'><pre class='datakey'>Email</pre><div class='datavalue'>${client['email']}</div></div>";
-            echo "<div class='data'><pre class='datakey'>Afdeling</pre><div class='datavalue'>${client['afdeling']}</div></div>";
-            echo "<div class='data'><pre class='datakey'>Nationaliteit</pre><div class='datavalue'>${client['nationaliteit']}</div></div>";
-            echo "<div class='data'><pre class='datakey'>Burgerlijke staat</pre><div class='datavalue'>${client['burgelijkestaat']}</div></div>";
+                include_once '../../Includes/sidebar.php';
             ?>
+                <div class="client-content">
+                    <div class="client">
+                        <?php
+                            echo "<div class='data-content'>";
+                                echo "<div class='data'><pre class='datakey'>Geslacht</pre><div class='datavalue'>${client['geslacht']}</div></div>";
+                                echo "<div class='data'><pre class='datakey'>Geboortedatum</pre><div class='datavalue'>${client['geboortedatum']}</div></div>";
+                                echo "<div class='data'><pre class='datakey'>Adres</pre><div class='datavalue'>${client['adres']}</div></div>";
+                                echo "<div class='data'><pre class='datakey'>Postcode</pre><div class='datavalue'>${client['postcode']}</div></div>";
+                                echo "<div class='data'><pre class='datakey'>Woonplaats</pre><div class='datavalue'>${client['woonplaats']}</div></div>";
+                                echo "<div class='data'><pre class='datakey'>Telefoonnummer</pre><div class='datavalue'>${client['telefoonnummer']}</div></div>";
+                                echo "<div class='data'><pre class='datakey'>Email</pre><div class='datavalue'>${client['email']}</div></div>";
+                                echo "<div class='data'><pre class='datakey'>Afdeling</pre><div class='datavalue'>${client['afdeling']}</div></div>";
+                                echo "<div class='data'><pre class='datakey'>Nationaliteit</pre><div class='datavalue'>${client['nationaliteit']}</div></div>";
+                                echo "<div class='data'><pre class='datakey'>Burgerlijke staat</pre><div class='datavalue'>${client['burgelijkestaat']}</div></div>";
+                            echo "</div>";
+                        ?>
+                    </div>
+                </div>
         </div>
     </div>
-</div>
-</div>
 </body>
 </html>
