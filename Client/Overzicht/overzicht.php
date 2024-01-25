@@ -6,7 +6,6 @@ if(!isset($_GET['id'])) {
     header("Location: ../client.php");
 }
 
-
 $id = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
 

@@ -63,7 +63,7 @@ include '../../Includes/header.php';
                 <input required type="text" placeholder="Naam" name="naam"><br>
                 <label for="geslacht">Geslacht</label><br>
                 <input required type="string" maxlength="1" placeholder="Geslacht" name="Geslacht"><br>
-                <label for="Geboortedatum Adres Postcode">Adresgegevens</label><br>
+                <label for="Adres">Adresgegevens</label><br>
                 <input required type="text" placeholder="Adres" name="Adres">
                 <input required type="text" placeholder="Postcode" name="Postcode">
                 <input required type="text" placeholder="Woonplaats" name="Woonplaats"><br>
@@ -84,12 +84,6 @@ include '../../Includes/header.php';
 
                 <button type="submit">Toevoegen</button>
             </form>
-
-
-
-
-
-
         </div>
     </div>
 </div>
