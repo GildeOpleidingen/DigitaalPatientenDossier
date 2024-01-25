@@ -38,7 +38,6 @@ foreach ($clientRelations as $relation) {
 </head>
 <body>
 <div class="main">
-    <div class="main-content">
         <?php
         include '../../Includes/header.php';
         ?>
@@ -104,7 +103,6 @@ foreach ($clientRelations as $relation) {
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 
 </body>
