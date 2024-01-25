@@ -14,18 +14,20 @@ $client->bind_param("i", $id);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
 
-$clientRelaties = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
-$clientRelaties->bind_param("i", $id);
-$clientRelaties->execute();
-$clientRelaties = $clientRelaties->get_result()->fetch_all(MYSQLI_ASSOC);
+$medewerkers = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");
+$medewerkers->execute();
+$medewerkers = $medewerkers->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$verzorgers = [];
-foreach ($clientRelaties as $relation) {
-    $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
-    $verzorger->bind_param("i", $relation['medewerkerid']);
-    $verzorger->execute();
-    $verzorger = $verzorger->get_result()->fetch_assoc();
-    array_push($verzorgers, $verzorger);
+// Loop door alle medewerkers heen, als de medewerker al in de database staat, zet dan de checked variabele op true
+foreach ($medewerkers as $key => $medewerker) {
+    $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
+    $stmt->bind_param("ii", $id, $medewerker['id']);
+    $stmt->execute();
+    $stmt = $stmt->get_result()->fetch_assoc();
+
+    if ($stmt) {
+        $medewerkers[$key]['checked'] = true;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -33,49 +35,43 @@ foreach ($clientRelaties as $relation) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="overzicht.css">
-    <title>Verzorgers van <?= $client['naam']; ?></title>
+    <link rel="Stylesheet" href="verzorgers.css">
+    <title>Verzorgers van <?= $client['naam'] ?></title>
 </head>
 <body>
-<?php
-include_once '../../Includes/header.php';
-
-?>
 <div class="main">
-    <?php
-    include_once '../../Includes/sidebar.php';
-    ?>
-    <div class="main2">
-        <div class="client">
-            <form method="POST">
-                <input type="hidden" value="<?= $client['id']; ?>" name="clientId">
-                <?php
-                foreach ($verzorgers as $verzorger) {
-                    echo "<div class='data'><pre class='datakey'>" . $verzorger['naam'] . "</pre><div class='datavalue'><input type='checkbox' name='verwijder[${verzorger["id"]}]'></div></div>";
-                }
-                ?>
+        <?php
+        include '../../Includes/header.php';
+        ?>
 
-                <select name="medewerkerId">
-                    <option value="" disabled selected>Selecteer een verzorger</option>
-                    <?php
-                    $result = DatabaseConnection::getConn()->query("SELECT id, naam FROM medewerker;");
-                    while ($row = $result->fetch_array()) {
-                        if (!in_array($row[0], array_column($verzorgers, 'id'))) {
-                            echo "<option value='$row[0]'>$row[1]</option>";
-                        }
-                    }
+        <?php
+        include '../../Includes/sidebar.php';
+        ?>
 
-                    ?>
-                </select>
-
-                <button type="submit" formaction="Verzorger/voegtoe.php">Voeg toe aan client</button>
-                <button type="submit" formaction="Verzorger/verwijder.php">Verwijder van client</button>
-            </form>
+        <form action="Verzorger/verwerk.php" method="post" class="content">
+            <input type="hidden" name="clientId" value="<?= $id ?>">
+            <div class="form-content">
+                <div class="pages">Verzorgers van <?= $client['naam'] ?></div>
+                <div class="form">
+                    <div class="questionnaire">
+                            <?php foreach ($medewerkers as $medewerker) { ?>
+                                <div class="question"><p><?= $medewerker['naam'] ?></p>
+                                    <div class="checkboxes">
+                                        <div>
+                                            <input type="checkbox" name="verzorgers[<?= $medewerker['id'] ?>]" <?php if (isset($medewerker['checked'])) { echo "checked"; } ?>>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                    </div>
+                </div>
+                <div class="submit">
+                    <button type="submit">Opslaan</button>
+                </div>
+            </div>
+        </form>
         </div>
-
-
-    </div>
 </div>
-</div>
+
 </body>
 </html>
