@@ -5,6 +5,7 @@
 
 .main2{
     width: 100%;
+    padding-top: 5%; /* Dit is een hacky af fix */
 }
 
 .data {

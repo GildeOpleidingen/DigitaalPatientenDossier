@@ -1,13 +1,14 @@
 <?php
+    session_start();
     include_once '../Database/DatabaseConnection.php';
-    $id = $_GET['id'];
+    $id = $_SESSION['loggedin_id'];
 
     if ($id == null) {
         header("Location: ../index.php");
     }
 
     $result = DatabaseConnection::getConn()->prepare("SELECT clientid FROM verzorgerregel WHERE medewerkerid = ?");
-    $result->bind_param("s", $id);
+    $result->bind_param("i", $id);
     $result->execute();
     $links = $result->get_result()->fetch_all();
     ?>
@@ -57,12 +58,12 @@
 
                         $client = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM client WHERE id=$link[0]")->fetch_array();
                         if ($client[2] == null) {
-                            echo "<div class='user'><a class='username' href='../Cliënt/Overzicht/overzicht.php?id=$client[0]'>$client[1]</a><div class='img'>no image found</div></div>";
+                            echo "<div class='user'><a class='username' href='../Client/Overzicht/overzicht.php?id=$client[0]'>$client[1]</a><div class='img'>no image found</div></div>";
                             $size++;
                             continue;
                         }
 
-                        echo "<div class='user'><a class='username' href='../Cliënt/Overzicht/overzicht.php?id=$client[0]'>$client[1]</a><img class='img' src='data:image/jpeg;base64," . base64_encode($client[2]) . "'/></div>";
+                        echo "<div class='user'><a class='username' href='../Client/Overzicht/overzicht.php?id=$client[0]'>$client[1]</a><img class='img' src='data:image/jpeg;base64," . base64_encode($client[2]) . "'/></div>";
                         $size++;
                     }
                 }

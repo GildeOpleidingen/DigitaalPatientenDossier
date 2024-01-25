@@ -74,7 +74,12 @@ a{
     list-style-type: none;
 }
 
-.selected{
+.copyright {
+    color: rgba(53, 79, 99, 0.6);
+
+}
+
+.selected {
     color: #DD0069;
     font-weight: bold;
 }
