@@ -1,6 +1,7 @@
-<?php 
+<?php
+session_start();
 include '../Database/DatabaseConnection.php';
-$result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;");
+$items = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;")->fetch_all();
 ?>
 
 <!DOCTYPE html>
@@ -9,11 +10,11 @@ $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geb
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cliënten</title>
-    <link rel="stylesheet" href="cliënt.css">
+    <link rel="stylesheet" href="client.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <?php 
+<?php
     include '../Includes/header.php';
 ?>
 
@@ -31,14 +32,16 @@ $result = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geb
                         <th>woonplaats</th>
                         <th>geboortedatum</th>
                     </tr>
-                    <?php while($row1 = mysqli_fetch_array($result)):;?>
-                    <tr>
-                        <td class="row1"><?php echo $row1[0];?></td>
-                        <td class="row1"><a href="Overzicht/overzicht.php?id=<?php echo $row1[0];?>"><?php echo $row1[1];?></a></td>
-                        <td class="row1"><?php echo $row1[2];?></td>
-                        <td class="row1"><?php echo $row1[3];?></td>
-                    </tr>
-                    <?php endwhile;?>
+                    <?php
+                        foreach ($items as $row) {
+                            echo "<tr>";
+                            echo "<td class='row1'>$row[0]</td>";
+                            echo "<td class='row1'><a href=Overzicht/overzicht.php?id=$row[0]>$row[1]</a></td>";
+                            echo "<td class='row1'>$row[2]</td>";
+                            echo "<td class='row1'>$row[3]</td>";
+                            echo "</tr>";
+                        }
+                    ?>
                 </table>
         </div>
         </div>
