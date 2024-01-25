@@ -27,7 +27,7 @@ $_SESSION['clientId'] = $_GET['id'];
 
         <form id="patientForm">
             <!-- metingen -->
-            <label for="Hartslag">Hard slag:</label>
+            <label for="Hartslag">Hartslag:</label>
             <input type="number" id="hartslag" name="hartslag" placeholder="slagen per minuut" required min="0" max="200"> <!-- o tot 200 -->
 
             <label for="Ademhaling">Ademhaling:</label>
