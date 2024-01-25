@@ -50,7 +50,7 @@ $_SESSION['clientId'] = $_GET['id'];
 
             <label for="Pijnschaal">Pijnschaal:</label>
             <input type="number" id="pijnschaal" name="pijnschaal" placeholder="van 1 tot 10" required min="1" max="10">
-            <br/><button type="button" onclick="submit()">Submit</button>
+            <br/><button class="metingButton" type="button" onclick="submit()">Submit</button>
         </form>
 
     </div>

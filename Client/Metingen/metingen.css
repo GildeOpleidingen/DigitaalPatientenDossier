@@ -15,8 +15,8 @@ form{
     background-color: white;
     padding: 20px;
     height: 97%;
-
 }
+
 body {
     font-family: Arial, sans-serif;
 }
@@ -38,7 +38,7 @@ input, select {
     border-radius: 5px;
 }
 
-button {
+.metingButton {
     padding: 10px;
     background-color: #4CAF50;
     color: white;
