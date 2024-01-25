@@ -47,7 +47,9 @@ if (isset($_POST['submit'])) {
     $hobbies = $_POST['hobbies'];
     $belangrijkeinfo = $_POST['belangrijkeinfo'];
 
-    insertClientStory($client['id'], $foto ?? $clientStory['foto'], $introductie, $gezinfamilie, $belangrijkeinfo, $hobbies);
+    if(insertClientStory($client['id'], $foto ?? $clientStory['foto'], $introductie, $gezinfamilie, $belangrijkeinfo, $hobbies)){
+        $_SESSION['success'] = "De gegevens zijn succesvol bijgewerkt!";
+    }
     $clientStory = getClientStoryByClientId($client['id']); // Update de informatie van de clientstory
 }
 ?>
@@ -77,16 +79,19 @@ if (isset($_POST['submit'])) {
                     <p id="status" style="color:red"><?= $_SESSION['error'] ?? "" ?></p>
                     <input type="file" id="file-selector" name="foto" accept="image/png, image/jpg, image/jpeg">
                 </label>
-
+                
                 <p>Introductie: </p><textarea name="introductie"><?= $clientStory['introductie'] ?? "" ?></textarea>
                 <p>Gezin en familie: </p><textarea name="gezinfamilie"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
                 <p>Hobbies: </p><textarea name="hobbies"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
                 <p>Belangrijke informatie voor omgang: </p><textarea name="belangrijkeinfo"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
+                <p style="color:green"><?= $_SESSION['success'] ?? "" ?></p>
                 <input type="submit" name="submit" class="button" value="Update clientverhaal">
             </form>
         </div>
     </div>
-    <?php unset($_SESSION['error']) ?>
+
+    <?php unset($_SESSION['error'])?>
+    <?php unset($_SESSION['success'])?>
 
     <script>
         const status = document.getElementById('status');
