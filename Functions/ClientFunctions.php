@@ -77,7 +77,7 @@ function getClientStoryByClientId($id): array {
 
 function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies): bool {
     $medischOverzicht = getMedischOverzichtByClientId($clientid);
-    if(checkIfClientExistsById($clientid)){
+    if(checkIfClientExistsById($clientid) && count($medischOverzicht) > 0){
         if(!checkIfClientStoryExistsByClientId($clientid)){
             $result = DatabaseConnection::getConn()->prepare("INSERT INTO `clientverhaal`(`id`, `medischoverzichtid`, `foto`, `introductie`, `gezinfamilie`, `belangrijkeinfo`, `hobbies`) VALUES (NULL, ?, ?, ?, ?, ?, ?);");
             $result->bind_param("isssss", $medischOverzicht['id'], $foto, $introductie, $familie, $belangrijkeinfo, $hobbies);

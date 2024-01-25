@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
     $hobbies = $_POST['hobbies'];
     $belangrijkeinfo = $_POST['belangrijkeinfo'];
 
-    if(insertClientStory($client['id'], $foto ?? $clientStory['foto'], $introductie, $gezinfamilie, $belangrijkeinfo, $hobbies)){
+    if(insertClientStory($client['id'], $foto ?? $clientStory['foto'] ?? "", $introductie, $gezinfamilie, $belangrijkeinfo, $hobbies)){
         $_SESSION['success'] = "De gegevens zijn succesvol bijgewerkt!";
     }
     $clientStory = getClientStoryByClientId($client['id']); // Update de informatie van de clientstory
@@ -75,7 +75,7 @@ if (isset($_POST['submit'])) {
             <form class="invulformulier" method="POST" enctype="multipart/form-data">
                 <p>Foto:</p>
                 <label class="img-flex">
-                    <img id="image" src="data:image/png;base64,<?= base64_encode($clientStory['foto']) ?? "" ?>" alt=" " width="200" height="200">
+                    <img id="image" src="data:image/png;base64,<?= base64_encode($clientStory['foto'] ?? "") ?? "" ?>" alt=" " width="200" height="200">
                     <p id="status" style="color:red"><?= $_SESSION['error'] ?? "" ?></p>
                     <input type="file" id="file-selector" name="foto" accept="image/png, image/jpg, image/jpeg">
                 </label>
