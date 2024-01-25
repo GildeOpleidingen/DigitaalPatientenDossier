@@ -58,6 +58,7 @@ foreach ($medewerkers as $key => $medewerker) {
                                 <div class="question"><p><?= $medewerker['naam'] ?></p>
                                     <div class="checkboxes">
                                         <div>
+                                            <input type="hidden" name="verzorgers[<?= $medewerker['id'] ?>]"> <!-- Hidden input om de waarde mee te geven als hij niet gecheckt is -->
                                             <input type="checkbox" name="verzorgers[<?= $medewerker['id'] ?>]" <?php if (isset($medewerker['checked'])) { echo "checked"; } ?>>
                                         </div>
                                     </div>
