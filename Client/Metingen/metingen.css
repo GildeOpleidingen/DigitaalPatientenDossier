@@ -1,0 +1,52 @@
+.main{
+    display: flex;
+    flex-direction: row;
+}
+
+.main2{
+    padding-top: 110px;
+    padding-left: 40px;
+    padding-right: 40px;
+    width: 100%;
+    background-color: #00365E;
+}
+
+form{
+    background-color: white;
+    padding: 20px;
+    height: 97%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+form {
+    top: 10%;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 95%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.metingButton {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
