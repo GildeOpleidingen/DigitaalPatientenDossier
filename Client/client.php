@@ -38,7 +38,7 @@ $items = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, gebo
                             echo "<td class='row1'>$row[0]</td>";
                             echo "<td class='row1'><a href=Overzicht/overzicht.php?id=$row[0]>$row[1]</a></td>";
                             echo "<td class='row1'>$row[2]</td>";
-                            echo "<td class='row1'>$row[3]</td>";
+                            echo "<td class='row1'>".date_create($row[3])->format("d-m-Y")."</td>";
                             echo "</tr>";
                         }
                     ?>
