@@ -55,7 +55,7 @@ foreach ($clientRelations as $relation) {
                         </div>
                         <div class="text">
                             <strong>Geboortedatum</strong>
-                            <p><?= $client['geboortedatum'] ?></p>
+                            <p><?= date_create($client['geboortedatum'])->format('d-m-Y') ?></p>
                         </div>
                         <div class="text">
                             <strong>Adres</strong>
