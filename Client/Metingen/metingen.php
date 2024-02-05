@@ -4,6 +4,33 @@ include '../../Database/DatabaseConnection.php';
 
 $id = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
+
+if (!isset($id)) {
+    header("Location: ../../index.php");
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $hartslag = $_POST['hartslag'];
+    $ademhaling = $_POST['ademhaling'];
+    $bloeddruk = $_POST['bloeddruk'];
+    $temperatuur = $_POST['temperatuur'];
+    $vochtinname = $_POST['vochtinname'];
+    $uitscheiding = $_POST['uitscheiding'];
+    $uitscheidingPlas = $_POST['uitscheidingPlas'];
+    $pijnschaal = $_POST['pijnschaal'];
+
+    $verzorgerregelid = DatabaseConnection::getConn()->query("SELECT id FROM verzorgerregel WHERE medewerkerid = $id")->fetch_array()[0];
+    $time = date("Y-m-d H:i:s");
+
+    $meting = DatabaseConnection::getConn()->prepare("INSERT INTO meting (verzorgerregelid, datumtijd, hartslag, ademhaling, bloeddruklaag, temperatuur, vochtinname, pijn, bloeddrukhoog) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $meting->bind_param("isiiiiiii", $verzorgerregelid, $time, $hartslag, $ademhaling, $bloeddruk, $temperatuur, $vochtinname, $pijnschaal, $uitscheidingPlas);
+    $meting->execute();
+    $metingId = $meting->insert_id;
+
+    $metingUrine = DatabaseConnection::getConn()->prepare("INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) VALUES (?, ?, ?)");
+    $metingUrine->bind_param("isi", $metingId, $time, $uitscheiding);
+    $metingUrine->execute();
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -25,7 +52,7 @@ $_SESSION['clientId'] = $_GET['id'];
         ?>
     <div class="main2">
 
-        <form id="patientForm">
+        <form id="patientForm" method="POST">
             <!-- metingen -->
             <label for="Hartslag">Hartslag:</label>
             <input type="number" id="hartslag" name="hartslag" placeholder="slagen per minuut" required min="0" max="200"> <!-- o tot 200 -->
