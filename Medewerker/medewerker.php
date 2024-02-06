@@ -18,7 +18,6 @@ $result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefo
         Search <input type="text" name="search">
         <input type="submit">
     </form>
-    <center>
         <table>
             <tr>
                 <th>Naam</th>
@@ -35,7 +34,6 @@ $result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefo
             </tr>
             <?php } ?>
         </table>
-    </center>
 </body>
 
 </html>
