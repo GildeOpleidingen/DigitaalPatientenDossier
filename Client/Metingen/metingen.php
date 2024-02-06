@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $metingId = $meting->insert_id;
 
     $metingUrine = DatabaseConnection::getConn()->prepare("INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) VALUES (?, ?, ?)");
-    $metingUrine->bind_param("isi", $metingId, $time, $uitscheiding);
+    $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingPlas);
     $metingUrine->execute();
 }
 ?>
