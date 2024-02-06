@@ -9,6 +9,8 @@ if (!isset($id)) {
     header("Location: ../../index.php");
 }
 
+$samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hartslag = $_POST['hartslag'];
     $ademhaling = $_POST['ademhaling'];
@@ -16,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $temperatuur = $_POST['temperatuur'];
     $vochtinname = $_POST['vochtinname'];
     $uitscheiding = $_POST['uitscheiding'];
+    $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
     $uitscheidingPlas = $_POST['uitscheidingPlas'];
     $pijnschaal = $_POST['pijnschaal'];
 
@@ -30,6 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $metingUrine = DatabaseConnection::getConn()->prepare("INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) VALUES (?, ?, ?)");
     $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingPlas);
     $metingUrine->execute();
+
+    $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd) VALUES (?, ?, ?)");
+    $metingUrineSamenstelling->bind_param("iis", $metingId, $uitscheidingSamenstelling, $time);
+    $metingUrineSamenstelling->execute();
 }
 ?>
 <!doctype html>
@@ -71,6 +78,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <label for="Uitscheiding">Uitscheiding:</label>
             <input type="number" id="uitscheiding" name="uitscheiding" placeholder="Invoeren in frequentie per dag" required>
+
+            <label for="Samenstelling">Samenstelling uitscheiding:</label>
+            <select name="uitscheidingSamenstelling">
+                <?php
+                foreach ($samenStellingen as $samenStelling) {
+                    echo "<option value='$samenStelling[id]'>$samenStelling[uiterlijk]</option>";
+                }
+                ?>
+            </select>
 
             <label for="Uitscheidingplas">Uitscheiding plas:</label>
             <input type="number" id="uitscheidingplas" name="uitscheidingPlas" placeholder="Invoeren in aantal milliliters" required>
