@@ -2,7 +2,7 @@
 session_start();
 include_once '../../Database/DatabaseConnection.php';
 
-if(!isset($_GET['id'])) {
+if (!isset($_GET['id'])) {
     header("Location: ../client.php");
 }
 
@@ -18,6 +18,16 @@ $clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorg
 $clientRelations->bind_param("i", $id);
 $clientRelations->execute();
 $clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$contactpersonen = DatabaseConnection::getConn()->prepare("SELECT * FROM relatie WHERE clientid = ?");
+$contactpersonen->bind_param("i", $id);
+$contactpersonen->execute();
+$contactpersonen = $contactpersonen->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$medischoverzicht = DatabaseConnection::getConn()->prepare("SELECT * FROM medischoverzicht WHERE clientid = ?");
+$medischoverzicht->bind_param("i", $id);
+$medischoverzicht->execute();
+$medischoverzicht = $medischoverzicht->get_result()->fetch_assoc();
 
 $verzorgers = [];
 foreach ($clientRelations as $relation) {
@@ -93,13 +103,42 @@ foreach ($clientRelations as $relation) {
                     <strong>Nationaliteit</strong>
                     <p><?= $client['nationaliteit'] ?></p>
                 </div>
+            </div>
+            <br>
+            <div class="patiëntgegevens-content">
                 <div class="text">
-                    <a href="verzorgers.php?id=<?= $_GET['id']?>">
-                        <strong>Verzorger(s)</strong>
+                    <?php
+                    if ($contactpersonen <= null) { ?>
+                        <strong>Contactpersonen</strong>
+                        <p>Geen contactpersonen<p>
+                    <?php } else {
+                        $num = 1;
+                        foreach ($contactpersonen as $contactpersoon) { ?>
+                            <strong>Contactpersoon <?= $num ?> </strong>
+                            <p><?= $contactpersoon['naam'] ?></p>
+                            <p><?= $contactpersoon['relatietype'] ?></p>
+                            <p><?= $contactpersoon['telefoonnummer'] ?></p>
+                            <br>
+                            <?php $num++;
+                        }
+                    } ?>
+                </div>
+                <div class="text">
+                    <strong>Zorgopname</strong>
+                    <p>Vanaf <?= $medischoverzicht['opnamedatum'] ?></p>
+                </div>
+                <div class="text">
+                    <a href="verzorgers.php?id=<?= $_GET['id'] ?>">
                     </a>
-                    <?php foreach ($verzorgers as $verzorger) { ?>
+                    <?php $num = 1;
+                    foreach ($verzorgers as $verzorger) { ?>
+                        <strong>Verzorger <?= $num ?></strong>
                         <p><?= $verzorger['naam'] ?></p>
-                    <?php } ?>
+                        <p><?= $verzorger['klas'] ?></p>
+                        <p><?= $verzorger['email'] ?></p>
+                        <br>
+                        <?php $num++;
+                    } ?>
                 </div>
             </div>
         </div>
