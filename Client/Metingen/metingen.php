@@ -9,6 +9,10 @@ if (!isset($id)) {
     header("Location: ../../index.php");
 }
 
+if (!isset($_SESSION['loggedin_id'])) {
+    header("Location: ../../index.php");
+}
+
 $samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
