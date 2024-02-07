@@ -11,24 +11,30 @@ include '../../Functions/ClientFunctions.php';
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="zorgplan.css">
     <title>Zorgplan</title>
 </head>
+
 <body>
     <?php include_once '../../Includes/header.php'; ?>
 
     <div class="main">
 
         <?php include_once '../../Includes/sidebar.php'; ?>
-        
+
         <div class="main2">
             <div class="main3">
                 <div class="header">
-                    <p class="title" style="font-size: 2rem; padding:5px;">Zorgplan</p>
-                    <a href="" class="title button" style="font-size: 2rem">Zorgplan toevoegen</a>
+                    <p class="title">Zorgplan</p>
+                    <?php if (checkIfCarePlanExistsByClientId($_SESSION['clientId'])) { ?>
+                        <a href="#" class="title button">Zorgplan aanpassen</a>
+                    <?php } else { ?>
+                        <a href="#" class="title button">Zorgplan toevoegen</a>
+                    <?php } ?>
                 </div>
                 <div class="content">
                     <a href="#" class="title">Patroon van Gezondheidsbeleving en -instandhouding</a>
@@ -41,10 +47,11 @@ include '../../Functions/ClientFunctions.php';
                     <a href="#" class="title">Rollen- en relatiepatroon</a>
                     <a href="#" class="title">Seksualiteits- en voortplantingspatroon</a>
                     <a href="#" class="title">Stressverwerkingspatroon</a>
-                    <a href="#" class="title">Waarde- en  levensovertuiging</a>
+                    <a href="#" class="title">Waarde- en levensovertuiging</a>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>

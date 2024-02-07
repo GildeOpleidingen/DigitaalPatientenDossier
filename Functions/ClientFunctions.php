@@ -99,8 +99,25 @@ function checkIfClientStoryExistsByClientId($id): bool {
     SELECT cv.*
     FROM client c
     JOIN medischoverzicht mo on mo.clientid = c.id 
-    join clientverhaal cv on cv.medischoverzichtid = mo.id
-    where c.id = ?
+    JOIN clientverhaal cv on cv.medischoverzichtid = mo.id
+    WHERE c.id = ?
+    ");
+    $result->bind_param("i", $id);
+    $result->execute();
+
+    if($result->get_result()->num_rows > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function checkIfCarePlanExistsByClientId($id): bool {
+    $result = DatabaseConnection::getConn()->prepare("
+    SELECT cp.*
+    FROM client c
+    JOIN zorgplan cp on cp.clientid = c.id
+    WHERE c.id = ?
     ");
     $result->bind_param("i", $id);
     $result->execute();
