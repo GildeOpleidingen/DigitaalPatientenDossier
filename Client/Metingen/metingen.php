@@ -4,6 +4,44 @@ include '../../Database/DatabaseConnection.php';
 
 $id = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
+
+if (!isset($id)) {
+    header("Location: ../../index.php");
+}
+
+if (!isset($_SESSION['loggedin_id'])) {
+    header("Location: ../../index.php");
+}
+
+$samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $hartslag = $_POST['hartslag'];
+    $ademhaling = $_POST['ademhaling'];
+    $bloeddruk = $_POST['bloeddruk'];
+    $temperatuur = $_POST['temperatuur'];
+    $vochtinname = $_POST['vochtinname'];
+    $uitscheiding = $_POST['uitscheiding'];
+    $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
+    $uitscheidingPlas = $_POST['uitscheidingPlas'];
+    $pijnschaal = $_POST['pijnschaal'];
+
+    $verzorgerregelid = DatabaseConnection::getConn()->query("SELECT id FROM verzorgerregel WHERE medewerkerid = $id")->fetch_array()[0];
+    $time = date("Y-m-d H:i:s");
+
+    $meting = DatabaseConnection::getConn()->prepare("INSERT INTO meting (verzorgerregelid, datumtijd, hartslag, ademhaling, bloeddruklaag, temperatuur, vochtinname, pijn, bloeddrukhoog) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $meting->bind_param("isiiiiiii", $verzorgerregelid, $time, $hartslag, $ademhaling, $bloeddruk, $temperatuur, $vochtinname, $pijnschaal, $uitscheidingPlas);
+    $meting->execute();
+    $metingId = $meting->insert_id;
+
+    $metingUrine = DatabaseConnection::getConn()->prepare("INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) VALUES (?, ?, ?)");
+    $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingPlas);
+    $metingUrine->execute();
+
+    $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd) VALUES (?, ?, ?)");
+    $metingUrineSamenstelling->bind_param("iis", $metingId, $uitscheidingSamenstelling, $time);
+    $metingUrineSamenstelling->execute();
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -25,7 +63,7 @@ $_SESSION['clientId'] = $_GET['id'];
         ?>
     <div class="main2">
 
-        <form id="patientForm">
+        <form id="patientForm" method="POST">
             <!-- metingen -->
             <label for="Hartslag">Hartslag:</label>
             <input type="number" id="hartslag" name="hartslag" placeholder="slagen per minuut" required min="0" max="200"> <!-- o tot 200 -->
@@ -44,6 +82,15 @@ $_SESSION['clientId'] = $_GET['id'];
 
             <label for="Uitscheiding">Uitscheiding:</label>
             <input type="number" id="uitscheiding" name="uitscheiding" placeholder="Invoeren in frequentie per dag" required>
+
+            <label for="Samenstelling">Samenstelling uitscheiding:</label>
+            <select name="uitscheidingSamenstelling">
+                <?php
+                foreach ($samenStellingen as $samenStelling) {
+                    echo "<option value='$samenStelling[id]'>$samenStelling[uiterlijk]</option>";
+                }
+                ?>
+            </select>
 
             <label for="Uitscheidingplas">Uitscheiding plas:</label>
             <input type="number" id="uitscheidingplas" name="uitscheidingPlas" placeholder="Invoeren in aantal milliliters" required>
