@@ -12,10 +12,10 @@
 }
 
 .main3{
+    display:flex;
+    flex-direction: column;
     background-color: white;
-    padding: 20px;
-    height: 97%;
-    top: 10%;
+    height:97%;
 }
 
 .title {
@@ -43,7 +43,15 @@
 }
 
 .button {
-    background-color: #00365E;
-    padding:5px;
-    border-radius: 15px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #45a049;
+    color:rgb(199, 199, 199);
 }

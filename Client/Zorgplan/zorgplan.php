@@ -21,7 +21,9 @@ include '../../Functions/ClientFunctions.php';
     <?php include_once '../../Includes/header.php'; ?>
 
     <div class="main">
+
         <?php include_once '../../Includes/sidebar.php'; ?>
+        
         <div class="main2">
             <div class="main3">
                 <div class="header">
