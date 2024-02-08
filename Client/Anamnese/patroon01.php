@@ -17,16 +17,15 @@ if (!isset($_SESSION['loggedin_id'])) {
     <title>Formulieren</title>
 </head>
 <body>
-    <div class="main">
+<div class="main">
+    <?php
+    include '../../Includes/header.php';
+    ?>
+
+    <?php
+    include '../../Includes/sidebar.php';
+    ?>
     <div class="main-content">
-        <?php
-            include '../../Includes/header.php';
-        ?>
-
-        <?php
-            include '../../Includes/sidebar.php';
-        ?>
-
         <div class="content">
             <div class="form-content">
             <div class="pages">1 Patroon van gezondheidsbeleving en -instandhouding</div>
