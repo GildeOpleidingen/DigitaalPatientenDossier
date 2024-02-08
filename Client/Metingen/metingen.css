@@ -30,12 +30,30 @@ label {
 }
 
 input, select {
-    width: 95%;
+    width: 100%;
     padding: 8px;
     margin-bottom: 10px;
     box-sizing: border-box;
     border: 1px solid black;
     border-radius: 5px;
+}
+
+.bloeddrukken{
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+.Uitscheidingen{
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.bloeddruk-lengte{
+    width: 100%;
+}
+.Uitscheiding2{
+    width: 100%;
 }
 
 .metingButton {
@@ -47,6 +65,6 @@ input, select {
     cursor: pointer;
 }
 
-.metingButton:hover {
+button:hover {
     background-color: #45a049;
 }
