@@ -44,7 +44,7 @@ include '../../Database/DatabaseConnection.php';
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="radio-2">
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat hoort u?"></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="radio-2">
@@ -69,7 +69,7 @@ include '../../Database/DatabaseConnection.php';
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="radio-4">
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat ziet u?"></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="radio-4">
@@ -82,7 +82,7 @@ include '../../Database/DatabaseConnection.php';
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="radio-5">
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat ruikt u?"></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="radio-5">
@@ -168,7 +168,7 @@ include '../../Database/DatabaseConnection.php';
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="radio-12">
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?"></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="radio-12">

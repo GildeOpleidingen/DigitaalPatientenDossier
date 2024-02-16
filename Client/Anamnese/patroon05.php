@@ -32,7 +32,7 @@ include '../../Database/DatabaseConnection.php';
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="radio-1">
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?"></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="radio-1">
@@ -45,7 +45,7 @@ include '../../Database/DatabaseConnection.php';
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="radio-2">
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?"></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="radio-2">
