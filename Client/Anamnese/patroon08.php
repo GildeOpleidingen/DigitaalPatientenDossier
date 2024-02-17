@@ -2,6 +2,23 @@
 <?php
 session_start();
 include '../../Database/DatabaseConnection.php';
+
+$id = $_GET['id'];
+
+if (isset($_REQUEST['navbutton'])) {
+    //TODO: hier actie om data op te slaan in database.
+    switch($_REQUEST['navbutton']) {
+        case 'next': //action for next here
+            header('Location: patroon09.php?id='.$id);
+            break;
+    
+        case 'prev': //action for previous here
+            header('Location: patroon07.php?id='.$id);
+            break;
+    }
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +30,7 @@ include '../../Database/DatabaseConnection.php';
     <title>Anamnese</title>
 </head>
 <body>
+    <form action="" method="post">
     <div class="main">
     <div class="main-content">
         <?php
@@ -193,11 +211,12 @@ include '../../Database/DatabaseConnection.php';
                     </div>
                 </div>
                 <div class="submit">
-                    <button id="vorige">< Vorige</button>
-                    <button>Volgende ></button>
+                    <button name="navbutton" type="submit" value="prev">< Vorige</button>
+                    <button name="navbutton" type="submit" value="next">Volgende ></button>
                 </div>
             </div>
         </div>
+        </form>
     </div>
     </div>
 
