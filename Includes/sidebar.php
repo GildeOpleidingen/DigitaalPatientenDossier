@@ -167,7 +167,7 @@
         $pages = array(
             "overzicht" => "Overzicht",
             "patiëntgegevens" => "Patiëntgegevens",
-            "anamnese" => "Anamnese",
+            "patroon01" => "Anamnese",
             "zorgplan" => "Zorgplan",
             "rapportage" => "Rapportage",
             "metingen" => "Metingen",

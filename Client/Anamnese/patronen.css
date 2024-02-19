@@ -46,7 +46,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     padding: 20px;
     color: #00365E;
 }
@@ -55,6 +55,12 @@
     display: flex;
     justify-content: space-between;
     gap: 50px;
+    padding: 10px;
+}
+
+.question:hover{
+    background-color: rgb(226, 223, 223);
+    border-radius: 5px;
 }
 
 .questions, .results{
@@ -65,12 +71,47 @@
 }
 
 input[type="text"] {
-    width: 300px;
     height: 0px;
     padding: 10px;
     border: 2px solid #00365E;
     border-radius: 3px;
 } 
+
+input[type="text"] {
+    height: 0px;
+    padding: 10px;
+    border: 2px solid #00365E;
+    border-radius: 3px;
+} 
+
+#checkfield {
+    display: none;
+    width: 100%;
+}
+
+textarea{
+    width: 300px;
+    padding: 2px;
+    overflow: hidden;
+    resize: vertical;
+    border: 2px solid #00365E;
+    border-radius: 3px;
+}
+
+#radio:checked ~ #checkfield {
+    display: block;
+}
+
+input[type = "radio"] {
+    cursor: pointer;
+}
+
+.question-answer{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+}
 
 .checkboxes{
     display: flex;
@@ -108,3 +149,4 @@ input[type="text"] {
     color: white;
     cursor: pointer;
 }
+
