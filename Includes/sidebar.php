@@ -129,7 +129,7 @@
         <div class="personal-information">
             <p><?php echo $row1[0]; ?></p>
             <p id="birth"><?php
-                echo $row1[1];
+                echo date_create($row1[1])->format('d-m-Y');
                 $geboortedatum = $row1[1];
                 $vandaag = date("Y-m-d");
                 $leeftijd = date_diff(date_create($geboortedatum), date_create($vandaag))->format('%Y');

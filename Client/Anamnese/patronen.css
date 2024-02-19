@@ -1,11 +1,8 @@
 .main{
+    display: flex;
     flex-direction: row;
     height: 100vh;
     width: 100%;
-}
-
-.main-content {
-    display: flex;
 }
 
 .content{
@@ -18,7 +15,7 @@
 
 .form-content{
     height: 100%;
-    width: 100%;
+    width: 105em;
     overflow: auto;
     display: flex;
     flex-direction: column;

@@ -32,14 +32,14 @@ if (isset($_REQUEST['navbutton'])) {
 <body>
     <form action="" method="post">
     <div class="main">
-    <div class="main-content">
         <?php
-            include '../../Includes/header.php';
+        include '../../Includes/header.php';
         ?>
         <?php
-            include '../../Includes/sidebar.php';
+        include '../../Includes/sidebar.php';
         ?>
 
+    <div class="main-content">
         <div class="content">
             <div class="form-content">
             <div class="pages">2 Voedings- en stofwisselingspatroon</div>
