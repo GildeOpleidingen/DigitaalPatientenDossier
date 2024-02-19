@@ -11,6 +11,23 @@
     background-color: #00365E;
 }
 
+.btns{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.btns button{
+    padding: 15px;
+    background-color: #DD0069;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 0;
+    cursor: pointer;
+}
+
 form{
     background-color: white;
     padding: 20px;

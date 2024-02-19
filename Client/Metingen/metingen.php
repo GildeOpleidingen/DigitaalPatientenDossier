@@ -62,6 +62,10 @@ include_once '../../Includes/header.php';
     include_once '../../Includes/sidebar.php';
     ?>
     <div class="main2">
+        <div class="btns">
+            <button type="button" class="MetingenInvul">Metingen invullen</button>
+            <button type="button" class="MetingenTabel">Metingen bekijken</button>
+        </div>
 
         <form id="patientForm">
             <!-- metingen -->
