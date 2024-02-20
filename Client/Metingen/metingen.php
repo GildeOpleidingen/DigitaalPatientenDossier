@@ -18,19 +18,21 @@ $samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterl
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hartslag = $_POST['hartslag'];
     $ademhaling = $_POST['ademhaling'];
-    $bloeddruk = $_POST['bloeddruk'];
+    $bloeddruklaag = $_POST['bloeddruk'];
+    $bloeddrukhoog = $_POST['bloeddruk2'];
     $temperatuur = $_POST['temperatuur'];
     $vochtinname = $_POST['vochtinname'];
     $uitscheiding = $_POST['uitscheiding'];
-    $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
+    $uitscheidingStool = $_POST['uitscheiding2'];
     $uitscheidingPlas = $_POST['uitscheidingPlas'];
     $pijnschaal = $_POST['pijnschaal'];
+    $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
 
     $verzorgerregelid = DatabaseConnection::getConn()->query("SELECT id FROM verzorgerregel WHERE medewerkerid = $id")->fetch_array()[0];
     $time = date("Y-m-d H:i:s");
 
-    $meting = DatabaseConnection::getConn()->prepare("INSERT INTO meting (verzorgerregelid, datumtijd, hartslag, ademhaling, bloeddruklaag, temperatuur, vochtinname, pijn, bloeddrukhoog) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $meting->bind_param("isiiiiiii", $verzorgerregelid, $time, $hartslag, $ademhaling, $bloeddruk, $temperatuur, $vochtinname, $pijnschaal, $uitscheidingPlas);
+    $meting = DatabaseConnection::getConn()->prepare("INSERT INTO meting (verzorgerregelid, datumtijd, hartslag, ademhaling, bloeddruklaag, bloeddrukhoog, temperatuur, vochtinname, pijn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $meting->bind_param("isiiiiiii", $verzorgerregelid, $time, $hartslag, $ademhaling, $bloeddruklaag, $bloeddrukhoog, $temperatuur, $vochtinname, $pijnschaal);
     $meting->execute();
     $metingId = $meting->insert_id;
 
@@ -67,7 +69,7 @@ include_once '../../Includes/header.php';
             <a href="metingenTabel.php?id=1"><button type="button" class="MetingenTabel">Metingen bekijken</button></a>
         </div>
 
-        <form id="patientForm">
+        <form id="patientForm" method="POST">
             <!-- metingen -->
             <label for="Hartslag">Hartslag:</label>
             <input type="number" id="hartslag" name="hartslag" placeholder="slagen per minuut" required min="0" max="200"> <!-- o tot 200 -->
@@ -105,6 +107,15 @@ include_once '../../Includes/header.php';
 
             <label for="Uitscheidingplas">Uitscheiding plas:</label>
             <input type="number" id="uitscheidingplas" name="uitscheidingPlas" placeholder="Invoeren in aantal milliliters" required>
+
+            <label for="UitscheidingSamenstelling">Uitscheiding samenstelling:</label>
+            <select id="uitscheidingSamenstelling" name="uitscheidingSamenstelling" required>
+                <?php
+                foreach ($samenStellingen as $samenStelling) {
+                    echo "<option value='$samenStelling[id]'>$samenStelling[uiterlijk]</option>";
+                }
+                ?>
+            </select>
 
             <label for="Pijnschaal">Pijnschaal:</label>
             <input type="number" id="pijnschaal" name="pijnschaal" placeholder="van 1 tot 10" required min="1" max="10">
