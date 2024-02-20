@@ -18,6 +18,15 @@ if (isset($_REQUEST['navbutton'])) {
     exit;
 }
 
+$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
+$client->bind_param("i", $id);
+$client->execute();
+$client = $client->get_result()->fetch_assoc();
+
+if ($client == null) {
+    header("Location: ../../index.php");
+}
+
 ?>
 
 <!DOCTYPE html>
