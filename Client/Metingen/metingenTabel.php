@@ -14,7 +14,6 @@ if (!isset($_SESSION['loggedin_id'])) {
 }
 
 $samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
-}
 ?>
 <!doctype html>
 <html lang="en">
@@ -36,8 +35,10 @@ include_once '../../Includes/header.php';
     ?>
     <div class="main2">
         <div class="btns">
-            <a href="metingen.php?id=1"><button type="button" class="MetingenInvul">Metingen invullen</button></a>
-            <a href="metingenTabel.php?id=1"><button type="button" class="MetingenTabel">Metingen bekijken</button></a>
+            <?php
+            echo "<a href='metingen.php?id=$id'><button type='button' class'MetingenInvul'>Metingen invullen</button></a>";
+            echo "<a href='metingenTabel.php?id=$id'><button type='button' class='MetingenTabel'>Metingen bekijken</button></a>";
+            ?>
         </div>
     <div class="tabel">
 

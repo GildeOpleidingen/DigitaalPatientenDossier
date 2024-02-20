@@ -65,8 +65,10 @@ include_once '../../Includes/header.php';
     ?>
     <div class="main2">
         <div class="btns">
-            <a href="metingen.php?id=1"><button type="button" class="MetingenInvul">Metingen invullen</button></a>
-            <a href="metingenTabel.php?id=1"><button type="button" class="MetingenTabel">Metingen bekijken</button></a>
+            <?php
+            echo "<a href='metingen.php?id=$id'><button type='button' class'MetingenInvul'>Metingen invullen</button></a>";
+            echo "<a href='metingenTabel.php?id=$id'><button type='button' class='MetingenTabel'>Metingen bekijken</button></a>";
+            ?>
         </div>
 
         <form id="patientForm" method="POST">
