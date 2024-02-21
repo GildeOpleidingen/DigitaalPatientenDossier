@@ -2,6 +2,8 @@
 session_start();
 include '../../Database/DatabaseConnection.php';
 
+$id = $_GET['id'];
+
 $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
 $client->bind_param("i", $id);
 $client->execute();
