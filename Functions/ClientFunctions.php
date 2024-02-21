@@ -111,3 +111,16 @@ function checkIfClientStoryExistsByClientId($id): bool {
         return false;
     }
 }
+
+function getAdmissionDateByClientId($id): string {
+    $result = DatabaseConnection::getConn()->prepare("
+    select opnamedatum
+    from medischoverzicht
+    where clientid = ?
+    ");
+    $result->bind_param("i", $id);
+    $result->execute();
+
+    $dateString = $result->get_result()->fetch_array()['opnamedatum'];
+    return $dateString;
+}

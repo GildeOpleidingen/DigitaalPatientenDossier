@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once '../../Database/DatabaseConnection.php';
+include_once '../../Functions/ClientFunctions.php';
 
 if(!isset($_GET['id'])) {
     header("Location: ../client.php");
@@ -47,7 +48,16 @@ foreach ($clientRelations as $relation) {
         ?>
 
         <div class="content">
-                <!-- maak overzicht -->
+            <div class="content-2">
+                <div id="episodes" class="card">
+                    <p class="header">Episodes</p>
+                    <p class="text">Geen Episodes</p>
+                </div>
+                <div id="opnamedatum" class="card">
+                    <p class="header">Opgenomen op</p>
+                    <p class="text"><?php echo getAdmissionDateByClientId($id);?></p>
+                </div>
+        </div>
         </div>
     </div>
 

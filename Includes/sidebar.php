@@ -28,7 +28,7 @@
             height: 100vh;
             min-width: 200px;
             padding-top: 80px;
-            background-color: white;
+            background-color: white                                                                 ;
             text-align: center;
             display: flex;
             flex-direction: column;

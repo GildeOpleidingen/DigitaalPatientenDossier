@@ -11,9 +11,11 @@ $result = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefo
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medewerker</title>
+    <link rel="stylesheet" href="medewerker.css">
 </head>
 
 <body>
+<?php //include '../Includes/header.php'; ?>
     <form action="medewerkeropzoeken.php" method="post">
         Search <input type="text" name="search">
         <input type="submit">
