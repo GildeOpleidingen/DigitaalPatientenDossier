@@ -1,4 +1,4 @@
-CREATE TABLE `dpd`.`pijnkaart` ( `pijnindex` INT NOT NULL , `pijnomschrijving` VARCHAR(50) NOT NULL , PRIMARY KEY (`pijnindex`));
+CREATE TABLE `dpd`.`pijnkaart` ( `pijnindex` INT NOT NULL , `pijnomschrijving` VARCHAR(60) NOT NULL , PRIMARY KEY (`pijnindex`));
 
 INSERT INTO `pijnkaart`(`pijnindex`, `pijnomschrijving`) VALUES (0, 'Nergens last van');
 INSERT INTO `pijnkaart`(`pijnindex`, `pijnomschrijving`) VALUES (1, 'Iets gevoelig, geen beperkingen in de activiteiten');
