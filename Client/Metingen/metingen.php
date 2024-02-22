@@ -40,7 +40,7 @@ $metingtijden->bind_param("i", $verzorgerregelid);
 $metingtijden->execute();
 $metingtijden = $metingtijden->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$metingen = getMeting($metingtijden);
+$metingen = getMeting($metingtijden, $verzorgerregelid);
 
 foreach ($metingen[1] as $meting) {
     foreach ($meting as $data) {

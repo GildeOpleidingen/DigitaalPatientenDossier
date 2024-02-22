@@ -1,6 +1,7 @@
 <?php
 
-function getMeting($metingtijden){
+function getMeting($metingtijden, $verzorgerregelid)
+{
     $metingen = [];
     $tijden = [];
     foreach ($metingtijden as $metingtijd) {
@@ -12,7 +13,7 @@ function getMeting($metingtijden){
             'hartslag' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN hartslag ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = 1)
+            WHERE verzorgerregelid = ?)
 
             UNION
             
@@ -20,7 +21,7 @@ function getMeting($metingtijden){
             'ademhaling' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN ademhaling ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = 1)
+            WHERE verzorgerregelid = ?)
 
             UNION
             
@@ -28,7 +29,7 @@ function getMeting($metingtijden){
             'bloeddruklaag' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN bloeddruklaag ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = 1)
+            WHERE verzorgerregelid = ?)
 
             UNION
             
@@ -36,7 +37,7 @@ function getMeting($metingtijden){
             'temperatuur' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN temperatuur ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = 1)
+            WHERE verzorgerregelid = ?)
 
             UNION
             
@@ -44,7 +45,7 @@ function getMeting($metingtijden){
             'vochtinname' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN vochtinname ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = 1)
+            WHERE verzorgerregelid = ?)
 
             UNION
             
@@ -52,7 +53,7 @@ function getMeting($metingtijden){
             'pijn' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN pijn ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = 1)
+            WHERE verzorgerregelid = ?)
 
             UNION
             
@@ -60,7 +61,7 @@ function getMeting($metingtijden){
             'bloeddrukhoog' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN bloeddrukhoog ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = 1)
+            WHERE verzorgerregelid = ?)
 
             UNION
             
@@ -68,7 +69,7 @@ function getMeting($metingtijden){
             'samenstelling' AS metingontlasting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN samenstellingid ELSE null END) AS '$tijd'
             FROM metingontlasting
-            WHERE metingid = $metingid)
+            WHERE metingid = ?)
 
             UNION
             
@@ -76,13 +77,17 @@ function getMeting($metingtijden){
             'hoeveelheid' AS metingurine,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN hoeveelheid ELSE null END) AS '$tijd'
             FROM metingurine
-            WHERE metingid = $metingid)";
-        $result = DatabaseConnection::getConn()->query($query);
-        array_push($metingen, $result->fetch_all(MYSQLI_ASSOC));
+            WHERE metingid = ?)";
+        $result = DatabaseConnection::getConn()->prepare($query);
+        $result->bind_param("iiiiiiiii", $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $metingid, $metingid);
+        $result->execute();
+        $result = $result->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        $metingen[] = $result;
     }
     $arrays = [];
-    array_push($arrays, $tijden);
-    array_push($arrays, $metingen);
+    $arrays[] = $tijden;
+    $arrays[] = $metingen;
     return $arrays;
 }
 
@@ -94,7 +99,7 @@ function vindGelijkeWaarde($array, $time)
         }
     }
     return "";
-}   
+}
 
 
 
