@@ -94,26 +94,7 @@ function vindGelijkeWaarde($array, $time)
         }
     }
     return "";
-}
-
-function naarWoord($waarde){
-    switch ($waarde) {
-        case 1:
-            return "Harde keutels";
-        case 2:
-            return "Klonterig, worstvormig";
-        case 3:
-            return "Worstvormig met barstjes";
-        case 4:
-            return "Gladde sigaar";
-        case 5:
-            return "Zachte stukjes, gladde rand";
-        case 6:
-            return "Zachte stukjes, ruwe rand";
-        case 7:
-            return "Waterig, zonder vaste stof";
-    }
-}
+}   
 
 
 
