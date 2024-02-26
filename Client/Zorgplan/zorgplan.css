@@ -25,6 +25,13 @@
     margin:5px;
 }
 
+.patroon {
+    background-color: #DD0069;
+    height:10%;
+    text-align: center;
+    align-items: center;
+}
+
 .header {
     display:flex;
     justify-content: space-between;
@@ -49,7 +56,6 @@
     flex-direction: row;
     flex-wrap:wrap;
     height:97%;
-    text-align: center;
     background-color: rgb(240, 240, 240);
     margin:25px;
     border-radius: 10px;
@@ -57,7 +63,7 @@
 }
 
 .content a {
-    flex:0 0 50%;
+    flex:0 0 45%;
     margin:auto;
 }
 
@@ -89,6 +95,8 @@
     justify-content: space-between;
     align-items: center;
     margin-top:auto !important;
+    margin-left:25px !important;
+    margin-right:25px !important;
     margin:10px;
 }
 
@@ -97,7 +105,7 @@
     border-radius: 3px;
     resize: none;
     height: 80px;
-    width: 30%;    
+    width: 75%;    
 }
 
 .submit {
