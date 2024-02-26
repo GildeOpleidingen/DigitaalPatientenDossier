@@ -7,6 +7,11 @@ include '../../Functions/ClientFunctions.php';
 //     echo "<a href='../Clientverhaal/clientverhaal.php?id=$id'> Clientverhaal invullen </a>";
 // }
 
+if (isset($_GET['pt'])) {
+    $pt = $_GET['pt'];
+    $patroonTypes = getPatroonTypes();
+    $_SESSION['patroonType'] = $patroonTypes[$pt];
+}
 ?>
 
 <!DOCTYPE html>
@@ -28,27 +33,48 @@ include '../../Functions/ClientFunctions.php';
 
         <div class="main2">
             <div class="main3">
-                <div class="header">
-                    <p class="title">Zorgplan</p>
-                    <?php if (checkIfCarePlanExistsByClientId($_SESSION['clientId'])) { ?>
-                        <a href="#" class="title button">Zorgplan aanpassen</a>
+                <?php if (!isset($pt)) { ?>
+                    <div class="header">
+                        <p class="title">Zorgplan</p>
+                    </div>
+                    <div class="content">
+                        <?php foreach (getPatroonTypes() as $patroonType) { ?>
+                            <a href="?id=<?= $_SESSION['clientId'] ?>&pt=<?= $patroonType[0] ?>" class="title"><?= $patroonType[1] ?></a>
+                        <?php } ?>
+                    </div>
                     <?php } else { ?>
-                        <a href="#" class="title button">Zorgplan toevoegen</a>
+                        <div class="header">
+                            <a href="?id=<?= $_SESSION['clientId'] ?>" class="title">Terug</a>
+                            <h1 class="title"><?= $patroonTypes[$pt-1][1] ?></h1>
+                        </div>
+                        <form class="form">
+                            <div class="question">
+                                <p>P</p>
+                                <textarea name="p"></textarea>
+                            </div>
+                            <div class="question">
+                                <p>E</p>
+                                <textarea name="e"></textarea>
+                            </div>
+                            <div class="question">
+                                <p>S</p>
+                                <textarea name="s"></textarea>
+                            </div>
+                            <div class="question">
+                                <p>Doelen (SMART)</p>
+                                <textarea name="test"></textarea>
+                            </div>
+                            <div class="question">
+                                <p>Interventies</p>
+                                <textarea name="test"></textarea>
+                            </div>
+                            <div class="question">
+                                <p>Evaluatiedoelen</p>
+                                <textarea name="test"></textarea>
+                            </div>
+                        <input type="submit" value="Opslaan">
+                        </form>
                     <?php } ?>
-                </div>
-                <div class="content">
-                    <a href="#" class="title">Patroon van Gezondheidsbeleving en -instandhouding</a>
-                    <a href="#" class="title">Voedings- en stofwisselingspatroon</a>
-                    <a href="#" class="title">Uitscheidingspatroon</a>
-                    <a href="#" class="title">Activiteitenpatroon</a>
-                    <a href="#" class="title">Slaap-rustpatroon</a>
-                    <a href="#" class="title">Cognitie- en waarnemingspatroon</a>
-                    <a href="#" class="title">Zelfbelevingspatroon</a>
-                    <a href="#" class="title">Rollen- en relatiepatroon</a>
-                    <a href="#" class="title">Seksualiteits- en voortplantingspatroon</a>
-                    <a href="#" class="title">Stressverwerkingspatroon</a>
-                    <a href="#" class="title">Waarde- en levensovertuiging</a>
-                </div>
             </div>
         </div>
     </div>

@@ -36,6 +36,14 @@
     color:white;
 }
 
+.header a, .form-header .title {
+    color:white !important;
+}
+
+.header a:hover {
+    color:rgb(199, 199, 199) !important;
+}
+
 .content {
     display: flex;
     flex-direction: row;
@@ -45,6 +53,7 @@
     background-color: rgb(240, 240, 240);
     margin:25px;
     border-radius: 10px;
+    color:#00365E !important;
 }
 
 .content a {
@@ -63,4 +72,28 @@
 .button:hover {
     background-color: #45a049;
     color:rgb(199, 199, 199);
+}
+
+.form {
+    display:flex;
+    margin:25px;
+    border-radius: 10px;
+    background-color: rgb(240, 240, 240);
+    flex-direction: column;
+    height:100%;
+}
+
+.question {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin:10px;
+}
+
+.question textarea {
+    border: 2px solid #00365E;
+    border-radius: 3px;
+    resize: none;
+    width: 30%;    
 }

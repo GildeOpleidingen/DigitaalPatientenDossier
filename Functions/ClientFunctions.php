@@ -128,3 +128,21 @@ function checkIfCarePlanExistsByClientId($id): bool {
         return false;
     }
 }
+
+function getCarePlanByClientId($id): array {
+    $result = DatabaseConnection::getConn()->prepare("
+    SELECT cp.*
+    FROM client c
+    JOIN zorgplan cp on cp.clientid = c.id
+    WHERE c.id = ?
+    ");
+
+    $result->bind_param("i", $id);
+    $result->execute();
+    return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
+}
+
+function getPatroonTypes(){
+    $result = DatabaseConnection::getConn()->query("SELECT * FROM `patroontype`");
+    return $result->fetch_all(MYSQLI_NUM);
+}
