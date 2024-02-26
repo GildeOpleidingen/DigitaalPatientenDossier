@@ -14,6 +14,10 @@ $client->bind_param("i", $id);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
 
+if ($client == null) {
+    header("Location: ../client.php");
+}
+
 $medewerkers = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");
 $medewerkers->execute();
 $medewerkers = $medewerkers->get_result()->fetch_all(MYSQLI_ASSOC);
