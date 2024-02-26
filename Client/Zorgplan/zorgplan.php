@@ -10,7 +10,7 @@ include '../../Functions/ClientFunctions.php';
 if (isset($_GET['pt'])) {
     $pt = $_GET['pt'];
     $patroonTypes = getPatroonTypes();
-    $_SESSION['patroonType'] = $patroonTypes[$pt];
+    $_SESSION['patroonType'] = $patroonTypes[$pt-1];
 }
 ?>
 
@@ -39,12 +39,12 @@ if (isset($_GET['pt'])) {
                     </div>
                     <div class="content">
                         <?php foreach (getPatroonTypes() as $patroonType) { ?>
-                            <a href="?id=<?= $_SESSION['clientId'] ?>&pt=<?= $patroonType[0] ?>" class="title"><?= $patroonType[1] ?></a>
+                            <a href="?pt=<?= $patroonType[0] ?>" class="title"><?= $patroonType[1] ?></a>
                         <?php } ?>
                     </div>
                     <?php } else { ?>
                         <div class="header">
-                            <a href="?id=<?= $_SESSION['clientId'] ?>" class="title">Terug</a>
+                            <a href="zorgplan.php" class="title">Terug</a>
                             <h1 class="title"><?= $patroonTypes[$pt-1][1] ?></h1>
                         </div>
                         <form class="form">
@@ -72,7 +72,7 @@ if (isset($_GET['pt'])) {
                                 <p>Evaluatiedoelen</p>
                                 <textarea name="test"></textarea>
                             </div>
-                        <input type="submit" value="Opslaan">
+                            <input class="submit" type="submit" value="Opslaan">
                         </form>
                     <?php } ?>
             </div>

@@ -88,6 +88,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-top:auto !important;
     margin:10px;
 }
 
@@ -95,5 +96,21 @@
     border: 2px solid #00365E;
     border-radius: 3px;
     resize: none;
+    height: 80px;
     width: 30%;    
+}
+
+.submit {
+    width:10%;
+    padding:10px;
+    background-color: #4CAF50;
+    border:none;
+    border-radius: 5px;
+    cursor: pointer;
+    color:white;
+    margin:10px;
+}
+
+.submit:hover {
+    background-color: #45a049;
 }
