@@ -14,6 +14,10 @@ $client->bind_param("i", $id);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
 
+if ($client == null) {
+    header("Location: ../client.php");
+}
+
 $clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
 $clientRelations->bind_param("i", $id);
 $clientRelations->execute();
@@ -55,7 +59,7 @@ foreach ($clientRelations as $relation) {
                         </div>
                         <div class="text">
                             <strong>Geboortedatum</strong>
-                            <p><?= $client['geboortedatum'] ?></p>
+                            <p><?= date_create($client['geboortedatum'])->format('d-m-Y') ?></p>
                         </div>
                         <div class="text">
                             <strong>Adres</strong>

@@ -10,6 +10,28 @@
     width: 100%;
     background-color: #00365E;
 }
+.tabel{
+    background-color: white;
+    padding: 20px;
+    height: 97%;
+}
+
+.btns{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.btns button{
+    padding: 15px;
+    background-color: #DD0069;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 0;
+    cursor: pointer;
+}
 
 form{
     background-color: white;
@@ -30,12 +52,30 @@ label {
 }
 
 input, select {
-    width: 95%;
+    width: 100%;
     padding: 8px;
     margin-bottom: 10px;
     box-sizing: border-box;
     border: 1px solid black;
     border-radius: 5px;
+}
+
+.bloeddrukken{
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+.Uitscheidingen{
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.bloeddruk-lengte{
+    width: 100%;
+}
+.Uitscheiding2{
+    width: 100%;
 }
 
 .metingButton {

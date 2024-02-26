@@ -1,0 +1,1 @@
+ALTER TABLE `patroon03uitscheiding` CHANGE `observatie` `observatie` VARCHAR(10) NOT NULL;
