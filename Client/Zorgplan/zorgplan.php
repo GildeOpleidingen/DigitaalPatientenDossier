@@ -7,10 +7,17 @@ include '../../Functions/ClientFunctions.php';
 //     echo "<a href='../Clientverhaal/clientverhaal.php?id=$id'> Clientverhaal invullen </a>";
 // }
 
+$patroonTypes = getPatternTypes();
+
+if(isset($_GET['pt']) && $_SERVER['REQUEST_METHOD'] == 'POST'){
+    $pt = $_GET['pt'];
+    insertCarePlan($_SESSION['clientId'], date('Y-m-d h:i:s'), $patroonTypes[$pt-1][0], $_POST['p'], $_POST['e'], $_POST['s'], $_POST['doelen'], $_POST['interventies'], $_POST['evaluatiedoelen']);
+}
+
 if (isset($_GET['pt'])) {
     $pt = $_GET['pt'];
-    $patroonTypes = getPatroonTypes();
     $_SESSION['patroonType'] = $patroonTypes[$pt-1];
+    $patroonType = getPatternType($pt);
 }
 ?>
 
@@ -38,8 +45,8 @@ if (isset($_GET['pt'])) {
                         <p class="title">Zorgplan</p>
                     </div>
                     <div class="content">
-                        <?php foreach (getPatroonTypes() as $patroonType) { ?>
-                            <a href="?pt=<?= $patroonType[0] ?>" class="title"><?= $patroonType[1] ?></a>
+                        <?php foreach (getPatternTypes() as $patroonType) { ?>
+                            <a href="?pt=<?= $patroonType[0] ?>" class="patroon title"><?= $patroonType[1] ?></a>
                         <?php } ?>
                     </div>
                     <?php } else { ?>
@@ -47,32 +54,32 @@ if (isset($_GET['pt'])) {
                             <a href="zorgplan.php" class="title">Terug</a>
                             <h1 class="title"><?= $patroonTypes[$pt-1][1] ?></h1>
                         </div>
-                        <form class="form">
+                        <form class="form" method="POST">
                             <div class="question">
                                 <p>P</p>
-                                <textarea name="p"></textarea>
+                                <textarea name="p"><?= $patroonType["P"] ?? "" ?></textarea>
                             </div>
                             <div class="question">
                                 <p>E</p>
-                                <textarea name="e"></textarea>
+                                <textarea name="e"><?= $patroonType["E"] ?? "" ?></textarea>
                             </div>
                             <div class="question">
                                 <p>S</p>
-                                <textarea name="s"></textarea>
+                                <textarea name="s"><?= $patroonType["S"] ?? "" ?></textarea>
                             </div>
                             <div class="question">
                                 <p>Doelen (SMART)</p>
-                                <textarea name="test"></textarea>
+                                <textarea name="doelen"><?= $patroonType["doelen"] ?? "" ?></textarea>
                             </div>
                             <div class="question">
                                 <p>Interventies</p>
-                                <textarea name="test"></textarea>
+                                <textarea name="interventies"><?= $patroonType["interventies"] ?? "" ?></textarea>
                             </div>
                             <div class="question">
                                 <p>Evaluatiedoelen</p>
-                                <textarea name="test"></textarea>
+                                <textarea name="evaluatiedoelen"><?= $patroonType["evaluatiedoelen"] ?? "" ?></textarea>
                             </div>
-                            <input class="submit" type="submit" value="Opslaan">
+                            <input class="submit" type="submit" name="submit" value="Opslaan">
                         </form>
                     <?php } ?>
             </div>
