@@ -162,8 +162,6 @@
     ?>
     <ul>
         <?php
-        $id = $_GET['id'];
-
         $pages = array(
             "overzicht" => "Overzicht",
             "patiëntgegevens" => "Patiëntgegevens",
