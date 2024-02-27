@@ -2,18 +2,29 @@
 <?php
 session_start();
 include '../../Database/DatabaseConnection.php';
+include '../../Functions/Functions.php';
 
-$id = $_GET['id'];
+$clientId = $_GET['id'];
+$antwoorden = getPatternAnswers($clientId, 9);
+print_r($antwoorden);
+
+if(isset($antwoorden['seksuele_gerichtheid'])) {
+    $boolArrayGerichtheid = str_split($antwoorden['seksuele_gerichtheid']);
+}
+
+if(isset($antwoorden['observatie'])) {
+    $boolArrayObservatie = str_split($antwoorden['observatie']);
+}
 
 if (isset($_REQUEST['navbutton'])) {
     //TODO: hier actie om data op te slaan in database.
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
-            header('Location: patroon10.php?id='.$id);
+            header('Location: patroon10.php?id='.$clientId);
             break;
     
         case 'prev': //action for previous here
-            header('Location: patroon08.php?id='.$id);
+            header('Location: patroon08.php?id='.$clientId);
             break;
     }
     exit;
@@ -47,12 +58,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Is uw seksuele beleving veranderd?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-1">
+                                    <input id="radio" type="radio" name="radio-1" <?= $antwoorden['verandering_seksuele_beleving'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="door?"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="door?"><?= $antwoorden['verandering_seksuele_beleving_door'] ?? ""?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-1">
+                                    <input type="radio" name="radio-1" <?= !$antwoorden['verandering_seksuele_beleving'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -60,11 +71,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Is er de laatste tijd verandering gekomen in uw seksuele gedrag?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-2">
+                                    <input type="radio" name="radio-2" <?= $antwoorden['verandering_seksueel_gedrag'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-2">
+                                    <input type="radio" name="radio-2" <?= !$antwoorden['verandering_seksueel_gedrag'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -72,11 +83,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Heeft u wisselende seksuele contacten?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-3">
+                                    <input type="radio" name="radio-3" <?= $antwoorden['wisselende_contacten'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-3">
+                                    <input type="radio" name="radio-3" <?= !$antwoorden['wisselende_contacten'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -84,11 +95,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Houdt u bij uw seksuele activiteiten rekening met veilig vrijen?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-4">
+                                    <input type="radio" name="radio-4" <?= $antwoorden['veilig_vrijen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-4">
+                                    <input type="radio" name="radio-4" <?= !$antwoorden['veilig_vrijen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -96,12 +107,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Gebruikt u anticonceptiemiddelen?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-5">
+                                    <input id="radio" type="radio" name="radio-5" <?= $antwoorden['anticonceptiemiddel'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?"> <?= $antwoorden['anticonceptiemiddel_welke'] ?? "" ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-5">
+                                    <input type="radio" name="radio-5" <?= !$antwoorden['anticonceptiemiddel'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -109,30 +120,30 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Heeft u problemen bij het gebruik van anticonceptie-middelen?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-6">
+                                    <input type="radio" name="radio-6" <?= $antwoorden['anticonceptiemiddel_problemen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-6">
+                                    <input type="radio" name="radio-6" <?= !$antwoorden['anticonceptiemiddel_problemen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
                         </div>
                         <div class="question"><p>Wat is uw seksuele gerichtheid?</p> 
                             <div class="observation">
-                                <div class="question"><div class="observe"><input type="checkbox"><p>Heteroseksueel</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>Biseksueel</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>Homoseksueel</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGerichtheid[0] ? "checked" : "" ?>><p>Heteroseksueel</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGerichtheid[1] ? "checked" : "" ?>><p>Biseksueel</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGerichtheid[2] ? "checked" : "" ?>><p>Homoseksueel</p></div></div>
                             </div>
                         </div>
                         <div class="question"><p>- Ondervindt u problemen bij u zelf of bij anderen ten aanzien van uw seksuele gerichtheid?</p>
                             <div class="checkboxes">
-                                <p>    
-                                    <input type="radio" name="radio-1">
+                                <p>
+                                    <input type="radio" name="radio-1" <?= $antwoorden['seksuele_gerichtheid_problemen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-1">
+                                    <input type="radio" name="radio-1" <?= !$antwoorden['seksuele_gerichtheid_problemen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -140,12 +151,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Heeft u last (gehad) van seksueel overdraagbare aandoeningen (soa)?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-5">
+                                    <input id="radio" type="radio" name="radio-5"  <?= $antwoorden['soa'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?"> <?= $antwoorden['soa_welke'] ? "checked" : "" ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-5">
+                                    <input type="radio" name="radio-5"  <?= !$antwoorden['soa'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -153,10 +164,10 @@ if (isset($_REQUEST['navbutton'])) {
 
                         <div class="observation">
                             <h2>Verpleegkundige observatie bij dit patroon</h2>
-                            <div class="question"><div class="observe"><input type="checkbox"><p>Gewijzigde seksuele gewoonten</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox"><p>Seksueel disfunctioneren</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox"><p>Verkrachtingssyndroom gecompliceerde vorm</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox"><p>Verkrachtingssyndroom stille vorm</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= !$boolArrayObservatie[0] ? "checked" : "" ?>><p>Gewijzigde seksuele gewoonten</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= !$boolArrayObservatie[1] ? "checked" : "" ?>><p>Seksueel disfunctioneren</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= !$boolArrayObservatie[2] ? "checked" : "" ?>><p>Verkrachtingssyndroom gecompliceerde vorm</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= !$boolArrayObservatie[3] ? "checked" : "" ?>><p>Verkrachtingssyndroom stille vorm</p></div></div>
                         </div>
                     </div>
                 </div>

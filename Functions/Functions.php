@@ -66,18 +66,17 @@ function getPatternAnswers(int $clientId, int $patroonType): array|false {
     SELECT vl.id
     FROM vragenlijst vl
     LEFT JOIN verzorgerregel ON verzorgerregel.id = vl.verzorgerregelid
-    WHERE verzorgerregel.clientid = $clientId
+    WHERE verzorgerregel.clientid = ?
     ");
-    
+    $result->bind_param("i", $clientId);
     $result->execute();
-    $result = $result->get_result()->fetch_assoc();
     
+    $result = $result->get_result()->fetch_assoc();
     if(isset($result['id'])){
         $vlId = $result['id'];
         $result = DatabaseConnection::getConn()->prepare("SELECT * FROM $patroon WHERE vragenlijstid = $vlId;");
-
         $result->execute();
-        return $result->get_result()->fetch_array(MYSQLI_ASSOC);
+        return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
     }else{
         return false;
     }

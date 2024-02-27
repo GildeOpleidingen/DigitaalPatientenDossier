@@ -94,7 +94,7 @@ if ($client == null) {
                                     </p>
                                 </div>
                             </div>
-                            <div class="question"><p>Bent u ergens alergisch voor?</p>
+                            <div class="question"><p>Bent u ergens allergisch voor?</p>
                                 <div class="checkboxes">
                                     <div class="question-answer">
                                         <input id="radio" type="radio" name="radio-4">
