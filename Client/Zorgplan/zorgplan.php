@@ -9,15 +9,12 @@ include '../../Functions/ClientFunctions.php';
 
 $patroonTypes = getPatternTypes();
 
-if(isset($_GET['pt']) && $_SERVER['REQUEST_METHOD'] == 'POST'){
-    $pt = $_GET['pt'];
-    insertCarePlan($_SESSION['clientId'], date('Y-m-d h:i:s'), $patroonTypes[$pt-1][0], $_POST['p'], $_POST['e'], $_POST['s'], $_POST['doelen'], $_POST['interventies'], $_POST['evaluatiedoelen']);
-}
-
 if (isset($_GET['pt'])) {
     $pt = $_GET['pt'];
-    $_SESSION['patroonType'] = $patroonTypes[$pt-1];
     $patroonType = getPatternType($pt);
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        insertCarePlan($_SESSION['clientId'], date('Y-m-d h:i:s'), $patroonTypes[$pt-1][0], $_POST['p'], $_POST['e'], $_POST['s'], $_POST['doelen'], $_POST['interventies'], $_POST['evaluatiedoelen']);
+    }
 }
 ?>
 
