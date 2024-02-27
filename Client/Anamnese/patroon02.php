@@ -15,7 +15,9 @@ if (isset($_REQUEST['navbutton'])) {
         $gebitsprothese = $_POST['gebitsprothese'];
         $huidproblemen = $_POST['huidproblemen'];
         $gevoel = $_POST['gevoel'];
-        $observatie = $_POST['observatie'];
+    $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']));
+
+    $observatie = convertBoolArrayToString($arr);
 
         $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
                     from vragenlijst vl
@@ -290,32 +292,32 @@ if ($result != null) {
                                 <div class=" observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=0 name="observatie">
+                                        <div class="observe"><input type="checkbox" value=1 name="observatie1">
                                             <p>(Dreigend) voedingsteveel (zwaarlijvigheid)</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie">
+                                        <div class="observe"><input type="checkbox" value=1 name="observatie2">
                                             <p>Voedingstekort</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie">
+                                        <div class="observe"><input type="checkbox" value=1 name="observatie3">
                                             <p>(Dreigend) vochttekort</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie">
+                                        <div class="observe"><input type="checkbox" value=1 name="observatie4">
                                             <p>Falende warmteregulatie</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie">
+                                        <div class="observe"><input type="checkbox" value=1 name="observatie5">
                                             <p>Aspiratiegevaar</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie">
+                                        <div class="observe"><input type="checkbox" value=1 name="observatie6">
                                             <p>(Dreigende) huiddefect</p>
                                         </div>
                                     </div>
