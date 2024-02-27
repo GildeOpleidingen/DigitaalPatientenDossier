@@ -23,6 +23,7 @@ if (!isset($_SESSION['loggedin_id'])) {
 }
 
 $samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
+$pijnSchalen = DatabaseConnection::getConn()->query("SELECT pijnindex, pijnomschrijving FROM pijnkaart")->fetch_all(MYSQLI_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hartslag = $_POST['hartslag'];
@@ -31,8 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bloeddrukhoog = $_POST['bloeddruk2'];
     $temperatuur = $_POST['temperatuur'];
     $vochtinname = $_POST['vochtinname'];
-    $uitscheiding = $_POST['uitscheiding'];
-    $uitscheidingStool = $_POST['uitscheiding2'];
     $uitscheidingPlas = $_POST['uitscheidingPlas'];
     $pijnschaal = $_POST['pijnschaal'];
     $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
@@ -102,17 +101,6 @@ include_once '../../Includes/header.php';
             <label for="Vochtinname">Vochtinname:</label>
             <input type="number" id="vochtinname" name="vochtinname" placeholder="Invoeren in aantal milliliters" required min="0" max="5000"> <!-- o tot 5000 -->
 
-            <div class="Uitscheidingen">
-                <div class="Uitscheiding2">
-                    <label for="Uitscheiding">Uitscheiding:</label>
-                    <input type="number" id="uitscheiding" name="uitscheiding" placeholder="Invoeren in frequentie per dag" >
-                </div>
-                <div class="Uitscheiding2">
-                    <label for="Uitscheiding">Uitscheiding bristol stool chart:</label>
-                    <input type="number" id="uitscheiding2" name="uitscheiding2" placeholder="Invoeren in frequentie per dag" >
-                </div>
-            </div>
-
             <label for="Uitscheidingplas">Uitscheiding plas:</label>
             <input type="number" id="uitscheidingplas" name="uitscheidingPlas" placeholder="Invoeren in aantal milliliters" required>
 
@@ -126,7 +114,13 @@ include_once '../../Includes/header.php';
             </select>
 
             <label for="Pijnschaal">Pijnschaal:</label>
-            <input type="number" id="pijnschaal" name="pijnschaal" placeholder="van 1 tot 10" required min="1" max="10">
+            <select id="pijnschaal" name="pijnschaal" required>
+                <?php
+                foreach ($pijnSchalen as $pijnSchaal) {
+                    echo "<option value='$pijnSchaal[pijnindex]'>$pijnSchaal[pijnomschrijving]</option>";
+                }
+                ?>
+            </select>
             <br/><button class="metingButton" type="button" onclick="submit()">Submit</button>
         </form>
 
@@ -139,11 +133,7 @@ include_once '../../Includes/header.php';
         const bloeddruk2 = document.getElementById('bloeddruk2');
         const temperatuur = document.getElementById('temperatuur');
         const vochtinname = document.getElementById('vochtinname');
-        const uitscheiding = document.getElementById('uitscheiding');
-        const uitscheiding2 = document.getElementById('uitscheiding2');
         const uitscheidingplas = document.getElementById('uitscheidingplas');
-        const pijnschaal = document.getElementById('pijnschaal');
-
 
         hartslag.addEventListener('input', hartslagUpdate);
         ademhaling.addEventListener('input', ademHalingUpdate);
@@ -151,10 +141,7 @@ include_once '../../Includes/header.php';
         bloeddruk2.addEventListener('input', bloeddruk2Update);
         temperatuur.addEventListener('input', temperatuurUpdate);
         vochtinname.addEventListener('input', vochtinnameUpdate);
-        uitscheiding.addEventListener('input', uitscheidingUpdate);
-        uitscheiding2.addEventListener('input', uitscheiding2Update);
         uitscheidingplas.addEventListener('input', uitscheidingplasUpdate);
-        pijnschaal.addEventListener('input', pijnschaalUpdate);
 
         function hartslagUpdate() {
             if (hartslag) {
@@ -223,45 +210,12 @@ include_once '../../Includes/header.php';
                 console.log('error');
             }
         }
-        function uitscheidingUpdate() {
-            if (uitscheiding) {
-                if (!uitscheiding.value) {
-                    uitscheiding.style.border = '5px solid red';
-                }else {
-                    uitscheiding.style.border = '1px solid black';
-                }
-            }else{
-                console.log('error');
-            }
-        }
-        function uitscheiding2Update() {
-            if (uitscheiding2) {
-                if (uitscheiding2.value < 1 || uitscheiding2.value > 7) {
-                    uitscheiding2.style.border = '5px solid red';
-                }else {
-                    uitscheiding2.style.border = '1px solid black';
-                }
-            }else{
-                console.log('error');
-            }
-        }
         function uitscheidingplasUpdate() {
             if (uitscheidingplas) {
                 if (!uitscheidingplas.value) {
                     uitscheidingplas.style.border = '5px solid red';
                 }else {
                     uitscheidingplas.style.border = '1px solid black';
-                }
-            }else{
-                console.log('error');
-            }
-        }
-        function pijnschaalUpdate() {
-            if (pijnschaal) {
-                if (pijnschaal.value < 0 || pijnschaal.value > 10) {
-                    pijnschaal.style.border = '5px solid red';
-                }else {
-                    pijnschaal.style.border = '1px solid black';
                 }
             }else{
                 console.log('error');
