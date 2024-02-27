@@ -3,7 +3,10 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 
+// id van die client
 $id = $_GET['id'];
+
+
 
 if (isset($_REQUEST['navbutton'])) {
         $eetlust = $_POST['eetlust'];
@@ -15,29 +18,32 @@ if (isset($_REQUEST['navbutton'])) {
         $gebitsprothese = $_POST['gebitsprothese'];
         $huidproblemen = $_POST['huidproblemen'];
         $gevoel = $_POST['gevoel'];
+        // array van checkboxes van observatie tab
     $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']));
 
     $observatie = convertBoolArrayToString($arr);
 
-        $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
+    $result = DatabaseConnection::getConn()->prepare("
+                    SELECT vl.id
                     from vragenlijst vl
                     left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
                     where verzorgerregel.clientid = $id");
-    $result->execute();
-    $result = $result->get_result()->fetch_assoc();
+        $result->execute();
+            $result = $result->get_result()->fetch_assoc();
 
     if ($result != null){
-        //TODO: here action to save data in the database.
-        $id_vl=$result['id'];
-//
-    } else  {
-        // Als vragenlijstid niet bestaat, maak een nieuwe aan
+        $vragenlijst_id = $result['id'];
 
-        $sql2 = "INSERT INTO `vragenlijst`(`verzorgerregelid`)
+    } else {
+
+        $sql2 = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
             VALUES ((SELECT id
             FROM verzorgerregel
             WHERE clientid = $id
-            AND medewerkerid = 1))";
+            AND medewerkerid = 1))");
+
+        $sql2->execute();
+        $sql2 = $sql2->get_result();
 
 
         $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
@@ -47,23 +53,21 @@ if (isset($_REQUEST['navbutton'])) {
         $result->execute();
         $result = $result->get_result()->fetch_assoc();
 
-        $id_vl=$result['id'];
-//    $result2 = DatabaseConnection::getConn()->query($sql2);
-//        //print_r($result->get_result()->fetch_array()['id']);
-//
+        $vragenlijst_id=$result['id'];
+
 }
 
     // kijken of patroon02 bestaat door te kijken naar vragenlijst id
 $result = DatabaseConnection::getConn()->prepare("SELECT p.id
                     from patroon02voedingstofwisseling p
-                    where p.vragenlijstid = $id_vl");
+                    where p.vragenlijstid =  $vragenlijst_id");
 $result->execute();
 $result = $result->get_result()->fetch_assoc();
 
 if ($result != null) {
 
     //update
-    $result1 = DatabaseConnection::getConn()->query("UPDATE `patroon02voedingstofwisseling`
+    $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon02voedingstofwisseling`
             SET
             `eetlust`='$eetlust',
             `dieet`='$dieet',
@@ -75,37 +79,14 @@ if ($result != null) {
             `huidproblemen`='$huidproblemen',
             `gevoel`='$gevoel',
             `observatie`='$observatie'
-            WHERE `vragenlijstid`=$id_vl");
+            WHERE `vragenlijstid`=$vragenlijst_id");
 
-
+    $result1->execute();
+    $result1 = $result1->get_result();
 
 }else{
-//    print_r("INSERT INTO `patroon02voedingstofwisseling`(
-//                `vragenlijstid`,
-//                `eetlust`,
-//                `dieet`,
-//                `dieet_welk`,
-//                `gewicht_verandert`,
-//                `moeilijk_slikken`,
-//                `gebitsproblemen`,
-//                `gebitsprothese`,
-//                `huidproblemen`,
-//                `gevoel`,
-//                `observatie`)
-//            VALUES (
-//                    $id_vl,
-//                    $eetlust,
-//                    $dieet,
-//                    `$dieet_welk`,
-//                    $gewicht_verandert,
-//                    $moeilijk_slikken,
-//                    $gebitsproblemen,
-//                    $gebitsprothese,
-//                    $huidproblemen,
-//                    $gevoel,
-//                    $observatie)");
-    //insert
-    $result2 = DatabaseConnection::getConn()->query( "INSERT INTO `patroon02voedingstofwisseling`(
+    //hier insert je alle data in patroon02
+    $result2 = DatabaseConnection::getConn()->prepare( "INSERT INTO `patroon02voedingstofwisseling`(
                 `vragenlijstid`,
                 `eetlust`,
                 `dieet`,
@@ -118,7 +99,7 @@ if ($result != null) {
                 `gevoel`,
                 `observatie`)
             VALUES (
-                    $id_vl,
+                    $vragenlijst_id,
                     $eetlust,
                     $dieet,
                     '$dieet_welk',
@@ -129,7 +110,8 @@ if ($result != null) {
                     $huidproblemen,
                     $gevoel,
                     $observatie)");
-
+    $result2->execute();
+    $result2 = $result2->get_result();
 
 }
 
@@ -177,7 +159,7 @@ if ($result != null) {
                                     <p>Hoe is uw eetlust nu?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value=1 name="eetlust">
+                                            <input type="radio" value="1" name="eetlust">
                                             <label>Normaal</label>
                                         </p>
                                         <p>
@@ -185,7 +167,7 @@ if ($result != null) {
                                             <label>Slecht</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value=1 name="eetlust">
+                                            <input type="radio" value="1" name="eetlust">
                                             <label>Overmatig</label>
                                         </p>
                                     </div>
@@ -194,13 +176,13 @@ if ($result != null) {
                                     <p>- Heeft u een dieet?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value=1 name="dieet">
+                                            <input id="radio" type="radio" value="1" name="dieet">
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" name="dieet_welk"
                                                 placeholder="en wel?"></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value=0 name="dieet">
+                                            <input type="radio" value="0" name="dieet">
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -209,11 +191,11 @@ if ($result != null) {
                                     <p>- Is uw gewicht de laatste tijd veranderd?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value=1 name="gewicht_verandert">
+                                            <input type="radio" value="1" name="gewicht_verandert">
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value=0 name="gewicht_verandert">
+                                            <input type="radio" value="0" name="gewicht_verandert">
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -222,11 +204,11 @@ if ($result != null) {
                                     <p>Heeft u moeite met slikken?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value=1 name="moeilijk_slikken">
+                                            <input type="radio" value="1" name="moeilijk_slikken">
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value=0 name="moeilijk_slikken">
+                                            <input type="radio" value="0" name="moeilijk_slikken">
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -235,11 +217,11 @@ if ($result != null) {
                                     <p>Heeft u gebitsproblemen?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value=1 name="gebitsproblemen">
+                                            <input type="radio" value="1" name="gebitsproblemen">
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value=0 name="gebitsproblemen">
+                                            <input type="radio" value="0" name="gebitsproblemen">
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -248,11 +230,11 @@ if ($result != null) {
                                     <p>- Heeft u een gebitsprothese?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value=1 name="gebitsprothese">
+                                            <input type="radio" value="1" name="gebitsprothese">
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value=0 name="gebitsprothese">
+                                            <input type="radio" value="0" name="gebitsprothese">
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -261,11 +243,11 @@ if ($result != null) {
                                     <p>Heeft u huidproblemen?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value=1 name="huidproblemen">
+                                            <input type="radio" value="1" name="huidproblemen">
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value=0 name="huidproblemen">
+                                            <input type="radio" value="0" name="huidproblemen">
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -274,15 +256,15 @@ if ($result != null) {
                                     <p>Heeft u het koud of warm?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value=0 name="gevoel">
+                                            <input type="radio" value="0" name="gevoel">
                                             <label>Normaal</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value=1 name="gevoel">
+                                            <input type="radio" value="1" name="gevoel">
                                             <label>Koud</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value=2 name="gevoel">
+                                            <input type="radio" value="2" name="gevoel">
                                             <label>Warm</label>
                                         </p>
                                     </div>
@@ -292,32 +274,32 @@ if ($result != null) {
                                 <div class=" observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie1">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie1">
                                             <p>(Dreigend) voedingsteveel (zwaarlijvigheid)</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie2">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie2">
                                             <p>Voedingstekort</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie3">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie3">
                                             <p>(Dreigend) vochttekort</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie4">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie4">
                                             <p>Falende warmteregulatie</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie5">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie5">
                                             <p>Aspiratiegevaar</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value=1 name="observatie6">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie6">
                                             <p>(Dreigende) huiddefect</p>
                                         </div>
                                     </div>
