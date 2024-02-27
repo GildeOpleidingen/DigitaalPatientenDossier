@@ -32,15 +32,24 @@ $verzorgerregelid->execute();
 $verzorgerregelid = $verzorgerregelid->get_result()->fetch_all()[0];
 
 
-$metingtijden = DatabaseConnection::getConn()->prepare("SELECT id, datumtijd 
-                                                            FROM meting 
-                                                            WHERE verzorgerregelid = ? 
-                                                            ORDER BY datumtijd ASC");
-$metingtijden->bind_param("i", $verzorgerregelid);
+//$metingtijdens = DatabaseConnection::getConn()->prepare("SELECT id, datumtijd
+//                                                            FROM meting
+//                                                            WHERE verzorgerregelid = ?
+//                                                            ORDER BY datumtijd ASC");
+//$metingtijdens->bind_param("i", $verzorgerregelid);
+//$metingtijdens->execute();
+//$metingtijdens = $metingtijdens->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$metingtijden = DatabaseConnection::getConn()->prepare("SELECT m.id, m.datumtijd, vr.id as verzorgerregelid
+                                                            FROM meting m
+                                                            LEFT JOIN verzorgerregel vr on m.verzorgerregelid = vr.id 
+                                                            WHERE clientid = ? ORDER BY datumtijd ASC");
+$metingtijden->bind_param("i", $_SESSION['clientId']);
 $metingtijden->execute();
 $metingtijden = $metingtijden->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$metingen = getMeting($metingtijden, $verzorgerregelid);
+
+$metingen = getMeting($metingtijden);
 
 foreach ($metingen[1] as $meting) {
     foreach ($meting as $data) {

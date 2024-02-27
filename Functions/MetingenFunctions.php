@@ -1,12 +1,13 @@
 <?php
 
-function getMeting($metingtijden, $verzorgerregelid)
+function getMeting($metingtijden)
 {
     $metingen = [];
     $tijden = [];
     foreach ($metingtijden as $metingtijd) {
         $datumtijd = $metingtijd['datumtijd'];
         $metingid = $metingtijd['id'];
+        $verzorgerregelid = $metingtijd['verzorgerregelid'];
         $tijd = date('H:i', strtotime($datumtijd));
         $tijden[] = $tijd;
         $query = "(SELECT
