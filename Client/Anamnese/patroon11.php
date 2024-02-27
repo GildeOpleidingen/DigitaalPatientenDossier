@@ -2,10 +2,18 @@
 <?php
 session_start();
 include '../../Database/DatabaseConnection.php';
+include '../../Functions/Functions.php';
 
 $id = $_GET['id'];
 $anamneseId = 11;
 
+$antwoorden = getPatternAnswers($id, $anamneseId);
+if(isset($antwoorden['geloof_welk'])) {
+    $boolArrayGeloof = str_split($antwoorden['geloof_welk']);
+}
+if(isset($antwoorden['observatie'])) {
+    $boolArrayObservatie = str_split($antwoorden['observatie']);
+}
 
 if (isset($_REQUEST['navbutton'])) {
     //TODO: hier actie om data op te slaan in database.
@@ -49,19 +57,19 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Bent u gelovig?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-1" checked="<?= "true" ?>">
+                                    <input id="radio" type="radio" name="radio-1" <?= $antwoorden['gelovig'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <div id="checkfield">
                                         <div class="question"><div class="observe"><input type="checkbox"><p>R-K</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Nederlands hervormd</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Gereformeerd</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Moslim</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Joods</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"></textarea></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[1] ? "checked" : "" ?>><p>Nederlands hervormd</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[2] ? "checked" : "" ?>><p>Gereformeerd</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[3] ? "checked" : "" ?>><p>Moslim</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[4] ? "checked" : "" ?>><p>Joods</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[5] ? "checked" : "" ?>><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['geloof_anders'] ? $anwoorden['geloof_anders'] : "" ?></textarea></div>
                                     </div>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-1">
+                                    <input type="radio" name="radio-1" <?= !$antwoorden['gelovig'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -69,11 +77,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Heeft u behoefte aan religieuze activiteiten?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-2">
+                                    <input type="radio" name="radio-2" <?= $antwoorden['behoefte_religieuze_activiteit'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-2">
+                                    <input type="radio" name="radio-2" <?= !$antwoorden['behoefte_religieuze_activiteit'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -81,51 +89,51 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Zijn er gebruiken ten aanzien van uw geloofsovertuiging waar rekening mee gehouden moet worden?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-3">
+                                    <input id="radio" type="radio" name="radio-3" <?= $antwoorden['gebruiken_tav_geloofsovertuiging'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?"></textarea>
+                                    <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?"><?= $antwoorden['gebruiken_tav_geloofsovertuiging'] ? $antwoorden['gebruiken_tav_geloofsovertuiging_welke']  : "" ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-3">
+                                    <input type="radio" name="radio-3" <?= !$antwoorden['gebruiken_tav_geloofsovertuiging'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>Ja, wanneer?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
+                        <div class="question"><p>Ja, wanneer?</p><textarea  rows="1" cols="25" type="text"><?= $antwoorden['gebruiken_tav_geloofsovertuiging_wanneer'] ? $antwoorden['gebruiken_tav_geloofsovertuiging_wanneer']  : "" ?></textarea></div>
                         <div class="question"><p>Komen uw waarden en normen overeen met maatschappelijke waarden en normen?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-4">
+                                    <input type="radio" name="radio-4" <?= $antwoorden['overeenkomst_waarden_normen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-4">
+                                    <input type="radio" name="radio-4" <?= !$antwoorden['overeenkomst_waarden_normen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>Wat is uw etnische achtergrond</p><textarea  rows="1" cols="25" type="text"></textarea></div>
+                        <div class="question"><p>Wat is uw etnische achtergrond</p><textarea  rows="1" cols="25" type="text"><?= $antwoorden['etnische_achtergrond'] ? $antwoorden['etnische_achtergrond'] : "" ?></textarea></div>
                         <div class="question"><p>- Zijn er gebruiken met betrekking tot uw etnische achtergrond waar rekening mee gehouden moet worden?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-5">
+                                    <input id="radio" type="radio" name="radio-5" <?= $antwoorden['gebruiken_mbt_etnische_achtergrond'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?"><?= $antwoorden['gebruiken_mbt_etnische_achtergrond'] ? $antwoorden['gebruiken_mbt_etnische_achtergrond_welke'] : "" ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-5">
+                                    <input type="radio" name="radio-5" <?= !$antwoorden['gebruiken_mbt_etnische_achtergrond'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>Ja, wanneer?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
+                        <div class="question"><p>Ja, wanneer?</p><textarea  rows="1" cols="25" type="text"><?= $antwoorden['gebruiken_mbt_etnische_achtergrond'] ? $antwoorden['gebruiken_mbt_etnische_achtergrond_wanneer'] : "" ?></textarea></div>
 
                         <div class="observation">
                             <h2>Verpleegkundige observatie bij dit patroon</h2>
-                            <div class="question"><div class="observe"><input type="checkbox"><p>Geestelijke nood</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox"><p>Verandering in waarden en normen</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox"><p>Verandering in rolopvatting met betrekking tot etnische achtergrond</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox"><p>Verandering in rolinvulling met betrekking tot etnische achtergrond</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[0] ? "checked" : "" ?>><p>Geestelijke nood</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[1] ? "checked" : "" ?>><p>Verandering in waarden en normen</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[2] ? "checked" : "" ?>><p>Verandering in rolopvatting met betrekking tot etnische achtergrond</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[3] ? "checked" : "" ?>><p>Verandering in rolinvulling met betrekking tot etnische achtergrond</p></div></div>
                         </div>
                     </div>
                 </div>
