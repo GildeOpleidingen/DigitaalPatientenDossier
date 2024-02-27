@@ -2,18 +2,23 @@
 <?php
 session_start();
 include '../../Database/DatabaseConnection.php';
+include '../../Functions/Functions.php';
 
-$id = $_GET['id'];
+$clientId = $_GET['id'];
+$antwoorden = getPatternAnswers($clientId, 7);
+echo "<pre>";
+print_r($antwoorden);
+echo "</pre>";
 
 if (isset($_REQUEST['navbutton'])) {
     //TODO: hier actie om data op te slaan in database.
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
-            header('Location: patroon08.php?id='.$id);
+            header('Location: patroon08.php?id='.$clientId);
             break;
     
         case 'prev': //action for previous here
-            header('Location: patroon06.php?id='.$id);
+            header('Location: patroon06.php?id='.$clientId);
             break;
     }
     exit;
