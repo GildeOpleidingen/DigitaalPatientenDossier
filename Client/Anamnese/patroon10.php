@@ -11,10 +11,10 @@ $antwoorden = getPatternAnswers($clientId, 10);
 if(isset($antwoorden['reactie_spanningen'])) {
     $boolArrayReacties = str_split($antwoorden['reactie_spanningen']);
 }
+
 if(isset($antwoorden['observatie'])) {
     $boolArrayObservatie = str_split($antwoorden['observatie']);
 }
-print_r($antwoorden);
 
 if (isset($_REQUEST['navbutton'])) {
     //TODO: hier actie om data op te slaan in database.
