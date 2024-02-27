@@ -4,6 +4,8 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 
 $id = $_GET['id'];
+$anamneseId = 11;
+
 
 if (isset($_REQUEST['navbutton'])) {
     //TODO: hier actie om data op te slaan in database.
@@ -47,7 +49,7 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Bent u gelovig?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-1">
+                                    <input id="radio" type="radio" name="radio-1" checked="<?= "true" ?>">
                                     <label>Ja</label>
                                     <div id="checkfield">
                                         <div class="question"><div class="observe"><input type="checkbox"><p>R-K</p></div></div>
