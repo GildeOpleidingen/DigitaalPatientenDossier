@@ -6,7 +6,6 @@ include '../../Functions/Functions.php';
 
 $clientId = $_GET['id'];
 $antwoorden = getPatternAnswers($clientId, 9);
-print_r($antwoorden);
 
 if(isset($antwoorden['seksuele_gerichtheid'])) {
     $boolArrayGerichtheid = str_split($antwoorden['seksuele_gerichtheid']);
