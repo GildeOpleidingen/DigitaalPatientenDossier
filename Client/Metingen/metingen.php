@@ -26,20 +26,6 @@ if (!isset($_SESSION['loggedin_id'])) {
 
 $samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
 
-$verzorgerregelid = DatabaseConnection::getConn()->prepare("SELECT id FROM verzorgerregel WHERE medewerkerid = ?");
-$verzorgerregelid->bind_param("i", $id);
-$verzorgerregelid->execute();
-$verzorgerregelid = $verzorgerregelid->get_result()->fetch_all()[0];
-
-
-//$metingtijdens = DatabaseConnection::getConn()->prepare("SELECT id, datumtijd
-//                                                            FROM meting
-//                                                            WHERE verzorgerregelid = ?
-//                                                            ORDER BY datumtijd ASC");
-//$metingtijdens->bind_param("i", $verzorgerregelid);
-//$metingtijdens->execute();
-//$metingtijdens = $metingtijdens->get_result()->fetch_all(MYSQLI_ASSOC);
-
 $metingtijden = DatabaseConnection::getConn()->prepare("SELECT m.id, m.datumtijd, vr.id as verzorgerregelid
                                                             FROM meting m
                                                             LEFT JOIN verzorgerregel vr on m.verzorgerregelid = vr.id 
@@ -47,7 +33,6 @@ $metingtijden = DatabaseConnection::getConn()->prepare("SELECT m.id, m.datumtijd
 $metingtijden->bind_param("i", $_SESSION['clientId']);
 $metingtijden->execute();
 $metingtijden = $metingtijden->get_result()->fetch_all(MYSQLI_ASSOC);
-
 
 $metingen = getMeting($metingtijden);
 
