@@ -37,7 +37,7 @@ if (isset($_REQUEST['navbutton'])) {
     <form action="" method="post">
     <div class="main">
         <?php
-        // include '../../Includes/header.php';
+        include '../../Includes/header.php';
         ?>
         <?php
         include '../../Includes/sidebar.php';
