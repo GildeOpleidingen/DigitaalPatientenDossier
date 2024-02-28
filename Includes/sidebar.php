@@ -28,7 +28,7 @@
             height: 100vh;
             min-width: 200px;
             padding-top: 80px;
-            background-color: white                                                                 ;
+            background-color: white;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -162,12 +162,10 @@
     ?>
     <ul>
         <?php
-        $id = $_GET['id'];
-
         $pages = array(
             "overzicht" => "Overzicht",
             "patiëntgegevens" => "Patiëntgegevens",
-            "anamnese" => "Anamnese",
+            "patroon01" => "Anamnese",
             "zorgplan" => "Zorgplan",
             "rapportage" => "Rapportage",
             "metingen" => "Metingen",
