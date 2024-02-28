@@ -4,8 +4,10 @@ include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 
 // id van die client
-$id = $_GET['id'];
+$client_id = $_GET['id'];
 
+//id van de medewerker
+$medewerker_id = $_SESSION['loggedin_id'];
 
 
 if (isset($_REQUEST['navbutton'])) {
@@ -27,9 +29,10 @@ if (isset($_REQUEST['navbutton'])) {
                     SELECT vl.id
                     from vragenlijst vl
                     left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
-                    where verzorgerregel.clientid = $id");
+                    where verzorgerregel.clientid = ?");
+        $result->bind_param("i", $client_id);
         $result->execute();
-            $result = $result->get_result()->fetch_assoc();
+        $result = $result->get_result()->fetch_assoc();
 
     if ($result != null){
         $vragenlijst_id = $result['id'];
@@ -39,9 +42,9 @@ if (isset($_REQUEST['navbutton'])) {
         $sql2 = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
             VALUES ((SELECT id
             FROM verzorgerregel
-            WHERE clientid = $id
-            AND medewerkerid = 1))");
-
+            WHERE clientid = ?
+            AND medewerkerid = ?))");
+            $sql2->bind_param("ii", $client_id ,$medewerker_id);
         $sql2->execute();
         $sql2 = $sql2->get_result();
 
@@ -49,7 +52,8 @@ if (isset($_REQUEST['navbutton'])) {
         $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
                     from vragenlijst vl
                     left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
-                    where verzorgerregel.clientid = $id");
+                    where verzorgerregel.clientid = ?");
+        $result->bind_param("i", $client_id);
         $result->execute();
         $result = $result->get_result()->fetch_assoc();
 
@@ -60,12 +64,12 @@ if (isset($_REQUEST['navbutton'])) {
     // kijken of patroon02 bestaat door te kijken naar vragenlijst id
 $result = DatabaseConnection::getConn()->prepare("SELECT p.id
                     from patroon02voedingstofwisseling p
-                    where p.vragenlijstid =  $vragenlijst_id");
-$result->execute();
-$result = $result->get_result()->fetch_assoc();
+                    where p.vragenlijstid =  ?");
+    $result->bind_param("i", $vragenlijst_id);
+    $result->execute();
+    $result = $result->get_result()->fetch_assoc();
 
 if ($result != null) {
-
     //update
     $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon02voedingstofwisseling`
             SET
@@ -79,13 +83,14 @@ if ($result != null) {
             `huidproblemen`='$huidproblemen',
             `gevoel`='$gevoel',
             `observatie`='$observatie'
-            WHERE `vragenlijstid`=$vragenlijst_id");
-
+            WHERE `vragenlijstid`=?");
+    $result1->bind_param("i", $vragenlijst_id);
     $result1->execute();
     $result1 = $result1->get_result();
 
 }else{
     //hier insert je alle data in patroon02
+    $dieetwelk = "'$dieet_welk'";
     $result2 = DatabaseConnection::getConn()->prepare( "INSERT INTO `patroon02voedingstofwisseling`(
                 `vragenlijstid`,
                 `eetlust`,
@@ -99,17 +104,18 @@ if ($result != null) {
                 `gevoel`,
                 `observatie`)
             VALUES (
-                    $vragenlijst_id,
-                    $eetlust,
-                    $dieet,
-                    '$dieet_welk',
-                    $gewicht_verandert,
-                    $moeilijk_slikken,
-                    $gebitsproblemen,
-                    $gebitsprothese,
-                    $huidproblemen,
-                    $gevoel,
-                    $observatie)");
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?)");
+    $result2->bind_param("iiisiiiiiis", $vragenlijst_id, $eetlust, $dieet, $dieetwelk, $gewicht_verandert, $moeilijk_slikken, $gebitsproblemen, $gebitsprothese, $huidproblemen, $gevoel, $observatie);
     $result2->execute();
     $result2 = $result2->get_result();
 
@@ -118,11 +124,11 @@ if ($result != null) {
 
     switch ($_REQUEST['navbutton']) {
         case 'next': //action for next here
-            header('Location: patroon03.php?id=' . $id);
+            header('Location: patroon03.php?id=' . $client_id);
             break;
 
         case 'prev': //action for previous here
-            header('Location: patroon01.php?id=' . $id);
+            header('Location: patroon01.php?id=' . $client_id);
             break;
     }
     exit;
