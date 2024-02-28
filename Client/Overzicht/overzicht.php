@@ -31,6 +31,7 @@ foreach ($clientRelations as $relation) {
     $verzorger = $verzorger->get_result()->fetch_assoc();
     array_push($verzorgers, $verzorger);
 }
+$verzorgerNamen = []
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,74 +41,71 @@ foreach ($clientRelations as $relation) {
     <link rel="Stylesheet" href="overzicht.css">
     <title>Overzicht van <?= $client['naam'] ?></title>
 </head>
-<body>
-<div class="main">
-        <?php
-        include '../../Includes/header.php';
-        ?>
-
-        <?php
-        include '../../Includes/sidebar.php';
-        ?>
+    <body>
+        <div class="main">
+            <?php
+            include_once '../../Includes/header.php';
+            include_once '../../Includes/sidebar.php';
+            ?>
 
         <div class="content">
-                <div class="overzicht">
-                    <div class="overzicht-content">
-                        <div class="text">
-                            <strong>Geslacht</strong>
-                            <p><?= $client['geslacht'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Geboortedatum</strong>
-                            <p><?= date_create($client['geboortedatum'])->format('d-m-Y') ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Adres</strong>
-                            <p><?= $client['adres'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Postcode</strong>
-                            <p><?= $client['postcode'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Woonplaats</strong>
-                            <p><?= $client['woonplaats'] ?></p>
-                        </div>
+            <div class="overzicht">
+                <div class="overzicht-content">
+                    <div class="text">
+                        <strong>Geslacht:</strong>
+                        <p><?= $client['geslacht'] ?></p>
                     </div>
-                    <br>
-                    <div class="overzicht-content">
-                        <div class="text">
-                            <strong>Telefoonnummer</strong>
-                            <p><?= $client['telefoonnummer'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>E-mail</strong>
+                    <div class="text">
+                        <strong>Geboortedatum:</strong>
+                        <p><?= date_create($client['geboortedatum'])->format('d-m-Y') ?></p>
+                    </div>
+                    <div class="text">
+                        <strong>Adres:</strong>
+                        <p><?= $client['adres'] ?></p>
+                    </div>
+                    <div class="text">
+                        <strong>Postcode:</strong>
+                        <p><?= $client['postcode'] ?></p>
+                    </div>
+                    <div class="text">
+                        <strong>Woonplaats:</strong>
+                        <p><?= $client['woonplaats'] ?></p>
+                    </div>
+                    <div class="text">
+                        <strong>Telefoonnummer:</strong>
+                        <p><?= $client['telefoonnummer'] ?></p>
+                    </div>
+                    <div class="text">
+                            <strong>E-mail:</strong>
                             <p><?= $client['email'] ?></p>
                         </div>
                         <div class="text">
-                            <strong>Afdeling</strong>
+                            <strong>Afdeling:</strong>
                             <p><?= $client['afdeling'] ?></p>
                         </div>
                         <div class="text">
-                            <strong>Burgelijke staat</strong>
+                            <strong>Burgelijke staat:</strong>
                             <p><?= $client['burgelijkestaat'] ?></p>
                         </div>
                         <div class="text">
-                            <strong>Nationaliteit</strong>
+                            <strong>Nationaliteit:</strong>
                             <p><?= $client['nationaliteit'] ?></p>
                         </div>
                         <div class="text">
                             <a href="verzorgers.php?id=<?= $_GET['id']?>">
-                                <strong>Verzorger(s)</strong>
+                                <strong>Verzorger(s):</strong>
                             </a>
-                            <?php foreach ($verzorgers as $verzorger) { ?>
-                                <p><?= $verzorger['naam'] ?></p>
-                            <?php } ?>
+                            <div class="p2">
+                                <?php $i=0?>
+                                <?php foreach ($verzorgers as $key => $verzorger) { ?>
+                                    <?php $verzorgerNamen[$i] = $verzorger['naam']; ?>
+                                    <?php $i++?>
+                                <?php } ?>
+                                <p><?php echo join(", ",$verzorgerNamen); ?></p>
+                            </div>
                         </div>
-                    </div>
                 </div>
             </div>
-    </div>
-
-</body>
+        </div>
+    </body>
 </html>
