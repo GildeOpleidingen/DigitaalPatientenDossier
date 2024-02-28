@@ -6,30 +6,15 @@ if(!isset($_GET['id'])) {
     header("Location: ../client.php");
 }
 
-$rapportageId = $_GET['id'];
+$id = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
 
-if (!$_GET['id'] == null) {
-    header("Location: ../client.php");
-}
+$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
+$client->bind_param("i", $id);
+$client->execute();
+$client = $client->get_result()->fetch_assoc();
 
-$rapportage = DatabaseConnection::getConn()->prepare("SELECT * FROM rapportage WHERE id = ?");
-$rapportage->bind_param("i", $rapportageId);
-$rapportage->execute();
-$rapportage = $rapportage->get_result()->fetch_assoc();
-
-if ($rapportage == null) {
-    header("Location: ../client.php");
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $rapportage = $_POST['rapportage'];
-    $rapportageId = $_POST['rapportageId'];
-
-    $stmt = DatabaseConnection::getConn()->prepare("UPDATE rapportage SET rapportage = ? WHERE id = ?");
-    $stmt->bind_param("si", $rapportage, $id);
-    $stmt->execute();
-    $stmt->close();
+if ($client == null) {
     header("Location: ../client.php");
 }
 ?>
