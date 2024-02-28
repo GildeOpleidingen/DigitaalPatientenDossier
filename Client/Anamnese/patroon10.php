@@ -159,11 +159,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Bent u wel eens agressief?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-8" <?= $antwoorden['agressiief'] ? "checked" : "" ?>>
+                                    <input type="radio" name="radio-8" <?= $antwoorden['agressief'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-8" <?= !$antwoorden['agressiief'] ? "checked" : "" ?>>
+                                    <input type="radio" name="radio-8" <?= !$antwoorden['agressief'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
