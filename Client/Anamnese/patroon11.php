@@ -4,18 +4,13 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 
-$clientId = $_GET['id'];
+$antwoorden = getPatternAnswers($_SESSION['clientId'], 11);
 
-$antwoorden = getPatternAnswers($clientId, 11);
-
-if(isset($antwoorden['geloof_welk'])) {
-    $boolArrayGeloof = str_split($antwoorden['geloof_welk']);
-}
-if(isset($antwoorden['observatie'])) {
-    $boolArrayObservatie = str_split($antwoorden['observatie']);
-}
+$boolArrayGeloof = str_split($antwoorden['geloof_welk']);
+$boolArrayObservatie = str_split($antwoorden['observatie']);
 
 if (isset($_REQUEST['navbutton'])) {
+    $clientId = $_GET['id'];
     //TODO: hier actie om data op te slaan in database.
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here

@@ -4,15 +4,13 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 
-$clientId = $_GET['id'];
 
-$antwoorden = getPatternAnswers($clientId, 8);
+$antwoorden = getPatternAnswers($_SESSION['clientId'], 8);
 
-if(isset($antwoorden['observatie'])){
-    $boolArrayObservatie = str_split($antwoorden['observatie']);
-}
+$boolArrayObservatie = str_split($antwoorden['observatie']) ?? "";
 
 if (isset($_REQUEST['navbutton'])) {
+    $clientId = $_GET['id'];
     //TODO: hier actie om data op te slaan in database.
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
@@ -171,7 +169,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="radio-10" <?= $antwoorden['verenigingslid'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?"><?= $antwoorden['vereniging_welke    '] ?? "" ?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?"><?= $antwoorden['vereniging_welke'] ?? "" ?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="radio-10" <?= !$antwoorden['verenigingslid'] ? "checked" : "" ?>>
@@ -179,7 +177,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>- Hoe verliepen de contacten met derden (collega's, kennissen, verenigingsgenoten)?</p><textarea  rows="1" cols="25" type="text"></textarea></div> <!-- Dit staat nog niet in de database -->
+                        <div class="question"><p>- Hoe verliepen de contacten met derden (collega's, kennissen, verenigingsgenoten)?</p><textarea  rows="1" cols="25" type="text"><?= $antwoorden['contact_met_derden'] ?? "" ?></textarea></div>
                         <div class="question"><p>Heeft u de laatst tijd een verlies geleden (werk, personen, enzovoort)?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">

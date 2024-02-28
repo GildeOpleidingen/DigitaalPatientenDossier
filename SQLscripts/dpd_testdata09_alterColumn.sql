@@ -1,0 +1,1 @@
+ALTER TABLE `patroon10stressverwerking` ADD `reactie_anders` TINYTEXT NULL DEFAULT NULL AFTER `reactie_spanningen`; 

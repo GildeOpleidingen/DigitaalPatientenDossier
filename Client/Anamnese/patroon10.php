@@ -4,19 +4,15 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 
-$clientId = $_GET['id'];
 
-$antwoorden = getPatternAnswers($clientId, 10);
+$antwoorden = getPatternAnswers($_SESSION['clientId'], 10);
 
-if(isset($antwoorden['reactie_spanningen'])) {
     $boolArrayReacties = str_split($antwoorden['reactie_spanningen']);
-}
 
-if(isset($antwoorden['observatie'])) {
     $boolArrayObservatie = str_split($antwoorden['observatie']);
-}
 
 if (isset($_REQUEST['navbutton'])) {
+    $clientId = $_GET['id'];
     //TODO: hier actie om data op te slaan in database.
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
@@ -69,7 +65,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[9] ? "checked" : "" ?>><p>Slapen/terugtrekken</p></div></div>
                                 <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[10] ? "checked" : "" ?>><p>Vertrouwen op religie</p></div></div>
                                 <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[11] ? "checked" : "" ?>><p>Zo goed mogelijk zelf oplossen</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[12] ? "checked" : "" ?>><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"></textarea></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[12] ? "checked" : "" ?>><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['reactie_anders'] ?? "" ?></textarea></div>
                             </div>
                         </div>
                         <div class="question"><p>Probeert u spanningsvolle situaties zo goed mogelijk te voorkomen?</p>
