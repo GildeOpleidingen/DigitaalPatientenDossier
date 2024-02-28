@@ -8,11 +8,6 @@ $antwoorden = getPatternAnswers($_SESSION['clientId'], 6);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
-
-echo "<pre>";
-print_r($antwoorden);
-echo "</pre>";
-
 if (isset($_REQUEST['navbutton'])) {
     $clientId = $_GET['id'];
     //TODO: hier actie om data op te slaan in database.
