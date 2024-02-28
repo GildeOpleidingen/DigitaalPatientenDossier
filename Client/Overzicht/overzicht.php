@@ -23,6 +23,7 @@ $clientRelations->bind_param("i", $id);
 $clientRelations->execute();
 $clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
 
+$verzorgerNamen = [];
 $verzorgers = [];
 foreach ($clientRelations as $relation) {
     $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
@@ -40,15 +41,12 @@ foreach ($clientRelations as $relation) {
     <link rel="Stylesheet" href="overzicht.css">
     <title>Overzicht van <?= $client['naam'] ?></title>
 </head>
-<body>
-<div class="main">
-        <?php
-        include '../../Includes/header.php';
-        ?>
-
-        <?php
-        include '../../Includes/sidebar.php';
-        ?>
+    <body>
+        <div class="main">
+            <?php
+            include_once '../../Includes/header.php';
+            include_once '../../Includes/sidebar.php';
+            ?>
 
         <div class="content">
                 <!-- maak overzicht -->
