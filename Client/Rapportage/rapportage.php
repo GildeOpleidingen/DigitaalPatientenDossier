@@ -37,6 +37,9 @@ if ($client == null) {
         ?>
 
         <div class="content">
+            <?php echo "<a href='rapportageNieuw.php?id=" . $id . "'>" ?>
+                    <button type="submit">Nieuwe rapportage</button>
+            </a>
                     <form method="POST">
                         <div class="rapportage">
                             <textarea name="rapportage" id="rapportage" placeholder="Rapportage" style="width: 100%; height: 100%; box-sizing: border-box;"></textarea>
