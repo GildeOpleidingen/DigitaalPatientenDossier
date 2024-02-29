@@ -3,12 +3,15 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 
+$antwoorden = getPatternAnswers($_SESSION['clientId'], 2);
+
+$boolArrayObservatie = str_split($antwoorden['observatie']);
+
 // id van die client
 $client_id = $_GET['id'];
 
 //id van de medewerker
 $medewerker_id = $_SESSION['loggedin_id'];
-
 
 if (isset($_REQUEST['navbutton'])) {
         $eetlust = $_POST['eetlust'];
@@ -164,15 +167,15 @@ if ($result != null) {
                                     <p>Hoe is uw eetlust nu?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="eetlust">
+                                            <input type="radio" value="0" name="eetlust" <?= !$antwoorden['eetlust'] ? "checked" : "" ?>>
                                             <label>Normaal</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value=2 name="eetlust">
+                                            <input type="radio" value="1" name="eetlust" <?= $antwoorden['eetlust'] ? "checked" : "" ?>>
                                             <label>Slecht</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="1" name="eetlust">
+                                            <input type="radio" value="2" name="eetlust" <?= $antwoorden['eetlust'] == 2 ? "checked" : ""  ?>>
                                             <label>Overmatig</label>
                                         </p>
                                     </div>
@@ -181,13 +184,13 @@ if ($result != null) {
                                     <p>- Heeft u een dieet?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="dieet">
+                                            <input id="radio" type="radio" value="1" name="dieet" <?= $antwoorden['dieet'] ? "checked" : "" ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" name="dieet_welk"
-                                                placeholder="en wel?"></textarea>
+                                                placeholder="en wel?"><?= $antwoorden['dieet_welk'] ?? "" ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="dieet">
+                                            <input type="radio" value="0" name="dieet" <?= !$antwoorden['dieet'] ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -196,11 +199,11 @@ if ($result != null) {
                                     <p>- Is uw gewicht de laatste tijd veranderd?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="gewicht_verandert">
+                                            <input type="radio" value="1" name="gewicht_verandert" <?= $antwoorden['gewicht_verandert'] ? "checked" : "" ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="gewicht_verandert">
+                                            <input type="radio" value="0" name="gewicht_verandert" <?= !$antwoorden['gewicht_verandert'] ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -209,11 +212,11 @@ if ($result != null) {
                                     <p>Heeft u moeite met slikken?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="moeilijk_slikken">
+                                            <input type="radio" value="1" name="moeilijk_slikken" <?= $antwoorden['moeilijk_slikken'] ? "checked" : "" ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="moeilijk_slikken">
+                                            <input type="radio" value="0" name="moeilijk_slikken" <?= !$antwoorden['moeilijk_slikken'] ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -222,11 +225,11 @@ if ($result != null) {
                                     <p>Heeft u gebitsproblemen?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="gebitsproblemen">
+                                            <input type="radio" value="1" name="gebitsproblemen" <?= $antwoorden['gebitsproblemen'] ? "checked" : "" ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="gebitsproblemen">
+                                            <input type="radio" value="0" name="gebitsproblemen" <?= !$antwoorden['gebitsproblemen'] ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -235,11 +238,11 @@ if ($result != null) {
                                     <p>- Heeft u een gebitsprothese?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="gebitsprothese">
+                                            <input type="radio" value="1" name="gebitsprothese" <?= $antwoorden['gebitsprothese'] ? "checked" : "" ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="gebitsprothese">
+                                            <input type="radio" value="0" name="gebitsprothese" <?= !$antwoorden['gebitsprothese'] ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -248,11 +251,11 @@ if ($result != null) {
                                     <p>Heeft u huidproblemen?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="huidproblemen">
+                                            <input type="radio" value="1" name="huidproblemen" <?= $antwoorden['huidproblemen'] ? "checked" : "" ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="huidproblemen">
+                                            <input type="radio" value="0" name="huidproblemen" <?= !$antwoorden['huidproblemen'] ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -261,15 +264,15 @@ if ($result != null) {
                                     <p>Heeft u het koud of warm?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="0" name="gevoel">
+                                            <input type="radio" value="0" name="gevoel" <?= $antwoorden['gevoel'] == 0 ? "checked" : "" ?>>
                                             <label>Normaal</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="1" name="gevoel">
+                                            <input type="radio" value="1" name="gevoel" <?= $antwoorden['gevoel'] == 1 ? "checked" : "" ?>>
                                             <label>Koud</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="2" name="gevoel">
+                                            <input type="radio" value="2" name="gevoel" <?= $antwoorden['gevoel'] == 2 ? "checked" : "" ?>>
                                             <label>Warm</label>
                                         </p>
                                     </div>
@@ -279,32 +282,32 @@ if ($result != null) {
                                 <div class=" observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie1">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie1" <?= $boolArrayObservatie[0] ? "checked" : "" ?>>
                                             <p>(Dreigend) voedingsteveel (zwaarlijvigheid)</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie2">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie2" <?= $boolArrayObservatie[1] ? "checked" : "" ?>>
                                             <p>Voedingstekort</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie3">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie3" <?= $boolArrayObservatie[2] ? "checked" : "" ?>>
                                             <p>(Dreigend) vochttekort</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie4">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie4" <?= $boolArrayObservatie[3] ? "checked" : "" ?>>
                                             <p>Falende warmteregulatie</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie5">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie5" <?= $boolArrayObservatie[4] ? "checked" : "" ?>>
                                             <p>Aspiratiegevaar</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie6">
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie6" <?= $boolArrayObservatie[5] ? "checked" : "" ?>>
                                             <p>(Dreigende) huiddefect</p>
                                         </div>
                                     </div>
