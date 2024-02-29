@@ -155,7 +155,6 @@ if ($result != null) {
         include '../../Includes/sidebar.php';
         ?>
 
-            <div class="main-content">
                 <div class="content">
                     <div class="form-content">
                         <div class="pages">2 Voedings- en stofwisselingspatroon</div>
@@ -319,10 +318,8 @@ if ($result != null) {
                         </div>
                     </div>
                 </div>
+                </div>
     </form>
-    </div>
-    </div>
-
 </body>
 
 </html>

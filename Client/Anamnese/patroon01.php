@@ -47,7 +47,6 @@ if ($client == null) {
         <?php
         include '../../Includes/sidebar.php';
         ?>
-        <div class="main-content">
             <div class="content">
                 <div class="form-content">
                     <div class="pages">1 Patroon van gezondheidsbeleving en -instandhouding</div>
@@ -137,9 +136,7 @@ if ($client == null) {
                     </div>
                 </div>
             </div>
+            </div>
 </form>
-</div>
-</div>
-
 </body>
 </html>

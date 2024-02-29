@@ -45,7 +45,6 @@ if (isset($_REQUEST['navbutton'])) {
         <?php
         include '../../Includes/sidebar.php';
         ?>
-    <div class="main-content">
         <div class="content">
             <div class="form-content">
             <div class="pages">10 Stressverwerkingspatroon (probleemhantering)</div>
@@ -228,9 +227,7 @@ if (isset($_REQUEST['navbutton'])) {
                 </div>
             </div>
         </div>
+        </div>
         </form>
-    </div>
-    </div>
-
 </body>
 </html>
