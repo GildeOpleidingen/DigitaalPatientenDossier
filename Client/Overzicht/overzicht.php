@@ -3,7 +3,7 @@ session_start();
 include_once '../../Database/DatabaseConnection.php';
 include_once '../../Functions/ClientFunctions.php';
 
-if(!isset($_GET['id'])) {
+if (!isset($_GET['id'])) {
     header("Location: ../client.php");
 }
 
@@ -39,27 +39,37 @@ foreach ($clientRelations as $relation) {
 </head>
 <body>
 <div class="main">
-        <?php
-        include '../../Includes/header.php';
-        ?>
+    <?php
+    include '../../Includes/header.php';
+    ?>
 
-        <?php
-        include '../../Includes/sidebar.php';
-        ?>
+    <?php
+    include '../../Includes/sidebar.php';
+    ?>
 
-        <div class="content">
-            <div class="content-2">
-                <div id="episodes" class="card">
-                    <p class="header">Episodes</p>
-                    <p class="text">Geen Episodes</p>
-                </div>
-                <div id="opnamedatum" class="card">
-                    <p class="header">Opgenomen op</p>
-                    <p class="text"><?php echo getAdmissionDateByClientId($id);?></p>
-                </div>
+    <div class="content">
+        <div class="content-2">
+            <div id="episodes" class="card">
+                <strong class="header">Episodes</strong>
+                <p class="text">Geen Episodes</p>
+            </div>
+            <div id="opnamedatum" class="card">
+                <strong class="header">Opgenomen op</strong>
+                <p class="text"><?php echo getAdmissionDateByClientId($id); ?></p>
+            </div>
+            <div id="medischevoorgeschiedenis" class="card">
+                <strong class="header">Medische voorgeschiedenis</strong>
+                <p class="text"><?php echo getMedischOverzichtByClientId($id)['medischevoorgeschiedenis']; ?></p>
+            </div>
+            <div id="allergien" class="card">
+                <strong class="header">Allergieën</strong>
+                <p class="text"><?php echo getMedischOverzichtByClientId($id)['alergieen']; ?></p>
+            </div>
+            <div id="medicijnen" class="card">
+                <strong class="header">Medicatie</strong>
+                <p class="text"><?php echo getMedischOverzichtByClientId($id)['medicatie']; ?></p>
+            </div>
         </div>
-        </div>
-    </div>
 
 </body>
 </html>

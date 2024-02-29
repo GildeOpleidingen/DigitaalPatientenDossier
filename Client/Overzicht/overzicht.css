@@ -73,16 +73,15 @@ strong {
     flex-direction: column;
     width: 200px;
     margin: 10px;
-    background-color: #D2D4DA;
     border-radius: 10px;
 
 }
 
 .card>.header{
     width: 100%;
-    background-color: #B3B5BD;
     padding: 5px;
     border-radius: 10px 10px 0px 0px;
+    color: #00365E;
 }
 
 .card>.text{

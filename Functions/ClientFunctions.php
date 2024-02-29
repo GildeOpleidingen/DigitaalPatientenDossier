@@ -123,4 +123,6 @@ function getAdmissionDateByClientId($id): string {
 
     $dateString = $result->get_result()->fetch_array()['opnamedatum'];
     return $dateString;
+
 }
+
