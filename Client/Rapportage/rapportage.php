@@ -6,13 +6,17 @@ if(!isset($_GET['id'])) {
     header("Location: ../client.php");
 }
 
-$id = $_GET['id'];
+$clientId = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
 
 $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
+$client->bind_param("i", $clientId);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
+$rapportages = DatabaseConnection::getConn()->prepare("SELECT * FROM rapport r LEFT JOIN verzorgerregel vr on r.verzorgerregelid = vr.id WHERE vr.clientid = ?");
+$rapportages->bind_param("i", $clientId);
+$rapportages->execute();
+$rapportages = $rapportages->get_result()->fetch_all(MYSQLI_ASSOC);
 
 if ($client == null) {
     header("Location: ../client.php");
@@ -37,16 +41,17 @@ if ($client == null) {
         ?>
 
         <div class="content">
-            <?php echo "<a href='rapportageNieuw.php?id=" . $id . "'>" ?>
+            <?php echo "<a href='rapportageNieuw.php?id=" . $clientId . "'>" ?>
                     <button type="submit">Nieuwe rapportage</button>
             </a>
-                    <form method="POST">
-                        <div class="rapportage">
-                            <textarea name="rapportage" id="rapportage" placeholder="Rapportage" style="width: 100%; height: 100%; box-sizing: border-box;"></textarea>
-                            <button class="rapportageButton" type="button" onclick="submit()">Submit</button>
-                        </div>
-
-                    </form>
+            <?php
+            foreach ($rapportages as $rapport) {
+                echo "<h1>Rapportage van " . $rapport['datumtijd'] . " (" . $rapport['id'] . ")</h1>";
+                echo "<a href='rapportageAanpassen.php?id=" . $rapport['id'] . "'>";
+                echo "<button type='submit'>Aanpassen</button>";
+                echo "</a>";
+            }
+            ?>
         </div>
     </div>
 
