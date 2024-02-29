@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->close();
     
     header("Refresh:0");
+    exit();
 } else {
     $rapportageId = $_GET['id'];
 
