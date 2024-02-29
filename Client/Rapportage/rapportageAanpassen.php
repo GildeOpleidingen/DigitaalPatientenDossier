@@ -2,35 +2,36 @@
 session_start();
 include_once '../../Database/DatabaseConnection.php';
 
-if(!isset($_GET['id'])) {
-    header("Location: ../client.php");
-}
-
-$rapportageId = $_GET['id'];
-$_SESSION['clientId'] = $_GET['id'];
-
-if (!$_GET['id'] == null) {
-    header("Location: ../client.php");
-}
-
-$rapportage = DatabaseConnection::getConn()->prepare("SELECT * FROM rapportage WHERE id = ?");
-$rapportage->bind_param("i", $rapportageId);
-$rapportage->execute();
-$rapportage = $rapportage->get_result()->fetch_assoc();
-
-if ($rapportage == null) {
-    header("Location: ../client.php");
-}
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $rapportage = $_POST['rapportage'];
+    $rapportageInhoud = $_POST['inhoud'];
     $rapportageId = $_POST['rapportageId'];
 
-    $stmt = DatabaseConnection::getConn()->prepare("UPDATE rapportage SET rapportage = ? WHERE id = ?");
-    $stmt->bind_param("si", $rapportage, $id);
+    $tijd = date('Y-m-d H:i:s');
+    $stmt = DatabaseConnection::getConn()->prepare("UPDATE rapport SET inhoud = ?, datumtijd = ? WHERE id = ?");
+    $stmt->bind_param("ssi", $rapportageInhoud, $tijd, $rapportageId);
     $stmt->execute();
     $stmt->close();
-    header("Location: ../client.php");
+    
+    header("Refresh:0");
+} else {
+    $rapportageId = $_GET['id'];
+
+    if(!$rapportageId) {
+        header("Location: ../client.php");
+    }
+
+    if (!isset($_GET['id'])) {
+        header("Location: ../client.php");
+    }
+
+    $rapportage = DatabaseConnection::getConn()->prepare("SELECT * FROM rapport WHERE id = ?");
+    $rapportage->bind_param("i", $rapportageId);
+    $rapportage->execute();
+    $rapportage = $rapportage->get_result()->fetch_assoc();
+
+    if ($rapportage == null) {
+        header("Location: ../client.php");
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -39,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="rapportage.css">
-    <title>Rapportage van <?= $client['naam'] ?></title>
+    <title>Rapportage</title>
 </head>
 <body>
 <div class="main">
@@ -53,8 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="content">
                     <form method="POST">
+                        <input type="hidden" value="<?= $rapportageId ?>" name="rapportageId">
                         <div class="rapportage">
-                            <textarea name="rapportage" id="rapportage" placeholder="Rapportage" style="width: 100%; height: 100%; box-sizing: border-box;"></textarea>
+                            <h1>Rapportage aanpassen van <?= $rapportage['datumtijd'] ?> (<?= $rapportage['id'] ?>)</h1>
+                            <textarea name="inhoud" id="rapportage" placeholder="Rapportage" style="width: 100%; height: 100%; box-sizing: border-box;"><?= $rapportage['inhoud'] ?></textarea>
                             <button class="rapportageButton" type="button" onclick="submit()">Submit</button>
                         </div>
 
