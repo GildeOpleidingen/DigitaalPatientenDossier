@@ -59,15 +59,36 @@ foreach ($clientRelations as $relation) {
             </div>
             <div id="medischevoorgeschiedenis" class="card">
                 <strong class="header">Medische voorgeschiedenis</strong>
-                <p class="text"><?php echo getMedischOverzichtByClientId($id)['medischevoorgeschiedenis']; ?></p>
+                <p class="text">
+                    <?php $mv = getMedischOverzichtByClientId($id)['medischevoorgeschiedenis'];
+                    if ($mv) {
+                        echo $mv;
+                    } else {
+                        echo "Geen medische voorgeschiedenis ingevuld";
+                    } ?>
+                </p>
             </div>
             <div id="allergien" class="card">
                 <strong class="header">Allergieën</strong>
-                <p class="text"><?php echo getMedischOverzichtByClientId($id)['alergieen']; ?></p>
+                <p class="text">
+                    <?php $allergieen = getMedischOverzichtByClientId($id)['alergieen'];
+                    if ($allergieen) {
+                        echo $allergieen;
+                    } else {
+                        echo "Geen allergieën ingevuld";
+                    } ?>
+                </p>
             </div>
             <div id="medicijnen" class="card">
                 <strong class="header">Medicatie</strong>
-                <p class="text"><?php echo getMedischOverzichtByClientId($id)['medicatie']; ?></p>
+                <p class="text">
+                    <?php $medicatie = getMedischOverzichtByClientId($id)['medicatie'];
+                    if ($medicatie) {
+                        echo $medicatie;
+                    } else {
+                        echo "Geen medicatie ingevuld";
+                    } ?>
+                </p>
             </div>
         </div>
 
