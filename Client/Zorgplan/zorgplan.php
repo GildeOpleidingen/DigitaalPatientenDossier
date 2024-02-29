@@ -10,10 +10,10 @@ include '../../Functions/ClientFunctions.php';
 $patroonTypes = getPatternTypes();
 
 if (isset($_GET['pt'])) {
-    $pt = $_GET['pt'];
-    $patroonType = getPatternType($pt);
+    $patroonId = $_GET['pt'];
+    $patroonType = getPatternType($patroonId);
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        insertCarePlan($_SESSION['clientId'], date('Y-m-d h:i:s'), $patroonTypes[$pt-1][0], $_POST['p'], $_POST['e'], $_POST['s'], $_POST['doelen'], $_POST['interventies'], $_POST['evaluatiedoelen']);
+        insertCarePlan($_SESSION['clientId'], date('Y-m-d h:i:s'), $patroonTypes[$patroonId-1][0], $_POST['p'], $_POST['e'], $_POST['s'], $_POST['doelen'], $_POST['interventies'], $_POST['evaluatiedoelen']);
     }
 }
 ?>
@@ -37,7 +37,7 @@ if (isset($_GET['pt'])) {
 
         <div class="main2">
             <div class="main3">
-                <?php if (!isset($pt)) { ?>
+                <?php if (!isset($patroonId)) { ?>
                     <div class="header">
                         <p class="title">Zorgplan</p>
                     </div>
@@ -49,7 +49,7 @@ if (isset($_GET['pt'])) {
                     <?php } else { ?>
                         <div class="header">
                             <a href="zorgplan.php" class="title">Terug</a>
-                            <h1 class="title"><?= $patroonTypes[$pt-1][1] ?></h1>
+                            <h1 class="title"><?= $patroonTypes[$patroonId-1][1] ?></h1>
                         </div>
                         <form class="form" method="POST">
                             <div class="question">
