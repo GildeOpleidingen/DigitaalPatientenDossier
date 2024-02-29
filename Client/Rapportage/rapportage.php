@@ -53,7 +53,10 @@ if ($client == null) {
             }
             ?>
         </div>
-    </div>
+</div>
+        <div class="alleRapportages">
+
+        </div>
 
 </body>
 </html>

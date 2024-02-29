@@ -51,8 +51,7 @@ select{
     min-height: 130px;
     background-color: rgb(240, 240, 240);
     border-radius: 10px;
-    padding: 20px;
-    padding-left: 40px;
+    padding: 30px;
     align-items: center;
 }
 
@@ -76,4 +75,7 @@ select{
 strong {
     font-size: 20px;
     color: #00365E;
+}
+textarea{
+    resize: vertical;
 }
