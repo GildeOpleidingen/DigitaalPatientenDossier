@@ -7,7 +7,6 @@ include '../../Functions/Functions.php';
 $antwoorden = getPatternAnswers($_SESSION['clientId'], 9);
 
 $boolArrayGerichtheid = str_split($antwoorden['seksuele_gerichtheid']);
-
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
 if (isset($_REQUEST['navbutton'])) {
