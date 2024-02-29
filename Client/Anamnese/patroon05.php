@@ -2,18 +2,24 @@
 <?php
 session_start();
 include '../../Database/DatabaseConnection.php';
+include '../../Functions/Functions.php';
 
-$id = $_GET['id'];
+$antwoorden = getPatternAnswers($_SESSION['clientId'], 5);
+
+echo "<pre>";
+print_r($antwoorden);
+echo "</pre>";
 
 if (isset($_REQUEST['navbutton'])) {
+    $clientId = $_GET['id'];
     //TODO: hier actie om data op te slaan in database.
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
-            header('Location: patroon06.php?id='.$id);
+            header('Location: patroon06.php?id='.$clientId);
             break;
     
         case 'prev': //action for previous here
-            header('Location: patroon04.php?id='.$id);
+            header('Location: patroon04.php?id='.$clientId);
             break;
     }
     exit;
@@ -47,12 +53,12 @@ if (isset($_REQUEST['navbutton'])) {
                     <div class="question"><p>Is er in de afgelopen periode verandering in de de duur van uw slaap gekomen?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-1">
+                                    <input id="radio" type="radio" name="verandering_inslaaptijd" <?= $antwoorden['verandering_inslaaptijd'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?"></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-1">
+                                    <input type="radio" name="verandering_inslaaptijd" <?= !$antwoorden['verandering_inslaaptijd'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -60,12 +66,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Is er verandering ontstaan in de kwaliteit van uw slaap (in- en/of doorslaapprobleem)?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-2">
+                                    <input id="radio" type="radio" name="verandering_kwaliteit_slapen" <?= $antwoorden['verandering_kwaliteit_slapen'] ? "checked" : "" ?>>   
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?"></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_kwaliteit_slapen_blijktuit"> <?= $antwoorden['verandering_kwaliteit_slapen_blijktuit'] ??  "" ?> </textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-2">
+                                    <input type="radio" name="verandering_kwaliteit_slapen" <?= !$antwoorden['verandering_kwaliteit_slapen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>

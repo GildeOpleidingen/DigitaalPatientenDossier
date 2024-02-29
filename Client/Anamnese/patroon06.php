@@ -51,11 +51,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Heeft u moeite met horen?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-1" <?= $antwoorden['moeilijk_horen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="moeilijk_horen" <?= $antwoorden['moeilijk_horen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-1" <?= !$antwoorden['moeilijk_horen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="moeilijk_horen" <?= !$antwoorden['moeilijk_horen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -63,12 +63,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Hoort u stemmen die op dat moment door personen in uw omgeving niet gehoord (kunnen) worden?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-2" <?= $antwoorden['hoort_stemmen'] ? "checked" : ""?>>
+                                    <input id="radio" type="radio" name="hoort_stemmen" <?= $antwoorden['hoort_stemmen'] ? "checked" : ""?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat hoort u?"> <?= $antwoorden['hoort_stemmen_wat'] ?? "" ?> </textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-2" <?= !$antwoorden['hoort_stemmen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="hoort_stemmen" <?= !$antwoorden['hoort_stemmen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -76,11 +76,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Heeft u moeite met zien?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-3" <?= $antwoorden['moeite_met_zien'] ? "checked" : "" ?>>
+                                    <input type="radio" name="moeite_met_zien" <?= $antwoorden['moeite_met_zien'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-3" <?= !$antwoorden['moeite_met_zien'] ? "checked" : "" ?>>
+                                    <input type="radio" name="moeite_met_zien" <?= !$antwoorden['moeite_met_zien'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -88,12 +88,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Ziet u personen, dieren, objecten die op dat moment door personen in uw omgeving niet gezien (kunnen) worden?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-4" <?= $antwoorden['ziet_dingen'] ? "checked" : "" ?>>
+                                    <input id="radio" type="radio" name="ziet_dingen" <?= $antwoorden['ziet_dingen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat ziet u?"><?= $antwoorden['ziet_dingen_wat'] ?? "" ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-4" <?= !$antwoorden['ziet_dingen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="ziet_dingen" <?= !$antwoorden['ziet_dingen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -101,12 +101,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Ruikt u iets dat op dat moment door personen in uw omgeving niet geroken (kan) worden?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-5" <?= $antwoorden['ruikt_iets_onverklaarbaar'] ? "checked" : "" ?>>
+                                    <input id="radio" type="radio" name="ruikt_iets_onverklaarbaar" <?= $antwoorden['ruikt_iets_onverklaarbaar'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat ruikt u?"><?= $antwoorden['ruikt_iets_onverklaarbaar_wat'] ?? "" ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-5" <?= !$antwoorden['ruikt_iets_onverklaarbaar'] ? "checked" : "" ?>>
+                                    <input type="radio" name="ruikt_iets_onverklaarbaar" <?= !$antwoorden['ruikt_iets_onverklaarbaar'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -114,11 +114,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Zijn er de afgelopen tijd veranderingen opgetreden in uw denken?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-6" <?= $antwoorden['verandering_denken'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_denken" <?= $antwoorden['verandering_denken'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-6" <?= !$antwoorden['verandering_denken'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_denken" <?= !$antwoorden['verandering_denken'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -126,11 +126,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Heeft u moeite met spreken?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-7" <?= $antwoorden['moeite_spreken'] ? "checked" : "" ?>>
+                                    <input type="radio" name="moeite_spreken" <?= $antwoorden['moeite_spreken'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-7" <?= !$antwoorden['moeite_spreken'] ? "checked" : "" ?>>
+                                    <input type="radio" name="moeite_spreken" <?= !$antwoorden['moeite_spreken'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -139,11 +139,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Zijn er de afgelopen tijd veranderingen opgetreden in uw concentratievermogen?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-8" <?= $antwoorden['verandering_concentratievermogen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_concentratievermogen" <?= $antwoorden['verandering_concentratievermogen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-8" <?= !$antwoorden['verandering_concentratievermogen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_concentratievermogen" <?= !$antwoorden['verandering_concentratievermogen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -151,11 +151,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Kunt u moeilijker dagelijkse beslissingen nemen?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-9" <?= $antwoorden['moeilijker_beslissen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="moeilijker_beslissen" <?= $antwoorden['moeilijker_beslissen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-9" <?= !$antwoorden['moeilijker_beslissen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="moeilijker_beslissen" <?= !$antwoorden['moeilijker_beslissen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -163,11 +163,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Zijn er de afgelopen tijd veranderingen opgetreden in uw geheugen?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-10" <?= $antwoorden['verandering_geheugen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_geheugen" <?= $antwoorden['verandering_geheugen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-10" <?= !$antwoorden['verandering_geheugen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_geheugen" <?= !$antwoorden['verandering_geheugen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -175,11 +175,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Zijn er de afgelopen tijd veranderingen opgetreden in uw oriëntatie?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-11" <?= $antwoorden['verandering_orientatie'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_orientatie" <?= $antwoorden['verandering_orientatie'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-11" <?= !$antwoorden['verandering_orientatie'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_orientatie" <?= !$antwoorden['verandering_orientatie'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -187,12 +187,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Gebruikt u medicatie die uw oriëntatie, reactievermogen of denken beïnvloeden?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-12" <?= $antwoorden['invloed_medicatie'] ? "checked" : "" ?>>
+                                    <input id="radio" type="radio" name="invloed_medicatie" <?= $antwoorden['invloed_medicatie'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" ><?= $antwoorden['invloed_medicatie_welke'] ?? "" ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-12" <?= !$antwoorden['invloed_medicatie'] ? "checked" : "" ?>>
+                                    <input type="radio" name="invloed_medicatie" <?= !$antwoorden['invloed_medicatie'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -200,17 +200,17 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Gebruikt u verdovende/stimulerende middelen?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-13" <?= $antwoorden['gebruikt_middelen'] ? "checked" : "" ?>>
+                                    <input id="radio" type="radio" name="gebruikt_middelen" <?= $antwoorden['gebruikt_middelen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <div id="checkfield">
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $antwoorden['gebruikt_middelen_softdrugs'] ? "checked" : "" ?>><p>Softdrugs</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['gebruikt_middelen_softdrugs_welke'] ?? ""?></textarea></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $antwoorden['gebruikt_middelen_harddrugs'] ? "checked" : "" ?>><p>Harddrugs</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['gebruikt_middelen_harddrugs_welke'] ?? ""?></textarea></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $antwoorden['gebruikt_middelen_alcohol'] ? "checked" : "" ?>><p>Alcohol</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['gebruikt_middelen_alcohol_welke'] ?? ""?></textarea></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $antwoorden['gebruikt_middelen_anders'] ? "checked" : "" ?>><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['gebruikt_middelen_anders_welke'] ?? ""?></textarea></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $antwoorden['gebruikt_middelen_softdrugs'] ? "checked" : "" ?> name="gebruikt_middelen_softdrugs"><p>Softdrugs</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['gebruikt_middelen_softdrugs_welke'] ?? ""?></textarea></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $antwoorden['gebruikt_middelen_harddrugs'] ? "checked" : "" ?> name="gebruikt_middelen_harddrugs"><p>Harddrugs</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['gebruikt_middelen_harddrugs_welke'] ?? ""?></textarea></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $antwoorden['gebruikt_middelen_alcohol'] ? "checked" : "" ?> name="gebruikt_middelen_alcohol"><p>Alcohol</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['gebruikt_middelen_alcohol_welke'] ?? ""?></textarea></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $antwoorden['gebruikt_middelen_anders'] ? "checked" : "" ?> name="gebruikt_middelen_anders"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['gebruikt_middelen_anders_welke'] ?? ""?></textarea></div>
                                     </div>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-13" <?= !$antwoorden['gebruikt_middelen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="gebruikt_middelen" <?= !$antwoorden['gebruikt_middelen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -218,11 +218,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Heeft u pijnklachten?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-14" <?= $antwoorden['pijnklachten'] ? "checked" : "" ?>>
+                                    <input type="radio" name="pijnklachten" <?= $antwoorden['pijnklachten'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-14" <?= !$antwoorden['pijnklachten'] ? "checked" : "" ?>>
+                                    <input type="radio" name="pijnklachten" <?= !$antwoorden['pijnklachten'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
