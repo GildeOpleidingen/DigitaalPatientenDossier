@@ -3,9 +3,6 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/ClientFunctions.php';
 // $id = $_GET['id'];
-// if(getMedischOverzichtByClientId($id)){
-//     echo "<a href='../Clientverhaal/clientverhaal.php?id=$id'> Clientverhaal invullen </a>";
-// }
 
 $patroonTypes = getPatternTypes();
 
@@ -39,6 +36,11 @@ if (isset($_GET['pt'])) {
         <div class="main2">
             <div class="main3">
                 <?php if (!isset($patroonId)) { ?>
+                    <?php if(getMedischOverzichtByClientId($_SESSION['clientId'])){ ?>
+                        <div class="header" style="padding: 20px; background-color: rgb(240, 240, 240);">
+                            <a href='../Clientverhaal/clientverhaal.php?id=<?=$_SESSION['clientId']?>'><h1 style="color: #00365E"> Clientverhaal invullen </h1></a>
+                        </div>
+                        <?php }?>
                     <div class="content">
                         <?php foreach (getPatternTypes() as $patroonType) { ?>
                             <a href="?pt=<?= $patroonType[0] ?>" class="patroon title"><?= $patroonType[1] ?></a>
