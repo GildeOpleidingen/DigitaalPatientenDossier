@@ -14,6 +14,7 @@ if (isset($_GET['pt'])) {
     $patroonType = getPatternType($patroonId);
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         insertCarePlan($_SESSION['clientId'], date('Y-m-d h:i:s'), $patroonTypes[$patroonId-1][0], $_POST['p'], $_POST['e'], $_POST['s'], $_POST['doelen'], $_POST['interventies'], $_POST['evaluatiedoelen']);
+        header("Location: zorgplan.php?pt=$patroonId");
     }
 }
 ?>
@@ -38,9 +39,6 @@ if (isset($_GET['pt'])) {
         <div class="main2">
             <div class="main3">
                 <?php if (!isset($patroonId)) { ?>
-                    <div class="header">
-                        <p class="title">Zorgplan</p>
-                    </div>
                     <div class="content">
                         <?php foreach (getPatternTypes() as $patroonType) { ?>
                             <a href="?pt=<?= $patroonType[0] ?>" class="patroon title"><?= $patroonType[1] ?></a>

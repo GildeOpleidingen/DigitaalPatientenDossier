@@ -16,6 +16,7 @@
     flex-direction: column;
     background-color: white;
     height:97%;
+    border-radius: 5px;
 }
 
 .title {
@@ -26,10 +27,23 @@
 }
 
 .patroon {
-    background-color: #DD0069;
-    height:10%;
-    text-align: center;
-    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    background-color:  #DD0069;
+    color: white;
+    cursor: pointer;
+    border: 3px solid white;
+    min-height: 13%;
+}
+
+.patroon:hover{
+    outline: 3px solid #00365E;
+    background-color:  #ee0777;
+    color:white;
+}
+
+.patroon h1{
+    color: #00365E;
 }
 
 .header {
@@ -56,15 +70,15 @@
     flex-direction: row;
     flex-wrap:wrap;
     height:97%;
-    background-color: rgb(240, 240, 240);
-    margin:25px;
-    border-radius: 10px;
     color:#00365E !important;
+    justify-content: space-between;
+    align-items: center;
+    margin-top:0px;
+    margin:20px;
 }
 
 .content a {
     flex:0 0 45%;
-    margin:auto;
 }
 
 .button {
@@ -97,7 +111,6 @@
     margin-top:auto !important;
     margin-left:25px !important;
     margin-right:25px !important;
-    margin:10px;
 }
 
 .question textarea {
