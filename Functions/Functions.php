@@ -74,7 +74,8 @@ function getPatternAnswers(int $clientId, int $patroonType): array|false {
     $result = $result->get_result()->fetch_assoc();
     if(isset($result['id'])){
         $vlId = $result['id'];
-        $result = DatabaseConnection::getConn()->prepare("SELECT * FROM $patroon WHERE vragenlijstid = $vlId;");
+        $result = DatabaseConnection::getConn()->prepare("SELECT * FROM $patroon WHERE vragenlijstid = ?");
+        $result->bind_param("i", $vlId);
         $result->execute();
         return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
     }else{
