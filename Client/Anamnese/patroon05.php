@@ -6,10 +6,6 @@ include '../../Functions/Functions.php';
 
 $antwoorden = getPatternAnswers($_SESSION['clientId'], 5);
 
-echo "<pre>";
-print_r($antwoorden);
-echo "</pre>";
-
 if (isset($_REQUEST['navbutton'])) {
     $clientId = $_GET['id'];
     //TODO: hier actie om data op te slaan in database.
