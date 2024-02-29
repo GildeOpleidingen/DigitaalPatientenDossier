@@ -8,12 +8,12 @@ if ($loggedInId == null) {
     header("Location: ../index.php");
 }
 
-if(!isset($_GET['id'])) {
-    header("Location: ../client.php");
-}
-
 $clientId = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
+
+if(!isset($clientId)){
+    header("Location: ../client.php");
+}
 
 $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
 $client->bind_param("i", $id);
@@ -25,8 +25,8 @@ $verzorgerregel->bind_param("ii", $clientId, $loggedInId);
 $verzorgerregel->execute();
 $verzorgerregel = $verzorgerregel->get_result()->fetch_assoc()['id'];
 
-$tijd = time();
-$rapport = "rapportage";
+$tijd = date('Y-m-d H:i:s');
+$rapport = "";
 $rapportage = DatabaseConnection::getConn()->prepare("INSERT INTO rapport (verzorgerregelid, datumtijd, inhoud) VALUES (?, ?, ?)");
 $rapportage->bind_param("iss", $verzorgerregel, $tijd, $rapport);
 $rapportage->execute();
