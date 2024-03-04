@@ -6,6 +6,9 @@ include '../../Functions/Functions.php';
 
 $antwoorden = getPatternAnswers($_SESSION['clientId'], 5);
 
+$boolArrayInslaapmiddel = str_split($antwoorden['gebruik_inslaapmiddel_welke']);
+$boolArrayObservatie = str_split($antwoorden['observatie']);
+
 if (isset($_REQUEST['navbutton'])) {
     $clientId = $_GET['id'];
     //TODO: hier actie om data op te slaan in database.
@@ -74,32 +77,32 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Doet u iets om (in) te kunnen slapen?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="radio-3">
+                                    <input id="radio" type="radio" name="gebruik_inslaapmiddel" <?= $antwoorden['gebruik_inslaapmiddel'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <div id="checkfield">
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Medicijngebruik</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Beweging</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Alcohol/drugs</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Eten/drinken</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Douche/bad</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"></textarea></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[0] ? "checked" : "" ?>><p>Medicijngebruik</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[1] ? "checked" : "" ?>><p>Beweging</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[2] ? "checked" : "" ?>><p>Alcohol/drugs</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[3] ? "checked" : "" ?>><p>Eten/drinken</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[4] ? "checked" : "" ?>><p>Douche/bad</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[5] ? "checked" : "" ?>><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"></textarea></div>
                                     </div>
                                 </div>
                                 <p>
-                                    <input type="radio" name="radio-3">
+                                    <input type="radio" name="gebruik_inslaapmiddel" <?= !$antwoorden['gebruik_inslaapmiddel'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>- Hoe lang slaapt u nomaal?</p><p><input type="number" step=0.5 min="0" max="24"> uur</p></div>
+                        <div class="question"><p>- Hoe lang slaapt u nomaal?</p><p><input type="number" step=0.5 min="0" max="24" value="<?= $antwoorden['slaapduur'] ?? "" ?>"> uur</p></div>
                         <div class="question"><p>- Voelt u zich uitgerust als u wakker wordt?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-4">
+                                    <input type="radio" name="uitgerust_wakker" <?= $antwoorden['uitgerust_wakker'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-4">
+                                    <input type="radio" name="uitgerust_wakker" <?= !$antwoorden['uitgerust_wakker'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -107,11 +110,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Heeft u last van dromen, nachtmerries?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-5">
+                                    <input type="radio" name="dromen_nachtmerries" <?= $antwoorden['dromen_nachtmerries'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-5">
+                                    <input type="radio" name="dromen_nachtmerries" <?= !$antwoorden['dromen_nachtmerries'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -119,11 +122,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Neemt u rustperioden overdag?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-6">
+                                    <input type="radio" name="rustperiodes_overdag" <?= $antwoorden['rustperiodes_overdag'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-6">
+                                    <input type="radio" name="rustperiodes_overdag" <?= !$antwoorden['rustperiodes_overdag'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -131,11 +134,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Kunt u zich gemakkelijk ontspannen?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="radio-7">
+                                    <input type="radio" name="gemakkelijk_ontspannen" <?= $antwoorden['gemakkelijk_ontspannen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="radio-7">
+                                    <input type="radio" name="gemakkelijk_ontspannen" <?= !$antwoorden['gemakkelijk_ontspannen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -143,7 +146,7 @@ if (isset($_REQUEST['navbutton'])) {
 
                         <div class="observation">
                             <h2>Verpleegkundige observatie bij dit patroon</h2>
-                            <div class="question"><div class="observe"><input type="checkbox"><p>Verstoord slaap- en rustpatroon</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[0] ? "checked" : "" ?>><p>Verstoord slaap- en rustpatroon</p></div></div>
                         </div>
                     </div>
                 </div>
