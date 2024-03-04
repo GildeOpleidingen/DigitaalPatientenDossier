@@ -1,30 +1,27 @@
 <?php
 session_start();
 include '../../Database/DatabaseConnection.php';
+include '../../Functions/Functions.php';
 
-$id = $_GET['id'];
+$antwoorden = getPatternAnswers($_SESSION['clientId'], 1);
+echo "<pre>";
+print_r($antwoorden);
+echo "</pre>";
+$boolArrayObservatie = str_split($antwoorden['observatie']);
 
 if (isset($_REQUEST['navbutton'])) {
+    $clientId = $_GET['id'];
     //TODO: hier actie om data op te slaan in database.
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
-            header('Location: patroon02.php?id='.$id);
+            header('Location: patroon02.php?id='.$clientId);
             break;
 
         case 'prev': //action for previous here
-            header('Location: patroon11.php?id='.$id); //TODO: hier moet naar de hoofdpagina genavigeerd worden.
+            header('Location: patroon11.php?id='.$clientId); //TODO: hier moet naar de hoofdpagina genavigeerd worden.
             break;
     }
     exit;
-}
-
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
-
-if ($client == null) {
-    header("Location: ../../index.php");
 }
 
 ?>
@@ -41,7 +38,7 @@ if ($client == null) {
 <form action="" method="post">
     <div class="main">
         <?php
-        include '../../Includes/header.php';
+        // include '../../Includes/header.php';
         ?>
 
         <?php
@@ -52,17 +49,17 @@ if ($client == null) {
                     <div class="pages">1 Patroon van gezondheidsbeleving en -instandhouding</div>
                     <div class="form">
                         <div class="questionnaire">
-                            <div class="question"><p>Hoe is uw gezondheid in het algemeen?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
-                            <div class="question"><p>Wat doet u om gezond te blijven?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
+                            <div class="question"><p>Hoe is uw gezondheid in het algemeen?</p><textarea  rows="1" cols="25" type="text" name="algemene_gezondheid"><?= $antwoorden['algemene_gezondheid'] ?? ""?></textarea></div>
+                            <div class="question"><p>Wat doet u om gezond te blijven?</p><textarea  rows="1" cols="25" type="text" name="gezondheids_bezigheid"><?= $antwoorden['gezondheids_bezigheid'] ?? ""?></textarea></div>
                             <div class="question"><p>- Rookt u?</p>
                                 <div class="checkboxes">
                                     <div class="question-answer">
-                                        <input id="radio" type="radio" name="radio-1">
+                                        <input id="radio" type="radio" name="rookt" <?= $antwoorden['rookt'] ? "checked" : "" ?>>
                                         <label>Ja</label>
-                                        <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="hoeveel?"></textarea>
+                                        <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="hoeveel?" name="rookt_hoeveelheid"><?= $antwoorden['rookt_hoeveelheid'] ?? ""?></textarea>
                                     </div>
                                     <p>
-                                        <input type="radio" name="radio-1">
+                                        <input type="radio" name="rookt" <?= !$antwoorden['rookt'] ? "checked" : "" ?>>
                                         <label>Nee</label>
                                     </p>
                                 </div>
@@ -70,12 +67,12 @@ if ($client == null) {
                             <div class="question"><p>- Drinkt u?</p>
                                 <div class="checkboxes">
                                     <div class="question-answer">
-                                        <input id="radio" type="radio" name="radio-2">
+                                        <input id="radio" type="radio" name="drinkt" <?= $antwoorden['drinkt'] ? "checked" : "" ?>>
                                         <label>Ja</label>
-                                        <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="hoeveel?"></textarea>
+                                        <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="hoeveel?" name="drinkt_hoeveelheid"><?= $antwoorden['drinkt_hoeveelheid'] ?? "" ?></textarea>
                                     </div>
                                     <p>
-                                        <input type="radio" name="radio-2">
+                                        <input type="radio" name="drinkt" <?= !$antwoorden['drinkt'] ? "checked" : "" ?>>
                                         <label>Nee</label>
                                     </p>
                                 </div>
@@ -83,12 +80,12 @@ if ($client == null) {
                             <div class="question"><p>Heeft u momenteel een infectie of overdraagbare besmettelijke aandoening?</p>
                                 <div class="checkboxes">
                                     <div class="question-answer">
-                                        <input id="radio" type="radio" name="radio-3">
+                                        <input id="radio" type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] ? "checked" : "" ?>>
                                         <label>Ja</label>
-                                        <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?"></textarea>
+                                        <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="besmettelijke_aandoening_welke"><?= $antwoorden['besmettelijke_aandoening_welke'] ?? "" ?></textarea>
                                     </div>
                                     <p>
-                                        <input type="radio" name="radio-3">
+                                        <input type="radio" name="besmettelijke_aandoening">
                                         <label>Nee</label>
                                     </p>
                                 </div>
@@ -96,37 +93,37 @@ if ($client == null) {
                             <div class="question"><p>Bent u ergens allergisch voor?</p>
                                 <div class="checkboxes">
                                     <div class="question-answer">
-                                        <input id="radio" type="radio" name="radio-4">
+                                        <input id="radio" type="radio" name="alergieen" <?= $antwoorden['alergieen'] ? "checked" : "" ?>>
                                         <label>Ja</label>
-                                        <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?"></textarea>
+                                        <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="alergieen_welke"><?= $antwoorden['alergieen_welke'] ?? "" ?></textarea>
                                     </div>
                                     <p>
-                                        <input type="radio" name="radio-4">
+                                        <input type="radio" name="alergieen" <?= !$antwoorden['alergieen'] ? "checked" : "" ?>>
                                         <label>Nee</label>
                                     </p>
                                 </div>
                             </div>
-                            <div class="question"><p>Wat denkt u dat de oorzaak is van uw huidige situatie/toestand?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
-                            <div class="question"><p>- Wat heeft u eraan gedaan?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
-                            <div class="question"><p>- Hoe effectief was dat?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
-                            <div class="question"><p>- Hoe kunnen wij u helpen?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
-                            <div class="question"><p>- Wat is voor u belangrijk tijdens het verblijf op deze afdeling?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
-                            <div class="question"><p>- Vind u het gemakkelijk om dingen te doen of te laten op advies van de arts of verpleegkundige?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
-                            <div class="question"><p>Wat moet u in de toekomst doen ter voorkoming van het weer ziek worden?</p><textarea  rows="1" cols="25" type="text"></textarea></div>
+                            <div class="question"><p>Wat denkt u dat de oorzaak is van uw huidige situatie/toestand?</p><textarea  rows="1" cols="25" type="text" name="oorzaak_huidige_toestand"><?= $antwoorden['oorzaak_huidige_toestand'] ?? "" ?></textarea></div>
+                            <div class="question"><p>- Wat heeft u eraan gedaan?</p><textarea  rows="1" cols="25" type="text" name="oht_actie"><?= $antwoorden['oht_actie'] ?? "" ?></textarea></div>
+                            <div class="question"><p>- Hoe effectief was dat?</p><textarea  rows="1" cols="25" type="text" name="oht_hoe_effectief"><?= $antwoorden['oht_hoe_effectief'] ?? "" ?></textarea></div>
+                            <div class="question"><p>- Hoe kunnen wij u helpen?</p><textarea  rows="1" cols="25" type="text" name="oht_wat_nodig"><?= $antwoorden['oht_wat_nodig'] ?? "" ?></textarea></div>
+                            <div class="question"><p>- Wat is voor u belangrijk tijdens het verblijf op deze afdeling?</p><textarea  rows="1" cols="25" type="text" name="oht_wat_belangrijk"><?= $antwoorden['oht_wat_belangrijk'] ?? "" ?></textarea></div>
+                            <div class="question"><p>- Vind u het gemakkelijk om dingen te doen of te laten op advies van de arts of verpleegkundige?</p><textarea  rows="1" cols="25" type="text" name="oht_reactie_op_advies"><?= $antwoorden['oht_reactie_op_advies'] ?? "" ?></textarea></div>
+                            <div class="question"><p>Wat moet u in de toekomst doen ter voorkoming van het weer ziek worden?</p><textarea  rows="1" cols="25" type="text" name="preventie"><?= $antwoorden['preventie'] ?? "" ?></textarea></div>
 
 
                             <div class="observation">
                                 <h2>Verpleegkundige observatie bij dit patroon</h2>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>Gezondheidszoekend gedrag</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>Tekort in gezondheidsonderhoud</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>(Dreigende) inadequate opvolging van de behandeling</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>(Dreigend) tekort in gezondheidsinstandhouding</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>(Dreigende) therapieontrouw</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>Vergiftigingsgevaar</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>Infectiegevaar</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>Gevaar voor letsel (trauma)</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>Verstikkingsgevaar</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox"><p>Beschermingstekort</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[0] ? "checked" : "" ?>><p>Gezondheidszoekend gedrag</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[1] ? "checked" : "" ?>><p>Tekort in gezondheidsonderhoud</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[2] ? "checked" : "" ?>><p>(Dreigende) inadequate opvolging van de behandeling</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[3] ? "checked" : "" ?>><p>(Dreigend) tekort in gezondheidsinstandhouding</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[4] ? "checked" : "" ?>><p>(Dreigende) therapieontrouw</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[5] ? "checked" : "" ?>><p>Vergiftigingsgevaar</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[6] ? "checked" : "" ?>><p>Infectiegevaar</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[7] ? "checked" : "" ?>><p>Gevaar voor letsel (trauma)</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[8] ? "checked" : "" ?>><p>Verstikkingsgevaar</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[9] ? "checked" : "" ?>><p>Beschermingstekort</p></div></div>
                             </div>
                         </div>
                     </div>
