@@ -277,6 +277,9 @@ if ($result != null) {
 
 
                                 <div class=" observation">
+
+
+
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
                                         <div class="observe"><input type="checkbox" value="1" name="observatie1">
@@ -292,6 +295,9 @@ if ($result != null) {
                                         <div class="observe"><input type="checkbox" value="1" name="observatie3">
                                             <p>(Dreigend) vochttekort</p>
                                         </div>
+
+
+
                                     </div>
                                     <div class="question">
                                         <div class="observe"><input type="checkbox" value="1" name="observatie4">
@@ -299,6 +305,9 @@ if ($result != null) {
                                         </div>
                                     </div>
                                     <div class="question">
+
+
+
                                         <div class="observe"><input type="checkbox" value="1" name="observatie5">
                                             <p>Aspiratiegevaar</p>
                                         </div>
