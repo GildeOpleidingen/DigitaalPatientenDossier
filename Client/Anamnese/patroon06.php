@@ -38,8 +38,6 @@ if (isset($_REQUEST['navbutton'])) {
     <div class="main">
         <?php
         include '../../Includes/header.php';
-        ?>
-        <?php
         include '../../Includes/sidebar.php';
         ?>
         <div class="content">
@@ -64,7 +62,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="hoort_stemmen" <?= $antwoorden['hoort_stemmen'] ? "checked" : ""?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat hoort u?"> <?= $antwoorden['hoort_stemmen_wat'] ?? "" ?> </textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat hoort u?" name="hoort_stemmen_wat"> <?= $antwoorden['hoort_stemmen_wat'] ?? "" ?> </textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="hoort_stemmen" <?= !$antwoorden['hoort_stemmen'] ? "checked" : "" ?>>
@@ -89,7 +87,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="ziet_dingen" <?= $antwoorden['ziet_dingen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat ziet u?"><?= $antwoorden['ziet_dingen_wat'] ?? "" ?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat ziet u?" name="ziet_dingen_wat"><?= $antwoorden['ziet_dingen_wat'] ?? "" ?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="ziet_dingen" <?= !$antwoorden['ziet_dingen'] ? "checked" : "" ?>>
@@ -102,7 +100,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="ruikt_iets_onverklaarbaar" <?= $antwoorden['ruikt_iets_onverklaarbaar'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat ruikt u?"><?= $antwoorden['ruikt_iets_onverklaarbaar_wat'] ?? "" ?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat ruikt u?" name="ruikt_iets_onverklaarbaar_wat"><?= $antwoorden['ruikt_iets_onverklaarbaar_wat'] ?? "" ?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="ruikt_iets_onverklaarbaar" <?= !$antwoorden['ruikt_iets_onverklaarbaar'] ? "checked" : "" ?>>
@@ -188,7 +186,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="invloed_medicatie" <?= $antwoorden['invloed_medicatie'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" ><?= $antwoorden['invloed_medicatie_welke'] ?? "" ?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="invloed_medicatie_welke"><?= $antwoorden['invloed_medicatie_welke'] ?? "" ?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="invloed_medicatie" <?= !$antwoorden['invloed_medicatie'] ? "checked" : "" ?>>
@@ -226,9 +224,9 @@ if (isset($_REQUEST['navbutton'])) {
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>- Waar, wanneer, soort pijn?</p><textarea  rows="1" cols="25" type="text"><?= $antwoorden['pijnklachten_waar_wanneer_soort'] ?? "" ?></textarea></div>
-                        <div class="question"><p>- Wat doet u doorgaans tegen de pijn?</p><textarea  rows="1" cols="25" type="text"><?= $antwoorden['pijnklachten_tegengaan_pijn'] ?? "" ?></textarea></div>
-                        <div class="question"><p>- Wat doet u om pijn/ongemak zoveel mogelijk te voorkomen?</p><textarea  rows="1" cols="25" type="text"><?= $antwoorden['pijnklachten_preventie'] ?? "" ?></textarea></div>
+                        <div class="question"><p>- Waar, wanneer, soort pijn?</p><textarea  rows="1" cols="25" type="text" name="pijnklachten_waar_wanneer_soort"><?= $antwoorden['pijnklachten_waar_wanneer_soort'] ?? "" ?></textarea></div>
+                        <div class="question"><p>- Wat doet u doorgaans tegen de pijn?</p><textarea  rows="1" cols="25" type="text" name="pijnklachten_tegengaan_pijn"><?= $antwoorden['pijnklachten_tegengaan_pijn'] ?? "" ?></textarea></div>
+                        <div class="question"><p>- Wat doet u om pijn/ongemak zoveel mogelijk te voorkomen?</p><textarea  rows="1" cols="25" type="text" name="pijnklachten_preventie"><?= $antwoorden['pijnklachten_preventie'] ?? "" ?></textarea></div>
                         
                         <div class="observation">
                             <h2>Verpleegkundige observatie bij dit patroon</h2>

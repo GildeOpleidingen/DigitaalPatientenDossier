@@ -38,8 +38,6 @@ if (isset($_REQUEST['navbutton'])) {
     <div class="main">
         <?php
         include '../../Includes/header.php';
-        ?>
-        <?php
         include '../../Includes/sidebar.php';
         ?>
         <div class="content">
@@ -127,16 +125,16 @@ if (isset($_REQUEST['navbutton'])) {
 
                         <div class="observation">
                             <h2>Verpleegkundige observatie bij dit patroon</h2>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[0] ? "checked" : ""?>><p>Colon-obstipatie</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[1] ? "checked" : ""?>><p>Subjectief ervaren obstipatie</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[2] ? "checked" : ""?>><p>Diarree</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[3] ? "checked" : ""?>><p>Incontinentie van feces</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[4] ? "checked" : ""?>><p>Verstoorde urine-uitscheiding</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[5] ? "checked" : ""?>><p>Functionele urine-incontinentie</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[6] ? "checked" : ""?>><p>Reflex-urine-incontinentie</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[7] ? "checked" : ""?>><p>Stress-urine-incontinentie</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[8] ? "checked" : ""?>><p>Volledige urine-incontinentie</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[9] ? "checked" : ""?>><p>Urineretentie</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[0] ? "checked" : ""?> name="observatie1"><p>Colon-obstipatie</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[1] ? "checked" : ""?> name="observatie2"><p>Subjectief ervaren obstipatie</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[2] ? "checked" : ""?> name="observatie3"><p>Diarree</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[3] ? "checked" : ""?> name="observatie4"><p>Incontinentie van feces</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[4] ? "checked" : ""?> name="observatie5"><p>Verstoorde urine-uitscheiding</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[5] ? "checked" : ""?> name="observatie6"><p>Functionele urine-incontinentie</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[6] ? "checked" : ""?> name="observatie7"><p>Reflex-urine-incontinentie</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[7] ? "checked" : ""?> name="observatie8"><p>Stress-urine-incontinentie</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[8] ? "checked" : ""?> name="observatie9"><p>Volledige urine-incontinentie</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[9] ? "checked" : ""?> name="observatie10"><p>Urineretentie</p></div></div>
                         </div>
                     </div>
                 </div>

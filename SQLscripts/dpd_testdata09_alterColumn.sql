@@ -15,3 +15,5 @@ ALTER TABLE `patroon06cognitiewaarneming` CHANGE `gebruikt_middelen_softdrugs` `
 ALTER TABLE `patroon10stressverwerking` CHANGE `angsig_paniek` `angstig_paniek` TINYINT(1) NOT NULL; 
 ALTER TABLE `patroon10stressverwerking` CHANGE `angsig_paniek_actie` `angstig_paniek_actie` TINYTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL; 
 ALTER TABLE `patroon10stressverwerking` CHANGE `angsig_paniek_lukt_voorkomen` `angstig_paniek_lukt_voorkomen` TINYINT(1) NOT NULL; 
+
+ALTER TABLE `patroon07zelfbeleving` ADD `ervaring_voorheen` TINYINT NOT NULL AFTER `verandering_denkpatroon`; 

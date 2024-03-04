@@ -4,9 +4,7 @@ include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 
 $antwoorden = getPatternAnswers($_SESSION['clientId'], 1);
-echo "<pre>";
-print_r($antwoorden);
-echo "</pre>";
+
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
 if (isset($_REQUEST['navbutton'])) {
@@ -38,10 +36,7 @@ if (isset($_REQUEST['navbutton'])) {
 <form action="" method="post">
     <div class="main">
         <?php
-        // include '../../Includes/header.php';
-        ?>
-
-        <?php
+        include '../../Includes/header.php';
         include '../../Includes/sidebar.php';
         ?>
             <div class="content">
@@ -114,16 +109,16 @@ if (isset($_REQUEST['navbutton'])) {
 
                             <div class="observation">
                                 <h2>Verpleegkundige observatie bij dit patroon</h2>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[0] ? "checked" : "" ?>><p>Gezondheidszoekend gedrag</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[1] ? "checked" : "" ?>><p>Tekort in gezondheidsonderhoud</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[2] ? "checked" : "" ?>><p>(Dreigende) inadequate opvolging van de behandeling</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[3] ? "checked" : "" ?>><p>(Dreigend) tekort in gezondheidsinstandhouding</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[4] ? "checked" : "" ?>><p>(Dreigende) therapieontrouw</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[5] ? "checked" : "" ?>><p>Vergiftigingsgevaar</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[6] ? "checked" : "" ?>><p>Infectiegevaar</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[7] ? "checked" : "" ?>><p>Gevaar voor letsel (trauma)</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[8] ? "checked" : "" ?>><p>Verstikkingsgevaar</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[9] ? "checked" : "" ?>><p>Beschermingstekort</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[0] ? "checked" : "" ?> name="observatie1"><p>Gezondheidszoekend gedrag</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[1] ? "checked" : "" ?> name="observatie2"><p>Tekort in gezondheidsonderhoud</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[2] ? "checked" : "" ?> name="observatie3"><p>(Dreigende) inadequate opvolging van de behandeling</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[3] ? "checked" : "" ?> name="observatie4"><p>(Dreigend) tekort in gezondheidsinstandhouding</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[4] ? "checked" : "" ?> name="observatie5"><p>(Dreigende) therapieontrouw</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[5] ? "checked" : "" ?> name="observatie6"><p>Vergiftigingsgevaar</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[6] ? "checked" : "" ?> name="observatie7"><p>Infectiegevaar</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[7] ? "checked" : "" ?> name="observatie8"><p>Gevaar voor letsel (trauma)</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[8] ? "checked" : "" ?> name="observatie9"><p>Verstikkingsgevaar</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[9] ? "checked" : "" ?> name="observatie10"><p>Beschermingstekort</p></div></div>
                             </div>
                         </div>
                     </div>

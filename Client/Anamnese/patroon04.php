@@ -48,17 +48,17 @@ if (isset($_REQUEST['navbutton'])) {
                         <!-- Zorg ervoor dat dit 0-4 is en als het niet is ingevuld null is en niet 0 -->
                         <div class="question"><p>In hoeverre bent u in staat de volgende activiteiten te doen?</p></div>
                         <div class="question"><p><i>0 - volledige zelfzorg<br>1 - gebruik van hulpmiddelen of plan<br>2 - vereist assistentie/supervisie van anderen<br>3 - Vereidst gebruik van hulpmiddelen of plan/methoden en assistentie van anderen<br>4 - is afhankelijk en/of participeert niet)</i></p></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['voeding'] == "0" || $antwoorden['voeding'] > 0) { echo "checked"; } ?>><p>Voeding</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['voeding'] ?? ""?>"></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['aankleden'] == "0" || $antwoorden['aankleden'] > 0) { echo "checked"; } ?>><p>Aankleden</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['aankleden'] ?? "" ?>"></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['alg_mobiliteit'] == "0" || $antwoorden['alg_mobiliteit'] > 0) { echo "checked"; } ?>><p>Algemene mobiliteit</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['alg_mobiliteit'] ?? "" ?>"></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['koken'] == "0" || $antwoorden['koken'] > 0) { echo "checked"; } ?>><p>Koken</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['koken'] ?? "" ?>"></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['huishouden'] == "0" || $antwoorden['huishouden'] > 0) { echo "checked"; } ?>><p>Huishouden</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['huishouden'] ?? "" ?>"></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['financien'] == "0" || $antwoorden['financien'] > 0) { echo "checked"; } ?>><p>Financiën</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['financien'] ?? ""  ?>"></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['verzorging'] == "0" || $antwoorden['verzorging'] > 0) { echo "checked"; } ?>><p>Verzorging</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['verzorging'] ?? ""  ?>"></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['baden'] == "0" || $antwoorden['baden'] > 0) { echo "checked"; } ?>><p>Baden</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['baden'] ?? "" ?>"></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['toiletgang'] == "0" || $antwoorden['toiletgang'] > 0) { echo "checked"; } ?>><p>Toiletgang</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['toiletgang'] ?? "" ?>"></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['uit_bed_komen'] == "0" || $antwoorden['uit_bed_komen'] > 0) { echo "checked"; } ?>><p>Uit bed komen</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['uit_bed_komen'] ?? "" ?>"></div>
-                        <div class="question"><div class="observe"><input type="checkbox" <?php if($antwoorden['winkelen'] == "0" || $antwoorden['winkelen'] > 0) { echo "checked"; } ?>><p>Winkelen</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['winkelen'] ?? "" ?>"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="voedingCheckbox" <?php if($antwoorden['voeding'] == "0" || $antwoorden['voeding'] > 0) { echo "checked"; } ?>><p>Voeding</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['voeding'] ?? ""?>" name="voeding"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="aankledenCheckbox" <?php if($antwoorden['aankleden'] == "0" || $antwoorden['aankleden'] > 0) { echo "checked"; } ?>><p>Aankleden</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['aankleden'] ?? "" ?>" name="aankleden"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="alg_mobiliteitCheckbox" <?php if($antwoorden['alg_mobiliteit'] == "0" || $antwoorden['alg_mobiliteit'] > 0) { echo "checked"; } ?>><p>Algemene mobiliteit</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['alg_mobiliteit'] ?? "" ?>" name="alg_mobiliteit"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="kokenCheckbox" <?php if($antwoorden['koken'] == "0" || $antwoorden['koken'] > 0) { echo "checked"; } ?>><p>Koken</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['koken'] ?? "" ?>" name="koken"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="huishoudenCheckbox" <?php if($antwoorden['huishouden'] == "0" || $antwoorden['huishouden'] > 0) { echo "checked"; } ?>><p>Huishouden</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['huishouden'] ?? "" ?>" name="huishouden"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="financienCheckbox" <?php if($antwoorden['financien'] == "0" || $antwoorden['financien'] > 0) { echo "checked"; } ?>><p>Financiën</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['financien'] ?? ""  ?>" name="financien"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="verzorgingCheckbox" <?php if($antwoorden['verzorging'] == "0" || $antwoorden['verzorging'] > 0) { echo "checked"; } ?>><p>Verzorging</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['verzorging'] ?? ""  ?>" name="verzorging"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="badenCheckbox" <?php if($antwoorden['baden'] == "0" || $antwoorden['baden'] > 0) { echo "checked"; } ?>><p>Baden</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['baden'] ?? "" ?>" name="baden"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="toiletgangCheckbox" <?php if($antwoorden['toiletgang'] == "0" || $antwoorden['toiletgang'] > 0) { echo "checked"; } ?>><p>Toiletgang</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['toiletgang'] ?? "" ?>" name="toiletgang"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="uit_bed_komenCheckbox" <?php if($antwoorden['uit_bed_komen'] == "0" || $antwoorden['uit_bed_komen'] > 0) { echo "checked"; } ?>><p>Uit bed komen</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['uit_bed_komen'] ?? "" ?>" name="uit_bed_komen"></div>
+                        <div class="question"><div class="observe"><input type="checkbox" name="winkelenCheckbox" <?php if($antwoorden['winkelen'] == "0" || $antwoorden['winkelen'] > 0) { echo "checked"; } ?>><p>Winkelen</p></div><input type="number" min="0" max="4" value="<?= $antwoorden['winkelen'] ?? "" ?>" name="winkelen"></div>
                         <div class="question"><p>Neemt u meer tijd voor uzelf wanneer u dat nodig heeft?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
@@ -78,7 +78,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="dagelijkse_gewoontes" <?= $antwoorden['dagelijkse_gewoontes'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?"><?= $antwoorden['dagelijkse_gewoontes_welke'] ?? "" ?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="dagelijkse_gewoontes_welke"><?= $antwoorden['dagelijkse_gewoontes_welke'] ?? "" ?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="dagelijkse_gewoontes" <?= !$antwoorden['dagelijkse_gewoontes'] ? "checked" : "" ?>>
@@ -166,20 +166,20 @@ if (isset($_REQUEST['navbutton'])) {
 
                         <div class="observation">
                             <h2>Verpleegkundige observatie bij dit patroon</h2>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[0] ? "checked" : "" ?>><p>(Dreigend) verminderd activiteitsvermogen</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[1] ? "checked" : "" ?>><p>Oververmoeidheid</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[2] ? "checked" : "" ?>><p>Mobiliteitstekort</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[3] ? "checked" : "" ?>><p>Ontspanningstekort</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[4] ? "checked" : "" ?>><p>Moeheid</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[5] ? "checked" : "" ?>><p>Verminderd huishoudvermogen</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[6] ? "checked" : "" ?>><p>Volledig tekort aan persoonlijke zorg</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[0] ? "checked" : "" ?> name="observatie1"><p>(Dreigend) verminderd activiteitsvermogen</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[1] ? "checked" : "" ?> name="observatie2"><p>Oververmoeidheid</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[2] ? "checked" : "" ?> name="observatie3"><p>Mobiliteitstekort</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[3] ? "checked" : "" ?> name="observatie4"><p>Ontspanningstekort</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[4] ? "checked" : "" ?> name="observatie5"><p>Moeheid</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[5] ? "checked" : "" ?> name="observatie6"><p>Verminderd huishoudvermogen</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[6] ? "checked" : "" ?> name="observatie7"><p>Volledig tekort aan persoonlijke zorg</p></div></div>
                         </div>
                         <div class="observation">
                             <div class="question"><p>Zelfstandigheidstekort in:</p></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[7] ? "checked" : "" ?>><p>Wassen</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[8] ? "checked" : "" ?>><p>Kleding/verzorging</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[9] ? "checked" : "" ?>><p>Eten</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[10] ? "checked" : "" ?>><p>Toiletgang</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[7] ? "checked" : "" ?> name="observatie8"><p>Wassen</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[8] ? "checked" : "" ?> name="observatie9"><p>Kleding/verzorging</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[9] ? "checked" : "" ?> name="observatie10"><p>Eten</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[10] ? "checked" : "" ?> name="observatie11"><p>Toiletgang</p></div></div>
                         </div>
                     </div>
                 </div>

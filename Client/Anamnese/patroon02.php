@@ -151,10 +151,8 @@ if ($result != null) {
 <body>
     <form action="" method="post">
         <div class="main">
-            <?php
+        <?php
         include '../../Includes/header.php';
-        ?>
-            <?php
         include '../../Includes/sidebar.php';
         ?>
 
