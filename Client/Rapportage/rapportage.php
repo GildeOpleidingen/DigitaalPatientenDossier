@@ -13,11 +13,10 @@ $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id 
 $client->bind_param("i", $clientId);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
-$rapportages = DatabaseConnection::getConn()->prepare("SELECT * FROM rapport r LEFT JOIN verzorgerregel vr on r.verzorgerregelid = vr.id WHERE vr.clientid = ?");
+$rapportages = DatabaseConnection::getConn()->prepare("SELECT r.*, vr.id AS verzorgerregel_id FROM rapport r LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id WHERE vr.clientid = ?;");
 $rapportages->bind_param("i", $clientId);
 $rapportages->execute();
 $rapportages = $rapportages->get_result()->fetch_all(MYSQLI_ASSOC);
-
 if ($client == null) {
     header("Location: ../client.php");
 }
