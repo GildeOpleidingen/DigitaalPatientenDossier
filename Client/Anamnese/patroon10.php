@@ -4,8 +4,6 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 
-
-$clientId = $_SESSION['clientId'];
 $antwoorden = getPatternAnswers($_SESSION['clientId'], 10);
 
 $boolArrayReacties = str_split($antwoorden['reactie_spanningen']);
@@ -15,11 +13,11 @@ if (isset($_REQUEST['navbutton'])) {
     //TODO: hier actie om data op te slaan in database.
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
-            header('Location: patroon11.php?id='.$clientId);
+            header('Location: patroon11.php');
             break;
     
         case 'prev': //action for previous here
-            header('Location: patroon09.php?id='.$clientId);
+            header('Location: patroon09.php');
             break;
     }
     exit;

@@ -3,25 +3,23 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 
-$clientId = $_SESSION['clientId'];
-$antwoorden = getPatternAnswers($clientId, 2);
+$antwoorden = getPatternAnswers($_SESSION['clientId'], 2);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
-//id van de medewerker
 $medewerkerId = $_SESSION['loggedin_id'];
 
 if (isset($_REQUEST['navbutton'])) {
-        $eetlust = $_POST['eetlust'];
-        $dieet = $_POST['dieet'];
-        $dieetWelk = strval($_POST['dieet_welk']);
-        $gewichtVerandert = $_POST['gewicht_verandert'];
-        $moeilijkSlikken = $_POST['moeilijk_slikken'];
-        $gebitsProblemen = $_POST['gebitsproblemen'];
-        $gebitsProthese = $_POST['gebitsprothese'];
-        $huidProblemen = $_POST['huidproblemen'];
-        $gevoel = $_POST['gevoel'];
-        // array van checkboxes van observatie tab
+    $eetlust = $_POST['eetlust'];
+    $dieet = $_POST['dieet'];
+    $dieetWelk = strval($_POST['dieet_welk']);
+    $gewichtVerandert = $_POST['gewicht_verandert'];
+    $moeilijkSlikken = $_POST['moeilijk_slikken'];
+    $gebitsProblemen = $_POST['gebitsproblemen'];
+    $gebitsProthese = $_POST['gebitsprothese'];
+    $huidProblemen = $_POST['huidproblemen'];
+    $gevoel = $_POST['gevoel'];
+    // array van checkboxes van observatie tab
     $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']));
 
     $observatie = convertBoolArrayToString($arr);
@@ -31,15 +29,13 @@ if (isset($_REQUEST['navbutton'])) {
                     from vragenlijst vl
                     left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
                     where verzorgerregel.clientid = ?");
-        $result->bind_param("i", $clientId);
-        $result->execute();
-        $result = $result->get_result()->fetch_assoc();
+    $result->bind_param("i", $clientId);
+    $result->execute();
+    $result = $result->get_result()->fetch_assoc();
 
     if ($result != null){
         $vragenlijstId = $result['id'];
-
     } else {
-
         $sql2 = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
             VALUES ((SELECT id
             FROM verzorgerregel
@@ -48,7 +44,6 @@ if (isset($_REQUEST['navbutton'])) {
             $sql2->bind_param("ii", $clientId ,$medewerkerId);
         $sql2->execute();
         $sql2 = $sql2->get_result();
-
 
         $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
                     from vragenlijst vl
@@ -59,13 +54,13 @@ if (isset($_REQUEST['navbutton'])) {
         $result = $result->get_result()->fetch_assoc();
 
         $vragenlijstId=$result['id'];
-
 }
 
     // kijken of patroon02 bestaat door te kijken naar vragenlijst id
-$result = DatabaseConnection::getConn()->prepare("SELECT p.id
-                    from patroon02voedingstofwisseling p
-                    where p.vragenlijstid =  ?");
+    $result = DatabaseConnection::getConn()->prepare("
+                    SELECT p.id
+                    FROM patroon02voedingstofwisseling p
+                    WHERE p.vragenlijstid =  ?");
     $result->bind_param("i", $vragenlijstId);
     $result->execute();
     $result = $result->get_result()->fetch_assoc();
@@ -121,8 +116,6 @@ if ($result != null) {
     $result2 = $result2->get_result();
 
 }
-
-
     switch ($_REQUEST['navbutton']) {
         case 'next': //action for next here
             header('Location: patroon03.php?id=' . $clientId);
