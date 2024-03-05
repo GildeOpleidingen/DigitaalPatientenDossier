@@ -8,7 +8,6 @@ $antwoorden = getPatternAnswers($_SESSION['clientId'], 1);
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
 $client_id = $_GET['id'];
-
 //id van de medewerker
 $medewerker_id = $_SESSION['loggedin_id'];
 
@@ -32,7 +31,7 @@ if (isset($_REQUEST['navbutton'])) {
     $preventie= $_POST['oht_reactie_op_advies'];
     $observatie = $_POST['observatie'];
 
-    // array van checkboxes van observatie tab
+// array van checkboxes van observatie tab
     $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']));
 
     $observatie = convertBoolArrayToString($arr);
@@ -137,6 +136,9 @@ if (isset($_REQUEST['navbutton'])) {
         $result2 = $result2->get_result();
 
     }
+
+
+
 
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
