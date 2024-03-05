@@ -3,12 +3,12 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 
-$antwoorden = getPatternAnswers($_SESSION['clientId'], 1);
+$clientId = $_SESSION['clientId'];
+$antwoorden = getPatternAnswers($clientId, 1);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
 if (isset($_REQUEST['navbutton'])) {
-    $clientId = $_GET['id'];
     //TODO: hier actie om data op te slaan in database.
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
