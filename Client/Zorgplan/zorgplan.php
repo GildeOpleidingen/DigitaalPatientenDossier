@@ -54,15 +54,15 @@ if (isset($_GET['pt'])) {
                         <form class="form" method="POST">
                             <div class="question">
                                 <p>P</p>
-                                <textarea name="p"><?= $patroonType["P"] ?? "" ?></textarea>
+                                <input type="text" name="p"><?= $patroonType["P"] ?? "" ?></input>
                             </div>
                             <div class="question">
                                 <p>E</p>
-                                <textarea name="e"><?= $patroonType["E"] ?? "" ?></textarea>
+                                <input type="text" name="e"><?= $patroonType["E"] ?? "" ?></input>
                             </div>
                             <div class="question">
                                 <p>S</p>
-                                <textarea name="s"><?= $patroonType["S"] ?? "" ?></textarea>
+                                <input type="text" name="s"><?= $patroonType["S"] ?? "" ?></input>
                             </div>
                             <div class="question">
                                 <p>Doelen (SMART)</p>
