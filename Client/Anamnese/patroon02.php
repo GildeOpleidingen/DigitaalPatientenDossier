@@ -29,7 +29,7 @@ if (isset($_REQUEST['navbutton'])) {
                     from vragenlijst vl
                     left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
                     where verzorgerregel.clientid = ?");
-    $result->bind_param("i", $clientId);
+    $result->bind_param("i", $_SESSION['clientId']);
     $result->execute();
     $result = $result->get_result()->fetch_assoc();
 
@@ -41,7 +41,7 @@ if (isset($_REQUEST['navbutton'])) {
             FROM verzorgerregel
             WHERE clientid = ?
             AND medewerkerid = ?))");
-            $sql2->bind_param("ii", $clientId ,$medewerkerId);
+            $sql2->bind_param("ii", $_SESSION['clientId'] ,$medewerkerId);
         $sql2->execute();
         $sql2 = $sql2->get_result();
 
@@ -49,7 +49,7 @@ if (isset($_REQUEST['navbutton'])) {
                     from vragenlijst vl
                     left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
                     where verzorgerregel.clientid = ?");
-        $result->bind_param("i", $clientId);
+        $result->bind_param("i", $_SESSION['clientId']);
         $result->execute();
         $result = $result->get_result()->fetch_assoc();
 
