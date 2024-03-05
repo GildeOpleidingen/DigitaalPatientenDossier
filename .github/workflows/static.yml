@@ -16,3 +16,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Copy Directory
+        uses: MadaraUchiha/copy-action@0.0.1
+        with:
+          # Source file
+          source: .
+          # Target file
+          target: /var/www/digitaalpatientendossier.gds.local/
+                
