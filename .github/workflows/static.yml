@@ -1,0 +1,18 @@
+# Simple workflow for deploying static content
+name: Deploy static content to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    runs-on: 'self-hosted'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
