@@ -54,15 +54,15 @@ if (isset($_GET['pt'])) {
                         <form class="form" method="POST">
                             <div class="question">
                                 <p>P</p>
-                                <input type="text" name="p"><?= $patroonType["P"] ?? "" ?>
+                                <input type="text" name="p" value="<?= $patroonType["P"] ?? "" ?>">
                             </div>
                             <div class="question">
                                 <p>E</p>
-                                <input type="text" name="e"><?= $patroonType["E"] ?? "" ?>
+                                <input type="text" name="e" value="<?= $patroonType["E"] ?? "" ?>">
                             </div>
                             <div class="question">
                                 <p>S</p>
-                                <input type="text" name="s"><?= $patroonType["S"] ?? "" ?>
+                                <input type="text" name="s" value="<?= $patroonType["S"] ?? "" ?>">
                             </div>
                             <div class="question">
                                 <p>Doelen (SMART)</p>
