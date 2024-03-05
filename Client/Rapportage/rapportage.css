@@ -3,6 +3,7 @@
     flex-direction: row;
     height: 100vh;
     width: 100%;
+    background-color: #00365E;
 }
 
 .content{
@@ -12,6 +13,13 @@
     padding: 20px;
     padding-top: 100px;
 }
+.back{
+    width: 90%;
+    height: 90%;
+    background-color: white;
+    border-radius: 10px;
+}
+
 
 input{
     width: 300px;
@@ -56,6 +64,8 @@ select{
 }
 
 .rapportageButton {
+    position: relative;
+    left: 4%;
     padding: 10px;
     background-color: #4CAF50;
     color: white;
@@ -78,4 +88,19 @@ strong {
 }
 textarea{
     resize: vertical;
+}
+h1{
+    position: relative;
+    left: 4%;
+    width: 90%;
+    padding: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+h2{
+    padding: 30px;
+    padding-left: 40px;
 }

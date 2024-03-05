@@ -21,6 +21,8 @@ $rapportages = $rapportages->get_result()->fetch_all(MYSQLI_ASSOC);
 if ($client == null) {
     header("Location: ../client.php");
 }
+
+include '../../Includes/header.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,26 +34,25 @@ if ($client == null) {
 </head>
 <body>
 <div class="main">
-        <?php
-        include '../../Includes/header.php';
-        ?>
 
         <?php
         include '../../Includes/sidebar.php';
         ?>
 
         <div class="content">
+            <div class="back">
+                <h2>Reportages</h2>
             <?php echo "<a href='rapportageNieuw.php?id=" . $clientId . "'>" ?>
-                    <button type="submit">Nieuwe rapportage</button>
-            </a>
+                    <button class="rapportageButton" type="submit">Nieuwe rapportage</button>
             <?php
             foreach ($rapportages as $rapport) {
                 echo "<h1>Rapportage van " . $rapport['datumtijd'] . " (" . $rapport['id'] . ")</h1>";
                 echo "<a href='rapportageAanpassen.php?id=" . $rapport['id'] . "'>";
-                echo "<button type='submit'>Aanpassen</button>";
+                echo "<button class='rapportageButton' type='submit'>Aanpassen</button>";
                 echo "</a>";
             }
             ?>
+            </div>
         </div>
 </div>
         <div class="alleRapportages">
