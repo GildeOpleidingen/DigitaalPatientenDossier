@@ -92,7 +92,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>- Hoe lang slaapt u nomaal?</p><p><input type="number" step=0.5 min="0" max="24" value="<?= $antwoorden['slaapduur'] ?? "" ?>" name="slaapduur"> uur</p></div>
+                        <div class="question"><p>- Hoe lang slaapt u nomaal?</p><p><input type="number" step=0.5 min="0" max="24" value="<?= $antwoorden['slaapduur'] ?>" name="slaapduur"> uur</p></div>
                         <div class="question"><p>- Voelt u zich uitgerust als u wakker wordt?</p>
                             <div class="checkboxes">
                                 <p>    

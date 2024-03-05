@@ -64,7 +64,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[9] ? "checked" : "" ?> name="reactie10"><p>Slapen/terugtrekken</p></div></div>
                                 <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[10] ? "checked" : "" ?> name="reactie11"><p>Vertrouwen op religie</p></div></div>
                                 <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[11] ? "checked" : "" ?> name="reactie12"><p>Zo goed mogelijk zelf oplossen</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[12] ? "checked" : "" ?> name="reactie13"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['reactie_anders'] ?? "" ?></textarea></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[12] ? "checked" : "" ?> name="reactie13"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['reactie_anders'] ?></textarea></div>
                             </div>
                         </div>
                         <div class="question"><p>Probeert u spanningsvolle situaties zo goed mogelijk te voorkomen?</p>
@@ -72,7 +72,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="spanningsvolle_situaties_voorkomen" <?= $antwoorden['spanningsvolle_situaties_voorkomen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="spanningsvolle_situaties_voorkomen_hoe"><?= $antwoorden['spanningsvolle_situaties_voorkomen_hoe'] ?? "" ?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="spanningsvolle_situaties_voorkomen_hoe"><?= $antwoorden['spanningsvolle_situaties_voorkomen_hoe'] ?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="spanningsvolle_situaties_voorkomen" <?= !$antwoorden['spanningsvolle_situaties_voorkomen'] ? "checked" : "" ?>>
@@ -85,7 +85,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="spanningsvolle_situaties_oplossen" <?= $antwoorden['spanningsvolle_situaties_oplossen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="spanningsvolle_situaties_oplossen_hoe"><?= $antwoorden['spanningsvolle_situaties_oplossen_hoe'] ?? ""?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="spanningsvolle_situaties_oplossen_hoe"><?= $antwoorden['spanningsvolle_situaties_oplossen_hoe']?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="spanningsvolle_situaties_oplossen" <?= !$antwoorden['spanningsvolle_situaties_oplossen'] ? "checked" : "" ?>>
@@ -98,7 +98,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="omstandigheden_in_war_raken" <?= $antwoorden['omstandigheden_in_war_raken'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="omstandigheden_in_war_raken_welke"><?= $antwoorden['omstandigheden_in_war_raken_welke'] ?? ""?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="omstandigheden_in_war_raken_welke"><?= $antwoorden['omstandigheden_in_war_raken_welke']?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="omstandigheden_in_war_raken" <?= !$antwoorden['omstandigheden_in_war_raken'] ? "checked" : "" ?>>
@@ -111,7 +111,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="angstig_paniek" <?= $antwoorden['angstig_paniek'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat doet u dan?" name="angstig_paniek_actie"><?= $antwoorden['angstig_paniek_actie'] ?? ""?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat doet u dan?" name="angstig_paniek_actie"><?= $antwoorden['angstig_paniek_actie']?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="angstig_paniek" <?= !$antwoorden['angstig_paniek'] ? "checked" : "" ?>>
@@ -184,7 +184,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="maatregelen_veiligheid" <?= $antwoorden['maatregelen_veiligheid'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="door?" name="maatregelen_veiligheid_door"><?= $antwoorden['maatregelen_veiligheid_door'] ?? ""?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="door?" name="maatregelen_veiligheid_door"><?= $antwoorden['maatregelen_veiligheid_door']?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="maatregelen_veiligheid" <?= $antwoorden['maatregelen_veiligheid'] ? "checked" : "" ?>>
@@ -204,7 +204,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>- Met wie bespreekt u uw gevoelens c.q. problemen?</p><textarea  rows="1" cols="25" type="text" name="bespreken_gevoelens_met"><?= $antwoorden['bespreken_gevoelens_met'] ?? ""?></textarea></div>
+                        <div class="question"><p>- Met wie bespreekt u uw gevoelens c.q. problemen?</p><textarea  rows="1" cols="25" type="text" name="bespreken_gevoelens_met"><?= $antwoorden['bespreken_gevoelens_met']?></textarea></div>
 
                         <div class="observation">
                             <h2>Verpleegkundige observatie bij dit patroon</h2>

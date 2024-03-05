@@ -6,10 +6,10 @@ include '../../Functions/Functions.php';
 
 $antwoorden = getPatternAnswers($_SESSION['clientId'], 7);
 
-$boolArrayGevoelOpDitMoment = str_split($antwoorden['gevoel_op_dit_moment']) ?? "";
-$boolArrayGevoelMomenteel = str_split($antwoorden['gevoel_momenteel']) ?? "";
-$boolArrayLichamelijkeEnergie = str_split($antwoorden['lichamelijke_energie']) ?? "";
-$boolArrayObservatie = str_split($antwoorden['observatie']) ?? "";
+$boolArrayGevoelOpDitMoment = str_split($antwoorden['gevoel_op_dit_moment']);
+$boolArrayGevoelMomenteel = str_split($antwoorden['gevoel_momenteel']);
+$boolArrayLichamelijkeEnergie = str_split($antwoorden['lichamelijke_energie']);
+$boolArrayObservatie = str_split($antwoorden['observatie']);
 
 if (isset($_REQUEST['navbutton'])) {
     $clientId = $_GET['id'];
@@ -48,7 +48,7 @@ if (isset($_REQUEST['navbutton'])) {
             <div class="pages">7 Zelfbelevingspatroon</div>
                 <div class="form">
                     <div class="questionnaire">
-                        <div class="question"><p>Kunt u uzelf, in het kort, beschijven?</p><textarea  rows="1" cols="25" type="text"><?= $antwoorden['zelfbeschrijving'] ?? "" ?></textarea></div>
+                        <div class="question"><p>Kunt u uzelf, in het kort, beschijven?</p><textarea  rows="1" cols="25" type="text"><?= $antwoorden['zelfbeschrijving'] ?></textarea></div>
                         <div class="question"><p>Kunt u voor uzelf opkomen?</p>
                             <div class="checkboxes">
                                 <p>    
@@ -61,13 +61,13 @@ if (isset($_REQUEST['navbutton'])) {
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>Waar blijkt dat uit?</p><textarea  rows="1" cols="25" type="text" name="wel_niet_opkomen_blijktuit"><?= $antwoorden['wel_niet_opkomen_blijktuit'] ?? "" ?></textarea></div>
+                        <div class="question"><p>Waar blijkt dat uit?</p><textarea  rows="1" cols="25" type="text" name="wel_niet_opkomen_blijktuit"><?= $antwoorden['wel_niet_opkomen_blijktuit'] ?></textarea></div>
                         <div class="question"><p>Is uw stemming de laatste tijd veranderd?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="opkomen_voor_uzelf" <?= $antwoorden['verandering_stemming'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_stemming_welke"> <?= $antwoorden['verandering_stemming_welke'] ?? "" ?>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_stemming_welke"> <?= $antwoorden['verandering_stemming_welke'] ?>
                                 </div>
                                 <p>
                                     <input type="radio" name="opkomen_voor_uzelf" <?= !$antwoorden['verandering_stemming'] ? "checked" : "" ?>>
@@ -86,7 +86,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[6] ? "checked" : "" ?> name="gevoel7"><p>Labiel</p></div></div>
                                 <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[7] ? "checked" : "" ?> name="gevoel8"><p>Gespannen</p></div></div>
                                 <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[8] ? "checked" : "" ?> name="gevoel9"><p>Verdrietig</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[9] ? "checked" : "" ?> name="gevoel10"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['anders'] ?? "" ?></textarea></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[9] ? "checked" : "" ?> name="gevoel10"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['anders'] ?></textarea></div>
                             </div>
                         </div>
                         <div class="question"><p>- Is er de afgelopen tijd iets veranderd in uw concentratievermogen ten gevolgen van u stemming?</p>
@@ -142,7 +142,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="sensaties" <?= $antwoorden['sensaties'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat voelt u?" name="sensaties_wat"> <?= $antwoorden['sensaties_wat'] ?? "" ?> </textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="wat voelt u?" name="sensaties_wat"> <?= $antwoorden['sensaties_wat'] ?> </textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="sensaties" <?= !$antwoorden['sensaties'] ? "checked" : "" ?>>
@@ -164,7 +164,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayLichamelijkeEnergie[2] ? "checked" : "" ?> name="lichamelijkeEnergie3"><p>Te weinig</p></div></div>
                             </div>
                         </div>
-                        <div class="question"><p>Zorgt u goed voor u zelf, of vindt u dat het beter kan?</p><textarea  rows="1" cols="25" type="text" name="zelfverzorging"><?= $antwoorden['zelfverzorging'] ?? "" ?></textarea></div>
+                        <div class="question"><p>Zorgt u goed voor u zelf, of vindt u dat het beter kan?</p><textarea  rows="1" cols="25" type="text" name="zelfverzorging"><?= $antwoorden['zelfverzorging'] ?></textarea></div>
 
                         <div class="observation">
                             <h2>Verpleegkundige observatie bij dit patroon</h2>

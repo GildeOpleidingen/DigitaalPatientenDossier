@@ -39,8 +39,6 @@ if (isset($_REQUEST['navbutton'])) {
     <div class="main">
         <?php
         include '../../Includes/header.php';
-        ?>
-        <?php
         include '../../Includes/sidebar.php';
         ?>
         <div class="content">
@@ -85,7 +83,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="gebruiken_tav_geloofsovertuiging" <?= $antwoorden['gebruiken_tav_geloofsovertuiging'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_tav_geloofsovertuiging"><?= $antwoorden['gebruiken_tav_geloofsovertuiging'] ? $antwoorden['gebruiken_tav_geloofsovertuiging_welke']  : "" ?></textarea>
+                                    <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_tav_geloofsovertuiging"><?= $antwoorden['gebruiken_tav_geloofsovertuiging_welke'] ?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="gebruiken_tav_geloofsovertuiging" <?= !$antwoorden['gebruiken_tav_geloofsovertuiging'] ? "checked" : "" ?>>
@@ -93,7 +91,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>Ja, wanneer?</p><textarea  rows="1" cols="25" type="text" name="gebruiken_tav_geloofsovertuiging_wanneer"><?= $antwoorden['gebruiken_tav_geloofsovertuiging_wanneer'] ? $antwoorden['gebruiken_tav_geloofsovertuiging_wanneer']  : "" ?></textarea></div>
+                        <div class="question"><p>Ja, wanneer?</p><textarea  rows="1" cols="25" type="text" name="gebruiken_tav_geloofsovertuiging_wanneer"><?= $antwoorden['gebruiken_tav_geloofsovertuiging_wanneer'] ?></textarea></div>
                         <div class="question"><p>Komen uw waarden en normen overeen met maatschappelijke waarden en normen?</p>
                             <div class="checkboxes">
                                 <p>    
@@ -112,7 +110,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="gebruiken_mbt_etnische_achtergrond" <?= $antwoorden['gebruiken_mbt_etnische_achtergrond'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_mbt_etnische_achtergrond_welke"><?= $antwoorden['gebruiken_mbt_etnische_achtergrond'] ? $antwoorden['gebruiken_mbt_etnische_achtergrond_welke'] : "" ?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_mbt_etnische_achtergrond_welke"><?= $antwoorden['gebruiken_mbt_etnische_achtergrond_welke'] ?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="gebruiken_mbt_etnische_achtergrond" <?= !$antwoorden['gebruiken_mbt_etnische_achtergrond'] ? "checked" : "" ?>>
