@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bloeddrukhoog = $_POST['bloeddruk2'];
     $temperatuur = $_POST['temperatuur'];
     $vochtinname = $_POST['vochtinname'];
-    $uitscheidingPlas = $_POST['uitscheidingPlas'];
+    $uitscheidingUrine = $_POST['uitscheidingUrine'];
     $pijnschaal = $_POST['pijnschaal'];
     $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
 
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $metingId = $meting->insert_id;
 
     $metingUrine = DatabaseConnection::getConn()->prepare("INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) VALUES (?, ?, ?)");
-    $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingPlas);
+    $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingUrine);
     $metingUrine->execute();
 
     $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd) VALUES (?, ?, ?)");
@@ -101,8 +101,8 @@ include_once '../../Includes/header.php';
             <label for="Vochtinname">Vochtinname:</label>
             <input type="number" id="vochtinname" name="vochtinname" placeholder="Invoeren in aantal milliliters" required min="0" max="5000"> <!-- o tot 5000 -->
 
-            <label for="Uitscheidingplas">Uitscheiding urine:</label>
-            <input type="number" id="uitscheidingplas" name="uitscheidingPlas" placeholder="Invoeren in aantal milliliters" required>
+            <label for="Uitscheidingurine">Uitscheiding urine:</label>
+            <input type="number" id="uitscheidingurine" name="uitscheidingUrine" placeholder="Invoeren in aantal milliliters" required>
 
             <label for="UitscheidingSamenstelling">Uitscheiding samenstelling:</label>
             <select id="uitscheidingSamenstelling" name="uitscheidingSamenstelling" required>
@@ -133,7 +133,7 @@ include_once '../../Includes/header.php';
         const bloeddruk2 = document.getElementById('bloeddruk2');
         const temperatuur = document.getElementById('temperatuur');
         const vochtinname = document.getElementById('vochtinname');
-        const uitscheidingplas = document.getElementById('uitscheidingplas');
+        const uitscheidingurine = document.getElementById('uitscheidingurine');
 
         hartslag.addEventListener('input', hartslagUpdate);
         ademhaling.addEventListener('input', ademHalingUpdate);
@@ -141,7 +141,7 @@ include_once '../../Includes/header.php';
         bloeddruk2.addEventListener('input', bloeddruk2Update);
         temperatuur.addEventListener('input', temperatuurUpdate);
         vochtinname.addEventListener('input', vochtinnameUpdate);
-        uitscheidingplas.addEventListener('input', uitscheidingplasUpdate);
+        uitscheidingurine.addEventListener('input', uitscheidingurineUpdate);
 
         function hartslagUpdate() {
             if (hartslag) {
@@ -210,12 +210,12 @@ include_once '../../Includes/header.php';
                 console.log('error');
             }
         }
-        function uitscheidingplasUpdate() {
-            if (uitscheidingplas) {
-                if (!uitscheidingplas.value) {
-                    uitscheidingplas.style.border = '5px solid red';
+        function uitscheidingurineUpdate() {
+            if (uitscheidingurine) {
+                if (!uitscheidingurine.value) {
+                    uitscheidingurine.style.border = '5px solid red';
                 }else {
-                    uitscheidingplas.style.border = '1px solid black';
+                    uitscheidingurine.style.border = '1px solid black';
                 }
             }else{
                 console.log('error');
