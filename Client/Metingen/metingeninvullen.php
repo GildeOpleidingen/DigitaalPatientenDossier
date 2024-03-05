@@ -101,7 +101,7 @@ include_once '../../Includes/header.php';
             <label for="Vochtinname">Vochtinname:</label>
             <input type="number" id="vochtinname" name="vochtinname" placeholder="Invoeren in aantal milliliters" required min="0" max="5000"> <!-- o tot 5000 -->
 
-            <label for="Uitscheidingplas">Uitscheiding plas:</label>
+            <label for="Uitscheidingplas">Uitscheiding urine:</label>
             <input type="number" id="uitscheidingplas" name="uitscheidingPlas" placeholder="Invoeren in aantal milliliters" required>
 
             <label for="UitscheidingSamenstelling">Uitscheiding samenstelling:</label>
