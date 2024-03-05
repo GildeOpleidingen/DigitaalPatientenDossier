@@ -118,11 +118,11 @@ if ($result != null) {
 }
     switch ($_REQUEST['navbutton']) {
         case 'next': //action for next here
-            header('Location: patroon03.php?id=' . $clientId);
+            header('Location: patroon03.php');
             break;
 
         case 'prev': //action for previous here
-            header('Location: patroon01.php?id=' . $clientId);
+            header('Location: patroon01.php');
             break;
     }
     exit;
