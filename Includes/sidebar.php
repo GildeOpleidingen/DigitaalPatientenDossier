@@ -1,115 +1,110 @@
-<html>
-<head>
-    <meta charset="utf-8">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-            -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-            box-sizing: border-box;         /* Opera/IE 8+ */
-            font-family: 'Poppins', sans-serif;
-        }
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+        -moz-box-sizing: border-box; /* Firefox, other Gecko */
+        box-sizing: border-box; /* Opera/IE 8+ */
+        font-family: 'Poppins', sans-serif;
+    }
 
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
 
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
 
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-        }
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-        .sidebar {
-            height: 100vh;
-            min-width: 200px;
-            padding-top: 80px;
-            background-color: white;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            color: #00365E;
-            overflow: auto;
-        }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
 
-        .personal-information {
-            font-weight: bold;
-        }
+    .sidebar {
+        height: 100vh;
+        min-width: 200px;
+        padding-top: 80px;
+        background-color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        color: #00365E;
+        overflow: auto;
+    }
 
-        #birth {
-            font-weight: normal;
-        }
+    .personal-information {
+        font-weight: bold;
+    }
 
-        .profile-img {
-            height: 200px;
-            padding: 20px;
-        }
+    #birth {
+        font-weight: normal;
+    }
 
-        .profile-img img {
-            height: 160px;
-            border-radius: 50%;
-            border: 1px solid #00365E;
-        }
+    .profile-img {
+        height: 200px;
+        padding: 20px;
+    }
 
-        .cpr {
-            height: 60px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
+    .profile-img img {
+        height: 160px;
+        border-radius: 50%;
+        border: 1px solid #00365E;
+    }
 
-        .cpr-yes-btn {
-            color: white;
-            cursor: pointer;
-            border: none;
-            background-color: #17C542;
-        }
+    .cpr {
+        height: 60px;
+        padding: 20px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
 
-        .cpr-no-btn {
-            color: white;
-            cursor: pointer;
-            border: none;
-            background-color: #ed1c24;
-        }
+    .cpr-yes-btn {
+        color: white;
+        cursor: pointer;
+        border: none;
+        background-color: #17C542;
+    }
 
-        .cpr div {
-            height: 40px;
-        }
+    .cpr-no-btn {
+        color: white;
+        cursor: pointer;
+        border: none;
+        background-color: #ed1c24;
+    }
 
-        .cpr img {
-            height: 40px;
-        }
+    .cpr div {
+        height: 40px;
+    }
 
-        ul {
-            display: flex;
-            padding: 20px;
-            flex-direction: column;
-            gap: 20px;
-            list-style-type: none;
-        }
+    .cpr img {
+        height: 40px;
+    }
 
-        a {
-            color: #00365E;
-            text-decoration: none;
-            list-style-type: none;
-        }
+    ul {
+        display: flex;
+        padding: 20px;
+        flex-direction: column;
+        gap: 20px;
+        list-style-type: none;
+    }
 
-        .copyright{
-            font-size: 10px;
-        }
+    a {
+        color: #00365E;
+        text-decoration: none;
+        list-style-type: none;
+    }
 
-    </style>
-</head>
+    .copyright {
+        font-size: 10px;
+    }
+</style>
 
-<body>
 <div class="sidebar">
     <?php
     include_once '../../Database/DatabaseConnection.php';
@@ -183,5 +178,3 @@
         ?>
     </ul>
 </div>
-</body>
-</html>
