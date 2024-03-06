@@ -1,20 +1,22 @@
 <?php
 session_start();
 include '../../Database/DatabaseConnection.php';
+include '../../Functions/MetingenFunctions.php';
 
 $id = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
 
+$hartslag = [];
+$ademhaling = [];
+$bloeddruklaag = [];
+$temperatuur = [];
+$vochtinname = [];
+$pijn = [];
+$bloeddrukhoog = [];
+$samenstelling = [];
+$hoeveelheid = [];
+
 if (!isset($id)) {
-    header("Location: ../../index.php");
-}
-
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
-
-if ($client == null) {
     header("Location: ../../index.php");
 }
 
@@ -24,36 +26,51 @@ if (!isset($_SESSION['loggedin_id'])) {
 
 $samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $hartslag = $_POST['hartslag'];
-    $ademhaling = $_POST['ademhaling'];
-    $bloeddruklaag = $_POST['bloeddruk'];
-    $bloeddrukhoog = $_POST['bloeddruk2'];
-    $temperatuur = $_POST['temperatuur'];
-    $vochtinname = $_POST['vochtinname'];
-    $uitscheiding = $_POST['uitscheiding'];
-    $uitscheidingStool = $_POST['uitscheiding2'];
-    $uitscheidingPlas = $_POST['uitscheidingPlas'];
-    $pijnschaal = $_POST['pijnschaal'];
-    $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
+$metingtijden = DatabaseConnection::getConn()->prepare("SELECT m.id, m.datumtijd, vr.id as verzorgerregelid
+                                                            FROM meting m
+                                                            LEFT JOIN verzorgerregel vr on m.verzorgerregelid = vr.id 
+                                                            WHERE clientid = ? ORDER BY datumtijd ASC");
+$metingtijden->bind_param("i", $_SESSION['clientId']);
+$metingtijden->execute();
+$metingtijden = $metingtijden->get_result()->fetch_all(MYSQLI_ASSOC);
 
-    $verzorgerregelid = DatabaseConnection::getConn()->query("SELECT id FROM verzorgerregel WHERE medewerkerid = $id")->fetch_array()[0];
-    $time = date("Y-m-d H:i:s");
+$metingen = getMeting($metingtijden);
 
-    $meting = DatabaseConnection::getConn()->prepare("INSERT INTO meting (verzorgerregelid, datumtijd, hartslag, ademhaling, bloeddruklaag, bloeddrukhoog, temperatuur, vochtinname, pijn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $meting->bind_param("isiiiiiii", $verzorgerregelid, $time, $hartslag, $ademhaling, $bloeddruklaag, $bloeddrukhoog, $temperatuur, $vochtinname, $pijnschaal);
-    $meting->execute();
-    $metingId = $meting->insert_id;
-
-    $metingUrine = DatabaseConnection::getConn()->prepare("INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) VALUES (?, ?, ?)");
-    $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingPlas);
-    $metingUrine->execute();
-
-    $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd) VALUES (?, ?, ?)");
-    $metingUrineSamenstelling->bind_param("iis", $metingId, $uitscheidingSamenstelling, $time);
-    $metingUrineSamenstelling->execute();
+foreach ($metingen[1] as $meting) {
+    foreach ($meting as $data) {
+        switch ($data['meting']) {
+            case 'hartslag':
+                $hartslag[] = $data;
+                break;
+            case 'ademhaling':
+                $ademhaling[] = $data;
+                break;
+            case 'bloeddruklaag':
+                $bloeddruklaag[] = $data;
+                break;
+            case 'temperatuur':
+                $temperatuur[] = $data;
+                break;
+            case 'vochtinname':
+                $vochtinname[] = $data;
+                break;
+            case 'pijn':
+                $pijn[] = $data;
+                break;
+            case 'bloeddrukhoog':
+                $bloeddrukhoog[] = $data;
+                break;
+            case 'samenstelling':
+                $samenstelling[] = $data;
+                break;
+            case 'hoeveelheid':
+                $hoeveelheid[] = $data;
+                break;
+        }
+    }
 }
 ?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -73,6 +90,7 @@ include_once '../../Includes/header.php';
     include_once '../../Includes/sidebar.php';
     ?>
     <div class="main2">
+<<<<<<< HEAD
         <div class="btns">
             <?php echo '<a href="metingen.php?id=' . $id . '"><button type="button" class="MetingenInvul">Metingen invullen</button></a>'; ?>
             <?php echo '<a href="metingenTabel.php?id=' . $id . '"><button type="button" class="MetingenTabel">Metingen bekijken</button></a>'; ?>
@@ -286,5 +304,156 @@ include_once '../../Includes/header.php';
             }
         }
     </script>
+=======
+        <div class="form-content">
+            <div class="btns">
+                <?php echo '<a href="metingeninvullen.php?id=' . $id . '"><button type="button" class="MetingenInvul">Metingen invullen</button></a>'; ?>
+                <?php echo '<a href="metingen.php?id=' . $id . '"><button type="button" class="MetingenTabel">Metingen bekijken</button></a>'; ?>
+            </div>
+            <form id="patientForm">
+                <div class="tabel">
+                    <table>
+                        <th></th>
+                        <?php
+                        foreach ($metingen[0] as $tijd) {
+                            echo "<th>$tijd</th>";
+                        }
+                        ?>
+
+                        <tr>
+                            <td>Hartslag</td>
+                            <?php
+                            foreach ($hartslag as $hart) {
+                                foreach ($hart as $tijd => $waarde) {
+                                    if ($waarde != "hartslag") {
+                                        if ($waarde == 0) {
+                                            echo "<td></td>";
+                                        } else {
+                                            echo "<td>$waarde bpm</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <td>Ademhaling</td>
+                            <?php
+                            foreach ($ademhaling as $adem) {
+                                foreach ($adem as $tijd => $waarde) {
+                                    if ($waarde != "ademhaling") {
+                                        if ($waarde == 0) {
+                                            echo "<td></td>";
+                                        } else {
+                                            echo "<td>$waarde rpm</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <td>Bloeddruk</td>
+                            <?php
+                            foreach ($bloeddruklaag as $bloed) {
+                                foreach ($bloed as $time => $value) {
+                                    if ($time !== "meting") {
+                                        if ($value == 0) {
+                                            echo "<td></td>";
+                                        } else {
+                                            $matchingValue = vindGelijkeWaarde($bloeddrukhoog, $time);
+                                            echo "<td>$value/$matchingValue</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <td>Temperatuur</td>
+                            <?php
+                            foreach ($temperatuur as $temp) {
+                                foreach ($temp as $tijd => $waarde) {
+                                    if ($waarde != "temperatuur") {
+                                        if ($waarde == 0) {
+                                            echo "<td></td>";
+                                        } else {
+                                            echo "<td>$waarde °C</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <td>Vochtinname</td>
+                            <?php
+                            foreach ($vochtinname as $vocht) {
+                                foreach ($vocht as $tijd => $waarde) {
+                                    if ($waarde != "vochtinname") {
+                                        if ($waarde == 0) {
+                                            echo "<td></td>";
+                                        } else {
+                                            echo "<td>$waarde ml</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <td>Pijn</td>
+                            <?php
+                            foreach ($pijn as $value) {
+                                foreach ($value as $tijd => $waarde) {
+                                    if ($waarde != "pijn") {
+                                        if ($waarde == "") {
+                                            echo "<td></td>";
+                                        } else {
+                                            echo "<td>Index $waarde</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <td>Samenstelling</td>
+                            <?php
+                            foreach ($samenstelling as $samen) {
+                                foreach ($samen as $tijd => $waarde) {
+                                    if ($waarde != "samenstelling") {
+                                        if ($waarde == 0) {
+                                            echo "<td></td>";
+                                        } else {
+                                            echo "<td>Type $waarde</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <td>Hoeveelheid</td>
+                            <?php
+                            foreach ($hoeveelheid as $hoeveel) {
+                                foreach ($hoeveel as $tijd => $waarde) {
+                                    if ($waarde != "hoeveelheid") {
+                                        if ($waarde == 0) {
+                                            echo "<td></td>";
+                                        } else {
+                                            echo "<td>$waarde ml</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+>>>>>>> ef85ef39823d0a0596d5b0db940ab98d7a0b83e7
 </body>
 </html>
