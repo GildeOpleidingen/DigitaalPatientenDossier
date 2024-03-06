@@ -28,4 +28,5 @@ jobs:
         with:
           # Artifact name
           name: 'digitaalpatientendossier'
+          path: .
           
