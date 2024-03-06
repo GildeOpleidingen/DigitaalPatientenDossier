@@ -2,8 +2,7 @@
 session_start();
 include '../../Database/DatabaseConnection.php';
 
-$id = $_GET['id'];
-$_SESSION['clientId'] = $_GET['id'];
+$id = $_SESSION['clientId'];
 
 if (!isset($id)) {
     header("Location: ../../index.php");

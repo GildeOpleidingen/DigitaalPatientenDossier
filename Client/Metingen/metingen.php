@@ -3,8 +3,7 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/MetingenFunctions.php';
 
-$id = $_GET['id'];
-$_SESSION['clientId'] = $_GET['id'];
+$id = $_SESSION['clientId'];
 
 $hartslag = [];
 $ademhaling = [];
