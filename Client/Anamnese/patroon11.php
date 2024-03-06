@@ -51,12 +51,12 @@ if (isset($_REQUEST['navbutton'])) {
                                     <input id="radio" type="radio" name="gelovig" <?= $antwoorden['gelovig'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <div id="checkfield">
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[0] ? "checked" : "" ?> name="geloof1"><p>R-K</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[1] ? "checked" : "" ?> name="geloof2"><p>Nederlands hervormd</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[2] ? "checked" : "" ?> name="geloof3"><p>Gereformeerd</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[3] ? "checked" : "" ?> name="geloof4"><p>Moslim</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[4] ? "checked" : "" ?> name="geloof5"><p>Joods</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGeloof[5] ? "checked" : "" ?> name="geloof6"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['geloof_anders'] ? $anwoorden['geloof_anders'] : "" ?></textarea></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGeloof[0] ? "checked" : "" ?> name="geloof1"><p>R-K</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGeloof[1] ? "checked" : "" ?> name="geloof2"><p>Nederlands hervormd</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGeloof[2] ? "checked" : "" ?> name="geloof3"><p>Gereformeerd</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGeloof[3] ? "checked" : "" ?> name="geloof4"><p>Moslim</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGeloof[4] ? "checked" : "" ?> name="geloof5"><p>Joods</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGeloof[5] ? "checked" : "" ?> name="geloof6"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['geloof_anders'] ? $anwoorden['geloof_anders'] : "" ?></textarea></div>
                                     </div>
                                 </div>
                                 <p>

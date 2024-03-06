@@ -77,12 +77,12 @@ if (isset($_REQUEST['navbutton'])) {
                                     <input id="radio" type="radio" name="gebruik_inslaapmiddel" <?= $antwoorden['gebruik_inslaapmiddel'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <div id="checkfield">
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[0] ? "checked" : "" ?> name="inslaapmiddel1"><p>Medicijngebruik</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[1] ? "checked" : "" ?> name="inslaapmiddel2"><p>Beweging</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[2] ? "checked" : "" ?> name="inslaapmiddel3"><p>Alcohol/drugs</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[3] ? "checked" : "" ?> name="inslaapmiddel4"><p>Eten/drinken</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[4] ? "checked" : "" ?> name="inslaapmiddel5"><p>Douche/bad</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayInslaapmiddel[5] ? "checked" : "" ?> name="inslaapmiddel6"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"></textarea></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayInslaapmiddel[0] ? "checked" : "" ?> name="inslaapmiddel1"><p>Medicijngebruik</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayInslaapmiddel[1] ? "checked" : "" ?> name="inslaapmiddel2"><p>Beweging</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayInslaapmiddel[2] ? "checked" : "" ?> name="inslaapmiddel3"><p>Alcohol/drugs</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayInslaapmiddel[3] ? "checked" : "" ?> name="inslaapmiddel4"><p>Eten/drinken</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayInslaapmiddel[4] ? "checked" : "" ?> name="inslaapmiddel5"><p>Douche/bad</p></div></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayInslaapmiddel[5] ? "checked" : "" ?> name="inslaapmiddel6"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"></textarea></div>
                                     </div>
                                 </div>
                                 <p>
