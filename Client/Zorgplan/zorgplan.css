@@ -135,3 +135,11 @@
 .submit:hover {
     background-color: #45a049;
 }
+
+.pes {
+    border: 2px solid #00365E;
+    border-radius: 3px;
+    resize: none;
+    width: 75%;
+    height: 30px;
+}
