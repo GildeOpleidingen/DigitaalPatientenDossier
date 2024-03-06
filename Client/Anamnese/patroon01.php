@@ -7,8 +7,137 @@ $antwoorden = getPatternAnswers($_SESSION['clientId'], 1);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
+$client_id = $_GET['id'];
+
+//id van de medewerker
+$medewerker_id = $_SESSION['loggedin_id'];
+
 if (isset($_REQUEST['navbutton'])) {
-    //TODO: hier actie om data op te slaan in database.
+    $algemene_gezondheid = $_POST['algemene_gezondheid'];
+    $gezondheids_bezigheid = $_POST['gezondheids_bezigheid'];
+    $rookt = ($_POST['rookt']);
+    $rookt_hoeveelheid = $_POST['rookt_hoeveelheid'];
+    $drinkt = $_POST['drinkt'];
+    $drinkt_hoeveelheid = $_POST['drinkt_hoeveelheid'];
+    $besmettelijke_aandoening = $_POST['besmettelijke_aandoening'];
+    $besmettelijke_aandoening_welke = $_POST['besmettelijke_aandoening_welke'];
+    $alergieen = $_POST['alergieen'];
+    $alergieen_welke = $_POST['alergieen_welke'];
+    $oorzaak_huidige_toestand = $_POST['oorzaak_huidige_toestand'];
+    $oht_actie = $_POST['oht_actie'];
+    $oht_hoe_effectief = $_POST['$oht_hoe_effectief'];
+    $oht_wat_nodig = $_POST['oht_wat_nodig'];
+    $oht_wat_belangrijk = $_POST['oht_wat_belangrijk'];
+    $oht_reactie_op_advies = $_POST['oht_reactie_op_advies'];
+    $preventie= $_POST['oht_reactie_op_advies'];
+    $observatie = $_POST['observatie'];
+
+    // array van checkboxes van observatie tab
+    $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']));
+
+    $observatie = convertBoolArrayToString($arr);
+
+    $result = DatabaseConnection::getConn()->prepare("
+                    SELECT vl.id
+                    from vragenlijst vl
+                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
+                    where verzorgerregel.clientid = ?");
+    $result->bind_param("i", $client_id);
+    $result->execute();
+    $result = $result->get_result()->fetch_assoc();
+
+
+    if ($result != null){
+        $vragenlijst_id = $result['id'];
+
+    } else {
+
+        $sql2 = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
+            VALUES ((SELECT id
+            FROM verzorgerregel
+            WHERE clientid = ?
+            AND medewerkerid = ?))");
+        $sql2->bind_param("ii", $client_id ,$medewerker_id);
+        $sql2->execute();
+        $sql2 = $sql2->get_result();
+
+
+        $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
+                    from vragenlijst vl
+                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
+                    where verzorgerregel.clientid = ?");
+        $result->bind_param("i", $client_id);
+        $result->execute();
+        $result = $result->get_result()->fetch_assoc();
+
+        $vragenlijst_id=$result['id'];
+
+    }
+
+    // kijken of patroon02 bestaat door te kijken naar vragenlijst id
+    $result = DatabaseConnection::getConn()->prepare("SELECT p.id
+                    from patroon01gezondheidsbeleving p
+                    where p.vragenlijstid =  ?");
+    $result->bind_param("i", $vragenlijst_id);
+    $result->execute();
+    $result = $result->get_result()->fetch_assoc();
+
+    if ($result != null) {
+        //update
+        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon01gezondheidsbeleving`
+            SET
+            `algemene_gezondheid`='$algemene_gezondheid',
+            `gezondheids_bezigheid`='$gezondheids_bezigheid',
+            `rookt`='$rookt',
+            `rookt_hoeveelheid`='$rookt_hoeveelheid',
+            `drinkt`='$drinkt',
+            `drinkt_hoeveelheid`='$drinkt_hoeveelheid',
+            `besmettelijke_aandoening`='$besmettelijke_aandoening',
+            `besmettelijke_aandoening_welke`='$besmettelijke_aandoening_welke',
+            `alergieen`='$alergieen',
+            `alergieen_welke`='$alergieen_welke',
+            `oorzaak_huidige_toestand`='$oorzaak_huidige_toestand',
+            `oht_actie`='$oht_actie',
+            `oht_hoe_effectief`='$oht_hoe_effectief',
+            `oht_wat_nodig`='$oht_wat_nodig',
+            `oht_wat_belangrijk`='$oht_wat_belangrijk',
+            `oht_reactie_op_advies`='$oht_reactie_op_advies',
+            `preventie`='$preventie',
+            `observatie`='$observatie'
+           WHERE `vragenlijstid`=?");
+        $result1->bind_param("i", $vragenlijst_id);
+        $result1->execute();
+        $result1 = $result1->get_result();
+
+    }else{
+        //hier insert je alle data in patroon02
+        $result2 = DatabaseConnection::getConn()->prepare( "INSERT INTO `patroon01gezondheidsbeleving`(`vragenlijstid`, `algemene_gezondheid`, `gezondheids_bezigheid`, `rookt`, `rookt_hoeveelheid`, `drinkt`, `drinkt_hoeveelheid`, `besmettelijke_aandoening`, `besmettelijke_aandoening_welke`, `alergieen`, `alergieen_welke`, `oorzaak_huidige_toestand`, `oht_actie`, `oht_hoe_effectief`, `oht_wat_nodig`, `oht_wat_belangrijk`, `oht_reactie_op_advies`, `preventie`, `observatie`)
+            VALUES (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?)");
+        $result2->bind_param("issisisisisssssssss", $vragenlijst_id, $algemene_gezondheid, $gezondheids_bezigheid, $rookt, $rookt_hoeveelheid, $drinkt, $drinkt_hoeveelheid, $besmettelijke_aandoening, $besmettelijke_aandoening_welke, $alergieen, $alergieen_welke, $oorzaak_huidige_toestand, $oht_actie, $oht_hoe_effectief, $oht_wat_nodig, $oht_wat_belangrijk, $oht_reactie_op_advies, $preventie, $observatie);
+        $result2->execute();
+        $result2 = $result2->get_result();
+
+    }
+
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
             header('Location: patroon02.php');
@@ -19,6 +148,15 @@ if (isset($_REQUEST['navbutton'])) {
             break;
     }
     exit;
+}
+
+$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
+$client->bind_param("i", $client_id);
+$client->execute();
+$client = $client->get_result()->fetch_assoc();
+
+if ($client == null) {
+    header("Location: ../../index.php");
 }
 
 ?>
