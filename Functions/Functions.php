@@ -86,7 +86,12 @@ function getPatternAnswers(int $clientId, int $patroonType): array|false {
             WHERE TABLE_NAME = '$patroon'");
             $columns = $result->fetch_all(MYSQLI_ASSOC);
             foreach($columns as $column) {
-                $antwoorden[$column['COLUMN_NAME']] = "";
+                if($column['COLUMN_NAME'] == 'observatie') {
+                    // Dit is echt een hacky manier om de error te fixen voor observatie als je een andere manier hebt aub zeggen
+                    $antwoorden[$column['COLUMN_NAME'] ?? ""] = "00000000000000000000";
+                }else{
+                    $antwoorden[$column['COLUMN_NAME']] = "";
+                }
             }
         }
         foreach($antwoorden as $antwoord) {

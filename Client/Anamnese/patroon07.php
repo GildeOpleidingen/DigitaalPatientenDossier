@@ -76,16 +76,16 @@ if (isset($_REQUEST['navbutton'])) {
                         </div>
                         <div class="question"><p>- Hoe voelt u zich op dit moment?</p> 
                             <div class="observation">
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[0] ? "checked" : "" ?> name="gevoel1"><p>Neerslachtig</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[1] ? "checked" : "" ?> name="gevoel2"><p>Wanhopig</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[2] ? "checked" : "" ?> name="gevoel3"><p>Machteloos</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[3] ? "checked" : "" ?> name="gevoel4"><p>Opgewekt</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[4] ? "checked" : "" ?> name="gevoel5"><p>Somber</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[5] ? "checked" : "" ?> name="gevoel6"><p>Eufoor</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[6] ? "checked" : "" ?> name="gevoel7"><p>Labiel</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[7] ? "checked" : "" ?> name="gevoel8"><p>Gespannen</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[8] ? "checked" : "" ?> name="gevoel9"><p>Verdrietig</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelOpDitMoment[9] ? "checked" : "" ?> name="gevoel10"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['anders'] ?></textarea></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelOpDitMoment[0] ? "checked" : "" ?> name="gevoel1"><p>Neerslachtig</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelOpDitMoment[1] ? "checked" : "" ?> name="gevoel2"><p>Wanhopig</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelOpDitMoment[2] ? "checked" : "" ?> name="gevoel3"><p>Machteloos</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelOpDitMoment[3] ? "checked" : "" ?> name="gevoel4"><p>Opgewekt</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelOpDitMoment[4] ? "checked" : "" ?> name="gevoel5"><p>Somber</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelOpDitMoment[5] ? "checked" : "" ?> name="gevoel6"><p>Eufoor</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelOpDitMoment[6] ? "checked" : "" ?> name="gevoel7"><p>Labiel</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelOpDitMoment[7] ? "checked" : "" ?> name="gevoel8"><p>Gespannen</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelOpDitMoment[8] ? "checked" : "" ?> name="gevoel9"><p>Verdrietig</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelOpDitMoment[9] ? "checked" : "" ?> name="gevoel10"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['anders'] ?></textarea></div>
                             </div>
                         </div>
                         <div class="question"><p>- Is er de afgelopen tijd iets veranderd in uw concentratievermogen ten gevolgen van u stemming?</p>
@@ -151,41 +151,41 @@ if (isset($_REQUEST['navbutton'])) {
                         </div>
                         <div class="question"><p>- Hoe voelt u zich momenteel?</p> 
                             <div class="observation">
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelMomenteel[0] ? "checked" : "" ?> name="gevoelMomenteel1"><p>Sterk</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelMomenteel[1] ? "checked" : "" ?> name="gevoelMomenteel2"><p>Zwak</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGevoelMomenteel[2] ? "checked" : "" ?> name="gevoelMomenteel3"><p>Krachteloos</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelMomenteel[0] ? "checked" : "" ?> name="gevoelMomenteel1"><p>Sterk</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelMomenteel[1] ? "checked" : "" ?> name="gevoelMomenteel2"><p>Zwak</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGevoelMomenteel[2] ? "checked" : "" ?> name="gevoelMomenteel3"><p>Krachteloos</p></div></div>
                             </div>
                         </div>
                         <div class="question"><p>- Hoe staat het met uw lichamelijke energie?</p> 
                             <div class="observation">
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayLichamelijkeEnergie[0] ? "checked" : "" ?> name="lichamelijkeEnergie1"><p>Genoeg</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayLichamelijkeEnergie[1] ? "checked" : "" ?> name="lichamelijkeEnergie2"><p>Te veel</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayLichamelijkeEnergie[2] ? "checked" : "" ?> name="lichamelijkeEnergie3"><p>Te weinig</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayLichamelijkeEnergie[0] ? "checked" : "" ?> name="lichamelijkeEnergie1"><p>Genoeg</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayLichamelijkeEnergie[1] ? "checked" : "" ?> name="lichamelijkeEnergie2"><p>Te veel</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayLichamelijkeEnergie[2] ? "checked" : "" ?> name="lichamelijkeEnergie3"><p>Te weinig</p></div></div>
                             </div>
                         </div>
                         <div class="question"><p>Zorgt u goed voor u zelf, of vindt u dat het beter kan?</p><textarea  rows="1" cols="25" type="text" name="zelfverzorging"><?= $antwoorden['zelfverzorging'] ?></textarea></div>
 
                         <div class="observation">
                             <h2>Verpleegkundige observatie bij dit patroon</h2>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[0] ? "checked" : ""?> name="observatie1"><p>Lichte angst</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[1] ? "checked" : ""?> name="observatie2"><p>Matige angst</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[2] ? "checked" : ""?> name="observatie3"><p>Hevige (paniek) angst</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[3] ? "checked" : ""?> name="observatie4"><p>Lichte anticiperende angst</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[4] ? "checked" : ""?> name="observatie5"><p>Matige anticiperende angst</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[5] ? "checked" : ""?> name="observatie6"><p>Hevige anticiperende angst</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[6] ? "checked" : ""?> name="observatie7"><p>Vrees</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[7] ? "checked" : ""?> name="observatie8"><p>Reactieve depressie</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[8] ? "checked" : ""?> name="observatie9"><p>Moedeloosheid</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[9] ? "checked" : ""?> name="observatie10"><p>Identiteitsstoornis</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[10] ? "checked" : "" ?> name="observatie11"><p>Lichte machteloosheid</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[11] ? "checked" : "" ?> name="observatie12"><p>Matige machteloosheid</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[12] ? "checked" : "" ?> name="observatie13"><p>Ernstige machteloosheid</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[13] ? "checked" : "" ?> name="observatie14"><p>Geringe zelfachting</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[14] ? "checked" : "" ?> name="observatie15"><p>Chronisch geringe zelfachting</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[15] ? "checked" : "" ?> name="observatie16"><p>Reactief geringe zelfachting</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[16] ? "checked" : "" ?> name="observatie17"><p>Verstoord lichaamsbeeld</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[17] ? "checked" : "" ?> name="observatie18"><p>Hopeloosheid</p></div></div>
-                            <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayObservatie[18] ? "checked" : "" ?> name="observatie19"><p>Dreigende zelfverminking (automutilatie)</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[0] ? "checked" : ""?> name="observatie1"><p>Lichte angst</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[1] ? "checked" : ""?> name="observatie2"><p>Matige angst</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[2] ? "checked" : ""?> name="observatie3"><p>Hevige (paniek) angst</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[3] ? "checked" : ""?> name="observatie4"><p>Lichte anticiperende angst</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[4] ? "checked" : ""?> name="observatie5"><p>Matige anticiperende angst</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[5] ? "checked" : ""?> name="observatie6"><p>Hevige anticiperende angst</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[6] ? "checked" : ""?> name="observatie7"><p>Vrees</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[7] ? "checked" : ""?> name="observatie8"><p>Reactieve depressie</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[8] ? "checked" : ""?> name="observatie9"><p>Moedeloosheid</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[9] ? "checked" : ""?> name="observatie10"><p>Identiteitsstoornis</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[10] ? "checked" : "" ?> name="observatie11"><p>Lichte machteloosheid</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[11] ? "checked" : "" ?> name="observatie12"><p>Matige machteloosheid</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[12] ? "checked" : "" ?> name="observatie13"><p>Ernstige machteloosheid</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[13] ? "checked" : "" ?> name="observatie14"><p>Geringe zelfachting</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[14] ? "checked" : "" ?> name="observatie15"><p>Chronisch geringe zelfachting</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[15] ? "checked" : "" ?> name="observatie16"><p>Reactief geringe zelfachting</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[16] ? "checked" : "" ?> name="observatie17"><p>Verstoord lichaamsbeeld</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[17] ? "checked" : "" ?> name="observatie18"><p>Hopeloosheid</p></div></div>
+                            <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayObservatie[18] ? "checked" : "" ?> name="observatie19"><p>Dreigende zelfverminking (automutilatie)</p></div></div>
                         </div>
                     </div>
                 </div>
