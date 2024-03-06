@@ -1,4 +1,3 @@
-<html>
 <meta charset="utf-8">
 <style>
     * {
@@ -180,4 +179,3 @@
         ?>
     </ul>
 </div>
-</html>

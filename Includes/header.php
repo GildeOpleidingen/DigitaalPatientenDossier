@@ -9,7 +9,6 @@ $result->bind_param("i", $id);
 $result->execute();
 $medewerker = $result->get_result()->fetch_assoc();
 ?>
-<html>
 <meta charset="utf-8">
 <style>
     * {
@@ -131,4 +130,3 @@ $medewerker = $result->get_result()->fetch_assoc();
         </div>
     </header>
 </div>
-</html>
