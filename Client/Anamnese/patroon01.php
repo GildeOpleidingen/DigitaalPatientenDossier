@@ -7,6 +7,7 @@ $antwoorden = getPatternAnswers($_SESSION['clientId'], 1);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
+//id van de client
 $client_id = $_GET['id'];
 //id van de medewerker
 $medewerker_id = $_SESSION['loggedin_id'];
@@ -24,7 +25,7 @@ if (isset($_REQUEST['navbutton'])) {
     $alergieen_welke = $_POST['alergieen_welke'];
     $oorzaak_huidige_toestand = $_POST['oorzaak_huidige_toestand'];
     $oht_actie = $_POST['oht_actie'];
-    $oht_hoe_effectief = $_POST['$oht_hoe_effectief'];
+    $oht_hoe_effectief = $_POST['oht_hoe_effectief'];
     $oht_wat_nodig = $_POST['oht_wat_nodig'];
     $oht_wat_belangrijk = $_POST['oht_wat_belangrijk'];
     $oht_reactie_op_advies = $_POST['oht_reactie_op_advies'];
