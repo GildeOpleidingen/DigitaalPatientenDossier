@@ -36,7 +36,7 @@ jobs:
           # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
           name: 'digitaalpatientendossier'
           # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
-          path: '/var/www/digitaalpatiendossier.gds.local/html/'
+          path: '/var/www/digitaalpatientendossier.gds.local/html/'
           
       # - name: Copy file
       #   # You may pin to the exact commit or the version.
