@@ -16,7 +16,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
+      - name: Remove .git / .gitignore
+        run :
+          rm -rf .git
+          rm -rf .gitignore
+
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.3.1
         with:
