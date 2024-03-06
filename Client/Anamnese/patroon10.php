@@ -49,19 +49,19 @@ if (isset($_REQUEST['navbutton'])) {
                     <div class="questionnaire">
                         <div class="question"><p>Hoe reageert u gewoonlijk op situaties die spanningen oproepen?</p> 
                             <div class="observation">
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[0] ? "checked" : "" ?> name="reactie1"><p>Zoveel mogelijk vermijden</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[1] ? "checked" : "" ?> name="reactie2"><p>Drugs gebruiken</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[2] ? "checked" : "" ?> name="reactie3"><p>Ontwikkeling van lichamelijke symptomen</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[3] ? "checked" : "" ?> name="reactie4"><p>Medicatie</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[4] ? "checked" : "" ?> name="reactie5"><p>Meer/minder eten</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[5] ? "checked" : "" ?> name="reactie6"><p>Agressie</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[6] ? "checked" : "" ?> name="reactie7"><p>Praten met anderen</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[7] ? "checked" : "" ?> name="reactie8"><p>Alcohol drinken</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[8] ? "checked" : "" ?> name="reactie9"><p>Houd mijn gevoelens voor me</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[9] ? "checked" : "" ?> name="reactie10"><p>Slapen/terugtrekken</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[10] ? "checked" : "" ?> name="reactie11"><p>Vertrouwen op religie</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[11] ? "checked" : "" ?> name="reactie12"><p>Zo goed mogelijk zelf oplossen</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayReacties[12] ? "checked" : "" ?> name="reactie13"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['reactie_anders'] ?></textarea></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[0] ? "checked" : "" ?> name="reactie1"><p>Zoveel mogelijk vermijden</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[1] ? "checked" : "" ?> name="reactie2"><p>Drugs gebruiken</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[2] ? "checked" : "" ?> name="reactie3"><p>Ontwikkeling van lichamelijke symptomen</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[3] ? "checked" : "" ?> name="reactie4"><p>Medicatie</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[4] ? "checked" : "" ?> name="reactie5"><p>Meer/minder eten</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[5] ? "checked" : "" ?> name="reactie6"><p>Agressie</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[6] ? "checked" : "" ?> name="reactie7"><p>Praten met anderen</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[7] ? "checked" : "" ?> name="reactie8"><p>Alcohol drinken</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[8] ? "checked" : "" ?> name="reactie9"><p>Houd mijn gevoelens voor me</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[9] ? "checked" : "" ?> name="reactie10"><p>Slapen/terugtrekken</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[10] ? "checked" : "" ?> name="reactie11"><p>Vertrouwen op religie</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[11] ? "checked" : "" ?> name="reactie12"><p>Zo goed mogelijk zelf oplossen</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayReacties[12] ? "checked" : "" ?> name="reactie13"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text"><?= $antwoorden['reactie_anders'] ?></textarea></div>
                             </div>
                         </div>
                         <div class="question"><p>Probeert u spanningsvolle situaties zo goed mogelijk te voorkomen?</p>

@@ -253,11 +253,11 @@ if ($result != null) {
                                     <p>Heeft u het koud of warm?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="0" name="gevoel" <?= $antwoorden['gevoel'] == 0 ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gevoel" <?= !$antwoorden['gevoel'] ? "checked" : "" ?>>
                                             <label>Normaal</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="1" name="gevoel" <?= $antwoorden['gevoel'] == 1 ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="gevoel" <?= $antwoorden['gevoel'] ? "checked" : "" ?>>
                                             <label>Koud</label>
                                         </p>
                                         <p>
