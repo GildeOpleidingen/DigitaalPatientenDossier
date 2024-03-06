@@ -78,7 +78,17 @@ function getPatternAnswers(int $clientId, int $patroonType): array|false {
         $result->bind_param("i", $vlId);
         $result->execute();
         $antwoorden = (array) $result->get_result()->fetch_array(MYSQLI_ASSOC) ?? [];
-
+        if(empty($antwoorden)) {
+            // Dit is zodat als je geen data hebt dan krijg je geen error van undefined array key
+            $result = DatabaseConnection::getConn()->query("
+            SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = '$patroon'");
+            $columns = $result->fetch_all(MYSQLI_ASSOC);
+            foreach($columns as $column) {
+                $antwoorden[$column['COLUMN_NAME']] = "";
+            }
+        }
         foreach($antwoorden as $antwoord) {
             if(!isset($antwoord)) {
                 $antwoord = "";
