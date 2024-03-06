@@ -16,20 +16,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # - name: Copy Directory
-      #   uses: MadaraUchiha/copy-action@0.0.1
-      #   with:
-      #     # Source file
-      #     source: .
-      #     # Target file
-      #     target: /var/www/digitaalpatientendossier.gds.local/
-          
+        
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.3.1
         with:
           # Artifact name
           name: 'digitaalpatientendossier'
           path: .
+          
       - name: Download a Build Artifact
         uses: actions/download-artifact@v4.1.4
         with:
@@ -38,13 +32,4 @@ jobs:
           # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
           path: '/var/www/digitaalpatientendossier.gds.local/html/'
           
-      # - name: Copy file
-      #   # You may pin to the exact commit or the version.
-      #   # uses: canastro/copy-action@7ddff6fc153a2ea2cd0fb88ed9750544c051e399
-      #   uses: canastro/copy-action@0.0.2
-      #   with:
-      #     # Source file
-      #     source: 'digitaalpatientendossier.zip'
-      #     # Target file
-      #     target: '/var/www/digitaalpatiendossier.gds.local/html/'
           
