@@ -29,13 +29,16 @@ $medischoverzicht->bind_param("i", $id);
 $medischoverzicht->execute();
 $medischoverzicht = $medischoverzicht->get_result()->fetch_assoc();
 
+$verzorgerArr = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");
+$verzorgerArr->execute();
+$verzorgerArr = $verzorgerArr->get_result()->fetch_all(MYSQLI_ASSOC);
+
 $verzorgers = [];
 foreach ($clientRelations as $relation) {
-    $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
-    $verzorger->bind_param("i", $relation['medewerkerid']);
-    $verzorger->execute();
-    $verzorger = $verzorger->get_result()->fetch_assoc();
-    array_push($verzorgers, $verzorger);
+    foreach ($verzorgerArr as $naam)
+        if ($relation['medewerkerid'] == $naam['id']) {
+            $verzorgers[] = $naam;
+        }
 }
 ?>
 
