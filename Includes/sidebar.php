@@ -1,4 +1,3 @@
-<meta charset="utf-8">
 <style>
     * {
         margin: 0;

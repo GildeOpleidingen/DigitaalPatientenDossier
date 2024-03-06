@@ -9,7 +9,6 @@ $result->bind_param("i", $id);
 $result->execute();
 $medewerker = $result->get_result()->fetch_assoc();
 ?>
-<meta charset="utf-8">
 <style>
     * {
         margin: 0;
