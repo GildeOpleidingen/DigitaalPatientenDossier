@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="rapportage">
                             <h1>Rapportage aanpassen van <?= $rapportage['datumtijd'] ?> (<?= $rapportage['id'] ?>)</h1>
                             <textarea name="inhoud" id="rapportage" placeholder="Rapportage" style="width: 100%; height: 100%; box-sizing: border-box;"><?= $rapportage['inhoud'] ?></textarea>
-                            <button class="rapportageButton" type="button" onclick="submit()">Submit</button>
+                            <button class="rapportageButton" type="submit">Submit</button>
                         </div>
 
                     </form>
