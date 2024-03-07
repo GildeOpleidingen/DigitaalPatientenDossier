@@ -15,7 +15,7 @@
 
 .form-content{
     height: 100%;
-    width: 105em;
+    width: 100%;
     overflow: auto;
     display: flex;
     flex-direction: column;

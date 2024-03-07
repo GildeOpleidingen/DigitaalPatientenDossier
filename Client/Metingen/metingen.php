@@ -147,7 +147,7 @@ include_once '../../Includes/header.php';
                                             echo "<td></td>";
                                         } else {
                                             $matchingValue = vindGelijkeWaarde($bloeddrukhoog, $time);
-                                            echo "<td>$value/$matchingValue</td>";
+                                            echo "<td>$matchingValue/$value</td>";
                                         }
                                     }
                                 }
