@@ -120,6 +120,8 @@ $medewerker = $result->get_result()->fetch_assoc();
                             break;
                         } else if ($currentDir === "clientpagina") {
                             $dir = "../..";
+                        } else if ($currentDir === "Register") {
+                            $dir = "../..";
                         }
                     }
                     echo "<li><a href='$dir/$value/$key.php?id=$id' class='$selected' id='$key'>$value</a></li>";

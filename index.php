@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($result->num_rows > 0) {
             $row = mysqli_fetch_array($result);
-            if ($row['wachtwoord'] == $password) {
+            if ($row['wachtwoord'] == password_verify($password, $row['wachtwoord'])) {
                 $_SESSION['loggedin_id'] = $row['id'];
                 $_SESSION['loggedin_naam'] = $row['naam'];
                 header("Location: Dashboard/dashboard.php?id={$row['id']}");
@@ -45,9 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <center>
         <div class="loginbox">
             <img src="Images/gildezorgcollege.png" alt="gildezorgcollege">
-            <?php if (isset($error)) { ?>
-                <p style="color: red;"><?php echo $error; ?></p>
-            <?php } ?>
+            <p style="color: red;"><?= $error ?? ""; ?></p>
             <form method="post">
                 <h1>E-mail</h1>
                 <input type="text" name="e-mail">
