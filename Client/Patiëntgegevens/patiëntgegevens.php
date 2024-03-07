@@ -2,7 +2,7 @@
 session_start();
 include_once '../../Database/DatabaseConnection.php';
 
-if(!isset($_GET['id'])) {
+if (!isset($_GET['id'])) {
     header("Location: ../client.php");
 }
 
@@ -13,10 +13,6 @@ $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id 
 $client->bind_param("i", $id);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
-
-if ($client == null) {
-    header("Location: ../client.php");
-}
 
 $clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
 $clientRelations->bind_param("i", $id);
@@ -45,6 +41,7 @@ foreach ($clientRelations as $relation) {
         }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,13 +50,100 @@ foreach ($clientRelations as $relation) {
     <link rel="Stylesheet" href="patiëntgegevens.css">
     <title>Gegevens van <?= $client['naam'] ?></title>
 </head>
-    <body>
-        <div class="main">
-            <?php
-            include_once '../../Includes/header.php';
-            include_once '../../Includes/sidebar.php';
-            ?>
+<body>
+<div class="main">
+    <?php
+    include '../../Includes/header.php';
+    ?>
 
+<<<<<<<<< Temporary merge branch 1
+    <?php
+    include '../../Includes/sidebar.php';
+    ?>
+
+    <div class="content">
+        <div class="patiëntgegevens">
+            <div class="patiëntgegevens-content">
+                <div class="text">
+                    <strong>Geslacht</strong>
+                    <p><?= $client['geslacht'] ?></p>
+                </div>
+                <div class="text">
+                    <strong>Geboortedatum</strong>
+                    <p><?= $client['geboortedatum'] ?></p>
+                </div>
+                <div class="text">
+                    <strong>Adres</strong>
+                    <p><?= $client['adres'] ?></p>
+                </div>
+                <div class="text">
+                    <strong>Postcode</strong>
+                    <p><?= $client['postcode'] ?></p>
+                </div>
+                <div class="text">
+                    <strong>Woonplaats</strong>
+                    <p><?= $client['woonplaats'] ?></p>
+                </div>
+            </div>
+            <br>
+            <div class="patiëntgegevens-content">
+                <div class="text">
+                    <strong>Telefoonnummer</strong>
+                    <p><?= $client['telefoonnummer'] ?></p>
+                </div>
+                <div class="text">
+                    <strong>E-mail</strong>
+                    <p><?= $client['email'] ?></p>
+                </div>
+                <div class="text">
+                    <strong>Afdeling</strong>
+                    <p><?= $client['afdeling'] ?></p>
+                </div>
+                <div class="text">
+                    <strong>Burgelijke staat</strong>
+                    <p><?= $client['burgelijkestaat'] ?></p>
+                </div>
+                <div class="text">
+                    <strong>Nationaliteit</strong>
+                    <p><?= $client['nationaliteit'] ?></p>
+                </div>
+            </div>
+            <br>
+            <div class="patiëntgegevens-content">
+                <div class="text">
+                    <?php
+                    if ($contactpersonen <= null) { ?>
+                        <strong>Contactpersonen</strong>
+                        <p>Geen contactpersonen<p>
+                    <?php } else {
+                        $num = 1;
+                        foreach ($contactpersonen as $contactpersoon) { ?>
+                            <strong>Contactpersoon <?= $num ?> </strong>
+                            <p><?= $contactpersoon['naam'] ?></p>
+                            <p><?= $contactpersoon['relatietype'] ?></p>
+                            <p><?= $contactpersoon['telefoonnummer'] ?></p>
+                            <br>
+                            <?php $num++;
+                        }
+                    } ?>
+                </div>
+                <div class="text">
+                    <strong>Zorgopname</strong>
+                    <p>Vanaf <?= $medischoverzicht['opnamedatum'] ?></p>
+                </div>
+                <div class="text">
+                    <a href="verzorgers.php?id=<?= $_GET['id'] ?>">
+                    </a>
+                    <?php $num = 1;
+                    foreach ($verzorgers as $verzorger) { ?>
+                        <strong>Verzorger <?= $num ?></strong>
+                        <p><?= $verzorger['naam'] ?></p>
+                        <p><?= $verzorger['klas'] ?></p>
+                        <p><?= $verzorger['email'] ?></p>
+                        <br>
+                        <?php $num++;
+                    } ?>
+=========
         <div class="content">
             <div class="overzicht">
                 <div class="overzicht-content">
@@ -114,6 +198,7 @@ foreach ($clientRelations as $relation) {
                             <?php } ?>
                             <p><?php echo join(", ",$verzorgerNamen); ?></p>
                         </div>
+>>>>>>>>> Temporary merge branch 2
                 </div>
             </div>
         </div>
