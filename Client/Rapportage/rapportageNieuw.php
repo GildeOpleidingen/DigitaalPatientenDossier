@@ -8,17 +8,13 @@ if ($loggedInId == null) {
     header("Location: ../index.php");
 }
 
-$clientId = $_GET['id'];
-$_SESSION['clientId'] = $_GET['id'];
+$clientId = $_SESSION['clientId'];
 
 if(!isset($clientId)){
     header("Location: ../client.php");
 }
 
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
+$client = $_SESSION['client'] = getClientById($clientId);
 
 $verzorgerregel = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
 $verzorgerregel->bind_param("ii", $clientId, $loggedInId);
