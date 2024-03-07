@@ -116,8 +116,8 @@ function checkIfClientStoryExistsByClientId($id): bool {
     SELECT cv.*
     FROM client c
     JOIN medischoverzicht mo on mo.clientid = c.id 
-    join clientverhaal cv on cv.medischoverzichtid = mo.id
-    where c.id = ?
+    JOIN clientverhaal cv on cv.medischoverzichtid = mo.id
+    WHERE c.id = ?
     ");
     $result->bind_param("i", $id);
     $result->execute();
@@ -128,21 +128,3 @@ function checkIfClientStoryExistsByClientId($id): bool {
         return false;
     }
 }
-
-function getAdmissionDateByClientId($id): string {
-    $result = DatabaseConnection::getConn()->prepare("
-    select opnamedatum
-    from medischoverzicht
-    where clientid = ?
-    ");
-    $result->bind_param("i", $id);
-    $result->execute();
-    $opnamedatum = $result->get_result()->fetch_assoc();
-
-    if($opnamedatum != null){
-        return $opnamedatum['opnamedatum'];
-    }
-
-    return "Geen opnamedatum ingevuld";
-}
-

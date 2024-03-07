@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bloeddrukhoog = $_POST['bloeddruk2'];
     $temperatuur = $_POST['temperatuur'];
     $vochtinname = $_POST['vochtinname'];
-    $uitscheidingPlas = $_POST['uitscheidingPlas'];
+    $uitscheidingUrine = $_POST['uitscheidingUrine'];
     $pijnschaal = $_POST['pijnschaal'];
     $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
 
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $metingId = $meting->insert_id;
 
     $metingUrine = DatabaseConnection::getConn()->prepare("INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) VALUES (?, ?, ?)");
-    $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingPlas);
+    $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingUrine);
     $metingUrine->execute();
 
     $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd) VALUES (?, ?, ?)");
@@ -101,8 +101,8 @@ include_once '../../Includes/header.php';
             <label for="Vochtinname">Vochtinname:</label>
             <input type="number" id="vochtinname" name="vochtinname" placeholder="Invoeren in aantal milliliters" required min="0" max="5000"> <!-- o tot 5000 -->
 
-            <label for="Uitscheidingplas">Uitscheiding plas:</label>
-            <input type="number" id="uitscheidingplas" name="uitscheidingPlas" placeholder="Invoeren in aantal milliliters" required>
+            <label for="Uitscheidingurine">Uitscheiding urine:</label>
+            <input type="number" id="uitscheidingurine" name="uitscheidingUrine" placeholder="Invoeren in aantal milliliters" required>
 
             <label for="UitscheidingSamenstelling">Uitscheiding samenstelling:</label>
             <select id="uitscheidingSamenstelling" name="uitscheidingSamenstelling" required>
@@ -133,7 +133,7 @@ include_once '../../Includes/header.php';
         const bloeddruk2 = document.getElementById('bloeddruk2');
         const temperatuur = document.getElementById('temperatuur');
         const vochtinname = document.getElementById('vochtinname');
-        const uitscheidingplas = document.getElementById('uitscheidingplas');
+        const uitscheidingurine = document.getElementById('uitscheidingurine');
 
         hartslag.addEventListener('input', hartslagUpdate);
         ademhaling.addEventListener('input', ademHalingUpdate);
@@ -141,84 +141,56 @@ include_once '../../Includes/header.php';
         bloeddruk2.addEventListener('input', bloeddruk2Update);
         temperatuur.addEventListener('input', temperatuurUpdate);
         vochtinname.addEventListener('input', vochtinnameUpdate);
-        uitscheidingplas.addEventListener('input', uitscheidingplasUpdate);
+        uitscheidingurine.addEventListener('input', uitscheidingurineUpdate);
 
         function hartslagUpdate() {
-            if (hartslag) {
-                if (hartslag.value < 0 || hartslag.value > 200) {
-                    hartslag.style.border = '5px solid red';
-                }else {
-                    hartslag.style.border = '1px solid black';
-                }
+            if (hartslag.value < 0 || hartslag.value > 200) {
+                hartslag.style.border = '5px solid red';
             }else {
-                console.log("error");
+                hartslag.style.border = '1px solid black';
             }
         }
 
         function ademHalingUpdate() {
-            if (ademhaling) {
-                if (ademhaling.value < 0 || ademhaling.value > 80) {
-                    ademhaling.style.border = '5px solid red';
-                }else {
-                    ademhaling.style.border = '1px solid black';
-                }
-            }else{
-                console.log('error');
+            if (ademhaling.value < 0 || ademhaling.value > 80) {
+                ademhaling.style.border = '5px solid red';
+            }else {
+                ademhaling.style.border = '1px solid black';
             }
         }
         function bloeddrukUpdate() {
-            if (bloeddruk) {
-                if (bloeddruk.value < 0 || bloeddruk.value > 140) {
-                    bloeddruk.style.border = '5px solid red';
-                }else {
-                    bloeddruk.style.border = '1px solid black';
-                }
-            }else{
-                console.log('error');
+            if (bloeddruk.value < 0 || bloeddruk.value > 140) {
+                bloeddruk.style.border = '5px solid red';
+            }else {
+                bloeddruk.style.border = '1px solid black';
             }
         }
         function bloeddruk2Update() {
-            if (bloeddruk2) {
-                if (bloeddruk2.value < 0 || bloeddruk2.value > 140) {
-                    bloeddruk2.style.border = '5px solid red';
-                }else {
-                    bloeddruk2.style.border = '1px solid black';
-                }
-            }else{
-                console.log('error');
+            if (bloeddruk2.value < 0 || bloeddruk2.value > 140) {
+                bloeddruk2.style.border = '5px solid red';
+            }else {
+                bloeddruk2.style.border = '1px solid black';
             }
         }
         function temperatuurUpdate() {
-            if (temperatuur) {
-                if (temperatuur.value < 34 || temperatuur.value > 42) {
-                    temperatuur.style.border = '5px solid red';
-                }else {
-                    temperatuur.style.border = '1px solid black';
-                }
-            }else{
-                console.log('error');
+            if (temperatuur.value < 34 || temperatuur.value > 42) {
+                temperatuur.style.border = '5px solid red';
+            }else {
+                temperatuur.style.border = '1px solid black';
             }
         }
         function vochtinnameUpdate() {
-            if (vochtinname) {
-                if (vochtinname.value < 0 || vochtinname.value > 5000) {
-                    vochtinname.style.border = '5px solid red';
-                }else {
-                    vochtinname.style.border = '1px solid black';
-                }
-            }else{
-                console.log('error');
+            if (vochtinname.value < 0 || vochtinname.value > 5000) {
+                vochtinname.style.border = '5px solid red';
+            }else {
+                vochtinname.style.border = '1px solid black';
             }
         }
-        function uitscheidingplasUpdate() {
-            if (uitscheidingplas) {
-                if (!uitscheidingplas.value) {
-                    uitscheidingplas.style.border = '5px solid red';
-                }else {
-                    uitscheidingplas.style.border = '1px solid black';
-                }
-            }else{
-                console.log('error');
+        function uitscheidingurineUpdate() {
+            if (!uitscheidingurine.value) {
+                uitscheidingurine.style.border = '5px solid red';
+            }else {
+                uitscheidingurine.style.border = '1px solid black';
             }
         }
     </script>
