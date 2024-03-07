@@ -3,7 +3,6 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 
 $clientId = $_SESSION['clientId'];
-
 if (!isset($clientId)) {
     header("Location: ../../index.php");
 }
