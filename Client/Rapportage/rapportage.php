@@ -3,8 +3,7 @@ session_start();
 include_once '../../Database/DatabaseConnection.php';
 include_once '../../Functions/ClientFunctions.php';
 
-$clientId = $_GET['id'];
-$_SESSION['clientId'] = $_GET['id'];
+$clientId = $_SESSION['clientId'];
 
 $client = $_SESSION['client'] = getClientById($clientId);
 $rapportages = DatabaseConnection::getConn()->prepare("SELECT r.*, vr.id AS verzorgerregel_id FROM rapport r LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id WHERE vr.clientid = ?;");
