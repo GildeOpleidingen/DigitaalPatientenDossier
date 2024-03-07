@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once '../../Database/DatabaseConnection.php';
+include_once '../../Functions/ClientFunctions.php';
 
 $loggedInId = $_SESSION['loggedin_id'];
 
