@@ -35,12 +35,12 @@ include '../../Includes/header.php';
             <div class="back">
                 <h2>Reportages</h2>
             <?php echo "<a href='rapportageNieuw.php?id=" . $clientId . "'>" ?>
-                    <button class="rapportageButton" type="submit">Nieuwe rapportage</button>
+                    <button class="rapportageButton">Nieuwe rapportage</button>
             <?php
             foreach ($rapportages as $rapport) {
                 echo "<h1>Rapportage van " . $rapport['datumtijd'] . " (" . $rapport['id'] . ")</h1>";
                 echo "<a href='rapportageAanpassen.php?id=" . $rapport['id'] . "'>";
-                echo "<button class='rapportageButton' type='submit'>Aanpassen</button>";
+                echo "<button class='rapportageButton'>Aanpassen</button>";
                 echo "</a>";
             }
             ?>
