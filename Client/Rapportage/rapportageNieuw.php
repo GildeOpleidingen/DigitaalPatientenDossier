@@ -20,6 +20,9 @@ $client = $_SESSION['client'] = getClientById($clientId);
 $verzorgerregel = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
 $verzorgerregel->bind_param("ii", $clientId, $loggedInId);
 $verzorgerregel->execute();
+if ($verzorgerregel->get_result()->fetch_assoc() == null) {
+    header("Location: ../Overzicht/overzicht.php");
+}
 $verzorgerregel = $verzorgerregel->get_result()->fetch_assoc()['id'];
 
 $tijd = date('Y-m-d H:i:s');
