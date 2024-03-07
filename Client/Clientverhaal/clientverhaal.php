@@ -4,7 +4,6 @@ include '../../Database/DatabaseConnection.php';
 include '../../Functions/ClientFunctions.php';
 
 $clientId = $_SESSION['clientId'];
-
 if (!isset($_SESSION['clientId']) || !checkIfClientExistsById($_SESSION['clientId']) || !getMedischOverzichtByClientId($_SESSION['clientId'])) {
     header("Location: ../../index.php");
     exit;

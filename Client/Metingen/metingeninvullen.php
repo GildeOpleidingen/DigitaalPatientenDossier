@@ -2,14 +2,14 @@
 session_start();
 include '../../Database/DatabaseConnection.php';
 
-$id = $_SESSION['clientId'];
+$clientId = $_SESSION['clientId'];
 
-if (!isset($id)) {
+if (!isset($clientId)) {
     header("Location: ../../index.php");
 }
 
 $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
+$client->bind_param("i", $clientId);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
 
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pijnschaal = $_POST['pijnschaal'];
     $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
 
-    $verzorgerregelid = DatabaseConnection::getConn()->query("SELECT id FROM verzorgerregel WHERE medewerkerid = $id")->fetch_array()[0];
+    $verzorgerregelid = DatabaseConnection::getConn()->query("SELECT id FROM verzorgerregel WHERE medewerkerid = $clientId")->fetch_array()[0];
     $time = date("Y-m-d H:i:s");
 
     $meting = DatabaseConnection::getConn()->prepare("INSERT INTO meting (verzorgerregelid, datumtijd, hartslag, ademhaling, bloeddruklaag, bloeddrukhoog, temperatuur, vochtinname, pijn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -72,8 +72,8 @@ include_once '../../Includes/header.php';
     ?>
     <div class="main2">
         <div class="btns">
-            <?php echo '<a href="metingeninvullen.php?id='.$id.'"><button type="button" class="MetingenInvul">Metingen invullen</button></a>'; ?>
-            <?php echo '<a href="metingen.php?id='.$id.'"><button type="button" class="MetingenTabel">Metingen bekijken</button></a>'; ?>
+            <?php echo '<a href="metingeninvullen.php?id='.$clientId.'"><button type="button" class="MetingenInvul">Metingen invullen</button></a>'; ?>
+            <?php echo '<a href="metingen.php?id='.$clientId.'"><button type="button" class="MetingenTabel">Metingen bekijken</button></a>'; ?>
         </div>
         <form id="patientForm" method="POST">
             <!-- metingen -->

@@ -2,14 +2,14 @@
 session_start();
 include_once '../../Database/DatabaseConnection.php';
 
-if(!isset($_SESSION['clientId'])) {
-    header("Location: ../client.php");
+$clientId = $_SESSION['clientId'];
+if (!isset($clientId)) {
+    header("Location: ../../index.php");
 }
 
-$id = $_SESSION['clientId'];
 
 $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
+$client->bind_param("i", $clientId);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
 
@@ -24,7 +24,7 @@ $medewerkers = $medewerkers->get_result()->fetch_all(MYSQLI_ASSOC);
 // Loop door alle medewerkers heen, als de medewerker al in de database staat, zet dan de checked variabele op true
 foreach ($medewerkers as $key => $medewerker) {
     $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
-    $stmt->bind_param("ii", $id, $medewerker['id']);
+    $stmt->bind_param("ii", $clientId, $medewerker['id']);
     $stmt->execute();
     $stmt = $stmt->get_result()->fetch_assoc();
 
@@ -52,7 +52,7 @@ foreach ($medewerkers as $key => $medewerker) {
         ?>
 
         <form action="Verzorger/verwerk.php" method="post" class="content">
-            <input type="hidden" name="clientId" value="<?= $id ?>">
+            <input type="hidden" name="clientId" value="<?= $clientId ?>">
             <div class="form-content">
                 <div class="pages">Verzorgers van <?= $client['naam'] ?></div>
                 <div class="form">
