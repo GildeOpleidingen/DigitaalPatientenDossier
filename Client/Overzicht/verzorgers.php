@@ -7,7 +7,6 @@ if (!isset($clientId)) {
     header("Location: ../../index.php");
 }
 
-
 $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
 $client->bind_param("i", $clientId);
 $client->execute();
