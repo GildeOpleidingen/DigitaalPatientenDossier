@@ -2,17 +2,10 @@
 session_start();
 include_once '../../Database/DatabaseConnection.php';
 
-if(!isset($_GET['id'])) {
-    header("Location: ../client.php");
-}
-
 $clientId = $_GET['id'];
 $_SESSION['clientId'] = $_GET['id'];
 
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $clientId);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
+$client = $_SESSION['client'] = getClientById($clientId);
 $rapportages = DatabaseConnection::getConn()->prepare("SELECT r.*, vr.id AS verzorgerregel_id FROM rapport r LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id WHERE vr.clientid = ?;");
 $rapportages->bind_param("i", $clientId);
 $rapportages->execute();
