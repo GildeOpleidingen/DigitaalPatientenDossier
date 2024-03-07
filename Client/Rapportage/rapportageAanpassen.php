@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="content">
                     <form method="POST">
-                        <input type="hidden" value="<?= $rapportageId ?>" name="rapportageId">
+                        <input type="hidden" value="<?= $rapportage['id'] ?>" name="rapportageId">
                         <div class="rapportage">
                             <h1>Rapportage aanpassen van <?= $rapportage['datumtijd'] ?> (<?= $rapportage['id'] ?>)</h1>
                             <textarea name="inhoud" id="rapportage" placeholder="Rapportage" style="width: 100%; height: 100%; box-sizing: border-box;"><?= $rapportage['inhoud'] ?></textarea>
