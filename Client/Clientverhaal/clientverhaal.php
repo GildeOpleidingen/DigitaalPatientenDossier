@@ -4,7 +4,7 @@ include '../../Database/DatabaseConnection.php';
 include '../../Functions/ClientFunctions.php';
 
 $clientId = $_SESSION['clientId'];
-if (!isset($_SESSION['clientId']) || !checkIfClientExistsById($_SESSION['clientId']) || !getMedischOverzichtByClientId($_SESSION['clientId'])) {
+if (!isset($clientId) || !checkIfClientExistsById($clientId) || !getMedischOverzichtByClientId($clientId)) {
     header("Location: ../../index.php");
     exit;
 } 
@@ -13,7 +13,7 @@ if (isset($_SESSION['client'])) {
     unset($_SESSION['client']);
 }
 
-$client = $_SESSION['client'] = getClientById($_SESSION['clientId']);
+$client = $_SESSION['client'] = getClientById($clientId);
 if (checkIfClientStoryExistsByClientId($client['id'])) {
     $clientStory = getClientStoryByClientId($client['id']);
 }
