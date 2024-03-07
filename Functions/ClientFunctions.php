@@ -1,16 +1,22 @@
 <?php
 // Om deze functies te gebruiken moet je op de pagina waar je ze wilt gebruiken de databaseConnection includen en deze file includen
 function updateClient($naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto): bool {
-    $conn = DatabaseConnection::getConn();
-    $conn->query("UPDATE `client` SET `naam`='$naam',`geslacht`='$geslacht',`adres`='$adres',`postcode`='$postcode',`woonplaats`='$woonplaats',`telefoonnummer`='$telefoonnummer',`email`='$email',`reanimatiestatus`='$reanimatiestatus',`nationaliteit`='$nationaliteit',`afdeling`='$afdeling',`burgelijkestaat`='$burgelijkestaat',`foto`='$foto' WHERE `naam`='$naam';");
+    $result = DatabaseConnection::getConn()->prepare("UPDATE `client` SET `geslacht`=?,`adres`=?,`postcode`=?,`woonplaats`=?,`telefoonnummer`=?,`email`=?,`reanimatiestatus`=?,`nationaliteit`=?,`afdeling`=?,`burgelijkestaat`=?,`foto`=? WHERE `naam`=?;");
+    $result->bind_param("ssssssssssss", $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto, $naam);
+    $result->execute();
 
-    if ($conn->affected_rows == 1)
+    if ($result->affected_rows == 1)
         return true;
 
-    if ($conn->affected_rows <= 0) {
-        $result = $conn->query("SELECT * FROM `client` WHERE naam='$naam'")->fetch_all();
-        if (sizeof($result) == 0) {
-            $conn->query("INSERT INTO `client`(`naam`, `geslacht`, `adres`, `postcode`, `woonplaats`, `telefoonnummer`, `email`, `reanimatiestatus`, `nationaliteit`, `afdeling`, `burgelijkestaat`, `foto`) VALUES ('$naam','$geslacht','$adres','$postcode','$woonplaats','$telefoonnummer','$email','$reanimatiestatus','$nationaliteit','$afdeling','$burgelijkestaat','$foto');");
+    if ($result->affected_rows <= 0) {
+        $query = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE naam= ?")->fetch_all();
+        $query.bind_param("s", $naam);
+        $query.execute();
+        if (sizeof($query) == 0) {
+            //            DatabaseConnection::getConn()->prepare("INSERT INTO `client`(`naam`, `geslacht`, `adres`, `postcode`, `woonplaats`, `telefoonnummer`, `email`, `reanimatiestatus`, `nationaliteit`, `afdeling`, `burgelijkestaat`, `foto`) VALUES ('$naam','$geslacht','$adres','$postcode','$woonplaats','$telefoonnummer','$email','$reanimatiestatus','$nationaliteit','$afdeling','$burgelijkestaat','$foto');");
+            $result = DatabaseConnection::getConn()->prepare("INSERT INTO `client`(`naam`, `geslacht`, `adres`, `postcode`, `woonplaats`, `telefoonnummer`, `email`, `reanimatiestatus`, `nationaliteit`, `afdeling`, `burgelijkestaat`, `foto`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+            $result->bind_param("sssssssssss", $naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto);
+            $result->execute();
             return true;
         }
     }
@@ -41,20 +47,6 @@ function getClientById($id): array {
 function getClientByName($name): array {
     $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE naam = ?;");
     $result->bind_param("s", $name);
-    $result->execute();
-
-    return (array) $result->get_result()->fetch_array();
-}
-
-function getMedischOverzichtByClientId($id): array {
-    $result = DatabaseConnection::getConn()->prepare("
-    SELECT mo.*
-    FROM client c
-    JOIN medischoverzicht mo on mo.clientid = c.id 
-    where c.id = ?
-    ");
-    
-    $result->bind_param("i", $id);
     $result->execute();
 
     return (array) $result->get_result()->fetch_array();
@@ -183,5 +175,48 @@ function insertCarePlan($clientId, $opsteldatumtijd, $patroontypeid, $P, $E, $S,
         }
     }else{
         return false;
+    }
+}
+                          
+                          
+function getAdmissionDateByClientId($id): string {
+    $result = DatabaseConnection::getConn()->prepare("
+    select opnamedatum
+    from medischoverzicht
+    where clientid = ?
+    ");
+    $result->bind_param("i", $id);
+    $result->execute();
+    $opnamedatum = $result->get_result()->fetch_assoc();
+
+    if($opnamedatum != null){
+        return $opnamedatum['opnamedatum'];
+    }
+
+    return "Geen opnamedatum ingevuld";
+}
+                          
+function getMedischOverzichtByClientId($id): array {
+    $result = DatabaseConnection::getConn()->prepare("
+    SELECT mo.*
+    FROM client c
+    JOIN medischoverzicht mo on mo.clientid = c.id 
+    where c.id = ?
+    ");
+    
+    $result->bind_param("i", $id);
+    $result->execute();
+
+    $mo =  (array) $result->get_result()->fetch_array();
+    if($mo != null){
+        return $mo;
+    }
+    else{
+        $legeArray = [];
+        $legeArray["medischevoorgeschiedenis"] = "Geen medische voorgeschiedenis ingevuld";
+        $legeArray["medicatie"] = "Geen medicatie ingevuld";
+        $legeArray["alergieen"] = "Geen allergieën ingevuld";
+        $legeArray["opnamedatum"] = "Geen opnamedatum ingevuld";
+        return $legeArray;
     }
 }
