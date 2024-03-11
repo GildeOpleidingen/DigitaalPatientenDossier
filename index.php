@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['e-mail'];
         $password = $_POST['password'];
 
-        $result = DatabaseConnection::getConn()->prepare("SELECT id, naam, wachtwoord FROM medewerker WHERE email = ?");
+        $result = DatabaseConnection::getConn()->prepare("SELECT id, naam, wachtwoord, rol FROM medewerker WHERE email = ?");
         $result->bind_param("s", $email);
         $result->execute();
         $result = $result->get_result();
@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($row['wachtwoord'] == password_verify($password, $row['wachtwoord'])) {
                 $_SESSION['loggedin_id'] = $row['id'];
                 $_SESSION['loggedin_naam'] = $row['naam'];
+                $_SESSION['rol'] = $row['rol'];
                 header("Location: Dashboard/dashboard.php?id={$row['id']}");
             } else {
                 $error = "Het wachtwoord is onjuist.";
