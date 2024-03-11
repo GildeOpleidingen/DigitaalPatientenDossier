@@ -7,20 +7,148 @@ $antwoorden = getPatternAnswers($_SESSION['clientId'], 4);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
+$medewerkerId = $_SESSION['loggedin_id'];
+
 if (isset($_REQUEST['navbutton'])) {
-    //TODO: hier actie om data op te slaan in database.
-    switch($_REQUEST['navbutton']) {
+    $voeding = $_POST['voeding'];
+    $aankleden = $_POST['aankleden'];
+    $alg_mobiliteit= ($_POST['alg_mobiliteit']);
+    $koken = $_POST['koken'];
+    $huishouden = $_POST['huishouden'];
+    $financien = $_POST['financien'];
+    $verzorging = $_POST['verzorging'];
+    $baden = $_POST['baden'];
+    $toiletgang = $_POST['toiletgang'];
+    $uit_bed_komen = $_POST['winkelen'];
+    $tijd_voor_uzelf_nodig = $_POST['tijd_voor_uzelf_nodig'];
+    $tijd_voor_uzelf_nodig_blijktuit = $_POST['tijd_voor_uzelf_nodig_blijktuit'];
+    $dagelijkse_gewoontes = $_POST['dagelijkse_gewoontes'];
+    $dagelijkse_gewoontes_welke = $_POST['dagelijkse_gewoontes_welke'];
+    $lichamelijke_beperking = $_POST['lichamelijke_beperking'];
+    $lichamelijke_beperking_welke = $_POST['lichamelijke_beperking_welke'];
+    $vermoeitheids_klachten = $_POST['vermoeitheids_klachten'];
+    $passiever = $_POST['passiever'];
+    $passiever_blijktuit = $_POST['passiever_blijktuit'];
+    $problemen_starten_dag = $_POST['problemen_starten_dag'];
+    $problemen_starten_dag_blijktuit = $_POST['problemen_starten_dag_blijktuit	'];
+    $hobbys = $_POST['hobbys'];
+    $hobbys_bestedingstijd = $_POST['hobbys_bestedingstijd'];
+    $activiteiten_weggevallen = $_POST['activiteiten_weggevallen'];
+    $activiteiten_weggevallen_welke = $_POST['activiteiten_weggevallen_welke'];
+    $observatie = $_POST['observatie'];
+// array van checkboxes van observatie tab
+    $observatie = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']), !empty($_POST['observatie11']));
+
+    $observatie = convertBoolArrayToString($observatie);
+
+    $result = DatabaseConnection::getConn()->prepare("
+                    SELECT vl.id
+                    from vragenlijst vl
+                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
+                    where verzorgerregel.clientid = ?");
+    $result->bind_param("i", $_SESSION['clientId']);
+    $result->execute();
+    $result = $result->get_result()->fetch_assoc();
+
+    if ($result != null){
+        $vragenlijstId = $result['id'];
+    } else {
+        $sql2 = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
+            VALUES ((SELECT id
+            FROM verzorgerregel
+            WHERE clientid = ?
+            AND medewerkerid = ?))");
+        $sql2->bind_param("ii", $_SESSION['clientId'] ,$medewerkerId);
+        $sql2->execute();
+        $sql2 = $sql2->get_result();
+
+        $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
+                    from vragenlijst vl
+                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
+                    where verzorgerregel.clientid = ?");
+        $result->bind_param("i", $_SESSION['clientId']);
+        $result->execute();
+        $result = $result->get_result()->fetch_assoc();
+
+        $vragenlijstId=$result['id'];
+    }
+
+    // kijken of patroon02 bestaat door te kijken naar vragenlijst id
+    $result = DatabaseConnection::getConn()->prepare("
+                    SELECT p.id
+                    FROM patroon04activiteiten p
+                    WHERE p.vragenlijstid =  ?");
+    $result->bind_param("i", $vragenlijstId);
+    $result->execute();
+    $result = $result->get_result()->fetch_assoc();
+
+    if ($result != null) {
+        //update
+        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon04activiteiten` SET
+        `ontlasting_probleem`='$ontlasting_probleem',
+        `op_welke`='$op_welke',
+        `op_preventie`='$op_preventie',
+        `op_medicijnen`='$op_medicijnen',
+        `op_medicijnen_welke`='$op_medicijnen_welke',
+        `urineer_probleem`= '$urineer_probleem',
+        `up_incontinentie`='$up_incontinentie',
+        `up_incontinentie_behandeling`='$up_incontinentie_behandeling',
+        `up_incontinentie_behandeling_welke`='$up_incontinentie_behandeling_welke',
+        `transpiratie`='$transpiratie',
+        `transpiratie_welke`='$transpiratie_welke',
+        `observatie`='$observatie'
+           WHERE `vragenlijstid`=?");
+        $result1->bind_param("i", $vragenlijstId);
+        $result1->execute();
+        $result1 = $result1->get_result();
+
+    }else{
+        //hier insert je alle data in patroon02
+
+        $result2 = DatabaseConnection::getConn()->prepare( "INSERT INTO `patroon04activiteiten`(
+                `vragenlijstid`,
+                `ontlasting_probleem`,
+                `op_welke`,
+                `op_preventie`,
+                `op_medicijnen`,
+                `op_medicijnen_welke`,
+                `urineer_probleem`,
+                `up_incontinentie`,
+                `up_incontinentie_behandeling`,
+                `up_incontinentie_behandeling_welke`,
+                `transpiratie`,
+                `transpiratie_welke`,
+                `observatie`)
+            VALUES (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?)");
+        $result2->bind_param("iissisiiisiss", $vragenlijstId, $ontlasting_probleem, $op_welke, $op_preventie, $op_medicijnen, $op_medicijnen_welke, $urineer_probleem, $up_incontinentie, $up_incontinentie_behandeling, $up_incontinentie_behandeling_welke, $transpiratie, $transpiratie_welke, $observatie);
+        $result2->execute();
+        $result2 = $result2->get_result();
+
+    }
+    switch ($_REQUEST['navbutton']) {
         case 'next': //action for next here
             header('Location: patroon05.php');
             break;
-    
+
         case 'prev': //action for previous here
             header('Location: patroon03.php');
             break;
     }
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>
