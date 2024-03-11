@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../../Database/DatabaseConnection.php';
-
+$medewerker_id = $_SESSION['loggedin_id'];
 $clientId = $_SESSION['clientId'];
 if (!isset($clientId)) {
     header("Location: ../../index.php");
@@ -55,6 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $metingUrineSamenstelling->bind_param("iis", $metingId, $uitscheidingSamenstelling, $time);
     $metingUrineSamenstelling->execute();
 }
+
+$grens_asistent = DatabaseConnection::getConn()->prepare ("SELECT `grens_assistent` FROM `medewerker` WHERE id = $medewerker_id");
+$grens_asistent->execute();
+$asisstent_bool = $grens_asistent->get_result()->fetch_array()[0];
 ?>
 <!doctype html>
 <html lang="en">
@@ -81,6 +85,7 @@ include_once '../../Includes/header.php';
         </div>
         <form id="patientForm" method="POST">
             <!-- metingen -->
+            <?php echo '<input type="hidden" id="shown" value="'.$asisstent_bool.'">'; ?>
             <label for="Hartslag">Hartslag:</label>
             <input type="number" id="hartslag" name="hartslag" placeholder="slagen per minuut" required min="0" max="200"> <!-- o tot 200 -->
 
@@ -140,73 +145,154 @@ include_once '../../Includes/header.php';
 
     </div>
     <script>
-        const submitButton = document.getElementById('submitButton');
-        const hartslag = document.getElementById('hartslag');
-        const ademhaling = document.getElementById('ademhaling');
-        const bloeddruk = document.getElementById('bloeddruk');
-        const bloeddruk2 = document.getElementById('bloeddruk2');
-        const temperatuur = document.getElementById('temperatuur');
-        const vochtinname = document.getElementById('vochtinname');
-        const uitscheidingurine = document.getElementById('uitscheidingurine');
 
-        hartslag.addEventListener('input', hartslagUpdate);
-        ademhaling.addEventListener('input', ademHalingUpdate);
-        bloeddruk.addEventListener('input', bloeddrukUpdate);
-        bloeddruk2.addEventListener('input', bloeddruk2Update);
-        temperatuur.addEventListener('input', temperatuurUpdate);
-        vochtinname.addEventListener('input', vochtinnameUpdate);
-        uitscheidingurine.addEventListener('input', uitscheidingurineUpdate);
+        const shown = document.getElementById("shown");
 
-        function hartslagUpdate() {
-            if (hartslag.value < 0 || hartslag.value > 200) {
-                hartslag.style.border = '5px solid red';
-            }else {
-                hartslag.style.border = '1px solid black';
-            }
-        }
+        if (shown.value === "1") {
+            const hartslag = document.getElementById('hartslag');
+            const ademhaling = document.getElementById('ademhaling');
+            const bloeddruk = document.getElementById('bloeddruk');
+            const bloeddruk2 = document.getElementById('bloeddruk2');
+            const temperatuur = document.getElementById('temperatuur');
+            const vochtinname = document.getElementById('vochtinname');
+            const uitscheiding = document.getElementById('uitscheiding');
+            const uitscheiding2 = document.getElementById('uitscheiding2');
+            const uitscheidingplas = document.getElementById('uitscheidingplas');
+            const pijnschaal = document.getElementById('pijnschaal');
 
-        function ademHalingUpdate() {
-            if (ademhaling.value < 0 || ademhaling.value > 80) {
-                ademhaling.style.border = '5px solid red';
-            }else {
-                ademhaling.style.border = '1px solid black';
+
+            hartslag.addEventListener('input', hartslagUpdate);
+            ademhaling.addEventListener('input', ademHalingUpdate);
+            bloeddruk.addEventListener('input', bloeddrukUpdate);
+            bloeddruk2.addEventListener('input', bloeddruk2Update);
+            temperatuur.addEventListener('input', temperatuurUpdate);
+            vochtinname.addEventListener('input', vochtinnameUpdate);
+            uitscheiding.addEventListener('input', uitscheidingUpdate);
+            uitscheiding2.addEventListener('input', uitscheiding2Update);
+            uitscheidingplas.addEventListener('input', uitscheidingplasUpdate);
+            pijnschaal.addEventListener('input', pijnschaalUpdate);
+
+            function hartslagUpdate() {
+                if (hartslag) {
+                    if (hartslag.value < 0 || hartslag.value > 200) {
+                        hartslag.style.border = '5px solid red';
+                    } else {
+                        hartslag.style.border = '1px solid black';
+                    }
+                } else {
+                    console.log("error");
+                }
             }
-        }
-        function bloeddrukUpdate() {
-            if (bloeddruk.value < 0 || bloeddruk.value > 140) {
-                bloeddruk.style.border = '5px solid red';
-            }else {
-                bloeddruk.style.border = '1px solid black';
+
+            function ademHalingUpdate() {
+                if (ademhaling) {
+                    if (ademhaling.value < 0 || ademhaling.value > 80) {
+                        ademhaling.style.border = '5px solid red';
+                    } else {
+                        ademhaling.style.border = '1px solid black';
+                    }
+                } else {
+                    console.log('error');
+                }
             }
-        }
-        function bloeddruk2Update() {
-            if (bloeddruk2.value < 0 || bloeddruk2.value > 140) {
-                bloeddruk2.style.border = '5px solid red';
-            }else {
-                bloeddruk2.style.border = '1px solid black';
+
+            function bloeddrukUpdate() {
+                if (bloeddruk) {
+                    if (bloeddruk.value < 0 || bloeddruk.value > 140) {
+                        bloeddruk.style.border = '5px solid red';
+                    } else {
+                        bloeddruk.style.border = '1px solid black';
+                    }
+                } else {
+                    console.log('error');
+                }
             }
-        }
-        function temperatuurUpdate() {
-            if (temperatuur.value < 34 || temperatuur.value > 42) {
-                temperatuur.style.border = '5px solid red';
-            }else {
-                temperatuur.style.border = '1px solid black';
+
+            function bloeddruk2Update() {
+                if (bloeddruk2) {
+                    if (bloeddruk2.value < 0 || bloeddruk2.value > 140) {
+                        bloeddruk2.style.border = '5px solid red';
+                    } else {
+                        bloeddruk2.style.border = '1px solid black';
+                    }
+                } else {
+                    console.log('error');
+                }
             }
-        }
-        function vochtinnameUpdate() {
-            if (vochtinname.value < 0 || vochtinname.value > 5000) {
-                vochtinname.style.border = '5px solid red';
-            }else {
-                vochtinname.style.border = '1px solid black';
+
+            function temperatuurUpdate() {
+                if (temperatuur) {
+                    if (temperatuur.value < 34 || temperatuur.value > 42) {
+                        temperatuur.style.border = '5px solid red';
+                    } else {
+                        temperatuur.style.border = '1px solid black';
+                    }
+                } else {
+                    console.log('error');
+                }
             }
-        }
-        function uitscheidingurineUpdate() {
-            if (!uitscheidingurine.value) {
-                uitscheidingurine.style.border = '5px solid red';
-            }else {
-                uitscheidingurine.style.border = '1px solid black';
+
+            function vochtinnameUpdate() {
+                if (vochtinname) {
+                    if (vochtinname.value < 0 || vochtinname.value > 5000) {
+                        vochtinname.style.border = '5px solid red';
+                    } else {
+                        vochtinname.style.border = '1px solid black';
+                    }
+                } else {
+                    console.log('error');
+                }
+            }
+
+            function uitscheidingUpdate() {
+                if (uitscheiding) {
+                    if (!uitscheiding.value) {
+                        uitscheiding.style.border = '5px solid red';
+                    } else {
+                        uitscheiding.style.border = '1px solid black';
+                    }
+                } else {
+                    console.log('error');
+                }
+            }
+
+            function uitscheiding2Update() {
+                if (uitscheiding2) {
+                    if (uitscheiding2.value < 1 || uitscheiding2.value > 7) {
+                        uitscheiding2.style.border = '5px solid red';
+                    } else {
+                        uitscheiding2.style.border = '1px solid black';
+                    }
+                } else {
+                    console.log('error');
+                }
+            }
+
+            function uitscheidingplasUpdate() {
+                if (uitscheidingplas) {
+                    if (!uitscheidingplas.value) {
+                        uitscheidingplas.style.border = '5px solid red';
+                    } else {
+                        uitscheidingplas.style.border = '1px solid black';
+                    }
+                } else {
+                    console.log('error');
+                }
+            }
+
+            function pijnschaalUpdate() {
+                if (pijnschaal) {
+                    if (pijnschaal.value < 0 || pijnschaal.value > 10) {
+                        pijnschaal.style.border = '5px solid red';
+                    } else {
+                        pijnschaal.style.border = '1px solid black';
+                    }
+                } else {
+                    console.log('error');
+                }
             }
         }
     </script>
+
 </body>
 </html>
