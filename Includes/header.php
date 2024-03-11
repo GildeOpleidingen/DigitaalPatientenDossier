@@ -2,6 +2,7 @@
 if (!isset($_SESSION['loggedin_id'])) {
     header("Location: ../index.php");
 }
+
 $id = $_SESSION['loggedin_id'];
 
 $result = DatabaseConnection::getConn()->prepare("SELECT naam, foto FROM medewerker WHERE id = ?");

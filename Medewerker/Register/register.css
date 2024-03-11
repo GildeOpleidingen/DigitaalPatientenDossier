@@ -25,15 +25,6 @@
     padding: 20px;
 }
 
-.pages{
-    padding: 10px;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 20px;
-    color: white;
-    background-color: #DD0069;
-}
-
 .form{
     height: 100%;
     width: 100%;
@@ -42,111 +33,7 @@
     overflow: auto;
 }
 
-.questionnaire{
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px;
-    color: #00365E;
+.error {
+    color:red;
+    text-align: center;
 }
-
-.question{
-    display: flex;
-    justify-content: space-between;
-    gap: 50px;
-    padding: 10px;
-}
-
-.question:hover{
-    background-color: rgb(226, 223, 223);
-    border-radius: 5px;
-}
-
-.questions, .results{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-}
-
-input[type="text"] {
-    height: 0px;
-    padding: 10px;
-    border: 2px solid #00365E;
-    border-radius: 3px;
-} 
-
-input[type="text"] {
-    height: 0px;
-    padding: 10px;
-    border: 2px solid #00365E;
-    border-radius: 3px;
-} 
-
-#checkfield {
-    display: none;
-    width: 100%;
-}
-
-textarea{
-    width: 300px;
-    padding: 2px;
-    overflow: hidden;
-    resize: vertical;
-    border: 2px solid #00365E;
-    border-radius: 3px;
-}
-
-#radio:checked ~ #checkfield {
-    display: block;
-}
-
-input[type = "radio"] {
-    cursor: pointer;
-}
-
-.question-answer{
-    display: flex;
-    gap: 5px;
-    align-items: center;
-
-}
-
-.checkboxes{
-    display: flex;
-    gap: 20px;
-}
-
-.observation{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-.observe{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.submit{
-    width: 100%;
-    gap: 10px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.submit button {
-    border: 0px;
-    border-radius: 3px;
-    padding: 5px;
-    height: 40px;
-    width: 100px;
-    background-color: #00365E;
-    color: white;
-    cursor: pointer;
-}
-
