@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 include '../../Database/DatabaseConnection.php';
@@ -8,20 +7,134 @@ $antwoorden = getPatternAnswers($_SESSION['clientId'], 3);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
+$medewerkerId = $_SESSION['loggedin_id'];
+
 if (isset($_REQUEST['navbutton'])) {
-    //TODO: hier actie om data op te slaan in database.
-    switch($_REQUEST['navbutton']) {
+    $ontlasting_probleem = $_POST['ontlasting_probleem'];
+    $op_welke = $_POST['op_welke'];
+    $op_preventie = ($_POST['op_preventie']);
+    $op_medicijnen = $_POST['op_medicijnen'];
+    $op_medicijnen_welke = $_POST['op_medicijnen_welke'];
+    $urineer_probleem = $_POST['urineer_probleem'];
+    $up_incontinentie = $_POST['up_incontinentie'];
+    $up_incontinentie_behandeling = $_POST['up_incontinentie_behandeling'];
+    $up_incontinentie_behandeling_welke = $_POST['up_incontinentie_behandeling_welke'];
+    $transpiratie = $_POST['transpiratie'];
+    $transpiratie_welke = $_POST['transpiratie_welke'];
+
+// array van checkboxes van observatie tab
+    $observatie = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']));
+
+    $observatie = convertBoolArrayToString($observatie);
+
+    $result = DatabaseConnection::getConn()->prepare("
+                    SELECT vl.id
+                    from vragenlijst vl
+                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
+                    where verzorgerregel.clientid = ?");
+    $result->bind_param("i", $_SESSION['clientId']);
+    $result->execute();
+    $result = $result->get_result()->fetch_assoc();
+
+    if ($result != null){
+        $vragenlijstId = $result['id'];
+    } else {
+        $sql2 = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
+            VALUES ((SELECT id
+            FROM verzorgerregel
+            WHERE clientid = ?
+            AND medewerkerid = ?))");
+        $sql2->bind_param("ii", $_SESSION['clientId'] ,$medewerkerId);
+        $sql2->execute();
+        $sql2 = $sql2->get_result();
+
+        $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
+                    from vragenlijst vl
+                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
+                    where verzorgerregel.clientid = ?");
+        $result->bind_param("i", $_SESSION['clientId']);
+        $result->execute();
+        $result = $result->get_result()->fetch_assoc();
+
+        $vragenlijstId=$result['id'];
+    }
+
+    // kijken of patroon02 bestaat door te kijken naar vragenlijst id
+    $result = DatabaseConnection::getConn()->prepare("
+                    SELECT p.id
+                    FROM patroon03uitscheiding p
+                    WHERE p.vragenlijstid =  ?");
+    $result->bind_param("i", $vragenlijstId);
+    $result->execute();
+    $result = $result->get_result()->fetch_assoc();
+
+    if ($result != null) {
+        //update
+        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon03uitscheiding` SET
+        `ontlasting_probleem`='$ontlasting_probleem',
+        `op_welke`='$op_welke',
+        `op_preventie`='$op_preventie',
+        `op_medicijnen`='$op_medicijnen',
+        `op_medicijnen_welke`='$op_medicijnen_welke',
+        `urineer_probleem`= '$urineer_probleem',
+        `up_incontinentie`='$up_incontinentie',
+        `up_incontinentie_behandeling`='$up_incontinentie_behandeling',
+        `up_incontinentie_behandeling_welke`='$up_incontinentie_behandeling_welke',
+        `transpiratie`='$transpiratie',
+        `transpiratie_welke`='$transpiratie_welke',
+        `observatie`='$observatie'
+           WHERE `vragenlijstid`=?");
+        $result1->bind_param("i", $vragenlijstId);
+        $result1->execute();
+        $result1 = $result1->get_result();
+
+    }else{
+        //hier insert je alle data in patroon02
+
+        $result2 = DatabaseConnection::getConn()->prepare( "INSERT INTO `patroon03uitscheiding`(
+                `vragenlijstid`,
+                `ontlasting_probleem`,
+                `op_welke`,
+                `op_preventie`,
+                `op_medicijnen`,
+                `op_medicijnen_welke`,
+                `urineer_probleem`,
+                `up_incontinentie`,
+                `up_incontinentie_behandeling`,
+                `up_incontinentie_behandeling_welke`,
+                `transpiratie`,
+                `transpiratie_welke`,
+                `observatie`)
+            VALUES (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?)");
+        $result2->bind_param("iissisiiisiss", $vragenlijstId, $ontlasting_probleem, $op_welke, $op_preventie, $op_medicijnen, $op_medicijnen_welke, $urineer_probleem, $up_incontinentie, $up_incontinentie_behandeling, $up_incontinentie_behandeling_welke, $transpiratie, $transpiratie_welke, $observatie);
+        $result2->execute();
+        $result2 = $result2->get_result();
+
+    }
+    switch ($_REQUEST['navbutton']) {
         case 'next': //action for next here
             header('Location: patroon04.php');
             break;
-    
+
         case 'prev': //action for previous here
             header('Location: patroon02.php');
             break;
     }
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +170,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>- Wat doet u om deze problemen te bestrijden?</p><textarea  rows="1" cols="25" type="text" name="ontlasting_probleem_oplossing"><?= $antwoorden['op_preventie'] ?></textarea></div>
+                        <div class="question"><p>- Wat doet u om deze problemen te bestrijden?</p><textarea  rows="1" cols="25" type="text" name="op_preventie"><?= $antwoorden['op_preventie'] ?></textarea></div>
                         <div class="question"><p>- Gebruikt u iets om uw stoelgang te reguleren?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
@@ -100,7 +213,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="up_incontinentie_behandeling" <?= $antwoorden['up_incontinentie_behandeling'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="up_incontinentie_behandeling"><?= $antwoorden['up_incontinentie_behandeling_welke'] ?></textarea>
+                                    <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="up_incontinentie_behandeling_welke"><?= $antwoorden['up_incontinentie_behandeling_welke'] ?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="up_incontinentie_behandeling" <?= !$antwoorden['up_incontinentie_behandeling'] ? "checked" : "" ?>>
