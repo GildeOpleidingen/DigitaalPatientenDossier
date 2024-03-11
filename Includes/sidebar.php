@@ -108,6 +108,7 @@
 <div class="sidebar">
     <?php
     include_once '../../Database/DatabaseConnection.php';
+    include_once '../../Functions/ClientFunctions.php';
     $id = $_SESSION['clientId'];
 
     $row1 = getClientById($id);

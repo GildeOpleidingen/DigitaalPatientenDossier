@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once '../../Database/DatabaseConnection.php';
+include_once '../../Functions/ClientFunctions.php';
 
 $clientId = $_SESSION['clientId'];
 if (!isset($clientId)) {
