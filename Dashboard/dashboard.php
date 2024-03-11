@@ -1,14 +1,13 @@
 <?php
     session_start();
     include_once '../Database/DatabaseConnection.php';
-    $id = $_SESSION['loggedin_id'];
-
-    if ($id == null) {
+    $medewerkerId = $_SESSION['loggedin_id'];
+    if ($medewerkerId == null) {
         header("Location: ../index.php");
     }
 
     $result = DatabaseConnection::getConn()->prepare("SELECT clientid FROM verzorgerregel WHERE medewerkerid = ?");
-    $result->bind_param("i", $id);
+    $result->bind_param("i", $medewerkerId);
     $result->execute();
     $links = $result->get_result()->fetch_all();
     ?>
