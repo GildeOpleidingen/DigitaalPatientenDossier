@@ -2,7 +2,6 @@
 session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/ClientFunctions.php';
-// $id = $_GET['id'];
 
 $patroonTypes = getPatternTypes();
 

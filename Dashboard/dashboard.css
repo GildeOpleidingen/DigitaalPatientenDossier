@@ -22,6 +22,7 @@ header {
     width: 100%;
     background-color: white;
     z-index: 0;
+    border-radius: 25px;
 }
 
 .user {
@@ -34,6 +35,7 @@ header {
     width: 15em;
     border-radius: 25px;
     text-align: center;
+    margin: 10px;
 }
 
 .username {
@@ -48,3 +50,13 @@ header {
     left: 3.5em;
     border-radius: 10px;
 }
+
+.content{
+    height: 100%;
+    width: 100%;
+    background-color: #00365E;
+    padding: 20px;
+    padding-top: 100px;
+}
+
+
