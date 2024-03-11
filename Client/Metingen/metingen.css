@@ -33,6 +33,23 @@
     cursor: pointer;
 }
 
+.btns{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.btns button{
+    padding: 15px;
+    background-color: #DD0069;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 0;
+    cursor: pointer;
+}
+
 form{
     background-color: white;
     padding: 20px;
@@ -43,7 +60,10 @@ body {
     font-family: Arial, sans-serif;
 }
 form {
-    top: 10%;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    overflow: auto;
 }
 
 label {
@@ -87,6 +107,38 @@ input, select {
     cursor: pointer;
 }
 
+<<<<<<< HEAD
 button:hover {
     background-color: #45a049;
 }
+=======
+.invullen {
+    text-align: right;
+}
+
+.invullen button {
+    border: 0px;
+    border-radius: 3px;
+    padding: 5px;
+    height: 40px;
+    width: 100px;
+    background-color: #00365E;
+    color: white;
+    cursor: pointer;
+}
+
+.tabel table {
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    border-collapse: collapse;
+}
+
+.tabel table, th, td {
+    border: 1px solid black;
+    padding: 5px;
+    background-color: white;
+}
+
+
+>>>>>>> main

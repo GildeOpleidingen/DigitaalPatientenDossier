@@ -1,21 +1,22 @@
 <?php
 session_start();
 include_once '../../Database/DatabaseConnection.php';
+include_once '../../Functions/ClientFunctions.php';
 
-if(!isset($_GET['id'])) {
-    header("Location: ../client.php");
+$clientId = $_GET['id'];
+if (!isset($clientId)) {
+    header("Location: ../../index.php");
 }
 
-$id = $_GET['id'];
-$_SESSION['clientId'] = $_GET['id'];
+$_SESSION['clientId'] = $clientId;
 
 $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
+$client->bind_param("i", $clientId);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
 
 $clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
-$clientRelations->bind_param("i", $id);
+$clientRelations->bind_param("i", $clientId);
 $clientRelations->execute();
 $clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -38,72 +39,58 @@ foreach ($clientRelations as $relation) {
 </head>
 <body>
 <div class="main">
-        <?php
-        include '../../Includes/header.php';
-        ?>
+    <?php
+    include '../../Includes/header.php';
+    ?>
 
-        <?php
-        include '../../Includes/sidebar.php';
-        ?>
+    <?php
+    include '../../Includes/sidebar.php';
+    ?>
 
-        <div class="content">
-                <div class="overzicht">
-                    <div class="overzicht-content">
-                        <div class="text">
-                            <strong>Geslacht</strong>
-                            <p><?= $client['geslacht'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Geboortedatum</strong>
-                            <p><?= date_create($client['geboortedatum'])->format('d-m-Y') ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Adres</strong>
-                            <p><?= $client['adres'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Postcode</strong>
-                            <p><?= $client['postcode'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Woonplaats</strong>
-                            <p><?= $client['woonplaats'] ?></p>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="overzicht-content">
-                        <div class="text">
-                            <strong>Telefoonnummer</strong>
-                            <p><?= $client['telefoonnummer'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>E-mail</strong>
-                            <p><?= $client['email'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Afdeling</strong>
-                            <p><?= $client['afdeling'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Burgelijke staat</strong>
-                            <p><?= $client['burgelijkestaat'] ?></p>
-                        </div>
-                        <div class="text">
-                            <strong>Nationaliteit</strong>
-                            <p><?= $client['nationaliteit'] ?></p>
-                        </div>
-                        <div class="text">
-                            <a href="verzorgers.php?id=<?= $_GET['id']?>">
-                                <strong>Verzorger(s)</strong>
-                            </a>
-                            <?php foreach ($verzorgers as $verzorger) { ?>
-                                <p><?= $verzorger['naam'] ?></p>
-                            <?php } ?>
-                        </div>
-                    </div>
-                </div>
+    <div class="content">
+        <div class="content-2">
+            <div id="episodes" class="card">
+                <strong class="header">Episodes</strong>
+                <p class="text">Geen Episodes</p>
             </div>
-    </div>
+            <div id="opnamedatum" class="card">
+                <strong class="header">Opgenomen op</strong>
+                <p class="text"><?php echo getAdmissionDateByClientId($id); ?></p>
+            </div>
+            <div id="medischevoorgeschiedenis" class="card">
+                <strong class="header">Medische voorgeschiedenis</strong>
+                <p class="text">
+                    <?php $mv = getMedischOverzichtByClientId($id)['medischevoorgeschiedenis'];
+                    if ($mv) {
+                        echo $mv;
+                    } else {
+                        echo "Geen medische voorgeschiedenis ingevuld";
+                    } ?>
+                </p>
+            </div>
+            <div id="allergien" class="card">
+                <strong class="header">Allergieën</strong>
+                <p class="text">
+                    <?php $allergieen = getMedischOverzichtByClientId($id)['alergieen'];
+                    if ($allergieen) {
+                        echo $allergieen;
+                    } else {
+                        echo "Geen allergieën ingevuld";
+                    } ?>
+                </p>
+            </div>
+            <div id="medicijnen" class="card">
+                <strong class="header">Medicatie</strong>
+                <p class="text">
+                    <?php $medicatie = getMedischOverzichtByClientId($id)['medicatie'];
+                    if ($medicatie) {
+                        echo $medicatie;
+                    } else {
+                        echo "Geen medicatie ingevuld";
+                    } ?>
+                </p>
+            </div>
+        </div>
 
 </body>
 </html>

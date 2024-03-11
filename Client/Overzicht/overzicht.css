@@ -67,3 +67,34 @@ strong {
     font-size: 20px;
     color: #00365E;
 }
+
+.card{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    margin: 10px;
+    border-radius: 10px;
+
+}
+
+.card>.header{
+    width: 100%;
+    padding: 5px;
+    border-radius: 10px 10px 0px 0px;
+    color: #00365E;
+}
+
+.card>.text{
+    width: 100%;
+    padding: 5px;
+}
+
+
+.content-2{
+
+    height: 100%;
+    width: 100%;
+    background-color: #F3F4F8;
+    padding: 20px;
+border-radius: 25px
+  }
