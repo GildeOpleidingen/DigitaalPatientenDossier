@@ -34,7 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pijnschaal = $_POST['pijnschaal'];
     $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
 
-    $verzorgerregelid = DatabaseConnection::getConn()->query("SELECT id FROM verzorgerregel WHERE medewerkerid = $clientId")->fetch_array()[0];
+    $verzorgerregelid = DatabaseConnection::getConn()->prepare("SELECT id FROM verzorgerregel WHERE medewerkerid = ?");
+    $verzorgerregelid->bind_param("i", $_SESSION['loggedin_id']);
+    $verzorgerregelid->execute();
+    $verzorgerregelid = $verzorgerregelid->get_result()->fetch_array()[0];
     $time = date("Y-m-d H:i:s");
 
     $meting = DatabaseConnection::getConn()->prepare("INSERT INTO meting (verzorgerregelid, datumtijd, hartslag, ademhaling, bloeddruklaag, bloeddrukhoog, temperatuur, vochtinname, pijn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");

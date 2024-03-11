@@ -8,7 +8,7 @@ if (!isset($clientId)) {
     header("Location: ../../index.php");
 }
 
-$_SESSION['clientId'] = $_GET['id'];
+$_SESSION['clientId'] = $clientId;
 
 $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
 $client->bind_param("i", $clientId);

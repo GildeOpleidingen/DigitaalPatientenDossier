@@ -4,11 +4,8 @@ include '../../Database/DatabaseConnection.php';
 include '../../Functions/MetingenFunctions.php';
 
 $clientId = $_SESSION['clientId'];
-if (!isset($clientId)) {
-    header("Location: ../../index.php");
-}
 
-if (!isset($_SESSION['loggedin_id'])) {
+if (!isset($clientId) || !isset($_SESSION['loggedin_id'])) {
     header("Location: ../../index.php");
 }
 
