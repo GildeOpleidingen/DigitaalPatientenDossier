@@ -12,18 +12,21 @@ if (isset($_POST['submit'])) {
     $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $email = $_POST['email'];
     $name = $_POST['name'];
-
+    $rol = $_POST['rol'];
+    $klas = $_POST['klas'];
+    $telefoonnummer = $_POST['telefoonnummer'];
+    
     // Check of de medewerker data al bestaat
     $result = DatabaseConnection::getConn()->query("SELECT `id`, `email`, `naam` FROM `medewerker`");
     $medewerkers = $result->fetch_all(MYSQLI_ASSOC);
-
+    
     foreach ($medewerkers as $medewerker) {
         if ($medewerker['email'] == $email || $medewerker['naam'] == $name) {
             $error = "Medewerker bestaat al!";
         }
     }
 
-    if (!isset($error)) {
+    if ($error == "") {
         if ($_FILES != null) {
             $file = $_FILES["foto"]["tmp_name"] ?? "";
     
@@ -43,9 +46,9 @@ if (isset($_POST['submit'])) {
                 }
             }
         }
-        echo "Medewerker toegevoegd";
-        $result = DatabaseConnection::getConn()->prepare("INSERT INTO medewerker (email, foto, naam, wachtwoord) VALUES (?, ?, ?, ?)");
-        $result->bind_param("ssss", $foto ?? "", $email, $name, $hashedPassword);
+        
+        $result = DatabaseConnection::getConn()->prepare("INSERT INTO `medewerker` (naam, klas, foto, email, telefoonnummer, wachtwoord, rol) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $result->bind_param("sssssss", $name, $klas, $foto, $email, $telefoonnummer, $hashedPassword, $rol);
         $result->execute();
     }
 }
@@ -69,7 +72,7 @@ if (isset($_POST['submit'])) {
     <div class="main">
         <div class="content">
             <div class="form-content">
-                <form method="post" class="registration-content">
+                <form method="post" class="registration-content" enctype="multipart/form-data">
                     <h1 class="error" id="status"><?= $error ?></h1>
                     <h1>Registreer</h1>
                     <div class="flex-column">
@@ -78,8 +81,15 @@ if (isset($_POST['submit'])) {
                             <img id="image" class="img-preview">
                         </label>
                         <input type="text" name="name" placeholder="Naam" required>
+                        <input type="text" name="klas" placeholder="Klas" required>
+                        <input type="text" name="telefoonnummer" placeholder="Telefoonnummer">
                         <input type="email" name="email" placeholder="E-mail" required>
                         <input type="password" name="password" placeholder="Wachtwoord" required>
+                        <select name="rol" required>
+                            <option value="medewerker">Medewerker</option>
+                            <option value="beheerder">Beheerder</option>
+                        </select>
+
                         <input type="submit" name="submit" value="Registreer">
                     </div>
                 </form>
@@ -109,10 +119,6 @@ if (isset($_POST['submit'])) {
                 });
                 reader.readAsDataURL(file);
             });
-        }
-
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
         }
     </script>
 </body>
