@@ -2,21 +2,17 @@
 session_start();
 require_once('../../Includes/auth.php');
 include_once '../../Database/DatabaseConnection.php';
+include_once '../../Functions/ClientFunctions.php';
 
-if (!isset($_GET['id'])) {
-    header("Location: ../client.php");
+$clientId = $_SESSION['clientId'];
+if (!isset($clientId)) {
+    header("Location: ../../index.php");
 }
 
-$id = $_GET['id'];
-$_SESSION['clientId'] = $_GET['id'];
-
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
+$client = getClientById($clientId);
 
 $clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
-$clientRelations->bind_param("i", $id);
+$clientRelations->bind_param("i", $clientId);
 $clientRelations->execute();
 $clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
 

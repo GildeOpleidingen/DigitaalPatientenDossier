@@ -4,8 +4,11 @@ require_once('../../Includes/auth.php');
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/MetingenFunctions.php';
 
-$id = $_GET['id'];
-$_SESSION['clientId'] = $_GET['id'];
+$clientId = $_SESSION['clientId'];
+
+if (!isset($clientId) || !isset($_SESSION['loggedin_id'])) {
+    header("Location: ../../index.php");
+}
 
 $hartslag = [];
 $ademhaling = [];
@@ -16,14 +19,6 @@ $pijn = [];
 $bloeddrukhoog = [];
 $samenstelling = [];
 $hoeveelheid = [];
-
-if (!isset($id)) {
-    header("Location: ../../index.php");
-}
-
-if (!isset($_SESSION['loggedin_id'])) {
-    header("Location: ../../index.php");
-}
 
 $samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
 
@@ -93,8 +88,8 @@ include_once '../../Includes/header.php';
     <div class="main2">
         <div class="form-content">
             <div class="btns">
-                <?php echo '<a href="metingeninvullen.php?id=' . $id . '"><button type="button" class="MetingenInvul">Metingen invullen</button></a>'; ?>
-                <?php echo '<a href="metingen.php?id=' . $id . '"><button type="button" class="MetingenTabel">Metingen bekijken</button></a>'; ?>
+                <?php echo '<a href="metingeninvullen.php?id=' . $clientId . '"><button type="button" class="MetingenInvul">Metingen invullen</button></a>'; ?>
+                <?php echo '<a href="metingen.php?id=' . $clientId . '"><button type="button" class="MetingenTabel">Metingen bekijken</button></a>'; ?>
             </div>
             <form id="patientForm">
                 <div class="tabel">

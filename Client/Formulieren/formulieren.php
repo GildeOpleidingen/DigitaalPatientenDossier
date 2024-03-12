@@ -2,13 +2,14 @@
 session_start();
 require_once('../../Includes/auth.php');
 include '../../Database/DatabaseConnection.php';
+include_once '../../Functions/ClientFunctions.php';
 
-$id = $_GET['id'];
+$clientId = $_SESSION['clientId'];
+if (!isset($clientId)) {
+    header("Location: ../../index.php");
+}
 
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
+$client = getClientById($clientId);
 
 if ($client == null) {
     header("Location: ../../index.php");

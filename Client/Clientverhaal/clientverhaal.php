@@ -3,20 +3,17 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/ClientFunctions.php';
 
-if (!isset($_GET['id']) || !checkIfClientExistsById($_GET['id']) || !getMedischOverzichtByClientId($_GET['id'])) {
+$clientId = $_SESSION['clientId'];
+if (!isset($clientId) || !checkIfClientExistsById($clientId) || !getMedischOverzichtByClientId($clientId)) {
     header("Location: ../../index.php");
     exit;
-} else {
-    if (!isset($_SESSION['clientId'])) {
-        $_SESSION['clientId'] = $_GET['id'];
-    }
-}
+} 
 
 if (isset($_SESSION['client'])) {
     unset($_SESSION['client']);
 }
 
-$client = $_SESSION['client'] = getClientById($_GET['id']);
+$client = $_SESSION['client'] = getClientById($clientId);
 if (checkIfClientStoryExistsByClientId($client['id'])) {
     $clientStory = getClientStoryByClientId($client['id']);
 }
