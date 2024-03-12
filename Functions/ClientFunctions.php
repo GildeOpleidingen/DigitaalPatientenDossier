@@ -41,7 +41,7 @@ function getClientById($id): array {
     $result->bind_param("i", $id);
     $result->execute();
 
-    return (array) $result->get_result()->fetch_array();
+    return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
 }
 
 function getClientByName($name): array {
