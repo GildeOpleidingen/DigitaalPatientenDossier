@@ -37,3 +37,26 @@
     color:red;
     text-align: center;
 }
+
+.registration-content {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.img-preview {
+    max-width: 150px;
+    max-height: 150px;
+}
+
+.flex-column {
+    display:flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.label-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

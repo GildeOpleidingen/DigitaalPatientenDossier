@@ -24,9 +24,28 @@ if (isset($_POST['submit'])) {
     }
 
     if (!isset($error)) {
+        if ($_FILES != null) {
+            $file = $_FILES["foto"]["tmp_name"] ?? "";
+    
+            if (isset($file) && $file != "") {
+                $foto = file_get_contents($file);
+                $foto_size = getimagesize($file);
+    
+                if ($foto_size == FALSE) { // Als de foto geen foto is dan wordt $foto leeg gemaakt
+                    $foto = null;
+                    $_SESSION['error'] = "Er is geen foto geupload.";
+                }
+    
+                // Check of de foto niet groter is dan 16 mb omdat een mediumblob maximaal 16 mb kan zijn
+                if ($_FILES["foto"]["size"] > 16000000) {
+                    $foto = null;
+                    $_SESSION['error'] = "Het bestand is te groot, het bestand mag maximaal 16mb groot zijn.";
+                }
+            }
+        }
         echo "Medewerker toegevoegd";
-        $result = DatabaseConnection::getConn()->prepare("INSERT INTO medewerker (email, naam, wachtwoord) VALUES (?, ?, ?)");
-        $result->bind_param("sss", $email, $name, $hashedPassword);
+        $result = DatabaseConnection::getConn()->prepare("INSERT INTO medewerker (email, foto, naam, wachtwoord) VALUES (?, ?, ?, ?)");
+        $result->bind_param("ssss", $foto ?? "", $email, $name, $hashedPassword);
         $result->execute();
     }
 }
@@ -50,10 +69,14 @@ if (isset($_POST['submit'])) {
     <div class="main">
         <div class="content">
             <div class="form-content">
-                <form method="post">
-                    <h1 class="error"><?= $error ?></h1>
+                <form method="post" class="registration-content">
+                    <h1 class="error" id="status"><?= $error ?></h1>
                     <h1>Registreer</h1>
-                    <div>
+                    <div class="flex-column">
+                        <label class="label-image">
+                            <input type="file" id="file-selector" name="foto" accept="image/png, image/jpg, image/jpeg">
+                            <img id="image" class="img-preview">
+                        </label>
                         <input type="text" name="name" placeholder="Naam" required>
                         <input type="email" name="email" placeholder="E-mail" required>
                         <input type="password" name="password" placeholder="Wachtwoord" required>
@@ -64,6 +87,34 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
     </form>
+    <script>
+        const status = document.getElementById('status');
+        const output = document.getElementById('image');
+        if (window.FileList && window.File && window.FileReader) {
+            document.getElementById('file-selector').addEventListener('change', event => {
+                output.src = '';
+                status.textContent = '';
+                const file = event.target.files[0];
+                if (!file.type) {
+                    status.textContent = 'Het bestand die je probeert te gebruiken is geen .jpg, .jpeg of .png';
+                    return;
+                }
+                if (!file.type.match('image.*')) {
+                    status.textContent = 'Het bestand die je probeert te gebruiken is geen foto';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.addEventListener('load', event => {
+                    output.src = event.target.result;
+                });
+                reader.readAsDataURL(file);
+            });
+        }
+
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
 </body>
 
 </html>
