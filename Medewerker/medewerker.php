@@ -2,7 +2,7 @@
 session_start();
 include '../Database/DatabaseConnection.php';
 
-$items = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all();
+$items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +15,7 @@ $items = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefoo
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<?php
+    <?php
 include '../Includes/header.php';
 ?>
 
@@ -25,6 +25,7 @@ include '../Includes/header.php';
             <form action="medewerkeropzoeken.php" method="post">
                 <input type="text" placeholder="Search..." name="search">
                 <button type="submit"><i class="fa fa-search"></i></button>
+                <a href="Register/register.php" class="link-right">Voeg medewerker toe</a>
             </form>
             <table>
                 <tr>
@@ -36,10 +37,10 @@ include '../Includes/header.php';
                 <?php
                 foreach ($items as $row) {
                     echo "<tr>";
-                    echo "<td class='row1'>$row[0]</td>";
                     echo "<td class='row1'><a href=Overzicht/overzicht.php?id=$row[0]>$row[1]</a></td>";
                     echo "<td class='row1'>$row[2]</td>";
-                    echo "<td class='row1'>".$row[3]."</td>";
+                    echo "<td class='row1'>$row[3]</td>";
+                    echo "<td class='row1'>".$row[4]."</td>";
                     echo "</tr>";
                 }
                 ?>
