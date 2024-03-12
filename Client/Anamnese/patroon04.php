@@ -19,24 +19,25 @@ if (isset($_REQUEST['navbutton'])) {
     $verzorging = $_POST['verzorging'];
     $baden = $_POST['baden'];
     $toiletgang = $_POST['toiletgang'];
-    $uit_bed_komen = $_POST['winkelen'];
+    $uit_bed_komen = $_POST['uit_bed_komen'];
+    $winkelen = $_POST['winkelen'];
     $tijd_voor_uzelf_nodig = $_POST['tijd_voor_uzelf_nodig'];
     $tijd_voor_uzelf_nodig_blijktuit = $_POST['tijd_voor_uzelf_nodig_blijktuit'];
+    $dagelijkse_activiteiten = $_POST['dagelijkse_activiteiten'];
     $dagelijkse_gewoontes = $_POST['dagelijkse_gewoontes'];
     $dagelijkse_gewoontes_welke = $_POST['dagelijkse_gewoontes_welke'];
     $lichamelijke_beperking = $_POST['lichamelijke_beperking'];
     $lichamelijke_beperking_welke = $_POST['lichamelijke_beperking_welke'];
-    $vermoeitheids_klachten = $_POST['vermoeitheids_klachten'];
+    $vermoeidheids_klachten = $_POST['vermoeidheids_klachten'];
     $passiever = $_POST['passiever'];
     $passiever_blijktuit = $_POST['passiever_blijktuit'];
     $problemen_starten_dag = $_POST['problemen_starten_dag'];
-    $problemen_starten_dag_blijktuit = $_POST['problemen_starten_dag_blijktuit	'];
+    $problemen_starten_dag_blijktuit = $_POST['problemen_starten_dag_blijktuit'];
     $hobbys = $_POST['hobbys'];
     $hobbys_bestedingstijd = $_POST['hobbys_bestedingstijd'];
     $activiteiten_weggevallen = $_POST['activiteiten_weggevallen'];
     $activiteiten_weggevallen_welke = $_POST['activiteiten_weggevallen_welke'];
-    $observatie = $_POST['observatie'];
-// array van checkboxes van observatie tab
+    // array van checkboxes van observatie tab
     $observatie = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']), !empty($_POST['observatie11']));
 
     $observatie = convertBoolArrayToString($observatie);
@@ -85,17 +86,31 @@ if (isset($_REQUEST['navbutton'])) {
     if ($result != null) {
         //update
         $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon04activiteiten` SET
-        `ontlasting_probleem`='$ontlasting_probleem',
-        `op_welke`='$op_welke',
-        `op_preventie`='$op_preventie',
-        `op_medicijnen`='$op_medicijnen',
-        `op_medicijnen_welke`='$op_medicijnen_welke',
-        `urineer_probleem`= '$urineer_probleem',
-        `up_incontinentie`='$up_incontinentie',
-        `up_incontinentie_behandeling`='$up_incontinentie_behandeling',
-        `up_incontinentie_behandeling_welke`='$up_incontinentie_behandeling_welke',
-        `transpiratie`='$transpiratie',
-        `transpiratie_welke`='$transpiratie_welke',
+        `voeding`='$voeding',
+        `aankleden`='$aankleden',
+        `alg_mobiliteit`='$alg_mobiliteit',
+        `koken`='$koken',
+        `huishouden`='$huishouden',
+        `financien`= '$financien',
+        `verzorging`='$verzorging',
+        `baden`='$baden',
+        `toiletgang`='$toiletgang',
+        `uit_bed_komen`='$uit_bed_komen',
+        `winkelen`='$winkelen',
+        `tijd_voor_uzelf_nodig`='$tijd_voor_uzelf_nodig',
+        `tijd_voor_uzelf_nodig_blijktuit`='$tijd_voor_uzelf_nodig_blijktuit',
+        `dagelijkse_activiteiten`='$dagelijkse_activiteiten',
+        `dagelijkse_gewoontes`='$dagelijkse_gewoontes',
+        `dagelijkse_gewoontes_welke`='$dagelijkse_gewoontes_welke',
+        `vermoeidheids_klachten`='$vermoeidheids_klachten',
+        `passiever`= '$passiever',
+        `passiever_blijktuit`='$passiever_blijktuit',
+        `problemen_starten_dag`='$problemen_starten_dag',
+        `problemen_starten_dag_blijktuit`='$problemen_starten_dag_blijktuit',
+        `hobbys`='$hobbys',
+        `hobbys_bestedingstijd`='$hobbys_bestedingstijd',
+        `activiteiten_weggevallen`='$activiteiten_weggevallen',
+        `activiteiten_weggevallen_welke`='$activiteiten_weggevallen_welke',
         `observatie`='$observatie'
            WHERE `vragenlijstid`=?");
         $result1->bind_param("i", $vragenlijstId);
@@ -106,19 +121,35 @@ if (isset($_REQUEST['navbutton'])) {
         //hier insert je alle data in patroon02
 
         $result2 = DatabaseConnection::getConn()->prepare( "INSERT INTO `patroon04activiteiten`(
-                `vragenlijstid`,
-                `ontlasting_probleem`,
-                `op_welke`,
-                `op_preventie`,
-                `op_medicijnen`,
-                `op_medicijnen_welke`,
-                `urineer_probleem`,
-                `up_incontinentie`,
-                `up_incontinentie_behandeling`,
-                `up_incontinentie_behandeling_welke`,
-                `transpiratie`,
-                `transpiratie_welke`,
-                `observatie`)
+                    `vragenlijstid`,
+                    `voeding`,
+                    `aankleden`,
+                    `alg_mobiliteit`,
+                    `koken`,
+                    `huishouden`,
+                    `financien`,
+                    `verzorging`,
+                    `baden`,
+                    `toiletgang`,
+                    `uit_bed_komen`,
+                    `winkelen`,
+                    `tijd_voor_uzelf_nodig`,
+                    `tijd_voor_uzelf_nodig_blijktuit`,
+                    `dagelijkse_activiteiten`,
+                    `dagelijkse_gewoontes`,
+                    `dagelijkse_gewoontes_welke`,
+                    `lichamelijke_beperking`,
+                    `lichamelijke_beperking_welke`,
+                    `vermoeidheids_klachten`,
+                    `passiever`,
+                    `passiever_blijktuit`,
+                    `problemen_starten_dag`,
+                    `problemen_starten_dag_blijktuit`,
+                    `hobbys`,
+                    `hobbys_bestedingstijd`,
+                    `activiteiten_weggevallen`,
+                    `activiteiten_weggevallen_welke`,
+                    `observatie`)
             VALUES (
                     ?,
                     ?,
@@ -132,8 +163,24 @@ if (isset($_REQUEST['navbutton'])) {
                     ?,
                     ?,
                     ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
                     ?)");
-        $result2->bind_param("iissisiiisiss", $vragenlijstId, $ontlasting_probleem, $op_welke, $op_preventie, $op_medicijnen, $op_medicijnen_welke, $urineer_probleem, $up_incontinentie, $up_incontinentie_behandeling, $up_incontinentie_behandeling_welke, $transpiratie, $transpiratie_welke, $observatie);
+        $result2->bind_param("iiiiiiiiiiiiissisisisiisisiss", $vragenlijstId, $voeding, $aankleden, $alg_mobiliteit, $koken, $huishouden, $financien, $verzorging, $baden, $toiletgang, $uit_bed_komen, $winkelen, $tijd_voor_uzelf_nodig, $tijd_voor_uzelf_nodig_blijktuit, $dagelijkse_activiteiten, $dagelijkse_gewoontes, $dagelijkse_gewoontes_welke, $lichamelijke_beperking, $lichamelijke_beperking_welke, $vermoeidheids_klachten, $passiever, $passiever_blijktuit, $problemen_starten_dag, $problemen_starten_dag_blijktuit, $hobbys, $hobbys_bestedingstijd, $activiteiten_weggevallen, $activiteiten_weggevallen_welke, $observatie);
         $result2->execute();
         $result2 = $result2->get_result();
 
