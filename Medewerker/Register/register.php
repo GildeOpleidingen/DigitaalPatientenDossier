@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['loggedin_id']) || $_SESSION['rol'] != "beheerder") {
-    header("Location: ../index.php");
+    header("Location: ../../index.php");
 }
 
 include '../../Database/DatabaseConnection.php';
