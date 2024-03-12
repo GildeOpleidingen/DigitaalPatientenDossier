@@ -3,6 +3,7 @@ session_start();
 include '../../Database/DatabaseConnection.php';
 include_once '../../Functions/ClientFunctions.php';
 
+$medewerker_id = $_SESSION['loggedin_id'];
 $clientId = $_SESSION['clientId'];
 if (!isset($clientId)) {
     header("Location: ../../index.php");
