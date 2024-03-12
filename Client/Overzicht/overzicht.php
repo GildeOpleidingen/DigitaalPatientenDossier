@@ -10,10 +10,7 @@ if (!isset($clientId)) {
 
 $_SESSION['clientId'] = $clientId;
 
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $clientId);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
+$client = getClientById($clientId);
 
 $clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
 $clientRelations->bind_param("i", $clientId);

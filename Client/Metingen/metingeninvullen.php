@@ -1,16 +1,14 @@
 <?php
 session_start();
 include '../../Database/DatabaseConnection.php';
-$medewerker_id = $_SESSION['loggedin_id'];
+include_once '../../Functions/ClientFunctions.php';
+
 $clientId = $_SESSION['clientId'];
 if (!isset($clientId)) {
     header("Location: ../../index.php");
 }
 
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $clientId);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
+$client = getClientById($clientId);
 
 if ($client == null) {
     header("Location: ../../index.php");
