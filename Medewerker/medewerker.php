@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once('../Includes/auth.php');
+
 include '../Database/DatabaseConnection.php';
 
 $items = DatabaseConnection::getConn()->query("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all();

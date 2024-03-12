@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once('../../Includes/auth.php');
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/MetingenFunctions.php';
 
