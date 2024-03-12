@@ -1,21 +1,23 @@
-.main{
+.main {
     display: flex;
     flex-direction: row;
     height: 100vh;
     width: 100%;
 }
 
-.content{
+.content {
     height: 100%;
     width: 100%;
     background-color: #00365E;
     padding: 20px;
     padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.form-content{
-    height: 100%;
-    width: 100%;
+.form-content {
+    width: 60%;
     overflow: auto;
     display: flex;
     flex-direction: column;
@@ -23,9 +25,10 @@
     background-color: white;
     border-radius: 5px;
     padding: 20px;
+    margin:auto;
 }
 
-.form{
+.form {
     height: 100%;
     width: 100%;
     background-color: rgb(240, 240, 240);
@@ -34,12 +37,17 @@
 }
 
 .error {
-    color:red;
+    color: red;
+    text-align: center;
+}
+
+.success {
+    color: #4CAF50;
     text-align: center;
 }
 
 .registration-content {
-    display:flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
 }
@@ -50,13 +58,43 @@
 }
 
 .flex-column {
-    display:flex;
+    display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 100%;
+    height:100%;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    margin-top:5px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.submit {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: fit-content;
 }
 
 .label-image {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.registration-content label {
+    display:flex;
+    flex-direction: row;
+}
+
+.registration-content label p {
+    margin-right:5px;
 }

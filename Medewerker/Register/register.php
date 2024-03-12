@@ -7,6 +7,7 @@ if (!isset($_SESSION['loggedin_id']) || $_SESSION['rol'] != "beheerder") {
 
 include '../../Database/DatabaseConnection.php';
 $error = "";
+$success = "";
 
 if (isset($_POST['submit'])) {
     $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -15,6 +16,11 @@ if (isset($_POST['submit'])) {
     $rol = $_POST['rol'];
     $klas = $_POST['klas'];
     $telefoonnummer = $_POST['telefoonnummer'];
+
+    // Deze values zijn required en die mogen dus niet empty zijn
+    if(empty($email) || empty($name) || empty($rol) || empty($_POST['password']) || empty($klas)){
+        $error = "Vul alle velden in!";
+    }
     
     // Check of de medewerker data al bestaat
     $result = DatabaseConnection::getConn()->query("SELECT `id`, `email`, `naam` FROM `medewerker`");
@@ -50,6 +56,7 @@ if (isset($_POST['submit'])) {
         $result = DatabaseConnection::getConn()->prepare("INSERT INTO `medewerker` (naam, klas, foto, email, telefoonnummer, wachtwoord, rol) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $result->bind_param("sssssss", $name, $klas, $foto, $email, $telefoonnummer, $hashedPassword, $rol);
         $result->execute();
+        $success = "Medewerker toegevoegt!";
     }
 }
 
@@ -74,23 +81,31 @@ if (isset($_POST['submit'])) {
             <div class="form-content">
                 <form method="post" class="registration-content" enctype="multipart/form-data">
                     <h1 class="error" id="status"><?= $error ?></h1>
-                    <h1>Registreer</h1>
+                    <h1 class="success" id="status"><?= $success ?></h1>
+                    <h1>Voeg een nieuwe medewerker toe</h1>
                     <div class="flex-column">
+                        <label for="file-selector">Medewerkers foto</label>
                         <label class="label-image">
-                            <input type="file" id="file-selector" name="foto" accept="image/png, image/jpg, image/jpeg">
+                            <input type="file" id="file-selector" name="foto" accept="image/png, image/jpg, image/jpeg" placeholder="foto">
                             <img id="image" class="img-preview">
                         </label>
-                        <input type="text" name="name" placeholder="Naam" required>
-                        <input type="text" name="klas" placeholder="Klas" required>
-                        <input type="text" name="telefoonnummer" placeholder="Telefoonnummer">
-                        <input type="email" name="email" placeholder="E-mail" required>
-                        <input type="password" name="password" placeholder="Wachtwoord" required>
+                        <label for="name"><p style="color:red">*</p>Naam</label>
+                        <input type="text" id="name" name="name" placeholder="Naam" required>
+                        <label for="klas"><p style="color:red">*</p>Klas</label>
+                        <input type="text" id="klas" name="klas" placeholder="Klas" required>
+                        <label for="telefoonnummer">Telefoonnummer</label>
+                        <input type="text" id="telefoonnummer" name="telefoonnummer" placeholder="+31123456789">
+                        <label for="email"><p style="color:red">*</p>E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="E-mail" required>
+                        <label for="password"><p style="color:red">*</p>Wachtwoord</label>
+                        <input type="password" id="password" name="password" placeholder="Wachtwoord" required>
+                        <label for="rol"><p style="color:red">*</p>Rol</label>
                         <select name="rol" required>
                             <option value="medewerker">Medewerker</option>
                             <option value="beheerder">Beheerder</option>
                         </select>
 
-                        <input type="submit" name="submit" value="Registreer">
+                        <input class="submit" type="submit" name="submit" value="Voeg medewerker toe">
                     </div>
                 </form>
             </div>
