@@ -2,7 +2,6 @@
 session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/ClientFunctions.php';
-// $id = $_GET['id'];
 
 $patroonTypes = getPatternTypes();
 
@@ -54,15 +53,15 @@ if (isset($_GET['pt'])) {
                         <form class="form" method="POST">
                             <div class="question">
                                 <p>P</p>
-                                <textarea name="p"><?= $patroonType["P"] ?? "" ?></textarea>
+                                <input type="text" class="pes" name="p" value="<?= $patroonType["P"] ?? "" ?>">
                             </div>
                             <div class="question">
                                 <p>E</p>
-                                <textarea name="e"><?= $patroonType["E"] ?? "" ?></textarea>
+                                <input type="text" class="pes" name="e" value="<?= $patroonType["E"] ?? "" ?>">
                             </div>
                             <div class="question">
                                 <p>S</p>
-                                <textarea name="s"><?= $patroonType["S"] ?? "" ?></textarea>
+                                <input type="text" class="pes" name="s" value="<?= $patroonType["S"] ?? "" ?>">
                             </div>
                             <div class="question">
                                 <p>Doelen (SMART)</p>

@@ -1,36 +1,40 @@
 <?php
 session_start();
 include_once '../../Database/DatabaseConnection.php';
+include_once '../../Functions/ClientFunctions.php';
 
-if(!isset($_GET['id'])) {
-    header("Location: ../client.php");
+$clientId = $_SESSION['clientId'];
+if (!isset($clientId)) {
+    header("Location: ../../index.php");
 }
 
-$id = $_GET['id'];
-$_SESSION['clientId'] = $_GET['id'];
-
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
-
-if ($client == null) {
-    header("Location: ../client.php");
-}
+$client = getClientById($clientId);
 
 $clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
-$clientRelations->bind_param("i", $id);
+$clientRelations->bind_param("i", $clientId);
 $clientRelations->execute();
 $clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$verzorgerNamen = [];
+$contactpersonen = DatabaseConnection::getConn()->prepare("SELECT * FROM relatie WHERE clientid = ?");
+$contactpersonen->bind_param("i", $id);
+$contactpersonen->execute();
+$contactpersonen = $contactpersonen->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$medischoverzicht = DatabaseConnection::getConn()->prepare("SELECT * FROM medischoverzicht WHERE clientid = ?");
+$medischoverzicht->bind_param("i", $id);
+$medischoverzicht->execute();
+$medischoverzicht = $medischoverzicht->get_result()->fetch_assoc();
+
+$verzorgerArr = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");
+$verzorgerArr->execute();
+$verzorgerArr = $verzorgerArr->get_result()->fetch_all(MYSQLI_ASSOC);
+
 $verzorgers = [];
 foreach ($clientRelations as $relation) {
-    $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
-    $verzorger->bind_param("i", $relation['medewerkerid']);
-    $verzorger->execute();
-    $verzorger = $verzorger->get_result()->fetch_assoc();
-    array_push($verzorgers, $verzorger);
+    foreach ($verzorgerArr as $naam)
+        if ($relation['medewerkerid'] == $naam['id']) {
+            $verzorgers[] = $naam;
+        }
 }
 ?>
 <!DOCTYPE html>
@@ -41,69 +45,69 @@ foreach ($clientRelations as $relation) {
     <link rel="Stylesheet" href="patiëntgegevens.css">
     <title>Overzicht van <?= $client['naam'] ?></title>
 </head>
-    <body>
-        <div class="main">
-            <?php
-            include_once '../../Includes/header.php';
-            include_once '../../Includes/sidebar.php';
-            ?>
+<body>
+<div class="main">
+    <?php
+    include_once '../../Includes/header.php';
+    include_once '../../Includes/sidebar.php';
+    ?>
 
-        <div class="content">
-            <div class="overzicht">
-                <div class="overzicht-content">
-                    <div class="infotext">
-                        <strong>Geslacht:</strong>
-                        <p><?= $client['geslacht'] ?></p>
-                    </div>
-                    <div class="infotext">
-                        <strong>Geboortedatum:</strong>
-                        <p><?= date_create($client['geboortedatum'])->format('d-m-Y') ?></p>
-                    </div>
-                    <div class="infotext">
-                        <strong>Adres:</strong>
-                        <p><?= $client['adres'] ?></p>
-                    </div>
-                    <div class="infotext">
-                        <strong>Postcode:</strong>
-                        <p><?= $client['postcode'] ?></p>
-                    </div>
-                    <div class="infotext">
-                        <strong>Woonplaats:</strong>
-                        <p><?= $client['woonplaats'] ?></p>
-                    </div>
-                    <div class="infotext">
-                        <strong>Telefoonnummer:</strong>
-                        <p><?= $client['telefoonnummer'] ?></p>
-                    </div>
-                    <div class="infotext">
-                            <strong>E-mail:</strong>
-                            <p><?= $client['email'] ?></p>
-                        </div>
-                        <div class="infotext">
-                            <strong>Afdeling:</strong>
-                            <p><?= $client['afdeling'] ?></p>
-                        </div>
-                        <div class="infotext">
-                            <strong>Burgelijke staat:</strong>
-                            <p><?= $client['burgelijkestaat'] ?></p>
-                        </div>
-                        <div class="infotext">
-                            <strong>Nationaliteit:</strong>
-                            <p><?= $client['nationaliteit'] ?></p>
-                        </div>
-                        <div class="infotext">
-                            <a href="../Overzicht/verzorgers.php?id=<?= $_GET['id']?>">
-                                <strong>Verzorger(s):</strong>
-                            </a>
-                            <?php $i=0?>
-                            <?php foreach ($verzorgers as $key => $verzorger) { ?>
-                                <?php $verzorgerNamen[$i] = $verzorger['naam']; ?>
-                                <?php $i++?>
-                            <?php } ?>
-                            <p><?php echo join(", ",$verzorgerNamen); ?></p>
-                        </div>
+    <div class="content">
+        <div class="overzicht">
+            <div class="overzicht-content">
+                <div class="infotext">
+                    <strong>Geslacht:</strong>
+                    <p><?= $client['geslacht'] ?></p>
+                </div>
+                <div class="infotext">
+                    <strong>Geboortedatum:</strong>
+                    <p><?= date_create($client['geboortedatum'])->format('d-m-Y') ?></p>
+                </div>
+                <div class="infotext">
+                    <strong>Adres:</strong>
+                    <p><?= $client['adres'] ?></p>
+                </div>
+                <div class="infotext">
+                    <strong>Postcode:</strong>
+                    <p><?= $client['postcode'] ?></p>
+                </div>
+                <div class="infotext">
+                    <strong>Woonplaats:</strong>
+                    <p><?= $client['woonplaats'] ?></p>
+                </div>
+                <div class="infotext">
+                    <strong>Telefoonnummer:</strong>
+                    <p><?= $client['telefoonnummer'] ?></p>
+                </div>
+                <div class="infotext">
+                    <strong>E-mail:</strong>
+                    <p><?= $client['email'] ?></p>
+                </div>
+                <div class="infotext">
+                    <strong>Afdeling:</strong>
+                    <p><?= $client['afdeling'] ?></p>
+                </div>
+                <div class="infotext">
+                    <strong>Burgelijke staat:</strong>
+                    <p><?= $client['burgelijkestaat'] ?></p>
+                </div>
+                <div class="infotext">
+                    <strong>Nationaliteit:</strong>
+                    <p><?= $client['nationaliteit'] ?></p>
+                </div>
+                <div class="infotext">
+                    <a href="../Overzicht/verzorgers.php?id=<?= $_GET['id']?>">
+                        <strong>Verzorger(s):</strong>
+                    </a>
+                    <?php $i=0?>
+                    <?php foreach ($verzorgers as $key => $verzorger) { ?>
+                        <?php $verzorgerNamen[$i] = $verzorger['naam']; ?>
+                        <?php $i++?>
+                    <?php } ?>
+                    <p><?php echo join(", ",$verzorgerNamen); ?></p>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>

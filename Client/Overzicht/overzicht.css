@@ -46,32 +46,55 @@ select{
 }
 
 .overzicht{
-    display: grid;
-    background-color: rgb(240, 240, 240);
-    height: 500px;
-    align-items: center;
     width: 100%;
-    padding-right: 55%;
+    min-height: 130px;
+    background-color: rgb(240, 240, 240);
+    border-radius: 10px;
+    padding: 20px;
+    padding-left: 40px;
+    align-items: center;
 }
 
 .overzicht-content{
-    padding: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
 }
 
-.infotext{
-    margin-bottom: 10px;
-}
-
-.infotext strong{
-    display: inline-block;
-    width: 100px;
+strong {
     font-size: 20px;
     color: #00365E;
 }
 
-.infotext p{
-    margin: 0;
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 15%;
+.card{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    margin: 10px;
+    border-radius: 10px;
+
 }
+
+.card>.header{
+    width: 100%;
+    padding: 5px;
+    border-radius: 10px 10px 0px 0px;
+    color: #00365E;
+}
+
+.card>.text{
+    width: 100%;
+    padding: 5px;
+}
+
+
+.content-2{
+
+    height: 100%;
+    width: 100%;
+    background-color: #F3F4F8;
+    padding: 20px;
+border-radius: 25px
+  }

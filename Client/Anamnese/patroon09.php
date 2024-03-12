@@ -123,9 +123,9 @@ if (isset($_REQUEST['navbutton'])) {
                         </div>
                         <div class="question"><p>Wat is uw seksuele gerichtheid?</p> 
                             <div class="observation">
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGerichtheid[0] ? "checked" : "" ?> name="gerichtheid1"><p>Heteroseksueel</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGerichtheid[1] ? "checked" : "" ?> name="gerichtheid2"><p>Biseksueel</p></div></div>
-                                <div class="question"><div class="observe"><input type="checkbox" <?= $boolArrayGerichtheid[2] ? "checked" : "" ?> name="gerichtheid3"><p>Homoseksueel</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGerichtheid[0] ? "checked" : "" ?> name="gerichtheid1"><p>Heteroseksueel</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGerichtheid[1] ? "checked" : "" ?> name="gerichtheid2"><p>Biseksueel</p></div></div>
+                                <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayGerichtheid[2] ? "checked" : "" ?> name="gerichtheid3"><p>Homoseksueel</p></div></div>
                             </div>
                         </div>
                         <div class="question"><p>- Ondervindt u problemen bij u zelf of bij anderen ten aanzien van uw seksuele gerichtheid?</p>

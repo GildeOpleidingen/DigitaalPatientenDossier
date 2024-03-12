@@ -1,36 +1,28 @@
 <?php
 session_start();
 include_once '../../Database/DatabaseConnection.php';
+include_once '../../Functions/ClientFunctions.php';
 
-if(!isset($_GET['id'])) {
-    header("Location: ../client.php");
-}
-
-$id = $_GET['id'];
-$_SESSION['clientId'] = $_GET['id'];
-
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $id);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
-
-if ($client == null) {
-    header("Location: ../client.php");
+$clientId = $_SESSION['clientId'];
+$client = getClientById($clientId);
+if (!isset($clientId) || $client == null) {
+    header("Location: ../../index.php");
 }
 
 $medewerkers = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");
 $medewerkers->execute();
 $medewerkers = $medewerkers->get_result()->fetch_all(MYSQLI_ASSOC);
 
+$stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
+$stmt->bind_param("i", $clientId);
+$stmt->execute();
+$stmt = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 // Loop door alle medewerkers heen, als de medewerker al in de database staat, zet dan de checked variabele op true
 foreach ($medewerkers as $key => $medewerker) {
-    $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
-    $stmt->bind_param("ii", $id, $medewerker['id']);
-    $stmt->execute();
-    $stmt = $stmt->get_result()->fetch_assoc();
-
-    if ($stmt) {
-        $medewerkers[$key]['checked'] = true;
+    foreach($stmt as $relation) {
+        if ($medewerker['id'] == $relation['medewerkerid']) {
+            $medewerkers[$key]['checked'] = true;
+        }
     }
 }
 ?>
@@ -53,7 +45,7 @@ foreach ($medewerkers as $key => $medewerker) {
         ?>
 
         <form action="Verzorger/verwerk.php" method="post" class="content">
-            <input type="hidden" name="clientId" value="<?= $id ?>">
+            <input type="hidden" name="clientId" value="<?= $clientId ?>">
             <div class="form-content">
                 <div class="pages">Verzorgers van <?= $client['naam'] ?></div>
                 <div class="form">
