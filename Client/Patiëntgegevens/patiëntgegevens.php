@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once('../../Includes/auth.php');
 include_once '../../Database/DatabaseConnection.php';
 
 if (!isset($_GET['id'])) {
