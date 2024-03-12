@@ -1,3 +1,5 @@
+<!-- kopieer deze file naar config.php en vul de gegevens in-->
+
 <?php
 
 class config

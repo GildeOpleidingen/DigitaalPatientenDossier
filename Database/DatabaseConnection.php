@@ -13,7 +13,6 @@ class DatabaseConnection
 
     private static function checkConnection(): void {
         if (self::$conn == null) {
-            // Here you use the properties from the config class to create the database connection
             self::$conn = new mysqli(config::$host, config::$username, config::$pass, config::$db);
         }
     }
