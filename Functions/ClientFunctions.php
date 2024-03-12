@@ -36,9 +36,9 @@ function checkIfClientExistsByName(string $name): bool {
     return sizeof((array) $result) > 0;
 }
 
-function getClientById($id): array {
+function getClientById($ClientId): array {
     $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE id = ?;");
-    $result->bind_param("i", $id);
+    $result->bind_param("i", $ClientId);
     $result->execute();
 
     return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
