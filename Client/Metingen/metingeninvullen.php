@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $temperatuur = $_POST['temperatuur'];
     $vochtinname = $_POST['vochtinname'];
     $uitscheiding = $_POST['uitscheiding'];
-    $uitscheidingStool = $_POST['uitscheiding2'];
+    $uitscheidingStool = $_POST['uitscheidingSamenstelling'];
     $uitscheidingUrine = $_POST['uitscheidingUrine'];
     $pijnschaal = $_POST['pijnschaal'];
     $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingUrine);
     $metingUrine->execute();
 
-    $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd) VALUES (?, ?, ?)");
-    $metingUrineSamenstelling->bind_param("iis", $metingId, $uitscheidingSamenstelling, $time);
+    $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd, Hoeveelheid) VALUES (?, ?, ?, ?)");
+    $metingUrineSamenstelling->bind_param("iisi", $metingId, $uitscheidingSamenstelling, $time, $uitscheiding);
     $metingUrineSamenstelling->execute();
 }
 
@@ -109,13 +109,19 @@ include_once '../../Includes/header.php';
             <input type="number" id="vochtinname" name="vochtinname" placeholder="Invoeren in aantal milliliters" required min="0" max="5000"> <!-- o tot 5000 -->
 
             <div class="Uitscheidingen">
-                <div class="Uitscheiding2">
+                <div class="uitscheidingSamenstelling">
                     <label for="Uitscheiding">Uitscheiding:</label>
                     <input type="number" id="uitscheiding" name="uitscheiding" placeholder="Invoeren in frequentie per dag" >
                 </div>
-                <div class="Uitscheiding2">
-                    <label for="Uitscheiding">Uitscheiding bristol stool chart:</label>
-                    <input type="number" id="uitscheiding2" name="uitscheiding2" placeholder="Invoeren in frequentie per dag" >
+                <div class="uitscheidingSamenstelling">
+                    <label for="UitscheidingSamenstelling">Uitscheiding samenstelling:</label>
+                    <select id="uitscheidingSamenstelling" name="uitscheidingSamenstelling" required>
+                        <?php
+                        foreach ($samenStellingen as $samenStelling) {
+                            echo "<option value='$samenStelling[id]'>$samenStelling[uiterlijk]</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
 
@@ -155,7 +161,7 @@ include_once '../../Includes/header.php';
             const temperatuur = document.getElementById('temperatuur');
             const vochtinname = document.getElementById('vochtinname');
             const uitscheiding = document.getElementById('uitscheiding');
-            const uitscheiding2 = document.getElementById('uitscheiding2');
+            const uitscheidingSamenstelling = document.getElementById('uitscheidingSamenstelling');
             const uitscheidingplas = document.getElementById('uitscheidingplas');
             const pijnschaal = document.getElementById('pijnschaal');
 
@@ -167,7 +173,7 @@ include_once '../../Includes/header.php';
             temperatuur.addEventListener('input', temperatuurUpdate);
             vochtinname.addEventListener('input', vochtinnameUpdate);
             uitscheiding.addEventListener('input', uitscheidingUpdate);
-            uitscheiding2.addEventListener('input', uitscheiding2Update);
+            uitscheidingSamenstelling.addEventListener('input', uitscheidingSamenstellingUpdate);
             uitscheidingplas.addEventListener('input', uitscheidingplasUpdate);
             pijnschaal.addEventListener('input', pijnschaalUpdate);
 
@@ -255,12 +261,12 @@ include_once '../../Includes/header.php';
                 }
             }
 
-            function uitscheiding2Update() {
-                if (uitscheiding2) {
-                    if (uitscheiding2.value < 1 || uitscheiding2.value > 7) {
-                        uitscheiding2.style.border = '5px solid red';
+            function uitscheidingSamenstellingUpdate() {
+                if (uitscheidingSamenstelling) {
+                    if (uitscheidingSamenstelling.value < 1 || uitscheidingSamenstelling.value > 7) {
+                        uitscheidingSamenstelling.style.border = '5px solid red';
                     } else {
-                        uitscheiding2.style.border = '1px solid black';
+                        uitscheidingSamenstelling.style.border = '1px solid black';
                     }
                 } else {
                     console.log('error');

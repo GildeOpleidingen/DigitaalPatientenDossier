@@ -94,7 +94,7 @@ input, select {
 .bloeddruk-lengte{
     width: 100%;
 }
-.Uitscheiding2{
+.uitscheidingSamenstelling{
     width: 100%;
 }
 
@@ -107,11 +107,9 @@ input, select {
     cursor: pointer;
 }
 
-<<<<<<< HEAD
 button:hover {
     background-color: #45a049;
 }
-=======
 .invullen {
     text-align: right;
 }
