@@ -60,7 +60,6 @@ function getPatternAnswers(int $clientId, int $patroonType): array|false {
     ];
 
     $patroon = $patroonTypes[$patroonType - 1];
-
     // Haal verzorgerregelid op via de clientid
     $result = DatabaseConnection::getConn()->prepare("
     SELECT vl.id
@@ -70,14 +69,13 @@ function getPatternAnswers(int $clientId, int $patroonType): array|false {
     ");
     $result->bind_param("i", $clientId);
     $result->execute();
-    
     $result = $result->get_result()->fetch_assoc();
     if(isset($result['id'])){
         $vlId = $result['id'];
         $result = DatabaseConnection::getConn()->prepare("SELECT * FROM $patroon WHERE vragenlijstid = ?");
         $result->bind_param("i", $vlId);
         $result->execute();
-        $antwoorden = (array) $result->get_result()->fetch_array(MYSQLI_ASSOC) ?? [];
+        $antwoorden = (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
         if(empty($antwoorden)) {
             // Dit is zodat als je geen data hebt dan krijg je geen error van undefined array key
             $result = DatabaseConnection::getConn()->query("
@@ -102,6 +100,21 @@ function getPatternAnswers(int $clientId, int $patroonType): array|false {
 
         return $antwoorden;
     }else{
+        $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `verzorgerregel` WHERE clientid = ?;");
+        $result->bind_param("i", $clientId);
+        $result->execute();
+        $verzorgerregelid = $result->get_result()->fetch_array(MYSQLI_ASSOC)['id'];
+        
+        if($verzorgerregelid == null){
+            header("Location: ../../dashboard.php");
+        }
+
+        $today = date("Y-m-d");
+        $vragenlijst = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`id`, `verzorgerregelid`, `afnamedatumtijd`) VALUES (NULL, ?, ?)");
+        $vragenlijst->bind_param("is", $verzorgerregelid, $today);
+        $vragenlijst->execute();
+
+        header("Refresh:0");
         return false;
     }
 }
