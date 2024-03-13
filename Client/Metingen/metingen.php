@@ -17,6 +17,7 @@ $temperatuur = [];
 $vochtinname = [];
 $pijn = [];
 $bloeddrukhoog = [];
+$uitscheiding = [];
 $samenstelling = [];
 $hoeveelheid = [];
 
@@ -55,6 +56,9 @@ foreach ($metingen[1] as $meting) {
                 break;
             case 'bloeddrukhoog':
                 $bloeddrukhoog[] = $data;
+                break;
+            case 'uitscheiding':
+                $uitscheiding[] = $data;
                 break;
             case 'samenstelling':
                 $samenstelling[] = $data;
@@ -191,7 +195,23 @@ include_once '../../Includes/header.php';
                                         if ($waarde == "") {
                                             echo "<td></td>";
                                         } else {
-                                            echo "<td>Index $waarde</td>";
+                                            echo "<td>$waarde</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <td>Uitscheiding</td>
+                            <?php
+                            foreach ($uitscheiding as $value) {
+                                foreach ($value as $tijd => $waarde) {
+                                    if ($waarde != "uitscheiding") {
+                                        if ($waarde == "") {
+                                            echo "<td></td>";
+                                        } else {
+                                            echo "<td>$waarde</td>";
                                         }
                                     }
                                 }
