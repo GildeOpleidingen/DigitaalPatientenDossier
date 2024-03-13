@@ -119,9 +119,7 @@ $medewerker = $result->get_result()->fetch_assoc();
                         if ($value2 === $currentDir) {
                             $dir = "../..";
                             break;
-                        } else if ($currentDir === "clientpagina") {
-                            $dir = "../..";
-                        } else if ($currentDir === "Register") {
+                        } else if ($currentDir === "clientpagina" || $currentDir === "Register") {
                             $dir = "../..";
                         }
                     }
