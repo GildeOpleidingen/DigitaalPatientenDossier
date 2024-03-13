@@ -124,7 +124,7 @@
             ?>
         </div>
         <div class="personal-information">
-            <p><?php echo $row1['id']; ?></p>
+            <p><?php echo $row1['naam']; ?></p>
             <p id="birth"><?php
                 echo date_create($row1['geboortedatum'])->format('d-m-Y');
                 $geboortedatum = $row1['geboortedatum'];

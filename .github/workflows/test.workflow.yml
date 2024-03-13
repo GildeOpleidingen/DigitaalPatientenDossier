@@ -1,10 +1,10 @@
 # Simple workflow for deploying static content
-name: Deploy static content to Pages
+name: Deploy Digitaal Patienten Dossier naar Test
 
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ["test"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,6 +35,4 @@ jobs:
           # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
           name: 'digitaalpatientendossier'
           # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
-          path: '/var/www/digitaalpatientendossier.gds.local/html/'
-          
-          
+          path: '/var/www/test.digitaalpatientendossier.gds.local/html/'

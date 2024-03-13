@@ -46,6 +46,13 @@ foreach ($medewerkers as $key => $medewerker) {
 
         <form action="Verzorger/verwerk.php" method="post" class="content">
             <input type="hidden" name="clientId" value="<?= $clientId ?>">
+            <?php if (isset($_SESSION['verzorgersUpdated'])) { ?>
+                <div class="successMessage">
+                    <h1>De verzorgers zijn succesvol aangepast.</h1>
+                </div>
+            <?php
+                unset($_SESSION['verzorgersUpdated']);
+            } ?>
             <div class="form-content">
                 <div class="pages">Verzorgers van <?= $client['naam'] ?></div>
                 <div class="form">
