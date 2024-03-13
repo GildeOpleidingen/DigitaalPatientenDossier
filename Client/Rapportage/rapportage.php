@@ -33,7 +33,7 @@ include '../../Includes/header.php';
 
         <div class="content">
             <div class="back">
-                <h2>Reportages</h2>
+                <h2>Rapportage</h2>
             <?php echo "<a href='rapportageNieuw.php?id=" . $clientId . "'>" ?>
                     <button class="rapportageButton">Nieuwe rapportage</button>
             <?php
