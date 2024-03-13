@@ -1,0 +1,40 @@
+# Simple workflow for deploying static content
+name: Deploy Digitaal Patienten Dossier naar Productie
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    runs-on: 'self-hosted'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Remove .git / .gitignore
+        run :
+          rm -rf .git
+          rm -rf .gitignore
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          # Artifact name
+          name: 'digitaalpatientendossier'
+          path: .
+          
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v4.1.4
+        with:
+          # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
+          name: 'digitaalpatientendossier'
+          # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
+          path: '/var/www/digitaalpatientendossier.gds.local/html/'
+          
+          

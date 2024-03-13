@@ -33,9 +33,8 @@ include '../../Includes/header.php';
 
         <div class="content">
             <div class="back">
-                <h2>Reportages</h2>
-            <?php echo "<a href='rapportageNieuw.php?id=" . $clientId . "'>" ?>
-                    <button class="rapportageButton">Nieuwe rapportage</button>
+                <h2>Rapportages</h2>
+                    <?php echo "<a href='rapportageNieuw.php?id=" . $clientId . "' class='rapportageButton'>Nieuwe rapportage</a>"; ?>
             <?php
             foreach ($rapportages as $rapport) {
                 echo "<h1>Rapportage van " . $rapport['datumtijd'] . " (" . $rapport['id'] . ")</h1>";
