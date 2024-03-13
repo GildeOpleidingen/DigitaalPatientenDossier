@@ -23,10 +23,7 @@ $hoeveelheid = [];
 
 $samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
 
-$metingtijden = DatabaseConnection::getConn()->prepare("SELECT m.id, m.datumtijd, vr.id as verzorgerregelid
-                                                            FROM meting m
-                                                            LEFT JOIN verzorgerregel vr on m.verzorgerregelid = vr.id 
-                                                            WHERE clientid = ? ORDER BY datumtijd ASC");
+$metingtijden = DatabaseConnection::getConn()->prepare("SELECT id, clientid , datumtijd FROM meting WHERE clientid = ? ORDER BY datumtijd ASC");
 $metingtijden->bind_param("i", $_SESSION['clientId']);
 $metingtijden->execute();
 $metingtijden = $metingtijden->get_result()->fetch_all(MYSQLI_ASSOC);

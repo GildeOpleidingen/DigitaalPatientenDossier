@@ -7,14 +7,14 @@ function getMeting($metingtijden)
     foreach ($metingtijden as $metingtijd) {
         $datumtijd = $metingtijd['datumtijd'];
         $metingid = $metingtijd['id'];
-        $verzorgerregelid = $metingtijd['verzorgerregelid'];
+        $clientid = $metingtijd['clientid'];
         $tijd = date('H:i', strtotime($datumtijd));
         $tijden[] = $tijd;
         $query = "(SELECT
             'hartslag' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN hartslag ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = ?)
+            WHERE clientid = ?)
 
             UNION
             
@@ -22,7 +22,7 @@ function getMeting($metingtijden)
             'ademhaling' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN ademhaling ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = ?)
+            WHERE clientid = ?)
 
             UNION
             
@@ -30,7 +30,7 @@ function getMeting($metingtijden)
             'bloeddruklaag' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN bloeddruklaag ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = ?)
+            WHERE clientid = ?)
 
             UNION
             
@@ -38,7 +38,7 @@ function getMeting($metingtijden)
             'temperatuur' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN temperatuur ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = ?)
+            WHERE clientid = ?)
 
             UNION
             
@@ -46,7 +46,7 @@ function getMeting($metingtijden)
             'vochtinname' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN vochtinname ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = ?)
+            WHERE clientid = ?)
 
             UNION
             
@@ -54,7 +54,7 @@ function getMeting($metingtijden)
             'pijn' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN pijn ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = ?)
+            WHERE clientid = ?)
 
             UNION
             
@@ -62,7 +62,7 @@ function getMeting($metingtijden)
             'bloeddrukhoog' AS meting,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN bloeddrukhoog ELSE null END) AS '$tijd'
             FROM meting
-            WHERE verzorgerregelid = ?)
+            WHERE clientid = ?)
 
             UNION
             
@@ -89,7 +89,7 @@ function getMeting($metingtijden)
             FROM metingurine
             WHERE metingid = ?)";
         $result = DatabaseConnection::getConn()->prepare($query);
-        $result->bind_param("iiiiiiiiii", $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $metingid, $metingid, $metingid);
+        $result->bind_param("iiiiiiiiii", $clientid, $clientid, $clientid, $clientid, $clientid, $clientid, $clientid, $metingid, $metingid, $metingid);
         $result->execute();
         $result = $result->get_result()->fetch_all(MYSQLI_ASSOC);
 
