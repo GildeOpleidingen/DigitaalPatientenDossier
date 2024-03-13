@@ -43,7 +43,7 @@ function convertBoolArrayToString($boolArr): string {
  * @return      array|false
  */
 
-function getPatternAnswers(int $clientId, int $patroonType): array|false {
+function getPatternAnswers(int $clientId, int $patroonType) {
     // Patroontypes array van de database om maar 1 functie nodig te hebben
     $patroonTypes = [
         "patroon01gezondheidsbeleving",
@@ -104,17 +104,13 @@ function getPatternAnswers(int $clientId, int $patroonType): array|false {
         $result->bind_param("i", $clientId);
         $result->execute();
         $verzorgerregelid = $result->get_result()->fetch_array(MYSQLI_ASSOC)['id'];
-        
-        if($verzorgerregelid == null){
-            header("Location: ../../dashboard.php");
-        }
 
-        $today = date("Y-m-d");
+        $today = date('Y-m-d H:i:s');
         $vragenlijst = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`id`, `verzorgerregelid`, `afnamedatumtijd`) VALUES (NULL, ?, ?)");
         $vragenlijst->bind_param("is", $verzorgerregelid, $today);
         $vragenlijst->execute();
 
         header("Refresh:0");
-        return false;
+        die;
     }
 }
