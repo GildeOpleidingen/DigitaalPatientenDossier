@@ -71,20 +71,20 @@ if (isset($_REQUEST['navbutton'])) {
     if ($result != null) {
         //update
         $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon03uitscheiding` SET
-        `ontlasting_probleem`='$ontlasting_probleem',
-        `op_welke`='$op_welke',
-        `op_preventie`='$op_preventie',
-        `op_medicijnen`='$op_medicijnen',
-        `op_medicijnen_welke`='$op_medicijnen_welke',
-        `urineer_probleem`= '$urineer_probleem',
-        `up_incontinentie`='$up_incontinentie',
-        `up_incontinentie_behandeling`='$up_incontinentie_behandeling',
-        `up_incontinentie_behandeling_welke`='$up_incontinentie_behandeling_welke',
-        `transpiratie`='$transpiratie',
-        `transpiratie_welke`='$transpiratie_welke',
-        `observatie`='$observatie'
+        `ontlasting_probleem`=?,
+        `op_welke`=?,
+        `op_preventie`=?,
+        `op_medicijnen`=?,
+        `op_medicijnen_welke`=?,
+        `urineer_probleem`= ?,
+        `up_incontinentie`=?,
+        `up_incontinentie_behandeling`=?,
+        `up_incontinentie_behandeling_welke`=?,
+        `transpiratie`=?,
+        `transpiratie_welke`=?,
+        `observatie`=?
            WHERE `vragenlijstid`=?");
-        $result1->bind_param("i", $vragenlijstId);
+        $result1->bind_param("issisiiisissi", $ontlasting_probleem, $op_welke, $op_preventie, $op_medicijnen, $op_medicijnen_welke, $urineer_probleem, $up_incontinentie, $up_incontinentie_behandeling, $up_incontinentie_behandeling_welke, $transpiratie, $transpiratie_welke, $observatie,$vragenlijstId);
         $result1->execute();
         $result1 = $result1->get_result();
 

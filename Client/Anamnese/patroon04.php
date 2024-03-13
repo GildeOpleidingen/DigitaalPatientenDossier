@@ -86,40 +86,39 @@ if (isset($_REQUEST['navbutton'])) {
     if ($result != null) {
         //update
         $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon04activiteiten` SET
-        `voeding`='$voeding',
-        `aankleden`='$aankleden',
-        `alg_mobiliteit`='$alg_mobiliteit',
-        `koken`='$koken',
-        `huishouden`='$huishouden',
-        `financien`= '$financien',
-        `verzorging`='$verzorging',
-        `baden`='$baden',
-        `toiletgang`='$toiletgang',
-        `uit_bed_komen`='$uit_bed_komen',
-        `winkelen`='$winkelen',
-        `tijd_voor_uzelf_nodig`='$tijd_voor_uzelf_nodig',
-        `tijd_voor_uzelf_nodig_blijktuit`='$tijd_voor_uzelf_nodig_blijktuit',
-        `dagelijkse_activiteiten`='$dagelijkse_activiteiten',
-        `dagelijkse_gewoontes`='$dagelijkse_gewoontes',
-        `dagelijkse_gewoontes_welke`='$dagelijkse_gewoontes_welke',
-        `vermoeidheids_klachten`='$vermoeidheids_klachten',
-        `passiever`= '$passiever',
-        `passiever_blijktuit`='$passiever_blijktuit',
-        `problemen_starten_dag`='$problemen_starten_dag',
-        `problemen_starten_dag_blijktuit`='$problemen_starten_dag_blijktuit',
-        `hobbys`='$hobbys',
-        `hobbys_bestedingstijd`='$hobbys_bestedingstijd',
-        `activiteiten_weggevallen`='$activiteiten_weggevallen',
-        `activiteiten_weggevallen_welke`='$activiteiten_weggevallen_welke',
-        `observatie`='$observatie'
+        `voeding`=?,
+        `aankleden`=?,
+        `alg_mobiliteit`=?,
+        `koken`=?,
+        `huishouden`=?,
+        `financien`= ?,
+        `verzorging`=?,
+        `baden`=?,
+        `toiletgang`=?,
+        `uit_bed_komen`=?,
+        `winkelen`=?,
+        `tijd_voor_uzelf_nodig`=?,
+        `tijd_voor_uzelf_nodig_blijktuit`=?,
+        `dagelijkse_activiteiten`=?,
+        `dagelijkse_gewoontes`=?,
+        `dagelijkse_gewoontes_welke`=?,
+        `vermoeidheids_klachten`=?,
+        `passiever`=?,
+        `passiever_blijktuit`=?,
+        `problemen_starten_dag`=?,
+        `problemen_starten_dag_blijktuit`=?,
+        `hobbys`=?,
+        `hobbys_bestedingstijd`=?,
+        `activiteiten_weggevallen`=?,
+        `activiteiten_weggevallen_welke`=?,
+        `observatie`=?
            WHERE `vragenlijstid`=?");
-        $result1->bind_param("i", $vragenlijstId);
+        $result1->bind_param("iiiiiiiiiiiiissisisisiisisissi", $voeding, $aankleden, $alg_mobiliteit, $koken, $huishouden, $financien, $verzorging, $baden, $toiletgang, $uit_bed_komen, $winkelen, $tijd_voor_uzelf_nodig, $tijd_voor_uzelf_nodig_blijktuit, $dagelijkse_activiteiten, $dagelijkse_gewoontes, $dagelijkse_gewoontes_welke, $vermoeidheids_klachten, $passiever, $passiever_blijktuit, $problemen_starten_dag, $problemen_starten_dag_blijktuit, $hobbys, $hobbys_bestedingstijd, $activiteiten_weggevallen, $activiteiten_weggevallen_welke, $observatie, $vragenlijstId);
         $result1->execute();
         $result1 = $result1->get_result();
 
     }else{
         //hier insert je alle data in patroon02
-
         $result2 = DatabaseConnection::getConn()->prepare( "INSERT INTO `patroon04activiteiten`(
                     `vragenlijstid`,
                     `voeding`,
@@ -264,7 +263,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="question-answer">
                                     <input id="radio" type="radio" name="lichamelijke_beperking" <?= $antwoorden['lichamelijke_beperking'] ? "checked" : "" ?>>
                                     <label>Ja</label>
-                                    <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="lichamelijke_beperking_welke"><?= $antwoorden['lichamelijke_beperkingen_welke'] ?></textarea>
+                                    <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="lichamelijke_beperking_welke"><?= $antwoorden['lichamelijke_beperking_welke'] ?></textarea>
                                 </div>
                                 <p>
                                     <input type="radio" name="lichamelijke_beperking" <?= !$antwoorden['lichamelijke_beperking'] ? "checked" : "" ?>>

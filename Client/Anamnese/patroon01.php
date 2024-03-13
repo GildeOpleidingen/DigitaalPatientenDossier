@@ -6,9 +6,6 @@ include '../../Functions/Functions.php';
 $antwoorden = getPatternAnswers($_SESSION['clientId'], 1);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
-
-//id van de client
-$client_id = $_GET['id'];
 //id van de medewerker
 $medewerker_id = $_SESSION['loggedin_id'];
 
@@ -30,9 +27,7 @@ if (isset($_REQUEST['navbutton'])) {
     $oht_wat_belangrijk = $_POST['oht_wat_belangrijk'];
     $oht_reactie_op_advies = $_POST['oht_reactie_op_advies'];
     $preventie= $_POST['oht_reactie_op_advies'];
-
-
-// array van checkboxes van observatie tab
+    // array van checkboxes van observatie tab
     $observatie = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']));
 
     $observatie = convertBoolArrayToString($observatie);
@@ -42,7 +37,7 @@ if (isset($_REQUEST['navbutton'])) {
                     from vragenlijst vl
                     left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
                     where verzorgerregel.clientid = ?");
-    $result->bind_param("i", $client_id);
+    $result->bind_param("i", $_SESSION['clientId']);
     $result->execute();
     $result = $result->get_result()->fetch_assoc();
 
@@ -57,7 +52,7 @@ if (isset($_REQUEST['navbutton'])) {
             FROM verzorgerregel
             WHERE clientid = ?
             AND medewerkerid = ?))");
-        $sql2->bind_param("ii", $client_id ,$medewerker_id);
+        $sql2->bind_param("ii", $_SESSION['clientId'] ,$medewerker_id);
         $sql2->execute();
         $sql2 = $sql2->get_result();
 
@@ -66,7 +61,7 @@ if (isset($_REQUEST['navbutton'])) {
                     from vragenlijst vl
                     left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
                     where verzorgerregel.clientid = ?");
-        $result->bind_param("i", $client_id);
+        $result->bind_param("i", $_SESSION['clientId']);
         $result->execute();
         $result = $result->get_result()->fetch_assoc();
 
@@ -86,31 +81,31 @@ if (isset($_REQUEST['navbutton'])) {
         //update
         $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon01gezondheidsbeleving`
             SET
-            `algemene_gezondheid`='$algemene_gezondheid',
-            `gezondheids_bezigheid`='$gezondheids_bezigheid',
-            `rookt`='$rookt',
-            `rookt_hoeveelheid`='$rookt_hoeveelheid',
-            `drinkt`='$drinkt',
-            `drinkt_hoeveelheid`='$drinkt_hoeveelheid',
-            `besmettelijke_aandoening`='$besmettelijke_aandoening',
-            `besmettelijke_aandoening_welke`='$besmettelijke_aandoening_welke',
-            `alergieen`='$alergieen',
-            `alergieen_welke`='$alergieen_welke',
-            `oorzaak_huidige_toestand`='$oorzaak_huidige_toestand',
-            `oht_actie`='$oht_actie',
-            `oht_hoe_effectief`='$oht_hoe_effectief',
-            `oht_wat_nodig`='$oht_wat_nodig',
-            `oht_wat_belangrijk`='$oht_wat_belangrijk',
-            `oht_reactie_op_advies`='$oht_reactie_op_advies',
-            `preventie`='$preventie',
-            `observatie`='$observatie'
+            `algemene_gezondheid`=?,
+            `gezondheids_bezigheid`=?,
+            `rookt`=?,
+            `rookt_hoeveelheid`=?,
+            `drinkt`=?,
+            `drinkt_hoeveelheid`=?,
+            `besmettelijke_aandoening`=?,
+            `besmettelijke_aandoening_welke`=?,
+            `alergieen`=?,
+            `alergieen_welke`=?,
+            `oorzaak_huidige_toestand`=?,
+            `oht_actie`=?,
+            `oht_hoe_effectief`=?,
+            `oht_wat_nodig`=?,
+            `oht_wat_belangrijk`=?,
+            `oht_reactie_op_advies`=?,
+            `preventie`=?,
+            `observatie`=?
            WHERE `vragenlijstid`=?");
-        $result1->bind_param("i", $vragenlijst_id);
+        $result1->bind_param("ssisisisisssssssssi", $algemene_gezondheid, $gezondheids_bezigheid, $rookt, $rookt_hoeveelheid, $drinkt, $drinkt_hoeveelheid, $besmettelijke_aandoening, $besmettelijke_aandoening_welke, $alergieen, $alergieen_welke, $oorzaak_huidige_toestand, $oht_actie, $oht_hoe_effectief, $oht_wat_nodig, $oht_wat_belangrijk, $oht_reactie_op_advies, $preventie, $observatie,$vragenlijst_id);
         $result1->execute();
         $result1 = $result1->get_result();
 
     }else{
-        //hier insert je alle data in patroon02
+        //hier insert je alle data in patroon01
         $result2 = DatabaseConnection::getConn()->prepare( "INSERT INTO `patroon01gezondheidsbeleving`(`vragenlijstid`, `algemene_gezondheid`, `gezondheids_bezigheid`, `rookt`, `rookt_hoeveelheid`, `drinkt`, `drinkt_hoeveelheid`, `besmettelijke_aandoening`, `besmettelijke_aandoening_welke`, `alergieen`, `alergieen_welke`, `oorzaak_huidige_toestand`, `oht_actie`, `oht_hoe_effectief`, `oht_wat_nodig`, `oht_wat_belangrijk`, `oht_reactie_op_advies`, `preventie`, `observatie`)
             VALUES (
                     ?,
@@ -137,11 +132,7 @@ if (isset($_REQUEST['navbutton'])) {
         $result2 = $result2->get_result();
 
     }
-
-
-
-
-    switch($_REQUEST['navbutton']) {
+switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
             header('Location: patroon02.php');
             break;
@@ -154,7 +145,7 @@ if (isset($_REQUEST['navbutton'])) {
 }
 
 $client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $client_id);
+$client->bind_param("i", $_SESSION['clientId']);
 $client->execute();
 $client = $client->get_result()->fetch_assoc();
 
@@ -163,7 +154,6 @@ if ($client == null) {
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -220,7 +210,7 @@ if ($client == null) {
                                         <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="besmettelijke_aandoening_welke"><?= $antwoorden['besmettelijke_aandoening_welke'] ?></textarea>
                                     </div>
                                     <p>
-                                        <input type="radio" name="besmettelijke_aandoening">
+                                        <input type="radio" name="besmettelijke_aandoening" <?= !$antwoorden['besmettelijke_aandoening'] ? "checked" : "" ?>>
                                         <label>Nee</label>
                                     </p>
                                 </div>
