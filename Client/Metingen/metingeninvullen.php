@@ -35,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $uitscheidingUrine = $_POST['uitscheidingUrine'];
     $pijnschaal = $_POST['pijnschaal'];
 
-    $verzorgerregelid = DatabaseConnection::getConn()->prepare("SELECT id FROM verzorgerregel WHERE medewerkerid = ?");
-    $verzorgerregelid->bind_param("i", $_SESSION['loggedin_id']);
+    $verzorgerregelid = DatabaseConnection::getConn()->prepare("SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
+    $verzorgerregelid->bind_param("ii", $clientId, $medewerker_id);
     $verzorgerregelid->execute();
     $verzorgerregelid = $verzorgerregelid->get_result()->fetch_array()[0];
     $time = date("Y-m-d H:i:s");
