@@ -98,7 +98,7 @@ include_once '../../Includes/header.php';
             <form id="patientForm">
                 <div class="tabel">
                     <table>
-                        <th></th>
+                        <th>Tijd</th>
                         <?php
                         foreach ($metingen[0] as $tijd) {
                             echo "<th>$tijd</th>";
@@ -171,22 +171,6 @@ include_once '../../Includes/header.php';
                             ?>
                         </tr>
                         <tr>
-                            <td>Vochtinname</td>
-                            <?php
-                            foreach ($vochtinname as $vocht) {
-                                foreach ($vocht as $tijd => $waarde) {
-                                    if ($waarde != "vochtinname") {
-                                        if ($waarde == 0) {
-                                            echo "<td></td>";
-                                        } else {
-                                            echo "<td>$waarde ml</td>";
-                                        }
-                                    }
-                                }
-                            }
-                            ?>
-                        </tr>
-                        <tr>
                             <td>Pijn</td>
                             <?php
                             foreach ($pijn as $value) {
@@ -203,15 +187,18 @@ include_once '../../Includes/header.php';
                             ?>
                         </tr>
                         <tr>
-                            <td>Uitscheiding</td>
+                            <th><td>⠀</td></th>
+                        </tr>
+                        <tr>
+                            <td>Vochtinname</td>
                             <?php
-                            foreach ($uitscheiding as $value) {
-                                foreach ($value as $tijd => $waarde) {
-                                    if ($waarde != "uitscheiding") {
-                                        if ($waarde == "") {
+                            foreach ($vochtinname as $vocht) {
+                                foreach ($vocht as $tijd => $waarde) {
+                                    if ($waarde != "vochtinname") {
+                                        if ($waarde == 0) {
                                             echo "<td></td>";
                                         } else {
-                                            echo "<td>$waarde</td>";
+                                            echo "<td>$waarde ml</td>";
                                         }
                                     }
                                 }
@@ -219,7 +206,7 @@ include_once '../../Includes/header.php';
                             ?>
                         </tr>
                         <tr>
-                            <td>Samenstelling</td>
+                            <td>Ontlasting</td>
                             <?php
                             foreach ($samenstelling as $samen) {
                                 foreach ($samen as $tijd => $waarde) {
@@ -235,7 +222,23 @@ include_once '../../Includes/header.php';
                             ?>
                         </tr>
                         <tr>
-                            <td>Hoeveelheid</td>
+                            <td>Hoeveelheid ontlasting</td>
+                            <?php
+                            foreach ($uitscheiding as $value) {
+                                foreach ($value as $tijd => $waarde) {
+                                    if ($waarde != "uitscheiding") {
+                                        if ($waarde == "") {
+                                            echo "<td></td>";
+                                        } else {
+                                            echo "<td>$waarde</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <td>Hoeveelheid urine</td>
                             <?php
                             foreach ($hoeveelheid as $hoeveel) {
                                 foreach ($hoeveel as $tijd => $waarde) {
