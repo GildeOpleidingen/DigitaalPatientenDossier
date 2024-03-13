@@ -1,11 +1,16 @@
 <?php
 
+if (file_exists(dirname(__FILE__) . "/../../config.php")){
+    include_once dirname(__FILE__) . "/../../config.php";
+} elseif (file_exists(dirname(__FILE__) . "/../config.php")) {
+    include_once dirname(__FILE__) . "/../config.php";
+}
+else{
+    echo "geen config gevonden";
+}
+
 class DatabaseConnection
 {
-    private static string $host = "localhost";
-    private static string $username = "root";
-    private static string $pass = "";
-    private static string $db = "dpd";
     private static ?mysqli $conn = null;
 
     public static function getConn(): mysqli {
@@ -15,7 +20,7 @@ class DatabaseConnection
 
     private static function checkConnection(): void {
         if (self::$conn == null) {
-            self::$conn = new mysqli(self::$host, self::$username, self::$pass, self::$db);
+            self::$conn = new mysqli(config::$host, config::$username, config::$pass, config::$db);
         }
     }
 }
