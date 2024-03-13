@@ -26,4 +26,5 @@ foreach ($verzorgers as $key => $value) {
     }
 }
 
+$_SESSION['verzorgersUpdated'] = true;
 header("Location: ../verzorgers.php?id=$clientId");
