@@ -4,7 +4,7 @@ require_once('../Includes/auth.php');
 
 include '../Database/DatabaseConnection.php';
 
-$items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all();
+$items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all(MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,10 +39,10 @@ include '../Includes/header.php';
                 <?php
                 foreach ($items as $row) {
                     echo "<tr>";
-                    echo "<td class='row1'><a href=Overzicht/overzicht.php?id=$row[0]>$row[1]</a></td>";
-                    echo "<td class='row1'>$row[2]</td>";
-                    echo "<td class='row1'>$row[3]</td>";
-                    echo "<td class='row1'>".$row[4]."</td>";
+                    echo "<td class='row1'><a href=Overzicht/overzicht.php?id=".$row['id'].">".$row['naam']."</a></td>";
+                    echo "<td class='row1'>".$row['klas']."</td>";
+                    echo "<td class='row1'>".$row['email']."</td>";
+                    echo "<td class='row1'>".$row['telefoonnummer']."</td>";
                     echo "</tr>";
                 }
                 ?>
