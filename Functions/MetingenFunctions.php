@@ -88,6 +88,7 @@ function getMeting($metingtijden)
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN Hoeveelheid ELSE null END) AS '$tijd'
             FROM metingurine
             WHERE metingid = ?)";
+        
         $result = DatabaseConnection::getConn()->prepare($query);
         $result->bind_param("iiiiiiiiii", $clientid, $clientid, $clientid, $clientid, $clientid, $clientid, $clientid, $metingid, $metingid, $metingid);
         $result->execute();
