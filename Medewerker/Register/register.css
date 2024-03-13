@@ -84,6 +84,11 @@ input, select {
     width: fit-content;
 }
 
+.submit:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
 .label-image {
     display: flex;
     flex-direction: column;

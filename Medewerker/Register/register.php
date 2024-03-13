@@ -16,6 +16,10 @@ if (isset($_POST['submit'])) {
     $rol = $_POST['rol'];
     $klas = $_POST['klas'];
     $telefoonnummer = $_POST['telefoonnummer'];
+    
+    if($_POST['password'] != $_POST['confirmPassword']){
+        $error = "Wachtwoorden komen niet overeen!";
+    }
 
     // Deze values zijn required en die mogen dus niet empty zijn
     if(empty($email) || empty($name) || empty($rol) || empty($_POST['password']) || empty($klas)){
@@ -97,13 +101,15 @@ if (isset($_POST['submit'])) {
                         <input type="email" id="email" name="email" placeholder="E-mail" required>
                         <label for="password"><p style="color:red">*</p>Wachtwoord</label>
                         <input type="password" id="password" name="password" placeholder="Wachtwoord" required>
+                        <label for="password"><p style="color:red">*</p>Bevestig wachtwoord</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Wachtwoord" required>
                         <label for="rol"><p style="color:red">*</p>Rol</label>
                         <select name="rol" required>
                             <option value="medewerker">Medewerker</option>
                             <option value="beheerder">Beheerder</option>
                         </select>
 
-                        <input class="submit" type="submit" name="submit" value="Voeg medewerker toe">
+                        <input class="submit" id="submit" type="submit" name="submit" value="Voeg medewerker toe" disabled>
                     </div>
                 </form>
             </div>
@@ -133,6 +139,19 @@ if (isset($_POST['submit'])) {
                 reader.readAsDataURL(file);
             });
         }
+
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const submit = document.getElementById('submit');
+        confirmPassword.addEventListener('input', () => {
+            if (password.value != confirmPassword.value) {
+                confirmPassword.style.border = "3px solid red";
+                submit.disabled = true;
+            } else {
+                confirmPassword.style.border = "3px solid #4CAF50";
+                submit.disabled = false;
+            }
+        });
     </script>
 </body>
 
