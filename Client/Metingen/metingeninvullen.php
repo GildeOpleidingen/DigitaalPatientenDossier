@@ -31,10 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $temperatuur = $_POST['temperatuur'];
     $vochtinname = $_POST['vochtinname'];
     $uitscheiding = $_POST['uitscheiding'];
-    $uitscheidingStool = $_POST['uitscheidingSamenstelling'];
+    $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
     $uitscheidingUrine = $_POST['uitscheidingUrine'];
     $pijnschaal = $_POST['pijnschaal'];
-    $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
 
     $verzorgerregelid = DatabaseConnection::getConn()->prepare("SELECT id FROM verzorgerregel WHERE medewerkerid = ?");
     $verzorgerregelid->bind_param("i", $_SESSION['loggedin_id']);
@@ -51,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingUrine);
     $metingUrine->execute();
 
-    $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd, Hoeveelheid) VALUES (?, ?, ?, ?)");
+    $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd, uitscheiding) VALUES (?, ?, ?, ?)");
     $metingUrineSamenstelling->bind_param("iisi", $metingId, $uitscheidingSamenstelling, $time, $uitscheiding);
     $metingUrineSamenstelling->execute();
 }
@@ -115,7 +114,7 @@ include_once '../../Includes/header.php';
                     <input type="number" id="uitscheiding" name="uitscheiding" placeholder="Invoeren in frequentie per dag" >
                 </div>
                 <div class="uitscheidingSamenstelling">
-                    <label for="UitscheidingSamenstelling">Uitscheiding samenstelling:</label>
+                    <label for="uitscheidingSamenstelling">Uitscheiding samenstelling:</label>
                     <select id="uitscheidingSamenstelling" name="uitscheidingSamenstelling" required>
                         <?php
                         foreach ($samenStellingen as $samenStelling) {
@@ -128,15 +127,6 @@ include_once '../../Includes/header.php';
 
             <label for="Uitscheidingurine">Uitscheiding urine:</label>
             <input type="number" id="uitscheidingurine" name="uitscheidingUrine" placeholder="Invoeren in aantal milliliters" required>
-
-            <label for="UitscheidingSamenstelling">Uitscheiding samenstelling:</label>
-            <select id="uitscheidingSamenstelling" name="uitscheidingSamenstelling" required>
-                <?php
-                foreach ($samenStellingen as $samenStelling) {
-                    echo "<option value='$samenStelling[id]'>$samenStelling[uiterlijk]</option>";
-                }
-                ?>
-            </select>
 
             <label for="Pijnschaal">Pijnschaal:</label>
             <select id="pijnschaal" name="pijnschaal" required>
