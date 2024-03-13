@@ -23,8 +23,8 @@ if (isset($_POST['submit'])) {
     }
     
     // Check of de medewerker data al bestaat
-    $result = DatabaseConnection::getConn()->prepare("SELECT `email`, `naam` FROM `medewerker` WHERE email = ? OR naam = ?;");
-    $result->bind_param('ss', $email, $name);
+    $result = DatabaseConnection::getConn()->prepare("SELECT `email` FROM `medewerker` WHERE email = ?;");
+    $result->bind_param('s', $email);
     $result->execute();
     if ($result->get_result()->num_rows > 0) {
         $error = "Deze medewerker bestaat al!";
@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
         $result = DatabaseConnection::getConn()->prepare("INSERT INTO `medewerker` (naam, klas, foto, email, telefoonnummer, wachtwoord, rol) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $result->bind_param("sssssss", $name, $klas, $foto, $email, $telefoonnummer, $hashedPassword, $rol);
         $result->execute();
-        $success = "Medewerker toegevoegt!";
+        $success = "Medewerker toegevoegd!";
     }
 }
 
