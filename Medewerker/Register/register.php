@@ -23,13 +23,11 @@ if (isset($_POST['submit'])) {
     }
     
     // Check of de medewerker data al bestaat
-    $result = DatabaseConnection::getConn()->query("SELECT `id`, `email`, `naam` FROM `medewerker`");
-    $medewerkers = $result->fetch_all(MYSQLI_ASSOC);
-    
-    foreach ($medewerkers as $medewerker) {
-        if ($medewerker['email'] == $email || $medewerker['naam'] == $name) {
-            $error = "Medewerker bestaat al!";
-        }
+    $result = DatabaseConnection::getConn()->prepare("SELECT `email`, `naam` FROM `medewerker` WHERE email = ? OR naam = ?;");
+    $result->bind_param('ss', $email, $name);
+    $result->execute();
+    if ($result->get_result()->num_rows > 0) {
+        $error = "Deze medewerker bestaat al!";
     }
 
     if ($error == "") {
