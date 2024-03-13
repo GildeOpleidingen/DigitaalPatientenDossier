@@ -1,1 +1,0 @@
-ALTER TABLE metingontlasting ADD uitscheiding int(11);

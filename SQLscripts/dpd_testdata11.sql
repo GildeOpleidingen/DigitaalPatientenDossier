@@ -1,1 +1,1 @@
-ALTER TABLE meting ADD clientid int(11) AFTER verzorgerregelid;
+ALTER TABLE metingontlasting ADD uitscheiding int(11);
