@@ -111,6 +111,6 @@ function getPatternAnswers(int $clientId, int $patroonType) {
         $vragenlijst->execute();
 
         header("Refresh:0");
-        die;
+        die();
     }
 }
