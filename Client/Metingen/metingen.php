@@ -10,6 +10,7 @@ if (!isset($clientId) || !isset($_SESSION['loggedin_id'])) {
     header("Location: ../../index.php");
 }
 
+$medewerkers = [];
 $hartslag = [];
 $ademhaling = [];
 $bloeddruklaag = [];
@@ -23,7 +24,7 @@ $hoeveelheid = [];
 
 $samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
 
-$metingtijden = DatabaseConnection::getConn()->prepare("SELECT m.id, m.datumtijd, vr.id as verzorgerregelid
+$metingtijden = DatabaseConnection::getConn()->prepare("SELECT m.id, m.datumtijd, vr.id as verzorgerregelid, vr.medewerkerid as medewerkerid
                                                             FROM meting m
                                                             LEFT JOIN verzorgerregel vr on m.verzorgerregelid = vr.id 
                                                             WHERE clientid = ? ORDER BY datumtijd ASC");
@@ -36,6 +37,9 @@ $metingen = getMeting($metingtijden);
 foreach ($metingen[1] as $meting) {
     foreach ($meting as $data) {
         switch ($data['meting']) {
+            case 'naam':
+                $medewerkers[] = $data;
+                break;
             case 'hartslag':
                 $hartslag[] = $data;
                 break;
@@ -104,6 +108,23 @@ include_once '../../Includes/header.php';
                             echo "<th>$tijd</th>";
                         }
                         ?>
+
+                        <tr>
+                            <td>Medewerker</td>
+                            <?php
+                            foreach ($medewerkers as $medewerker) {
+                                foreach ($medewerker as $tijd => $waarde) {
+                                    if ($waarde != "naam") {
+                                        if ($waarde == 0) {
+                                            echo "<td></td>";
+                                        } else {
+                                            echo "<td>$waarde</td>";
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>
 
                         <tr>
                             <td>Hartslag</td>
