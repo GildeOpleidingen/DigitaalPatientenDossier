@@ -35,24 +35,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $uitscheidingUrine = $_POST['uitscheidingUrine'];
     $pijnschaal = $_POST['pijnschaal'];
 
-    $verzorgerregelid = DatabaseConnection::getConn()->prepare("SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
-    $verzorgerregelid->bind_param("ii", $clientId, $medewerker_id);
-    $verzorgerregelid->execute();
-    $verzorgerregelid = $verzorgerregelid->get_result()->fetch_array()[0];
-    $time = date("Y-m-d H:i:s");
+    if (!empty($hartslag) || !empty($ademhaling) || !empty($bloeddruklaag) || !empty($bloeddrukhoog) || !empty($temperatuur) || !empty($vochtinname) || !empty($uitscheiding) || !empty($uitscheidingSamenstelling) || !empty($uitscheidingUrine) || !empty($pijnschaal)) {
 
-    $meting = DatabaseConnection::getConn()->prepare("INSERT INTO meting (verzorgerregelid, datumtijd, hartslag, ademhaling, bloeddruklaag, bloeddrukhoog, temperatuur, vochtinname, pijn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $meting->bind_param("isiiiiiii", $verzorgerregelid, $time, $hartslag, $ademhaling, $bloeddruklaag, $bloeddrukhoog, $temperatuur, $vochtinname, $pijnschaal);
-    $meting->execute();
-    $metingId = $meting->insert_id;
+        $verzorgerregelid = DatabaseConnection::getConn()->prepare("SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
+        $verzorgerregelid->bind_param("ii", $clientId, $medewerker_id);
+        $verzorgerregelid->execute();
+        $verzorgerregelid = $verzorgerregelid->get_result()->fetch_array()[0];
+        $time = date("Y-m-d H:i:s");
 
-    $metingUrine = DatabaseConnection::getConn()->prepare("INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) VALUES (?, ?, ?)");
-    $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingUrine);
-    $metingUrine->execute();
+        $meting = DatabaseConnection::getConn()->prepare("INSERT INTO meting (verzorgerregelid, datumtijd, hartslag, ademhaling, bloeddruklaag, bloeddrukhoog, temperatuur, vochtinname, pijn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $meting->bind_param("isiiiiiii", $verzorgerregelid, $time, $hartslag, $ademhaling, $bloeddruklaag, $bloeddrukhoog, $temperatuur, $vochtinname, $pijnschaal);
+        $meting->execute();
+        $metingId = $meting->insert_id;
 
-    $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd, uitscheiding) VALUES (?, ?, ?, ?)");
-    $metingUrineSamenstelling->bind_param("iisi", $metingId, $uitscheidingSamenstelling, $time, $uitscheiding);
-    $metingUrineSamenstelling->execute();
+        $metingUrine = DatabaseConnection::getConn()->prepare("INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) VALUES (?, ?, ?)");
+        $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingUrine);
+        $metingUrine->execute();
+
+        $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd, uitscheiding) VALUES (?, ?, ?, ?)");
+        $metingUrineSamenstelling->bind_param("iisi", $metingId, $uitscheidingSamenstelling, $time, $uitscheiding);
+        $metingUrineSamenstelling->execute();
+    }
 }
 
 $grens_asistent = DatabaseConnection::getConn()->prepare ("SELECT `grens_assistent` FROM `medewerker` WHERE id = $medewerker_id");
@@ -93,12 +96,12 @@ include_once '../../Includes/header.php';
 
             <div class="bloeddrukken">
                 <div class="bloeddruk-lengte">
-                    <label for="Bloed druk">Bloeddruk Laag:</label>
-                    <input type="text" id="bloeddruk" name="bloeddruk" placeholder="Laag" required min="0" max="140"> <!-- o tot 140 -->
-                </div>
-                <div class="bloeddruk-lengte">
                     <label for="Bloed druk">Bloeddruk Hoog:</label>
                     <input type="text" id="bloeddruk2" name="bloeddruk2" placeholder="Hoog" required min="0" max="140"> <!-- o tot 140 -->
+                </div>
+                <div class="bloeddruk-lengte">
+                    <label for="Bloed druk">Bloeddruk Laag:</label>
+                    <input type="text" id="bloeddruk" name="bloeddruk" placeholder="Laag" required min="0" max="140"> <!-- o tot 140 -->
                 </div>
             </div>
 
