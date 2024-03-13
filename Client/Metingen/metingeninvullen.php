@@ -89,7 +89,7 @@ include_once '../../Includes/header.php';
             <input type="number" id="hartslag" name="hartslag" placeholder="slagen per minuut" required min="0" max="200"> <!-- o tot 200 -->
 
             <label for="Ademhaling">Ademhaling:</label>
-            <input type="number" id="ademhaling" name="ademhaling" placeholder="tussen 0 , 80" required min="0" max="80"> <!-- o tot 80 -->
+            <input type="number" id="ademhaling" name="ademhaling" placeholder="tussen 15 , 20" required min="0" max="80"> <!-- o tot 80 -->
 
             <div class="bloeddrukken">
                 <div class="bloeddruk-lengte">
