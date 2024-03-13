@@ -108,3 +108,7 @@ input[type="text"] {
     color: white;
     cursor: pointer;
 }
+
+.successMessage{
+    color: #4CAF50;
+}

@@ -65,7 +65,7 @@ if (isset($_GET['pt'])) {
                                 <input type="text" class="pes" name="s" value="<?= $patroonType["S"] ?? "" ?>">
                             </div>
                             <div class="question">
-                                <p>Doelen (SMART)</p>
+                                <p>Doel (SMART)</p>
                                 <textarea name="doelen"><?= $patroonType["doelen"] ?? "" ?></textarea>
                             </div>
                             <div class="question">
