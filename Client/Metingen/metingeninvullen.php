@@ -93,13 +93,14 @@ include_once '../../Includes/header.php';
 
             <div class="bloeddrukken">
                 <div class="bloeddruk-lengte">
-                    <label for="Bloed druk">Bloeddruk Laag:</label>
-                    <input type="text" id="bloeddruk" name="bloeddruk" placeholder="Laag" required min="0" max="140"> <!-- o tot 140 -->
-                </div>
-                <div class="bloeddruk-lengte">
                     <label for="Bloed druk">Bloeddruk Hoog:</label>
                     <input type="text" id="bloeddruk2" name="bloeddruk2" placeholder="Hoog" required min="0" max="140"> <!-- o tot 140 -->
                 </div>
+                <div class="bloeddruk-lengte">
+                    <label for="Bloed druk">Bloeddruk Laag:</label>
+                    <input type="text" id="bloeddruk" name="bloeddruk" placeholder="Laag" required min="0" max="140"> <!-- o tot 140 -->
+                </div>
+
             </div>
 
             <label for="Temperatuur">Temperatuur:</label>
