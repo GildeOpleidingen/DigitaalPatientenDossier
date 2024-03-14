@@ -2,12 +2,14 @@
 session_start();
 include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
+include '../../Functions/AnamneseFunctions.php';
 
 $antwoorden = getPatternAnswers($_SESSION['clientId'], 8);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
 $medewerkerId = $_SESSION['loggedin_id'];
+$clientId = $_SESSION['clientId'];
 
 if (isset($_REQUEST['navbutton'])) {
 $getrouwd_of_samenwonend = $_POST['getrouwd_samenwonend'];
@@ -38,46 +40,15 @@ $observatie = array(!empty($_POST['observatie1']), !empty($_POST['observatie2'])
 
 $observatie = convertBoolArrayToString($observatie);
 
-$result = DatabaseConnection::getConn()->prepare("
-                    SELECT vl.id
-                    from vragenlijst vl
-                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
-                    where verzorgerregel.clientid = ?");
-$result->bind_param("i", $_SESSION['clientId']);
-$result->execute();
-$result = $result->get_result()->fetch_assoc();
-
+$result = getVragenlijstId($clientId);
 if ($result != null){
-    $vragenlijstId = $result['id'];
+    $vragenlijstId = $result;
 } else {
-    $sql2 = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
-            VALUES ((SELECT id
-            FROM verzorgerregel
-            WHERE clientid = ?
-            AND medewerkerid = ?))");
-    $sql2->bind_param("ii", $_SESSION['clientId'] ,$medewerkerId);
-    $sql2->execute();
-    $sql2 = $sql2->get_result();
-
-    $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
-                    from vragenlijst vl
-                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
-                    where verzorgerregel.clientid = ?");
-    $result->bind_param("i", $_SESSION['clientId']);
-    $result->execute();
-    $result = $result->get_result()->fetch_assoc();
-
-    $vragenlijstId=$result['id'];
+    $result = insertVragenlijst($_SESSION['clientId'], $medewerkerId);
+    $vragenlijstId = $result;
 }
 
-// kijken of patroon02 bestaat door te kijken naar vragenlijst id
-$result = DatabaseConnection::getConn()->prepare("
-                    SELECT p.id
-                    FROM patroon08rollenrelatie p
-                    WHERE p.vragenlijstid =  ?");
-$result->bind_param("i", $vragenlijstId);
-$result->execute();
-$result = $result->get_result()->fetch_assoc();
+$result = checkIfPatternExists($vragenlijstId);
 
 if ($result != null) {
     //update
