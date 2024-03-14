@@ -218,8 +218,8 @@ if (isset($_REQUEST['navbutton'])) {
                     </div>
                 </div>
                 <div class="submit">
-                    <button name="navbutton" type="submit" value="prev">< Vorige</button>
-                    <button name="navbutton" type="submit" value="next">Volgende ></button>
+                    <button name="navbutton" type="submit" value="prev">Vorige</button>
+                    <button name="navbutton" type="submit" value="next">Volgende></button>
                 </div>
             </div>
         </div>
