@@ -33,3 +33,8 @@ Eentje voor de test omgeving
 Eentje voor de productie omgeving.
 
 Deze staan in de map .github/workflows/
+
+# Inloggen
+Deze hash kan je bij je medewerker als wachtwoord neerzetten.
+Het wachtwoord is "admin".
+$2y$10$7cuPDEMwyvZIZBBFoZujC.TqRAJewVoCTqigNy1MgdYp4x8XNS7Mm
