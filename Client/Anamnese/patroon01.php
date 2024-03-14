@@ -4,6 +4,15 @@ include '../../Database/DatabaseConnection.php';
 include '../../Functions/Functions.php';
 include '../../Functions/AnamneseFunctions.php';
 
+$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
+$client->bind_param("i", $_SESSION['clientId']);
+$client->execute();
+$client = $client->get_result()->fetch_assoc();
+
+if ($client == null) {
+    header("Location: ../../index.php");
+}
+
 $antwoorden = getPatternAnswers($_SESSION['clientId'], 1);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
@@ -109,15 +118,6 @@ switch($_REQUEST['navbutton']) {
             break;
     }
     exit;
-}
-
-$client = DatabaseConnection::getConn()->prepare("SELECT * FROM client WHERE id = ?");
-$client->bind_param("i", $_SESSION['clientId']);
-$client->execute();
-$client = $client->get_result()->fetch_assoc();
-
-if ($client == null) {
-    header("Location: ../../index.php");
 }
 
 ?>
