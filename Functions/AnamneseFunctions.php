@@ -1,6 +1,10 @@
 <?php
 
-//haalt de vragenlijst op gebaseerd op het megegeven clientid, returned het id van de vragenlijst.
+/**
+ * haalt de vragenlijst op gebaseerd op het megegeven clientid, returned het id van de vragenlijst.
+ *
+ * @return int|null
+ */
 function getVragenlijstId($clientId): int|null
 {
     $result = DatabaseConnection::getConn()->prepare("
@@ -15,7 +19,11 @@ function getVragenlijstId($clientId): int|null
     return $result['id'];
 }
 
-//insert een nieuwe vragenlijst voor de meegegeven client/medewerkerid
+/**
+ * insert een nieuwe vragenlijst voor de meegegeven client/medewerkerid
+ *
+ * @return int|null
+ */
 function insertVragenlijst($clientId, $medewerkerId): int|null {
     $result = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
             VALUES ((SELECT id
@@ -29,7 +37,11 @@ function insertVragenlijst($clientId, $medewerkerId): int|null {
     return $result['id'];
 }
 
-// Kijkt of er al een patroon bestaat met het megegeven vragenlijstid
+/**
+ * Kijkt of er al een patroon bestaat met het megegeven vragenlijstid
+ *
+ * @return array|null
+ */
 function checkIfPatternExists($vragenlijstId): array|null
 {
     $result = DatabaseConnection::getConn()->prepare("
