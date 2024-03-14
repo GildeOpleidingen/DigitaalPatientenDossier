@@ -133,6 +133,7 @@ button:hover {
 }
 
 .tabel table, th, td {
+    min-width: 5em;
     border: 1px solid black;
     padding: 5px;
     background-color: white;
