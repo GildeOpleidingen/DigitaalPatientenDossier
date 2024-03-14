@@ -42,11 +42,11 @@ function insertVragenlijst($clientId, $medewerkerId): int|null {
  *
  * @return array|null
  */
-function checkIfPatternExists($vragenlijstId): array|null
+function checkIfPatternExists($from, $vragenlijstId): array|null
 {
     $result = DatabaseConnection::getConn()->prepare("
                     SELECT p.id
-                    FROM patroon08rollenrelatie p
+                    FROM $from p
                     WHERE p.vragenlijstid =  ?");
     $result->bind_param("i", $vragenlijstId);
     $result->execute();

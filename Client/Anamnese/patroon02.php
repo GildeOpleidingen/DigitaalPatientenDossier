@@ -34,7 +34,7 @@ if (isset($_REQUEST['navbutton'])) {
         $vragenlijstId = $result;
     }
 
-    $result = checkIfPatternExists($vragenlijstId);
+    $result = checkIfPatternExists("patroon02voedingstofwisseling", $vragenlijstId);
 if ($result != null) {
     //update
     $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon02voedingstofwisseling`

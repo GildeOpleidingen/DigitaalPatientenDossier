@@ -52,7 +52,7 @@ if (isset($_REQUEST['navbutton'])) {
         $vragenlijstId = $result;
     }
 
-    $result = checkIfPatternExists($vragenlijstId);
+    $result = checkIfPatternExists("patroon04activiteiten", $vragenlijstId);
 
     if ($result != null) {
         //update

@@ -34,7 +34,6 @@ $contact_met_derden = $_POST['contact_met_derden'];
 $verlies_geleden = $_POST['verlies_geleden'];
 $verlies_geleden_welke = $_POST['verlies_geleden_welke'];
 
-print_r($getrouwd_of_samenwonend);
 // array van checkboxes van observatie tab
 $observatie = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']), !empty($_POST['observatie11']), !empty($_POST['observatie12']), !empty($_POST['observatie13']), !empty($_POST['observatie14']), !empty($_POST['observatie15']), !empty($_POST['observatie16']), !empty($_POST['observatie17']));
 
@@ -48,7 +47,7 @@ if ($result != null){
     $vragenlijstId = $result;
 }
 
-$result = checkIfPatternExists($vragenlijstId);
+$result = checkIfPatternExists("patroon08rollenrelatie", $vragenlijstId);
 
 if ($result != null) {
     //update

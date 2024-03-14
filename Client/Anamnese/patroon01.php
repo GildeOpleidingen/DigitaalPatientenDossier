@@ -38,11 +38,11 @@ if (isset($_REQUEST['navbutton'])) {
     if ($result != null){
         $vragenlijstId = $result;
     } else {
-        $result = insertVragenlijst($_SESSION['clientId'], $medewerkerId);
+        $result = insertVragenlijst($_SESSION['clientId'], $medewerker_id);
         $vragenlijstId = $result;
     }
 
-    $result = checkIfPatternExists($vragenlijstId);
+    $result = checkIfPatternExists("patroon01gezondheidsbeleving", $vragenlijstId);
 
     if ($result != null) {
         //update
