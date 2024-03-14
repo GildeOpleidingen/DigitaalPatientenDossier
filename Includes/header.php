@@ -83,8 +83,8 @@ $medewerker = $result->get_result()->fetch_assoc();
         <div class="foto">
             <?php echo '<img src="data:image/png;base64,' . base64_encode($medewerker['foto']) . '">'; ?>
             <?php echo "<span>$medewerker[naam]</span>"; ?>
-            <a href="/DigitaalPatientenDossier/Dashboard/logout.php"><img style="height: 27px;"
-                                                                          src="/DigitaalPatientenDossier/Images/logout.svg"></a>
+            <a href="/Dashboard/logout.php"><img style="height: 27px;"
+                                                                          src="/Images/logout.svg"></a>
         </div>
         <div class="navbar">
 
