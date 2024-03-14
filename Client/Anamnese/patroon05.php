@@ -176,12 +176,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Is er verandering ontstaan in de kwaliteit van uw slaap (in- en/of doorslaapprobleem)?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="verandering_kwaliteit_slapen" <?= $antwoorden['verandering_kwaliteit_slapen'] ? "checked" : "" ?>>   
+                                    <input id="radio" type="radio" name="verandering_kwaliteit_slapen" value="1" <?= $antwoorden['verandering_kwaliteit_slapen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_kwaliteit_slapen_blijktuit"> <?= $antwoorden['verandering_kwaliteit_slapen_blijktuit'] ??  "" ?> </textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="verandering_kwaliteit_slapen" <?= !$antwoorden['verandering_kwaliteit_slapen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_kwaliteit_slapen" value="0" <?= !$antwoorden['verandering_kwaliteit_slapen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -189,7 +189,7 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Doet u iets om (in) te kunnen slapen?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="gebruik_inslaapmiddel" <?= $antwoorden['gebruik_inslaapmiddel'] ? "checked" : "" ?>>
+                                    <input id="radio" type="radio" name="gebruik_inslaapmiddel" value="1" <?= $antwoorden['gebruik_inslaapmiddel'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <div id="checkfield">
                                         <div class="question"><div class="observe"><input type="checkbox" <?= @$boolArrayInslaapmiddel[0] ? "checked" : "" ?> name="inslaapmiddel1"><p>Medicijngebruik</p></div></div>
@@ -201,7 +201,7 @@ if (isset($_REQUEST['navbutton'])) {
                                     </div>
                                 </div>
                                 <p>
-                                    <input type="radio" name="gebruik_inslaapmiddel" <?= !$antwoorden['gebruik_inslaapmiddel'] ? "checked" : "" ?>>
+                                    <input type="radio" name="gebruik_inslaapmiddel" value="0" <?= !$antwoorden['gebruik_inslaapmiddel'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -210,11 +210,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Voelt u zich uitgerust als u wakker wordt?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="uitgerust_wakker" <?= $antwoorden['uitgerust_wakker'] ? "checked" : "" ?>>
+                                    <input type="radio" name="uitgerust_wakker" value="1" <?= $antwoorden['uitgerust_wakker'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="uitgerust_wakker" <?= !$antwoorden['uitgerust_wakker'] ? "checked" : "" ?>>
+                                    <input type="radio" name="uitgerust_wakker" value="0" <?= !$antwoorden['uitgerust_wakker'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -222,11 +222,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Heeft u last van dromen, nachtmerries?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="dromen_nachtmerries" <?= $antwoorden['dromen_nachtmerries'] ? "checked" : "" ?>>
+                                    <input type="radio" name="dromen_nachtmerries" value="1" <?= $antwoorden['dromen_nachtmerries'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="dromen_nachtmerries" <?= !$antwoorden['dromen_nachtmerries'] ? "checked" : "" ?>>
+                                    <input type="radio" name="dromen_nachtmerries" value="0" <?= !$antwoorden['dromen_nachtmerries'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -234,11 +234,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Neemt u rustperioden overdag?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="rustperiodes_overdag" <?= $antwoorden['rustperiodes_overdag'] ? "checked" : "" ?>>
+                                    <input type="radio" name="rustperiodes_overdag" value="1" <?= $antwoorden['rustperiodes_overdag'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="rustperiodes_overdag" <?= !$antwoorden['rustperiodes_overdag'] ? "checked" : "" ?>>
+                                    <input type="radio" name="rustperiodes_overdag" value="0" <?= !$antwoorden['rustperiodes_overdag'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -246,11 +246,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Kunt u zich gemakkelijk ontspannen?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="gemakkelijk_ontspannen" <?= $antwoorden['gemakkelijk_ontspannen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="gemakkelijk_ontspannen" value="1" <?= $antwoorden['gemakkelijk_ontspannen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="gemakkelijk_ontspannen" <?= !$antwoorden['gemakkelijk_ontspannen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="gemakkelijk_ontspannen" value="0" <?= !$antwoorden['gemakkelijk_ontspannen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>

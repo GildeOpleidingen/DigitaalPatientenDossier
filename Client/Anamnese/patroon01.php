@@ -179,12 +179,12 @@ if ($client == null) {
                             <div class="question"><p>- Rookt u?</p>
                                 <div class="checkboxes">
                                     <div class="question-answer">
-                                        <input id="radio" type="radio" name="rookt" <?= $antwoorden['rookt'] ? "checked" : "" ?>>
+                                        <input id="radio" type="radio" name="rookt" value="1" <?= $antwoorden['rookt'] ? "checked" : "" ?>>
                                         <label>Ja</label>
                                         <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="hoeveel?" name="rookt_hoeveelheid"><?= $antwoorden['rookt_hoeveelheid']?></textarea>
                                     </div>
                                     <p>
-                                        <input type="radio" name="rookt" <?= !$antwoorden['rookt'] ? "checked" : "" ?>>
+                                        <input type="radio" name="rookt" value="0" <?= !$antwoorden['rookt'] ? "checked" : "" ?>>
                                         <label>Nee</label>
                                     </p>
                                 </div>
@@ -192,12 +192,12 @@ if ($client == null) {
                             <div class="question"><p>- Drinkt u?</p>
                                 <div class="checkboxes">
                                     <div class="question-answer">
-                                        <input id="radio" type="radio" name="drinkt" <?= $antwoorden['drinkt'] ? "checked" : "" ?>>
+                                        <input id="radio" type="radio" name="drinkt" value="1" <?= $antwoorden['drinkt'] ? "checked" : "" ?>>
                                         <label>Ja</label>
                                         <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="hoeveel?" name="drinkt_hoeveelheid"><?= $antwoorden['drinkt_hoeveelheid'] ?></textarea>
                                     </div>
                                     <p>
-                                        <input type="radio" name="drinkt" <?= !$antwoorden['drinkt'] ? "checked" : "" ?>>
+                                        <input type="radio" name="drinkt" value="0" <?= !$antwoorden['drinkt'] ? "checked" : "" ?>>
                                         <label>Nee</label>
                                     </p>
                                 </div>
@@ -205,12 +205,12 @@ if ($client == null) {
                             <div class="question"><p>Heeft u momenteel een infectie of overdraagbare besmettelijke aandoening?</p>
                                 <div class="checkboxes">
                                     <div class="question-answer">
-                                        <input id="radio" type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] ? "checked" : "" ?>>
+                                        <input id="radio" type="radio" name="besmettelijke_aandoening" value="1" <?= $antwoorden['besmettelijke_aandoening'] ? "checked" : "" ?>>
                                         <label>Ja</label>
                                         <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="besmettelijke_aandoening_welke"><?= $antwoorden['besmettelijke_aandoening_welke'] ?></textarea>
                                     </div>
                                     <p>
-                                        <input type="radio" name="besmettelijke_aandoening" <?= !$antwoorden['besmettelijke_aandoening'] ? "checked" : "" ?>>
+                                        <input type="radio" name="besmettelijke_aandoening" value="0" <?= !$antwoorden['besmettelijke_aandoening'] ? "checked" : "" ?>>
                                         <label>Nee</label>
                                     </p>
                                 </div>
@@ -218,12 +218,12 @@ if ($client == null) {
                             <div class="question"><p>Bent u ergens allergisch voor?</p>
                                 <div class="checkboxes">
                                     <div class="question-answer">
-                                        <input id="radio" type="radio" name="alergieen" <?= $antwoorden['alergieen'] ? "checked" : "" ?>>
+                                        <input id="radio" type="radio" name="alergieen" value="1" <?= $antwoorden['alergieen'] ? "checked" : "" ?>>
                                         <label>Ja</label>
                                         <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="alergieen_welke"><?= $antwoorden['alergieen_welke'] ?></textarea>
                                     </div>
                                     <p>
-                                        <input type="radio" name="alergieen" <?= !$antwoorden['alergieen'] ? "checked" : "" ?>>
+                                        <input type="radio" name="alergieen" value="0" <?= !$antwoorden['alergieen'] ? "checked" : "" ?>>
                                         <label>Nee</label>
                                     </p>
                                 </div>
