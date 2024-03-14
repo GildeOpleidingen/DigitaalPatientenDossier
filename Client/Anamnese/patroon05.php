@@ -72,21 +72,21 @@ if (isset($_REQUEST['navbutton'])) {
     if ($result != null) {
         //update
         $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon05slaaprust` SET
-        `verandering_inslaaptijd`='$verandering_inslaaptijd',
-        `verandering_inslaaptijd_blijktuit`='$verandering_inslaaptijd_blijktuit',
-        `verandering_kwaliteit_slapen`='$verandering_kwaliteit_slapen',
-        `verandering_kwaliteit_slapen_blijktuit`='$verandering_kwaliteit_slapen_blijktuit',
-        `gebruik_inslaapmiddel`='$gebruik_inslaapmiddel',
-        `gebruik_inslaapmiddel_welke`= '$gebruik_inslaapmiddel_welke',
-        `gebruik_inslaapmiddel_anders`='$gebruik_inslaapmiddel_anders',
-        `slaapduur`='$slaapduur',
-        `uitgerust_wakker`='$uitgerust_wakker',
-        `dromen_nachtmerries`='$dromen_nachtmerries',
-        `rustperiodes_overdag`='$rustperiodes_overdag',
-        `gemakkelijk_ontspannen`='$gemakkelijk_ontspannen',
-        `observatie`='$observatie'
+        `verandering_inslaaptijd`=?,
+        `verandering_inslaaptijd_blijktuit`=?,
+        `verandering_kwaliteit_slapen`=?,
+        `verandering_kwaliteit_slapen_blijktuit`=?,
+        `gebruik_inslaapmiddel`=?,
+        `gebruik_inslaapmiddel_welke`= ?,
+        `gebruik_inslaapmiddel_anders`=?,
+        `slaapduur`=?,
+        `uitgerust_wakker`=?,
+        `dromen_nachtmerries`=?,
+        `rustperiodes_overdag`=?,
+        `gemakkelijk_ontspannen`=?,
+        `observatie`=?
            WHERE `vragenlijstid`=?");
-        $result1->bind_param("i", $vragenlijstId);
+        $result1->bind_param("isisisidiiiisi", $verandering_inslaaptijd,$verandering_inslaaptijd_blijktuit,$verandering_kwaliteit_slapen,$verandering_kwaliteit_slapen_blijktuit,$gebruik_inslaapmiddel,$gebruik_inslaapmiddel_welke,$gebruik_inslaapmiddel_anders,$slaapduur,$uitgerust_wakker,$dromen_nachtmerries,$rustperiodes_overdag,$gemakkelijk_ontspannen, $observatie, $vragenlijstId);
         $result1->execute();
         $result1 = $result1->get_result();
 

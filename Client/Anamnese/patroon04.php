@@ -102,6 +102,8 @@ if (isset($_REQUEST['navbutton'])) {
         `dagelijkse_activiteiten`=?,
         `dagelijkse_gewoontes`=?,
         `dagelijkse_gewoontes_welke`=?,
+        `lichamelijke_beperking`=?,
+        `lichamelijke_beperking_welke`=?,
         `vermoeidheids_klachten`=?,
         `passiever`=?,
         `passiever_blijktuit`=?,
@@ -113,7 +115,13 @@ if (isset($_REQUEST['navbutton'])) {
         `activiteiten_weggevallen_welke`=?,
         `observatie`=?
            WHERE `vragenlijstid`=?");
-        $result1->bind_param("iiiiiiiiiiiiissisisisiisisissi", $voeding, $aankleden, $alg_mobiliteit, $koken, $huishouden, $financien, $verzorging, $baden, $toiletgang, $uit_bed_komen, $winkelen, $tijd_voor_uzelf_nodig, $tijd_voor_uzelf_nodig_blijktuit, $dagelijkse_activiteiten, $dagelijkse_gewoontes, $dagelijkse_gewoontes_welke, $vermoeidheids_klachten, $passiever, $passiever_blijktuit, $problemen_starten_dag, $problemen_starten_dag_blijktuit, $hobbys, $hobbys_bestedingstijd, $activiteiten_weggevallen, $activiteiten_weggevallen_welke, $observatie, $vragenlijstId);
+        $result1->bind_param("iiiiiiiiiiiissisisisiisisissi", $voeding, $aankleden, $alg_mobiliteit,
+            $koken, $huishouden, $financien, $verzorging, $baden, $toiletgang, $uit_bed_komen, $winkelen,
+            $tijd_voor_uzelf_nodig, $tijd_voor_uzelf_nodig_blijktuit, $dagelijkse_activiteiten, $dagelijkse_gewoontes,
+            $dagelijkse_gewoontes_welke,$lichamelijke_beperking,
+            $lichamelijke_beperking_welke,$vermoeidheids_klachten, $passiever, $passiever_blijktuit, $problemen_starten_dag,
+            $problemen_starten_dag_blijktuit, $hobbys, $hobbys_bestedingstijd, $activiteiten_weggevallen,
+            $activiteiten_weggevallen_welke, $observatie, $vragenlijstId);
         $result1->execute();
         $result1 = $result1->get_result();
 
