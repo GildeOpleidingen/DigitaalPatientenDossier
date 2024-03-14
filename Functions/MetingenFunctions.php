@@ -8,6 +8,7 @@ function getMeting($metingtijden)
         $datumtijd = $metingtijd['datumtijd'];
         $metingid = $metingtijd['id'];
         $verzorgerregelid = $metingtijd['verzorgerregelid'];
+        $medewerkerid = $metingtijd['medewerkerid'];
         $tijd = date('H:i', strtotime($datumtijd));
         $tijden[] = $tijd;
         $query = "(SELECT
@@ -71,16 +72,28 @@ function getMeting($metingtijden)
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN samenstellingid ELSE null END) AS '$tijd'
             FROM metingontlasting
             WHERE metingid = ?)
-
+            
+            UNION
+            
+            (SELECT
+            'uitscheiding' AS metingontlasting,
+            MAX(CASE WHEN datumtijd = '$datumtijd' THEN uitscheiding ELSE null END) AS '$tijd'
+            FROM metingontlasting
+            WHERE metingid = ?)
+            
             UNION
             
             (SELECT
             'hoeveelheid' AS metingurine,
             MAX(CASE WHEN datumtijd = '$datumtijd' THEN hoeveelheid ELSE null END) AS '$tijd'
             FROM metingurine
-            WHERE metingid = ?)";
+            WHERE metingid = ?)
+            
+            UNION
+            
+            (SELECT 'naam' as meting, naam FROM medewerker WHERE id = ?)";
         $result = DatabaseConnection::getConn()->prepare($query);
-        $result->bind_param("iiiiiiiii", $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $metingid, $metingid);
+        $result->bind_param("iiiiiiiiiii", $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $metingid, $metingid, $metingid, $medewerkerid);
         $result->execute();
         $result = $result->get_result()->fetch_all(MYSQLI_ASSOC);
 
