@@ -100,7 +100,6 @@ include_once '../../Includes/header.php';
                     <label for="Bloed druk">Bloeddruk Laag:</label>
                     <input type="text" id="bloeddruk" name="bloeddruk" placeholder="Laag" required min="0" max="140"> <!-- o tot 140 -->
                 </div>
-
             </div>
 
             <label for="Temperatuur">Temperatuur:</label>
