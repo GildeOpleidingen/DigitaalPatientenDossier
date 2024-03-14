@@ -7,13 +7,149 @@ $antwoorden = getPatternAnswers($_SESSION['clientId'], 8);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
+$medewerkerId = $_SESSION['loggedin_id'];
+
+if (isset($_REQUEST['navbutton'])) {
+$getrouwd_of_samenwonend = $_POST['getrouwd_samenwonend'];
+$kinderen = $_POST['kinderen'];
+$tevreden_thuissituatie = $_POST['tevreden_thuissituatie'];
+$steun_vrienden_familie = $_POST['steun_vrienden_familie'];
+$inkomstenbron = $_POST['inkomstenbron'];
+$verandering_fin_sit_vroeger = $_POST['verandering_fin_sit_vroeger'] ?? "";
+$verandering_fin_sit_vroeger_welke = $_POST['verandering_fin_sit_vroeger_welke'] ?? "";
+$verandering_fin_sit_toekomst = $_POST['verandering_fin_sit_toekomst'] ?? "";
+$verandering_fin_sit_toekomst_welke = $_POST['verandering_fin_sit_toekomst_welke'] ?? "";
+$verandering_sociale_contacten = $_POST['verandering_sociale_contacten'];
+$verandering_sociale_contacten_welke = $_POST['verandering_sociale_contacten_welke'];
+$opleiding = $_POST['opleiding'];
+$groot_gezin = $_POST['groot_gezin'];
+$plaats_in_gezin = $_POST['plaats_in_gezin'];
+$onderlinge_contacten_gezin = $_POST['onderlinge_contacten_gezin'];
+$agressie_gezin = $_POST['agressie_gezin'];
+$verenigingslid = $_POST['verenigingslid'];
+$vereniging_welke = $_POST['vereniging_welke'];
+$contact_met_derden = $_POST['contact_met_derden'];
+$verlies_geleden = $_POST['verlies_geleden'];
+$verlies_geleden_welke = $_POST['verlies_geleden_welke'];
+
+print_r($getrouwd_of_samenwonend);
+// array van checkboxes van observatie tab
+$observatie = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']), !empty($_POST['observatie11']), !empty($_POST['observatie12']), !empty($_POST['observatie13']), !empty($_POST['observatie14']), !empty($_POST['observatie15']), !empty($_POST['observatie16']), !empty($_POST['observatie17']));
+
+$observatie = convertBoolArrayToString($observatie);
+
+$result = DatabaseConnection::getConn()->prepare("
+                    SELECT vl.id
+                    from vragenlijst vl
+                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
+                    where verzorgerregel.clientid = ?");
+$result->bind_param("i", $_SESSION['clientId']);
+$result->execute();
+$result = $result->get_result()->fetch_assoc();
+
+if ($result != null){
+    $vragenlijstId = $result['id'];
+} else {
+    $sql2 = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
+            VALUES ((SELECT id
+            FROM verzorgerregel
+            WHERE clientid = ?
+            AND medewerkerid = ?))");
+    $sql2->bind_param("ii", $_SESSION['clientId'] ,$medewerkerId);
+    $sql2->execute();
+    $sql2 = $sql2->get_result();
+
+    $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
+                    from vragenlijst vl
+                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
+                    where verzorgerregel.clientid = ?");
+    $result->bind_param("i", $_SESSION['clientId']);
+    $result->execute();
+    $result = $result->get_result()->fetch_assoc();
+
+    $vragenlijstId=$result['id'];
+}
+
+// kijken of patroon02 bestaat door te kijken naar vragenlijst id
+$result = DatabaseConnection::getConn()->prepare("
+                    SELECT p.id
+                    FROM patroon08rollenrelatie p
+                    WHERE p.vragenlijstid =  ?");
+$result->bind_param("i", $vragenlijstId);
+$result->execute();
+$result = $result->get_result()->fetch_assoc();
+
+if ($result != null) {
+    //update
+    $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon08rollenrelatie` SET
+        `getrouwd_samenwonend` = ?,
+        `kinderen` = ?,
+        `tevreden_thuissituatie` = ?,
+        `steun_vrienden_familie` = ?,
+        `inkomstenbron` = ?,
+        `verandering_fin_sit_vroeger` = ?,
+        `verandering_fin_sit_vroeger_welke` = ?,
+        `verandering_fin_sit_toekomst` = ?,
+        `verandering_fin_sit_toekomst_welke` = ?,
+        `opleiding` = ?,
+        `verandering_sociale_contacten` = ?,
+        `verandering_sociale_contacten_welke` = ?,
+        `groot_gezin` = ?,
+        `plaats_in_gezin` = ?,
+        `onderlinge_contacten_gezin` = ?,
+        `agressie_gezin` = ?,
+        `verenigingslid` = ?,
+        `vereniging_welke` = ?,
+        `contact_met_derden` = ?,
+        `verlies_geleden` = ?,
+        `verlies_geleden_welke` = ?,
+        `observatie` = ?
+           WHERE `vragenlijstid`=?");
+    $result1->bind_param("iiiisisissisissiississi", $getrouwd_of_samenwonend, $kinderen, $tevreden_thuissituatie, $steun_vrienden_familie, $inkomstenbron, $verandering_fin_sit_vroeger, $verandering_fin_sit_vroeger_welke, $verandering_fin_sit_toekomst, $verandering_fin_sit_toekomst_welke, $opleiding, $verandering_sociale_contacten, $verandering_sociale_contacten_welke, $groot_gezin, $plaats_in_gezin, $onderlinge_contacten_gezin, $agressie_gezin, $verenigingslid, $vereniging_welke, $contact_met_derden, $verlies_geleden, $verlies_geleden_welke, $observatie, $vragenlijstId);
+    $result1->execute();
+    $result1 = $result1->get_result();
+
+}else{
+    //hier insert je alle data in patroon02
+
+    $result2 = DatabaseConnection::getConn()->prepare( "INSERT INTO `patroon08rollenrelatie`(
+                `vragenlijstid`,
+                `getrouwd_samenwonend`,
+                `kinderen`,
+                `tevreden_thuissituatie`,
+                `steun_vrienden_familie`,
+                `inkomstenbron`,
+                `verandering_fin_sit_vroeger`,
+                `verandering_fin_sit_vroeger_welke`,
+                `verandering_fin_sit_toekomst`,
+                `verandering_fin_sit_toekomst_welke`,
+                `opleiding`,
+                `verandering_sociale_contacten`,
+                `verandering_sociale_contacten_welke`,
+                `groot_gezin`,
+                `plaats_in_gezin`,
+                `onderlinge_contacten_gezin`,
+                `agressie_gezin`,
+                `verenigingslid`,
+                `vereniging_welke`,
+                `contact_met_derden`,
+                `verlies_geleden`,
+                `verlies_geleden_welke`,
+                `observatie`)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $result2->bind_param("iiiiisisissisissiississ", $vragenlijstId, $getrouwd_of_samenwonend, $kinderen, $tevreden_thuissituatie, $steun_vrienden_familie, $inkomstenbron, $verandering_fin_sit_vroeger, $verandering_fin_sit_vroeger_welke, $verandering_fin_sit_toekomst, $verandering_fin_sit_toekomst_welke, $opleiding, $verandering_sociale_contacten, $verandering_sociale_contacten_welke, $groot_gezin, $plaats_in_gezin, $onderlinge_contacten_gezin, $agressie_gezin, $verenigingslid, $vereniging_welke, $contact_met_derden, $verlies_geleden, $verlies_geleden_welke, $observatie);
+    $result2->execute();
+    $result2 = $result2->get_result();
+    }
+}
+
 if (isset($_REQUEST['navbutton'])) {
     //TODO: hier actie om data op te slaan in database.
     switch($_REQUEST['navbutton']) {
         case 'next': //action for next here
             header('Location: patroon09.php');
             break;
-    
+
         case 'prev': //action for previous here
             header('Location: patroon07.php');
             break;
@@ -46,11 +182,11 @@ if (isset($_REQUEST['navbutton'])) {
                     <div class="question"><p>Bent u getrouwd/samenwonend?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="getrouwd_samenwonend" <?= $antwoorden['getrouwd_samenwonend'] ? "checked" : "" ?>>
+                                    <input type="radio" name="getrouwd_samenwonend" value="1" <?= $antwoorden['getrouwd_samenwonend'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="getrouwd_samenwonend" <?= !$antwoorden['getrouwd_samenwonend'] ? "checked" : "" ?>>
+                                    <input type="radio" name="getrouwd_samenwonend" value="0" <?= !$antwoorden['getrouwd_samenwonend'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -58,11 +194,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Heeft u kinderen?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="kinderen" <?= $antwoorden['kinderen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="kinderen" value="1" <?= $antwoorden['kinderen'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="kinderen" <?= !$antwoorden['kinderen'] ? "checked" : "" ?>>
+                                    <input type="radio" name="kinderen" value="0" <?= !$antwoorden['kinderen'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -70,11 +206,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Bent u tevreden over uw thuissituatie?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="tevreden_thuissituatie" <?= $antwoorden['tevreden_thuissituatie'] ? "checked" : "" ?>>
+                                    <input type="radio" name="tevreden_thuissituatie" value="1" <?= $antwoorden['tevreden_thuissituatie'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="tevreden_thuissituatie" <?= !$antwoorden['tevreden_thuissituatie'] ? "checked" : "" ?>>
+                                    <input type="radio" name="tevreden_thuissituatie" value="0" <?= !$antwoorden['tevreden_thuissituatie'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -82,11 +218,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Heeft u een vrienden-/familiekring waar u steun aan heeft?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="steun_vrienden_familie" <?= $antwoorden['steun_vrienden_familie'] ? "checked" : "" ?>>
+                                    <input type="radio" name="steun_vrienden_familie" value="1" <?= $antwoorden['steun_vrienden_familie'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="steun_vrienden_familie" <?= !$antwoorden['steun_vrienden_familie'] ? "checked" : "" ?>>
+                                    <input type="radio" name="steun_vrienden_familie" value="0" <?= !$antwoorden['steun_vrienden_familie'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -95,12 +231,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Is er de afgelopen tijd een verandering geweest in uw financiële situatie?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="verandering_fin_sit_vroeger" <?= $antwoorden['verandering_fin_sit_vroeger'] ? "checked" : "" ?>>
+                                    <input id="radio" type="radio" name="verandering_fin_sit_vroeger" value="1" <?= $antwoorden['verandering_fin_sit_vroeger'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="verandering_fin_sit_vroeger_welke"><?= $antwoorden['verandering_fin_sit_vroeger_welke'] ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="verandering_fin_sit_vroeger" <?= !$antwoorden['verandering_fin_sit_vroeger'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_fin_sit_vroeger" value="0"  <?= !$antwoorden['verandering_fin_sit_vroeger'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -108,26 +244,26 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Verwacht u in de nabije toekomst een verandering in uw financiële situatie?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="verandering_fin_sit_toekomst" <?= $antwoorden['verandering_fin_sit_toekomst'] ? "checked" : "" ?>>
+                                    <input id="radio" type="radio" name="verandering_fin_sit_toekomst" value="1" <?= $antwoorden['verandering_fin_sit_toekomst'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="verandering_fin_sit_toekomst_welke"><?= $antwoorden['verandering_fin_sit_toekomst_welke'] ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="verandering_fin_sit_toekomst" <?= !$antwoorden['verandering_fin_sit_toekomst'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_fin_sit_toekomst" value="0" <?= !$antwoorden['verandering_fin_sit_toekomst'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
                         </div>
-                        <div class="question"><p>Wat is uw opleiding?</p><textarea  rows="1" cols="25" type="text"><?= $antwoorden['opleiding'] ?></textarea></div>
+                        <div class="question"><p>Wat is uw opleiding?</p><textarea  rows="1" cols="25" type="text" name="opleiding"><?= $antwoorden['opleiding'] ?></textarea></div>
                         <div class="question"><p>Is er de laatste tijd verandering gekomen in uw sociale contacten?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="verandering_fin_sit_toekomst" <?= $antwoorden['verandering_sociale_contacten'] ? "checked" : "" ?>>
+                                    <input id="radio" type="radio" name="verandering_sociale_contacten" value="1" <?= $antwoorden['verandering_sociale_contacten'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="verandering_sociale_contacten_welke"><?= $antwoorden['verandering_sociale_contacten_welke'] ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="verandering_fin_sit_toekomst" <?= !$antwoorden['verandering_sociale_contacten'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verandering_sociale_contacten" value="0" <?= !$antwoorden['verandering_sociale_contacten'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -135,11 +271,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Komt u uit een groot gezin?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="groot_gezin" <?= $antwoorden['groot_gezin'] ? "checked" : "" ?>>
+                                    <input type="radio" name="groot_gezin" value="1" <?= $antwoorden['groot_gezin'] ? "checked" : "" ?>>
                                     <label>Ja</label> 
                                 </p>
                                 <p>
-                                    <input type="radio" name="groot_gezin" <?= !$antwoorden['groot_gezin'] ? "checked" : "" ?>>
+                                    <input type="radio" name="groot_gezin" value="0" <?= !$antwoorden['groot_gezin'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -149,11 +285,11 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>- Was er sprake van agressie in dat gezin?</p>
                             <div class="checkboxes">
                                 <p>    
-                                    <input type="radio" name="agressie_gezin" <?= $antwoorden['agressie_gezin'] ? "checked" : "" ?>>
+                                    <input type="radio" name="agressie_gezin" value="1" <?= $antwoorden['agressie_gezin'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                 </p>
                                 <p>
-                                    <input type="radio" name="agressie_gezin" <?= !$antwoorden['agressie_gezin'] ? "checked" : "" ?>>
+                                    <input type="radio" name="agressie_gezin" value="0" <?= !$antwoorden['agressie_gezin'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -161,12 +297,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Bent u lid van verenigingen?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="verenigingslid" <?= $antwoorden['verenigingslid'] ? "checked" : "" ?>>
+                                    <input id="radio" type="radio" name="verenigingslid" value="1" <?= $antwoorden['verenigingslid'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="vereniging_welke"><?= $antwoorden['vereniging_welke'] ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="verenigingslid" <?= !$antwoorden['verenigingslid'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verenigingslid" value="0" <?= !$antwoorden['verenigingslid'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
@@ -175,12 +311,12 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="question"><p>Heeft u de laatst tijd een verlies geleden (werk, personen, enzovoort)?</p>
                             <div class="checkboxes">
                                 <div class="question-answer">
-                                    <input id="radio" type="radio" name="verlies_geleden" <?= $antwoorden['verlies_geleden'] ? "checked" : "" ?>>
+                                    <input id="radio" type="radio" name="verlies_geleden" value="1" <?= $antwoorden['verlies_geleden'] ? "checked" : "" ?>>
                                     <label>Ja</label>
                                     <textarea  rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verlies_geleden_welke"><?= $antwoorden['verlies_geleden_welke'] ?></textarea>
                                 </div>
                                 <p>
-                                    <input type="radio" name="verlies_geleden" <?= !$antwoorden['verlies_geleden'] ? "checked" : "" ?>>
+                                    <input type="radio" name="verlies_geleden" value="0" <?= !$antwoorden['verlies_geleden'] ? "checked" : "" ?>>
                                     <label>Nee</label>
                                 </p>
                             </div>
