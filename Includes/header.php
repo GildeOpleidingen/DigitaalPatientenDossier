@@ -2,6 +2,7 @@
 if (!isset($_SESSION['loggedin_id'])) {
     header("Location: ../index.php");
 }
+
 $id = $_SESSION['loggedin_id'];
 
 $result = DatabaseConnection::getConn()->prepare("SELECT naam, foto FROM medewerker WHERE id = ?");
@@ -118,7 +119,7 @@ $medewerker = $result->get_result()->fetch_assoc();
                         if ($value2 === $currentDir) {
                             $dir = "../..";
                             break;
-                        } else if ($currentDir === "clientpagina") {
+                        } else if ($currentDir === "clientpagina" || $currentDir === "Register") {
                             $dir = "../..";
                         }
                     }

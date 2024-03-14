@@ -9,16 +9,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['e-mail'];
         $password = $_POST['password'];
 
-        $result = DatabaseConnection::getConn()->prepare("SELECT id, naam, wachtwoord FROM medewerker WHERE email = ?");
+        $result = DatabaseConnection::getConn()->prepare("SELECT id, naam, wachtwoord, rol FROM medewerker WHERE email = ?");
         $result->bind_param("s", $email);
         $result->execute();
         $result = $result->get_result();
 
         if ($result->num_rows > 0) {
             $row = mysqli_fetch_array($result);
-            if ($row['wachtwoord'] == $password) {
+            if ($row['wachtwoord'] == password_verify($password, $row['wachtwoord'])) {
                 $_SESSION['loggedin_id'] = $row['id'];
                 $_SESSION['loggedin_naam'] = $row['naam'];
+                $_SESSION['rol'] = $row['rol'];
                 header("Location: Dashboard/dashboard.php?id={$row['id']}");
             } else {
                 $error = "Het wachtwoord is onjuist.";
@@ -45,9 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <center>
         <div class="loginbox">
             <img src="Images/gildezorgcollege.png" alt="gildezorgcollege">
-            <?php if (isset($error)) { ?>
-                <p style="color: red;"><?php echo $error; ?></p>
-            <?php } ?>
+            <p style="color: red;"><?= $error ?? ""; ?></p>
             <form method="post">
                 <h1>E-mail</h1>
                 <input type="text" name="e-mail">

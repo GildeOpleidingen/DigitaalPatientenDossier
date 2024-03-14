@@ -83,4 +83,7 @@ form.example::after {
     display: table;
 }
 
+.link-right {
+    float:right;
+}
 /**/
