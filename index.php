@@ -31,6 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "Vul alle velden in.";
     }
 }
+
+// testing
 ?>
 
 <!DOCTYPE html>
