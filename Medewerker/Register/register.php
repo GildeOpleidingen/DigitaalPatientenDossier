@@ -5,7 +5,7 @@ if (!isset($_SESSION['loggedin_id']) || $_SESSION['rol'] != "beheerder") {
     header("Location: ../../index.php");
 }
 
-include '../../Database/DatabaseConnection.php';
+include '../../database/DatabaseConnection.php';
 $error = "";
 $success = "";
 
@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
 
 <body>
     <?php
-    include '../../Includes/header.php';
+    include '../../includes/header.php';
     ?>
     <div class="main">
         <div class="content">

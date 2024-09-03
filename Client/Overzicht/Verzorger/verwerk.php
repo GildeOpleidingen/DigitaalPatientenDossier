@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once '../../../Database/DatabaseConnection.php';
+include_once '../../../database/DatabaseConnection.php';
 
 if (!isset($_SESSION['loggedin_id'])) {
     return;

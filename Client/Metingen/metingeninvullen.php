@@ -1,8 +1,9 @@
 <?php
 session_start();
-require_once('../../Includes/auth.php');
-include '../../Database/DatabaseConnection.php';
-include_once '../../Functions/ClientFunctions.php';
+require_once('../../includes/auth.php');
+include '../../database/DatabaseConnection.php';
+include_once '../../classes/Main.php';
+$Main = new Main();
 
 $medewerker_id = $_SESSION['loggedin_id'];
 $clientId = $_SESSION['clientId'];
@@ -10,7 +11,7 @@ if (!isset($clientId)) {
     header("Location: ../../index.php");
 }
 
-$client = getClientById($clientId);
+$client = $Main->getClientById($clientId);
 
 if ($client == null) {
     header("Location: ../../index.php");
@@ -68,25 +69,28 @@ $asisstent_bool = $grens_asistent->get_result()->fetch_array()[0];
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Metingen</title>
     <link rel="stylesheet" href="metingen.css">
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
 </head>
 <body>
 <?php
-include_once '../../Includes/header.php';
+include_once '../../includes/n-header.php';
 ?>
 <div class="main">
     <?php
-    include_once '../../Includes/sidebar.php';
+    include_once '../../includes/n-sidebar.php';
     ?>
-    <div class="main2">
-        <div class="btns">
-            <?php echo '<a href="metingeninvullen.php?id='.$clientId.'"><button type="button" class="MetingenInvul">Metingen invullen</button></a>'; ?>
-            <?php echo '<a href="metingen.php?id='.$clientId.'"><button type="button" class="MetingenTabel">Metingen bekijken</button></a>'; ?>
-        </div>
+<div class="content">
+    <div class="mt-5 mb-3 bg-white p-3">
+        <p class="card-text">
         <form id="patientForm" method="POST">
+            <a href="metingen.php?id=<?= $clientId = $_SESSION['clientId'] ?>">Teruggaan</a>
             <!-- metingen -->
             <?php echo '<input type="hidden" id="shown" value="'.$asisstent_bool.'">'; ?>
-            <label for="Hartslag">Hartslag:</label>
-            <input type="number" id="hartslag" name="hartslag" placeholder="slagen per minuut" required min="0" max="200"> <!-- o tot 200 -->
+            <!-- gebruik dit voor form fields -->
+            <div class="mt-3 mb-3">
+                <label for="Hartslag">Hartslag:</label>
+                <input type="number" id="hartslag" name="hartslag" class="form-control form-control-sm" placeholder="slagen per minuut" required min="0" max="200"> <!-- o tot 200 -->
+            </div>
 
             <label for="Ademhaling">Ademhaling:</label>
             <input type="number" id="ademhaling" name="ademhaling" placeholder="tussen 0 , 80" required min="0" max="80"> <!-- o tot 80 -->
@@ -136,7 +140,7 @@ include_once '../../Includes/header.php';
                 }
                 ?>
             </select>
-            <br/><button class="metingButton" type="button" onclick="submit()">Submit</button>
+            <button class="mt-3 metingButton btn btn-secondary w-100" type="button" onclick="submit()">Indienen</button>
         </form>
 
     </div>

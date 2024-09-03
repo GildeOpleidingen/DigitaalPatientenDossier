@@ -1,10 +1,11 @@
 <?php
 session_start();
-include_once '../../Database/DatabaseConnection.php';
-include_once '../../Functions/ClientFunctions.php';
+include_once '../../database/DatabaseConnection.php';
+include_once '../../classes/Main.php';
+$Main = new Main();
 
 $clientId = $_SESSION['clientId'];
-$client = getClientById($clientId);
+$client = $Main->getClientById($clientId);
 if (!isset($clientId) || $client == null) {
     header("Location: ../../index.php");
 }
@@ -37,11 +38,11 @@ foreach ($medewerkers as $key => $medewerker) {
 <body>
 <div class="main">
         <?php
-        include '../../Includes/header.php';
+        include '../../includes/header.php';
         ?>
 
         <?php
-        include '../../Includes/sidebar.php';
+        include '../../includes/sidebar.php';
         ?>
 
         <form action="Verzorger/verwerk.php" method="post" class="content">

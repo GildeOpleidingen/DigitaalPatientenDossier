@@ -1,53 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    font-family: "Inter Tight", sans-serif;
+}
+
+body {
+    font-family: "Inter Tight", sans-serif;
+    background-color: #00365E !important;
+}
+
 .main{
     display: flex;
     flex-direction: row;
+    height: 100vh;
+    width: 100%;
 }
 
-.main2{
-    padding-top: 110px;
-    padding-left: 40px;
-    padding-right: 40px;
+.content{
+    height: 100%;
     width: 100%;
     background-color: #00365E;
-}
-.tabel{
-    background-color: white;
     padding: 20px;
-    height: 97%;
-}
-
-.btns{
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    padding: 5px;
-}
-
-.btns button{
-    padding: 15px;
-    background-color: #DD0069;
-    color: white;
-    border-radius: 5px;
-    font-weight: bold;
-    border: 0;
-    cursor: pointer;
-}
-
-.btns{
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    padding: 5px;
-}
-
-.btns button{
-    padding: 15px;
-    background-color: #DD0069;
-    color: white;
-    border-radius: 5px;
-    font-weight: bold;
-    border: 0;
-    cursor: pointer;
+    padding-top: 100px;
 }
 
 form{
@@ -58,83 +32,4 @@ form{
 
 body {
     font-family: Arial, sans-serif;
-}
-form {
-    height: 100%;
-    width: 100%;
-    border-radius: 5px;
-    overflow: auto;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input, select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
-.bloeddrukken{
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-}
-.Uitscheidingen{
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-}
-
-.bloeddruk-lengte{
-    width: 100%;
-}
-.uitscheidingSamenstelling{
-    width: 100%;
-}
-
-.metingButton {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-.invullen {
-    text-align: right;
-}
-
-.invullen button {
-    border: 0px;
-    border-radius: 3px;
-    padding: 5px;
-    height: 40px;
-    width: 100px;
-    background-color: #00365E;
-    color: white;
-    cursor: pointer;
-}
-
-.tabel table {
-    width: 100%;
-    padding: 20px;
-    border-radius: 10px;
-    border-collapse: collapse;
-}
-
-.tabel table, th, td {
-    min-width: 80px;
-    border: 1px solid black;
-    padding: 5px;
-    background-color: white;
 }

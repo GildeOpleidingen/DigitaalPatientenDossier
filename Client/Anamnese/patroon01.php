@@ -1,9 +1,11 @@
 <?php
 session_start();
-include '../../Database/DatabaseConnection.php';
-include '../../Functions/Functions.php';
+include '../../database/DatabaseConnection.php';
+include_once '../../classes/Main.php';
+$Main = new Main();
 
-$antwoorden = getPatternAnswers($_SESSION['clientId'], 1);
+$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 1);
+var_dump($antwoorden);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
@@ -35,8 +37,8 @@ if (isset($_REQUEST['navbutton'])) {
 <form action="" method="post">
     <div class="main">
         <?php
-        include '../../Includes/header.php';
-        include '../../Includes/sidebar.php';
+        include '../../includes/header.php';
+        include '../../includes/sidebar.php';
         ?>
             <div class="content">
                 <div class="form-content">

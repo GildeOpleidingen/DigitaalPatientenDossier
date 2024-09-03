@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once '../../Database/DatabaseConnection.php';
+include_once '../../database/DatabaseConnection.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rapportageInhoud = $_POST['inhoud'];
@@ -46,11 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 <div class="main">
         <?php
-        include '../../Includes/header.php';
+        include '../../includes/header.php';
         ?>
 
         <?php
-        include '../../Includes/sidebar.php';
+        include '../../includes/sidebar.php';
         ?>
 
         <div class="content">

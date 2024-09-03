@@ -1,7 +1,8 @@
 <?php
 session_start();
-include_once '../../Database/DatabaseConnection.php';
-include_once '../../Functions/ClientFunctions.php';
+include_once '../../database/DatabaseConnection.php';
+include_once '../../classes/Main.php';
+$Main = new Main();
 
 $loggedInId = $_SESSION['loggedin_id'];
 
@@ -15,14 +16,14 @@ if(!isset($clientId)){
     header("Location: ../client.php");
 }
 
-$client = $_SESSION['client'] = getClientById($clientId);
+$client = $_SESSION['client'] = $Main->getClientById($clientId);
 
 $verzorgerregel = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
 $verzorgerregel->bind_param("ii", $clientId, $loggedInId);
 $verzorgerregel->execute();
 $verzorgerregel = $verzorgerregel->get_result()->fetch_assoc();
 if ($verzorgerregel == null) {
-    header("Location: ../Overzicht/overzicht.php");
+    header("Location: ../overzicht/overzicht.php");
     exit();
 }
 $verzorgerregel = $verzorgerregel['id'];

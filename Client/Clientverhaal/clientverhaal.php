@@ -1,10 +1,11 @@
 <?php
 session_start();
-include '../../Database/DatabaseConnection.php';
-include '../../Functions/ClientFunctions.php';
+include '../../database/DatabaseConnection.php';
+include_once '../../classes/Main.php';
+$Main = new Main();
 
 $clientId = $_SESSION['clientId'];
-if (!isset($clientId) || !checkIfClientExistsById($clientId) || !getMedischOverzichtByClientId($clientId)) {
+if (!isset($clientId) || !$Main->checkIfClientExistsById($clientId) || !$Main->getMedischOverzichtByClientId($clientId)) {
     header("Location: ../../index.php");
     exit;
 } 
@@ -13,9 +14,9 @@ if (isset($_SESSION['client'])) {
     unset($_SESSION['client']);
 }
 
-$client = $_SESSION['client'] = getClientById($clientId);
-if (checkIfClientStoryExistsByClientId($client['id'])) {
-    $clientStory = getClientStoryByClientId($client['id']);
+$client = $_SESSION['client'] = $Main->getClientById($clientId);
+if ($Main->checkIfClientStoryExistsByClientId($client['id'])) {
+    $clientStory = $Main->getClientStoryByClientId($client['id']);
 }
 
 if (isset($_POST['submit'])) {
@@ -44,10 +45,10 @@ if (isset($_POST['submit'])) {
     $hobbies = $_POST['hobbies'];
     $belangrijkeinfo = $_POST['belangrijkeinfo'];
 
-    if(insertClientStory($client['id'], $foto ?? $clientStory['foto'] ?? "", $introductie, $gezinfamilie, $belangrijkeinfo, $hobbies)){
+    if($Main->insertClientStory($client['id'], $foto ?? $clientStory['foto'] ?? "", $introductie, $gezinfamilie, $belangrijkeinfo, $hobbies)){
         $_SESSION['success'] = "De gegevens zijn succesvol bijgewerkt!";
     }
-    $clientStory = getClientStoryByClientId($client['id']); // Update de informatie van de clientstory
+    $clientStory = $Main->getClientStoryByClientId($client['id']); // Update de informatie van de clientstory
 }
 ?>
 
@@ -57,17 +58,17 @@ if (isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="Stylesheet" href="../../Includes/header.css">
-    <link rel="Stylesheet" href="../../Includes/sidebar.css">
+    <link rel="Stylesheet" href="../../assets/css/header.css">
+    <link rel="Stylesheet" href="../../assets/css/sidebar.css">
     <link rel="Stylesheet" href="clientverhaal.css">
 
     <title>Cliëntverhaal invullen</title>
 </head>
-<?php include '../../Includes/header.php'; ?>
+<?php include '../../includes/header.php'; ?>
 
 <body>
     <div class="main">
-        <?php include '../../Includes/sidebar.php'; ?>
+        <?php include '../../includes/sidebar.php'; ?>
         <div class="main2">
             <form class="invulformulier" method="POST" enctype="multipart/form-data">
                 <p>Foto:</p>

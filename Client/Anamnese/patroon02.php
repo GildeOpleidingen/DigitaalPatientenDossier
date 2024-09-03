@@ -1,9 +1,10 @@
 <?php
 session_start();
-include '../../Database/DatabaseConnection.php';
-include '../../Functions/Functions.php';
+include '../../database/DatabaseConnection.php';
+include_once '../../classes/Main.php';
+$Main = new Main();
 
-$antwoorden = getPatternAnswers($_SESSION['clientId'], 2);
+$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 2);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
@@ -22,7 +23,7 @@ if (isset($_REQUEST['navbutton'])) {
     // array van checkboxes van observatie tab
     $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']));
 
-    $observatie = convertBoolArrayToString($arr);
+    $observatie = $Main->convertBoolArrayToString($arr);
 
     $result = DatabaseConnection::getConn()->prepare("
                     SELECT vl.id
@@ -143,8 +144,8 @@ if ($result != null) {
     <form action="" method="post">
         <div class="main">
         <?php
-        include '../../Includes/header.php';
-        include '../../Includes/sidebar.php';
+        include '../../includes/header.php';
+        include '../../includes/sidebar.php';
         ?>
 
                 <div class="content">

@@ -1,11 +1,13 @@
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
     * {
         margin: 0;
         padding: 0;
         -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
         -moz-box-sizing: border-box; /* Firefox, other Gecko */
         box-sizing: border-box; /* Opera/IE 8+ */
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Inter Tight' , sans-serif;
     }
 
     ::-webkit-scrollbar {
@@ -29,7 +31,8 @@
         min-width: 200px;
         padding-top: 80px;
         background-color: white;
-        text-align: center;
+        text-align: left;
+        padding: 10px;
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -107,11 +110,12 @@
 
 <div class="sidebar">
     <?php
-    include_once '../../Database/DatabaseConnection.php';
-    include_once '../../Functions/ClientFunctions.php';
+    include_once '../../database/DatabaseConnection.php';
+    include_once '../../classes/Main.php';
+    $Main = new Main();
 
     $clientId = $_SESSION['clientId'];
-    $row1 = getClientById($clientId);
+    $row1 = $Main->getClientById($clientId);
     ?>
     <div class="profile">
         <div class="profile-img">
@@ -166,7 +170,7 @@
             "zorgplan" => "Zorgplan",
             "rapportage" => "Rapportage",
             "metingen" => "Metingen",
-            "formulieren" => "Formulieren"
+            "formulieren" => "formulieren"
         );
 
         $currentPage = basename($_SERVER['PHP_SELF'], ".php");

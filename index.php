@@ -1,9 +1,9 @@
 <?php
 session_start();
 if (isset($_SESSION['loggedin_id'])) {
-    header("Location: Dashboard/dashboard.php?id={$_SESSION['loggedin_id']}");
+    header("Location: dashboard.php?id={$_SESSION['loggedin_id']}");
 }
-include 'Database/DatabaseConnection.php';
+include 'database/DatabaseConnection.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($_POST['e-mail']) && !empty($_POST['password'])) {
         $email = $_POST['e-mail'];
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['loggedin_id'] = $row['id'];
                 $_SESSION['loggedin_naam'] = $row['naam'];
                 $_SESSION['rol'] = $row['rol'];
-                header("Location: Dashboard/dashboard.php?id={$row['id']}");
+                header("Location: dashboard.php?id={$row['id']}");
             } else {
                 $error = "Het wachtwoord is onjuist.";
             }
@@ -31,13 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "Vul alle velden in.";
     }
 }
-
-// testing
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="Css/login.css">
+<link rel="stylesheet" href="assets/css/login.css">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body style="background: #00365E">
     <center>
         <div class="loginbox">
-            <img src="Images/gildezorgcollege.png" alt="gildezorgcollege">
+            <img src="assets/images/gildezorgcollege.png" alt="gildezorgcollege">
             <p style="color: red;"><?= $error ?? ""; ?></p>
             <form method="post">
                 <h1>E-mail</h1>

@@ -1,7 +1,8 @@
 <?php
 session_start();
-include_once '../../Database/DatabaseConnection.php';
-include_once '../../Functions/ClientFunctions.php';
+include_once '../../database/DatabaseConnection.php';
+include_once '../../classes/Main.php';
+$Main = new Main();
 
 $clientId = $_GET['id'];
 if (!isset($clientId)) {
@@ -10,7 +11,7 @@ if (!isset($clientId)) {
 
 $_SESSION['clientId'] = $clientId;
 
-$client = getClientById($clientId);
+$client = $Main->getClientById($clientId);
 
 $clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
 $clientRelations->bind_param("i", $clientId);
@@ -32,62 +33,66 @@ foreach ($clientRelations as $relation) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="overzicht.css">
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Overzicht van <?= $client['naam'] ?></title>
 </head>
 <body>
 <div class="main">
     <?php
-    include '../../Includes/header.php';
+    include '../../includes/n-header.php';
     ?>
 
     <?php
-    include '../../Includes/sidebar.php';
+    include '../../includes/n-sidebar.php';
     ?>
-
+        
     <div class="content">
-        <div class="content-2">
-            <div id="episodes" class="card">
-                <strong class="header">Episodes</strong>
-                <p class="text">Geen Episodes</p>
-            </div>
-            <div id="opnamedatum" class="card">
-                <strong class="header">Opgenomen op</strong>
-                <p class="text"><?php echo getAdmissionDateByClientId($id); ?></p>
-            </div>
-            <div id="medischevoorgeschiedenis" class="card">
-                <strong class="header">Medische voorgeschiedenis</strong>
+        <div class="mt-3 mb-3 bg-white p-3">
+            <p class="card-text">
+                <h2 class="lead text-primary">Episodes</h2>
+                <p class="text">Geen episodes</p>
+
+                <h2 class="lead text-primary">Opgenomen op</h2>
+                <p class="text"><?= $Main->getAdmissionDateByClientId($clientId); ?></p>
+
+                <h2 class="lead text-primary">Medische voorgeschiedenis</h2>
                 <p class="text">
-                    <?php $mv = getMedischOverzichtByClientId($id)['medischevoorgeschiedenis'];
+                    <?php
+                    $mv = $Main->getMedischOverzichtByClientId($clientId)['medischevoorgeschiedenis'];
                     if ($mv) {
                         echo $mv;
                     } else {
                         echo "Geen medische voorgeschiedenis ingevuld";
-                    } ?>
+                    }
+                    ?>
                 </p>
-            </div>
-            <div id="allergien" class="card">
-                <strong class="header">Allergieën</strong>
+
+                <h2 class="lead text-primary">Allergieën</h2>
                 <p class="text">
-                    <?php $allergieen = getMedischOverzichtByClientId($id)['alergieen'];
+                    <?php
+                    $allergieen = $Main->getMedischOverzichtByClientId($clientId)['alergieen'];
                     if ($allergieen) {
                         echo $allergieen;
                     } else {
                         echo "Geen allergieën ingevuld";
-                    } ?>
+                    }
+                    ?>
                 </p>
-            </div>
-            <div id="medicijnen" class="card">
-                <strong class="header">Medicatie</strong>
+
+                <h2 class="lead text-primary">Medicatie</h2>
                 <p class="text">
-                    <?php $medicatie = getMedischOverzichtByClientId($id)['medicatie'];
+                    <?php
+                    $medicatie = $Main->getMedischOverzichtByClientId($clientId)['medicatie'];
                     if ($medicatie) {
                         echo $medicatie;
                     } else {
                         echo "Geen medicatie ingevuld";
-                    } ?>
+                    }
+                    ?>
                 </p>
-            </div>
-        </div>
 
+            </p>
+        </div>
+    </div>    
 </body>
 </html>

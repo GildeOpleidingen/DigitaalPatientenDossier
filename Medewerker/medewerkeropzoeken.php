@@ -1,7 +1,7 @@
 <?php
 session_start();
 $search = "%".$_POST['search']."%";
-include '../Database/DatabaseConnection.php';
+include '../database/DatabaseConnection.php';
 
 $items = DatabaseConnection::getConn()->prepare("SELECT naam, klas, email, telefoonnummer, foto FROM medewerker WHERE naam like ?;");
 $items->bind_param("s",$search);
@@ -21,7 +21,7 @@ if (sizeof($items) > 0){ ?>
 
 <body>
 <?php
-include '../Includes/header.php';
+include '../includes/header.php';
 
 ?>
 <div class="main">

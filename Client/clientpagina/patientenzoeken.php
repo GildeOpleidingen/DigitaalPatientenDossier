@@ -1,7 +1,7 @@
 <?php
 session_start();
 $search = "%".$_POST['search']."%";
-include '../../Database/DatabaseConnection.php';
+include '../../database/DatabaseConnection.php';
 
 $items = DatabaseConnection::getConn()->prepare("SELECT id, naam, woonplaats, geboortedatum FROM client WHERE naam like ?");
 $items->bind_param("s", $search);
@@ -21,7 +21,7 @@ if (sizeof($items) > 0){
        </head>
        <body>
         <?php
-        include '../../Includes/header.php';
+        include '../../includes/header.php';
         
         ?>
         <div class="main">
@@ -40,7 +40,7 @@ if (sizeof($items) > 0){
             <?php foreach($items as $row){ ?>
             <tr>
                 <td class="row1"><?php echo $row[0];?></td>
-                <td class="row1"><a href="Overzicht/overzicht.php?id=<?php echo $row[1];?>"><?php echo $row[1];?></a></td>
+                <td class="row1"><a href="overzicht/overzicht.php?id=<?php echo $row[1];?>"><?php echo $row[1];?></a></td>
                 <td class="row1"><?php echo $row[2];?></td>
                 <td class="row1"><?php echo $row[3];?></td>
             </tr>
