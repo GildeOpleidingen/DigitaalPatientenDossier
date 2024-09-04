@@ -70,20 +70,24 @@ if ($result != null) {
     //update
     $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon02voedingstofwisseling`
             SET
-            `eetlust`='$eetlust',
-            `dieet`='$dieet',
-            `dieet_welk`='$dieetWelk',
-            `gewicht_verandert`='$gewichtVerandert',
-            `moeilijk_slikken`='$moeilijkSlikken',
-            `gebitsproblemen`='$gebitsProblemen',
-            `gebitsprothese`='$gebitsProthese',
-            `huidproblemen`='$huidProblemen',
-            `gevoel`='$gevoel',
-            `observatie`='$observatie'
+            `eetlust`=?,
+            `dieet`=?,
+            `dieet_welk`=?,
+            `gewicht_verandert`=?,
+            `moeilijk_slikken`=?,
+            `gebitsproblemen`=?,
+            `gebitsprothese`=?,
+            `huidproblemen`=?,
+            `gevoel`=?,
+            `observatie`=?
             WHERE `vragenlijstid`=?");
-    $result1->bind_param("i", $vragenlijstId);
-    $result1->execute();
-    $result1 = $result1->get_result();
+    if ($result1) {
+        $result1->bind_param("iisiiiiisii", $eetlust, $dieet, $dieetWelk, $gewichtVerandert, $moeilijkSlikken, $gebitsProblemen, $gebitsProthese, $huidProblemen, $gevoel, $observatie, $vragenlijstId);
+        $result1->execute();
+    } else {
+        // Handle error
+        echo "Error preparing statement: " . DatabaseConnection::getConn()->error;
+    }
 
 }else{
     //hier insert je alle data in patroon02
