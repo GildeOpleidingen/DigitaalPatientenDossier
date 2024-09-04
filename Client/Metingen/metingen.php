@@ -100,17 +100,17 @@ foreach ($metingen[1] as $meting) {
         <div class="content">
             <div class="mt-5 mb-3 bg-white p-3">
                 <p class="card-text">
-                <div class="btns">
+                <div>
                     <?php echo '<a href="metingeninvullen.php?id=' . $clientId . '"><button type="button" class="btn btn-primary">Metingen invullen</button></a>'; ?>
                     <?php echo '<a href="metingen.php?id=' . $clientId . '"><button type="button" class="btn btn-secondary">Metingen bekijken</button></a>'; ?>
                 </div>
                 <form id="patientForm">
-                    <div class="tabel">
+                    <div class="table table-striped">
                         <table>
                             <th>Tijd</th>
                             <?php
                             foreach ($metingen[0] as $tijd) {
-                                echo "<th>$tijd</th>";
+                                echo "<th class='p-3'>$tijd</th>";
                             }
                             ?>
 
@@ -123,7 +123,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($waarde == 0) {
                                                 echo "<td></td>";
                                             } else {
-                                                echo "<td>$waarde</td>";
+                                                echo "<td class='text-center'>$waarde</td>";
                                             }
                                         }
                                     }
@@ -140,7 +140,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($waarde == 0) {
                                                 echo "<td></td>";
                                             } else {
-                                                echo "<td>$waarde bpm</td>";
+                                                echo "<td class='text-center'>$waarde bpm</td>";
                                             }
                                         }
                                     }
@@ -156,7 +156,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($waarde == 0) {
                                                 echo "<td></td>";
                                             } else {
-                                                echo "<td>$waarde rpm</td>";
+                                                echo "<td class='text-center'>$waarde rpm</td>";
                                             }
                                         }
                                     }
@@ -173,7 +173,7 @@ foreach ($metingen[1] as $meting) {
                                                 echo "<td></td>";
                                             } else {
                                                 $matchingValue = $Metingen->vindGelijkeWaarde($bloeddrukhoog, $time);
-                                                echo "<td>$matchingValue/$value</td>";
+                                                echo "<td class='text-center'>$matchingValue/$value</td>";
                                             }
                                         }
                                     }
@@ -189,7 +189,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($waarde == 0) {
                                                 echo "<td></td>";
                                             } else {
-                                                echo "<td>$waarde °C</td>";
+                                                echo "<td class='text-center'>$waarde °C</td>";
                                             }
                                         }
                                     }
@@ -205,7 +205,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($waarde == "") {
                                                 echo "<td></td>";
                                             } else {
-                                                echo "<td>$waarde</td>";
+                                                echo "<td class='text-center'>$waarde</td>";
                                             }
                                         }
                                     }
@@ -226,7 +226,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($waarde == 0) {
                                                 echo "<td></td>";
                                             } else {
-                                                echo "<td>$waarde ml</td>";
+                                                echo "<td class='text-center'>$waarde ml</td>";
                                             }
                                         }
                                     }
@@ -242,7 +242,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($waarde == 0) {
                                                 echo "<td></td>";
                                             } else {
-                                                echo "<td>Type $waarde</td>";
+                                                echo "<td class='text-center'>Type $waarde</td>";
                                             }
                                         }
                                     }
@@ -258,7 +258,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($waarde == "") {
                                                 echo "<td></td>";
                                             } else {
-                                                echo "<td>$waarde</td>";
+                                                echo "<td class='text-center'>$waarde</td>";
                                             }
                                         }
                                     }
@@ -274,7 +274,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($waarde == 0) {
                                                 echo "<td></td>";
                                             } else {
-                                                echo "<td>$waarde ml</td>";
+                                                echo "<td class='text-center'>$waarde ml</td>";
                                             }
                                         }
                                     }
