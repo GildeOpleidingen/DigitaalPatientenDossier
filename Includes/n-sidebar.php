@@ -59,10 +59,11 @@ $row1 = $Main->getClientById($clientId);
                 );
 
                 $currentPage = basename($_SERVER['PHP_SELF'], ".php");
-
                 foreach ($pages as $key => $value) {
+                    $value = lcfirst($value);
+                    $valueTekst = ucfirst($value);
                     $active = ($key === $currentPage) ? "active" : "text-white";
-                    echo "<li class='nav-item'><a href='../$value/$key.php?id=$clientId' class='nav-link $active' id='$key'>$value</a>";
+                    echo "<li class='nav-item'><a href='../$value/$key.php?id=$clientId' class='nav-link $active' id='$key'>$valueTekst</a>";
                 }
                 ?>
             </ul>

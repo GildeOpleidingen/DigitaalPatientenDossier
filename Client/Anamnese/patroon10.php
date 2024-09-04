@@ -32,20 +32,21 @@ if (isset($_REQUEST['navbutton'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="Stylesheet" href="patronen.css">
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Anamnese</title>
 </head>
 <body>
     <form action="" method="post">
     <div class="main">
         <?php
-        include '../../includes/header.php';
+        include '../../includes/n-header.php';
         ?>
         <?php
-        include '../../includes/sidebar.php';
+        include '../../includes/n-sidebar.php';
         ?>
-        <div class="content">
+        <div class="content mt-3">
             <div class="form-content">
-            <div class="pages">10 Stressverwerkingspatroon (probleemhantering)</div>
+            <div class="pages">10. Stressverwerkingspatroon (probleemhantering)</div>
                 <div class="form">
                     <div class="questionnaire">
                         <div class="question"><p>Hoe reageert u gewoonlijk op situaties die spanningen oproepen?</p> 
