@@ -5,7 +5,6 @@ include_once '../../classes/Main.php';
 $Main = new Main();
 
 $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 1);
-var_dump($antwoorden);
 
 $boolArrayObservatie = str_split($antwoorden['observatie']);
 
