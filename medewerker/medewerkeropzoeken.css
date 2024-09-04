@@ -1,0 +1,84 @@
+.main{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100%;
+    background-color: #00365E;
+}
+
+
+table {
+    padding: 20px;
+    border-radius: 10px;
+    border-collapse: collapse;
+}
+
+th {
+    border: 1px solid black;
+    padding: 5px;
+    background-color: white;
+}
+
+
+
+.row1{
+    border: 1px solid black;
+    padding: 5px;
+    background-color: white;
+}
+
+
+.content{
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    padding-top: 100px;
+    background-color: #00365E;
+}
+
+.content2{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    background-color:rgb(189, 189, 189);
+}
+
+
+/* Style the search field */
+form.example input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 80%;
+    background: #f1f1f1;
+}
+
+/* Style the submit button */
+form.example button {
+    float: left;
+    width: 20%;
+    padding: 10px;
+    background: #2196F3;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none; /* Prevent double borders */
+    cursor: pointer;
+}
+
+form.example button:hover {
+    background: #0b7dda;
+}
+
+/* Clear floats */
+form.example::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/**/
