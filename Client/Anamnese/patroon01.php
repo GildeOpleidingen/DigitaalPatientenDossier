@@ -30,18 +30,19 @@ if (isset($_REQUEST['navbutton'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="patronen.css">
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Anamnese</title>
 </head>
 <body>
 <form action="" method="post">
     <div class="main">
         <?php
-        include '../../includes/header.php';
-        include '../../includes/sidebar.php';
+        include '../../includes/n-header.php';
+        include '../../includes/n-sidebar.php';
         ?>
-            <div class="content">
+            <div class="content mt-3">
                 <div class="form-content">
-                    <div class="pages">1 Patroon van gezondheidsbeleving en -instandhouding</div>
+                    <div class="pages">1. Patroon van gezondheidsbeleving en -instandhouding</div>
                     <div class="form">
                         <div class="questionnaire">
                             <div class="question"><p>Hoe is uw gezondheid in het algemeen?</p><textarea  rows="1" cols="25" type="text" name="algemene_gezondheid"><?= $antwoorden['algemene_gezondheid']?></textarea></div>
