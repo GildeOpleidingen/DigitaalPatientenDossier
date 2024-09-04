@@ -26,8 +26,7 @@ digitaalpatientendossier.gds.local
 Om phpmyadmin te benaderen via de url.
 pma.digitaalpatientendossier.gds.local
 
-# Deployen
-
+# Deployment
 Deployment worden geregeld door GitHub Actions
 Er zijn op dit moment twee workflows.
 Eentje voor de test omgeving
