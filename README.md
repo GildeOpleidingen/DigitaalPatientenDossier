@@ -7,7 +7,7 @@ Voor de database connectie te fixen:
 - Verwijder alle comments en whitespaces voor de <?php tag
 
 ```diff
-- Push geen database credentials meer naar de repository
+! PUSH GEEN DATABASE CREDENTIALS NAAR DE REPOSITORY
 ```
 # Werkwijze
 
