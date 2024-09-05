@@ -6,8 +6,9 @@ Voor de database connectie te fixen:
 - vul de credentials van je database in `config.php`
 - Verwijder alle comments en whitespaces voor de <?php tag
 
-## Push aub geen database credentials meer naar de repository
-
+```diff
+- Push geen database credentials meer naar de repository
+```
 # Werkwijze
 
 - Maak een eigen feature branch.
