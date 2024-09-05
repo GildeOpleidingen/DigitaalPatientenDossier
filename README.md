@@ -1,4 +1,4 @@
-# DigitaalPatientenDossier
+# Digitaal Patienten Dossier
 
 Voor de database connectie te fixen:
 - maak een nieuwe file genaamd `config.php` in de root folder
