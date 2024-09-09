@@ -3,7 +3,7 @@ session_start();
 include_once 'database/DatabaseConnection.php';
 $medewerkerId = $_SESSION['loggedin_id'];
 if ($medewerkerId == null) {
-    header("Location: ../index.php");
+    header("Location: ../inloggen");
 }
 
 $result = DatabaseConnection::getConn()->prepare("SELECT clientid FROM verzorgerregel WHERE medewerkerid = ?");

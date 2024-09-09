@@ -8,17 +8,17 @@ $Main = new Main();
 $medewerker_id = $_SESSION['loggedin_id'];
 $clientId = $_SESSION['clientId'];
 if (!isset($clientId)) {
-    header("Location: ../../index.php");
+    header("Location: ../../inloggen");
 }
 
 $client = $Main->getClientById($clientId);
 
 if ($client == null) {
-    header("Location: ../../index.php");
+    header("Location: ../../inloggen");
 }
 
 if (!isset($_SESSION['loggedin_id'])) {
-    header("Location: ../../index.php");
+    header("Location: ../../inloggen");
 }
 
 $samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);

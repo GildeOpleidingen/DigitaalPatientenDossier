@@ -6,7 +6,7 @@ $Main = new Main();
 
 $clientId = $_SESSION['clientId'];
 if (!isset($clientId) || !$Main->checkIfClientExistsById($clientId) || !$Main->getMedischOverzichtByClientId($clientId)) {
-    header("Location: ../../index.php");
+    header("Location: ../../inloggen");
     exit;
 } 
 

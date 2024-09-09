@@ -8,7 +8,7 @@ $Metingen = new Metingen();
 $clientId = $_SESSION['clientId'];
 
 if (!isset($clientId) || !isset($_SESSION['loggedin_id'])) {
-    header("Location: ../../index.php");
+    header("Location: ../../inloggen");
 }
 
 $medewerkers = [];
