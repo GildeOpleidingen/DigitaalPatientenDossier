@@ -22,13 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['rol'] = $row['rol'];
                 header("Location: dashboard.php?id={$row['id']}");
             } else {
-                $error = "Het wachtwoord is onjuist.";
+                $_SESSION['error'] = "Het wachtwoord is onjuist.";
             }
         } else {
-            $error = "Er bestaat geen account met dit e-mailadres.";
+            $_SESSION['error'] = "Er bestaat geen account met dit e-mailadres.";
         }
     } else {
-        $error = "Vul alle velden in.";
+        $_SESSION['error'] = "Vul alle velden in.";
     }
 }
 ?>
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <center>
         <div class="loginbox">
             <img src="assets/images/gildezorgcollege.png" alt="gildezorgcollege">
-            <p style="color: red;"><?= $error ?? ""; ?></p>
+            <p style="color: red;"><?= $_SESSION['error'] ?? ""; ?></p>
             <form method="post">
                 <h1>E-mail</h1>
                 <input type="text" name="e-mail">

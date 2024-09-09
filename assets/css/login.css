@@ -4,49 +4,27 @@
     font-family: "Inter Tight", sans-serif;
 }
 
-.loginbox {
-    position: relative;
-    background: white;
-    width: 600px;
-    height: 650px;
-    top: 4em;
-    border-radius: 1%
-}
-
 h1 {
     font-family: 'Inter Tight' , sans-serif;
     font-weight: lighter;
     color: #00365E;
 }
 
-input{
-    height: 35px;
-    width: 400px;
-    background: linear-gradient(360deg, rgba(107, 107, 107, 0.2) 0%, rgba(255, 255, 255, 0) 59.79%), #EEEEEE;
-    border-radius: 5px;
-    border: none;
-    font-size: large;
-    font-family: 'Inter Tight' , sans-serif;
+section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full viewport height */
 }
 
-button{
-    margin-top: 130px;
-    width: 150px;
-    height: 50px;
-    background-color: #DD0069;
-    color: white;
-    font-family: 'Inter Tight' , sans-serif;
-    font-size: x-large;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-}
-button:hover{
-    background-color: #FF0080;
+.card-body a img {
+    position: relative;
+    z-index: 10;
+    display: block;
+    margin: 0 auto;
 }
 
-img{
-    width: 600px;
-    margin-top: -7em;
-    margin-bottom: -13em;
+.card-body form {
+    position: relative;
+    z-index: 1;
 }
