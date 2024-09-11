@@ -27,7 +27,6 @@ if (isset($_GET['pt'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Zorgplan</title>
-    <style></style>
 </head>
 
 <body>
@@ -45,10 +44,21 @@ if (isset($_GET['pt'])) {
                         <div class="header">
                             <a href='../clientverhaal/clientverhaal.php?id=<?=$_SESSION['clientId']?>' class="h1 fw-bold text-decoration-none text-primary">Clientverhaal invullen <i class="h3 bi bi-plus-square-dotted"></i></a>
 
-                            <div class="row">
+                            <div class="mt-3 row">
                             <?php foreach ($Main->getPatternTypes() as $patroonType) { ?>
                             <div class="col-lg-6 col-md-6 col-sm-12">
-                            <a href="?pt=<?= $patroonType[0] ?>" class=""><?= $patroonType[1] ?></a>
+                                <a href="?pt=<?= $patroonType[0] ?>" class="card text-decoration-none mb-1">
+                                    <div class="card-text fw-light h4 ps-3 p-2">
+                                        <div class="row">
+                                            <div class="col-lg-11 col-md-10 col-sm-9">
+                                                <?= $patroonType[1] ?>
+                                            </div>
+                                            <div class="col-lg-1 col-md-2 col-sm-3">
+                                                <i class="bi bi-chevron-right" style="font-size: 20px;"></i>
+                                            </div>
+                                        </div>    
+                                    </div>
+                                </a>
                             </div>
                             <?php } ?>
                             </div>
@@ -64,6 +74,7 @@ if (isset($_GET['pt'])) {
                                 <label for="p">P</label>
                                 <input type="text" class="pes" name="p" value="<?= $patroonType["P"] ?? "" ?>" class="form-control">
                             </div>
+                            
                             <div class="mt-3">
                                 <label for="e">E</label>
                                 <input type="text" class="pes" name="e" value="<?= $patroonType["E"] ?? "" ?>" class="form-control">
