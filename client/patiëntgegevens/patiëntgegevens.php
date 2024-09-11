@@ -56,7 +56,7 @@ foreach ($clientRelations as $relation) {
     ?>
 
     <div class="content">
-        <div class="mt-3 mb-3 bg-white p-3">
+        <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
             <p class="card-text">
                 <div class="overzicht-content">
                     <div class="infotext">

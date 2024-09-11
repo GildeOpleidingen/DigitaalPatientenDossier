@@ -98,7 +98,7 @@ foreach ($metingen[1] as $meting) {
         include_once '../../includes/n-sidebar.php';
         ?>
         <div class="content">
-            <div class="mt-5 mb-3 bg-white p-3">
+            <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
                 <p class="card-text">
                 <div>
                     <?php echo '<a href="metingeninvullen.php?id=' . $clientId . '"><button type="button" class="btn btn-primary">Metingen invullen</button></a>'; ?>

@@ -27,6 +27,7 @@ if (isset($_GET['pt'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Zorgplan</title>
+    <style></style>
 </head>
 
 <body>
@@ -37,7 +38,7 @@ if (isset($_GET['pt'])) {
         <?php include_once '../../includes/n-sidebar.php'; ?>
 
         <div class="content">
-            <div class="mt-5 mb-3 bg-white p-3">
+            <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
                 <p class="card-text">
                     <?php if (!isset($patroonId)) { ?>
                         <?php if($Main->getMedischOverzichtByClientId($_SESSION['clientId'])){ ?>
@@ -54,6 +55,37 @@ if (isset($_GET['pt'])) {
                         </div>
                         <?php }?>
                     <?php } else { ?>
+                        <div class="header">
+                            <a href="zorgplan.php" class="title">Terug</a>
+                            <h1 class="title"><?= $patroonTypes[$patroonId-1][1] ?></h1>
+                        </div>
+                        <form class="form" method="POST">
+                            <div class="mt-3">
+                                <label for="p">P</label>
+                                <input type="text" class="pes" name="p" value="<?= $patroonType["P"] ?? "" ?>" class="form-control">
+                            </div>
+                            <div class="mt-3">
+                                <label for="e">E</label>
+                                <input type="text" class="pes" name="e" value="<?= $patroonType["E"] ?? "" ?>" class="form-control">
+                            </div>
+                            <div class="mt-3">
+                                <label for="s">S</label>
+                                <input type="text" class="pes" name="s" value="<?= $patroonType["S"] ?? "" ?>" class="form-control">
+                            </div>
+                            <div class="mt-3">
+                                <label for="doelen">Doel (SMART)</label>
+                                <textarea name="doelen" class="form-control"><?= $patroonType["doelen"] ?? "" ?></textarea>
+                            </div>
+                            <div class="mt-3">
+                                <label for="interventies">Interventies</label>
+                                <textarea name="interventies" class="form-control"><?= $patroonType["interventies"] ?? "" ?></textarea>
+                            </div>
+                            <div class="mt-3">
+                                <label for="evaluatiedoelen">Evaluatiedoelen</label>
+                                <textarea name="evaluatiedoelen" class="form-control"><?= $patroonType["evaluatiedoelen"] ?? "" ?></textarea>
+                            </div>
+                            <button class="mt-3 btn btn-secondary w-100" type="submit" name="submit">Opslaan</button>
+                        </form>
                     <?php } ?>
                 </p>
             </div>

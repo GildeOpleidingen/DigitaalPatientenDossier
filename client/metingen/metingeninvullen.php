@@ -80,7 +80,7 @@ include_once '../../includes/n-header.php';
     include_once '../../includes/n-sidebar.php';
     ?>
 <div class="content">
-    <div class="mt-5 mb-3 bg-white p-3">
+    <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
         <p class="card-text">
         <form id="patientForm" method="POST">
             <a href="metingen.php?id=<?= $clientId = $_SESSION['clientId'] ?>">Teruggaan</a>

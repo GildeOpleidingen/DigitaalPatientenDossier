@@ -36,7 +36,7 @@ include '../../includes/n-header.php';
         ?>
 
         <div class="content">
-            <div class="mt-5 mb-3 bg-white p-3">
+            <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
                 <p class="card-text">
                 <h1>Rapportages</h1>
                 <a href='rapportageNieuw.php?id=<?= $clientId ?>' class='btn btn-primary'>Nieuwe rapportage</a>
