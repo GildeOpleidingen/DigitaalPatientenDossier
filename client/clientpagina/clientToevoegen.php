@@ -53,7 +53,7 @@ include '../../includes/header.php';
                 if($result === 1){
                     echo "Client toegevoegd";
                 echo "<br>";
-                echo "<a href='clientoverzicht.php'><button>terug naar overzicht</button></a>";
+                echo "<a href='clientoverzicht.php' class='btn btn-sm btn-secondary mb-2'>Terug naar overzicht</a>";
                 }
             }
             ?>
