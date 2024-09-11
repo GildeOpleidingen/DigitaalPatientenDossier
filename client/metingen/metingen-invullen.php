@@ -87,61 +87,61 @@ include_once '../../includes/n-header.php';
     <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
         <p class="card-text">
         <form id="patientForm" method="POST" class="needs-validation" novalidate>
-            <a href="metingen.php?id=<?= $clientId = $_SESSION['clientId'] ?>">Teruggaan</a>
+            <a href="metingen.php" class="btn btn-sm btn-secondary mb-2">Teruggaan</a>
 
             <?php echo '<input type="hidden" id="shown" value="'.$asisstent_bool.'">'; ?>
 
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="mb-3">
-                        <label for="Hartslag">Hartslag:</label>
+                        <label for="Hartslag">Hartslag</label>
                         <input type="number" id="hartslag" name="hartslag" class="form-control" placeholder="slagen per minuut" required min="0" max="200"> <!-- o tot 200 -->
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="mb-3">
-                        <label for="Ademhaling">Ademhaling:</label>
+                        <label for="Ademhaling">Ademhaling</label>
                         <input type="number" id="ademhaling" name="ademhaling" placeholder="tussen 0 , 80" required min="0" max="80" class="form-control"> <!-- o tot 80 -->
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="mb-3">
-                        <label for="Bloed druk">Bloeddruk Hoog:</label>
+                        <label for="Bloed druk">Bloeddruk Hoog</label>
                         <input type="text" id="bloeddruk2" name="bloeddruk2" placeholder="Hoog" required min="0" max="140" class="form-control"> <!-- o tot 140 -->
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="mb-3">
-                        <label for="Bloed druk">Bloeddruk Laag:</label>
+                        <label for="Bloed druk">Bloeddruk Laag</label>
                         <input type="text" id="bloeddruk" name="bloeddruk" placeholder="Laag" required min="0" max="140" class="form-control"> <!-- o tot 140 -->
                     </div>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label for="Temperatuur">Temperatuur:</label>
+                <label for="Temperatuur">Temperatuur</label>
                 <input type="number" id="temperatuur" name="temperatuur" placeholder="b.v.b, 37.9" required min="34" max="42" class="form-control"> <!-- 34° tot 42° -->
             </div>
 
             <div class="mb-3">
-                <label for="Vochtinname">Vochtinname:</label>
+                <label for="Vochtinname">Vochtinname</label>
                 <input type="number" id="vochtinname" name="vochtinname" placeholder="Invoeren in aantal milliliters" required min="0" max="5000" class="form-control"> <!-- o tot 5000 -->
             </div>
 
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="mb-3">
-                        <label for="Uitscheiding">Uitscheiding:</label>
+                        <label for="Uitscheiding">Uitscheiding</label>
                         <input type="number" id="uitscheiding" name="uitscheiding" placeholder="Invoeren in frequentie per dag" class="form-control">
                     </div>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="mb-3">
-                        <label for="uitscheidingSamenstelling">Uitscheiding samenstelling:</label>
+                        <label for="uitscheidingSamenstelling">Uitscheiding samenstelling</label>
                         <select id="uitscheidingSamenstelling" name="uitscheidingSamenstelling" class="form-select" required>
                             <option selected>Kies een optie</option>
                             <?php
@@ -155,12 +155,12 @@ include_once '../../includes/n-header.php';
             </div>
 
             <div class="mb-3">
-                <label for="Uitscheidingurine">Uitscheiding urine:</label>
+                <label for="Uitscheidingurine">Uitscheiding urine</label>
                 <input type="number" id="uitscheidingurine" name="uitscheidingUrine" placeholder="Invoeren in aantal milliliters" class="form-control" required>
             </div>
 
             <div class="mb-3">
-                <label for="Pijnschaal">Pijnschaal:</label>
+                <label for="Pijnschaal">Pijnschaal</label>
                 <select id="pijnschaal" name="pijnschaal" class="form-select" required>
                     <option selected>Kies een optie</option>
                     <?php
@@ -171,7 +171,7 @@ include_once '../../includes/n-header.php';
                 </select>
             </div>
 
-            <button class="mt-3 btn btn-secondary w-100" type="submit" name="metingen_invullen">Indienen</button>
+            <button class="btn btn-secondary w-100" type="submit" name="metingen_invullen">Indienen</button>
         </form>
 
     </div>
