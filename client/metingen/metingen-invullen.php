@@ -63,8 +63,6 @@ if (isset($_POST['metingen_invullen'])) {
 $grens_asistent = DatabaseConnection::getConn()->prepare ("SELECT `grens_assistent` FROM `medewerker` WHERE id = $medewerker_id");
 $grens_asistent->execute();
 $asisstent_bool = $grens_asistent->get_result()->fetch_array()[0];
-
-//test
 ?>
 <!doctype html>
 <html lang="en">
