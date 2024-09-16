@@ -22,13 +22,17 @@ jobs:
           rm -rf .git
           rm -rf .gitignore
 
+      - name: Clean target directory
+        run: 
+          rm -rf /var/www/digitaalpatientendossier.gds.local/html/*
+
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.3.1
         with:
           # Artifact name
           name: 'digitaalpatientendossier'
           path: .
-          
+
       - name: Download a Build Artifact
         uses: actions/download-artifact@v4.1.4
         with:
@@ -36,5 +40,4 @@ jobs:
           name: 'digitaalpatientendossier'
           # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
           path: '/var/www/digitaalpatientendossier.gds.local/html/'
-          
           
