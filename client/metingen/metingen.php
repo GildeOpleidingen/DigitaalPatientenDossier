@@ -8,7 +8,7 @@ $Metingen = new Metingen();
 $clientId = $_SESSION['clientId'];
 
 if (!isset($clientId) || !isset($_SESSION['loggedin_id'])) {
-    header("Location: ../../index.php");
+    header("Location: ../../inloggen");
 }
 
 $medewerkers = [];
@@ -98,19 +98,23 @@ foreach ($metingen[1] as $meting) {
         include_once '../../includes/n-sidebar.php';
         ?>
         <div class="content">
-            <div class="mt-5 mb-3 bg-white p-3">
+            <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
+                <?php if(isset($_SESSION['succes'])){ ?>
+                <div class="mb-3 alert alert-success" role="alert">
+                    <?php echo $_SESSION['succes']; ?>
+                </div>
+                <?php unset($_SESSION['succes']); } ?>
                 <p class="card-text">
                 <div>
-                    <?php echo '<a href="metingeninvullen.php?id=' . $clientId . '"><button type="button" class="btn btn-primary">Metingen invullen</button></a>'; ?>
-                    <?php echo '<a href="metingen.php?id=' . $clientId . '"><button type="button" class="btn btn-secondary">Metingen bekijken</button></a>'; ?>
+                    <?php echo '<a href="metingen-invullen.php"><button type="button" class="btn btn-primary mb-3">Metingen invullen</button></a>'; ?>
                 </div>
                 <form id="patientForm">
-                    <div class="table table-striped">
+                    <div class="table table-bordered">
                         <table>
                             <th>Tijd</th>
                             <?php
                             foreach ($metingen[0] as $tijd) {
-                                echo "<th class='p-3'>$tijd</th>";
+                                echo "<th class='p-3 text-center'>$tijd</th>";
                             }
                             ?>
 

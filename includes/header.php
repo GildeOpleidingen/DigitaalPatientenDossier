@@ -1,6 +1,6 @@
 <?php
 if (!isset($_SESSION['loggedin_id'])) {
-    header("Location: ../index.php");
+    header("Location: ../inloggen");
 }
 
 $id = $_SESSION['loggedin_id'];

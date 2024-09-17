@@ -24,19 +24,19 @@ body {
     padding-top: 100px;
 }
 
-input{
-    width: 300px;
-    height: 30px;
-    padding: 10px;
-    border: 2px solid #00365E;
-    border-radius: 3px;
+.card i {
+    color: white;
 }
 
-select{
-    width: 70px;
-    height: 30px;
-    border: 2px solid #00365E;
-    border-radius: 3px;
-    color: #00365E;
-    border: 2px solid #00365E;
+.card:hover {
+    transition: 0.3s ease-in-out;
+    background-color: #DE0069;
+    border: 1px solid #DE0069;
+    transform: scale(1.01);
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;}
+
+.card:hover i {
+    transition: 0.3s ease-in-out;
+    color: white;
 }

@@ -1,6 +1,6 @@
 <?php
 if (!isset($_SESSION['loggedin_id'])) {
-    header("Location: ../index.php");
+    header("Location: ../inloggen");
 }
 
 $id = $_SESSION['loggedin_id'];
@@ -77,8 +77,8 @@ $medewerker = $result->get_result()->fetch_assoc();
                 foreach ($header as $key => $value) {
                     $active = ($key === $currentPage || $value === $currentDir) ? "active" : "";
                     $value = strtolower($key);
-                    
-                    echo "<li class='nav-item'><a href='{$relativePath}{$value}/{$key}.php?id=$id' class='nav-link $active' id='$key'>" . ucfirst($value) . "</a></li>";
+                    echo '<script> console.log('.$relativePath.', '.$value.', '.$key.');</script>';
+                    echo "<li class='nav-item'><a href='{$relativePath}{$value}/{$key}.php' class='nav-link $active' id='$key'>" . ucfirst($value) . "</a></li>";
                 }
                 ?>
                 <span class="ps-3 align">

@@ -16,6 +16,7 @@ $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, tel
     <link rel="stylesheet" href="medewerker.css">
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/assets/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
 </head>
 
 <body>

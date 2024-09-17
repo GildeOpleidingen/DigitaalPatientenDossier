@@ -6,7 +6,7 @@ $Main = new Main();
 
 $clientId = $_GET['id'];
 if (!isset($clientId)) {
-    header("Location: ../../index.php");
+    header("Location: ../../inloggen");
 }
 
 $_SESSION['clientId'] = $clientId;
@@ -47,7 +47,7 @@ foreach ($clientRelations as $relation) {
     ?>
         
     <div class="content">
-        <div class="mt-3 mb-3 bg-white p-3">
+        <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
             <p class="card-text">
                 <h2 class="lead text-primary">Episodes</h2>
                 <p class="text">Geen episodes</p>

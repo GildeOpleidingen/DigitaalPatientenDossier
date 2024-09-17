@@ -2,11 +2,11 @@
 session_start();
 
 if (!isset($_SESSION['loggedin_id']) || $_SESSION['rol'] != "beheerder") {
-    header("Location: ../../index.php");
+    header("Location: ../../inloggen");
 }
 
 include '../../database/DatabaseConnection.php';
-$error = "";
+$_SESSION['error'] = "";
 $success = "";
 
 if (isset($_POST['submit'])) {
@@ -18,12 +18,12 @@ if (isset($_POST['submit'])) {
     $telefoonnummer = $_POST['telefoonnummer'];
     
     if($_POST['password'] != $_POST['confirmPassword']){
-        $error = "Wachtwoorden komen niet overeen!";
+        $_SESSION['error'] = "Wachtwoorden komen niet overeen!";
     }
 
     // Deze values zijn required en die mogen dus niet empty zijn
     if(empty($email) || empty($name) || empty($rol) || empty($_POST['password']) || empty($klas)){
-        $error = "Vul alle velden in!";
+        $_SESSION['error'] = "Vul alle velden in!";
     }
     
     // Check of de medewerker data al bestaat
@@ -31,10 +31,10 @@ if (isset($_POST['submit'])) {
     $result->bind_param('s', $email);
     $result->execute();
     if ($result->get_result()->num_rows > 0) {
-        $error = "Deze medewerker bestaat al!";
+        $_SESSION['error'] = "Deze medewerker bestaat al!";
     }
 
-    if ($error == "") {
+    if ($_SESSION['error'] == "") {
         if ($_FILES != null) {
             $file = $_FILES["foto"]["tmp_name"] ?? "";
     
@@ -82,7 +82,7 @@ if (isset($_POST['submit'])) {
         <div class="content">
             <div class="form-content">
                 <form method="post" class="registration-content" enctype="multipart/form-data">
-                    <h1 class="error" id="status"><?= $error ?></h1>
+                    <h1 class="error" id="status"><?= $_SESSION['error'] ?></h1>
                     <h1 class="success" id="status"><?= $success ?></h1>
                     <h1>Voeg een nieuwe medewerker toe</h1>
                     <div class="flex-column">

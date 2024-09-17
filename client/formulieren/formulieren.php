@@ -7,13 +7,13 @@ $Main = new Main();
 
 $clientId = $_SESSION['clientId'];
 if (!isset($clientId)) {
-    header("Location: ../../index.php");
+    header("Location: ../../inloggen");
 }
 
 $client = $Main->getClientById($clientId);
 
 if ($client == null) {
-    header("Location: ../../index.php");
+    header("Location: ../../inloggen");
 }
 ?>
 <!DOCTYPE html>
@@ -38,7 +38,7 @@ if ($client == null) {
         ?>
 
         <div class="content">
-            <div class="mt-3 mb-3 bg-white p-3">
+            <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
                 <p class="card-text">
                 <div class="form">
                     <div class="inputs"><input type="text" placeholder="Zoek ingevulde vragenlijst">

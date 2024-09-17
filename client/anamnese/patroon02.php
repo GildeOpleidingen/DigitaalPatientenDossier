@@ -162,15 +162,15 @@ if ($result != null) {
                                     <p>Hoe is uw eetlust nu?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="0" name="eetlust" <?= !$antwoorden['eetlust'] ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="eetlust" <?= !isset($antwoorden['eetlust']) ? "checked" : "" ?>>
                                             <label>Normaal</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="1" name="eetlust" <?= $antwoorden['eetlust'] ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="eetlust" <?= isset($antwoorden['eetlust']) ? "checked" : "" ?>>
                                             <label>Slecht</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="2" name="eetlust" <?= $antwoorden['eetlust'] == 2 ? "checked" : ""  ?>>
+                                            <input type="radio" value="2" name="eetlust" <?= isset($antwoorden['eetlust']) == 2 ? "checked" : ""  ?>>
                                             <label>Overmatig</label>
                                         </p>
                                     </div>
@@ -179,7 +179,7 @@ if ($result != null) {
                                     <p>- Heeft u een dieet?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="dieet" <?= $antwoorden['dieet'] ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" value="1" name="dieet" <?= isset($antwoorden['dieet']) ? "checked" : "" ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" name="dieet_welk"
                                                 placeholder="en wel?"><?= isset($antwoorden['dieet_welk']) ?></textarea>

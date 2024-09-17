@@ -1,4 +1,12 @@
-# DigitaalPatientenDossier
+# Credentials
+```php
+//    public static string $host = "10.250.0.103";
+//    public static string $username = "dpd";
+//    public static string $pass = "A]3__CQB0klPDyd4";
+//    public static string $db = "dpd";
+```
+
+# Digitaal Patienten Dossier
 
 Voor de database connectie te fixen:
 - maak een nieuwe file genaamd `config.php` in de root folder
@@ -6,8 +14,9 @@ Voor de database connectie te fixen:
 - vul de credentials van je database in `config.php`
 - Verwijder alle comments en whitespaces voor de <?php tag
 
-## Push aub geen database credentials meer naar de repository
-
+```diff
+! PUSH GEEN DATABASE CREDENTIALS NAAR DE REPOSITORY
+```
 # Werkwijze
 
 - Maak een eigen feature branch.
