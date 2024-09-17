@@ -24,7 +24,7 @@ if(isset($_POST['inloggen'])){
                 $_SESSION['loggedin_id'] = $row['id'];
                 $_SESSION['loggedin_naam'] = $row['naam'];
                 $_SESSION['rol'] = $row['rol'];
-                header("Location: dashboard.php");
+                header("Location: index.php");
             } else {
                 $_SESSION['error'] = "Het wachtwoord of e-mailadres is onjuist.";
             }
