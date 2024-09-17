@@ -1,8 +1,11 @@
 <?php
 session_start();
-if (isset($_SESSION['loggedin_id'])) {
-    header("Location: dashboard.php?id={$_SESSION['loggedin_id']}");
-}
+
+//Tom: removing this seems to fix the "id in url" problem, but do I break other things by removing this????
+    // if (isset($_SESSION['loggedin_id'])) {
+    //     header("Location: dashboard.php?id={$_SESSION['loggedin_id']}");
+    // }
+
 include 'database/DatabaseConnection.php';
 
 if(isset($_POST['inloggen'])){
@@ -21,7 +24,7 @@ if(isset($_POST['inloggen'])){
                 $_SESSION['loggedin_id'] = $row['id'];
                 $_SESSION['loggedin_naam'] = $row['naam'];
                 $_SESSION['rol'] = $row['rol'];
-                header("Location: dashboard.php");
+                header("Location: index.php");
             } else {
                 $_SESSION['error'] = "Het wachtwoord of e-mailadres is onjuist.";
             }
@@ -40,6 +43,7 @@ if(isset($_POST['inloggen'])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/login.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
     <title>Inloggen - DPD</title>
 </head>
 
