@@ -7,7 +7,7 @@ $Main = new Main();
 $loggedInId = $_SESSION['loggedin_id'];
 
 if ($loggedInId == null) {
-    header("Location: ../inloggen");
+    header("Location: ../index.php");
 }
 
 $clientId = $_SESSION['clientId'];

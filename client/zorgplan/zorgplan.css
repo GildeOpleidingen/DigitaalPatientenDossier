@@ -23,3 +23,20 @@ body {
     padding: 20px;
     padding-top: 100px;
 }
+
+.card i {
+    color: white;
+}
+
+.card:hover {
+    transition: 0.3s ease-in-out;
+    background-color: #DE0069;
+    border: 1px solid #DE0069;
+    transform: scale(1.01);
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;}
+
+.card:hover i {
+    transition: 0.3s ease-in-out;
+    color: white;
+}

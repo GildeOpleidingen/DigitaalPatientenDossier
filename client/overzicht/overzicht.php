@@ -6,7 +6,7 @@ $Main = new Main();
 
 $clientId = $_GET['id'];
 if (!isset($clientId)) {
-    header("Location: ../../inloggen");
+    header("Location: ../../index.php");
 }
 
 $_SESSION['clientId'] = $clientId;

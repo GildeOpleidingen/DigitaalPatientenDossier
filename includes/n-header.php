@@ -1,6 +1,6 @@
 <?php
 if (!isset($_SESSION['loggedin_id'])) {
-    header("Location: ../inloggen");
+    header("Location: ../index.php");
 }
 
 $id = $_SESSION['loggedin_id'];
@@ -69,7 +69,6 @@ $medewerker = $result->get_result()->fetch_assoc();
                 $currentPage = basename($_SERVER['PHP_SELF'], ".php");
                 $currentDir = basename(getcwd());
                 $projectRoot = basename($_SERVER['DOCUMENT_ROOT']);
-
                 // Determine relative path to the project root
                 $scriptDir = str_replace($_SERVER['DOCUMENT_ROOT'], '', getcwd());
                 $relativePath = str_repeat("../", substr_count($scriptDir, '/'));

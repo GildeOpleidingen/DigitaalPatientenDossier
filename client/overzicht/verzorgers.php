@@ -7,7 +7,7 @@ $Main = new Main();
 $clientId = $_SESSION['clientId'];
 $client = $Main->getClientById($clientId);
 if (!isset($clientId) || $client == null) {
-    header("Location: ../../inloggen");
+    header("Location: ../../index.php");
 }
 
 $medewerkers = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");

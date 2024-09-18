@@ -1,11 +1,6 @@
 <?php
 session_start();
 
-//Tom: removing this seems to fix the "id in url" problem, but do I break other things by removing this????
-    // if (isset($_SESSION['loggedin_id'])) {
-    //     header("Location: dashboard.php?id={$_SESSION['loggedin_id']}");
-    // }
-
 include 'database/DatabaseConnection.php';
 
 if(isset($_POST['inloggen'])){
