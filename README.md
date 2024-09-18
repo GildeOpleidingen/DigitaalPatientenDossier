@@ -45,9 +45,11 @@ Deze staan in de map .github/workflows/
 
 # Inloggen Digitaal Patienten Dossier
 Ga naar https://digitaalpatientendossier.gdcs.gildedevops.it/index.php (LET OP: Je moet verbonden zijn met de Gilde 1.09 wifi, anders kom je niet op de site).
+
 Als je wil inloggen als admin vul je de volgende gegevens in: 
 E-mailadres = "admin@admin.com".
 Wachtwoord = "admin".
+
 Als je wil inloggen als medewerker vul je de volgende gegevens in:
 E-mailadres 1 (Alvin Harrison) = "alvin.harrison@example.com".
 E-mailadres 2 (Dawn James) = "dawn.james@example.com".
