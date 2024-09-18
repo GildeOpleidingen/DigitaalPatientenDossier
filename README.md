@@ -54,7 +54,7 @@ E-mailadres 2 (Dawn James) = dawn.james@example.com
 E-mailadres 3 (Jackie Williamson) = jackie.williamson@example.com
 Wachtwoord (voor iedereen hetzelfde) = Gilde123
 
-# Inloggen phpmyAdmin
+# Inloggen PHPmyAdmin
 Ga naar https://phpmyadmin.gdcs.gildedevops.it/index.php (LET OP: Je moet verbonden zijn met de Gilde 1.09 wifi, anders kom je niet op de site)
 De username zou autmatisch al ingevuld moeten zijn als de pagina ingeladen is, als dit niet zo is vul je "dpd" in het username vakje in.
 Voor het wachtwoord kopieer en plak je het volgende stukje tekst in het wachtwoord vakje: "A]3__CQB0klPDyd4".
