@@ -43,7 +43,23 @@ Eentje voor de productie omgeving.
 
 Deze staan in de map .github/workflows/
 
-# Inloggen
+# Inloggen DigitaalPatiëntenDossier
+Ga naar https://digitaalpatientendossier.gdcs.gildedevops.it/index.php (LET OP: Je moet verbonden zijn met de Gilde 1.09 wifi, anders kom je niet op de site)
+Als je wil inloggen als admin vul je de volgende gegevens in: 
+E-mailadres = "admin@admin.com"
+Wachtwoord = "admin"
+Als je wil inloggen als medewerker vul je de volgende gegevens in:
+E-mailadres 1 (Alvin Harrison) = alvin.harrison@example.com
+E-mailadres 2 (Dawn James) = dawn.james@example.com
+E-mailadres 3 (Jackie Williamson) = jackie.williamson@example.com
+Wachtwoord (voor iedereen hetzelfde) = Gilde123
+
+# Inloggen phpmyAdmin
+Ga naar https://phpmyadmin.gdcs.gildedevops.it/index.php (LET OP: Je moet verbonden zijn met de Gilde 1.09 wifi, anders kom je niet op de site)
+De username zou autmatisch al ingevuld moeten zijn als de pagina ingeladen is, als dit niet zo is vul je "dpd" in het username vakje in.
+Voor het wachtwoord kopieer en plak je het volgende stukje tekst in het wachtwoord vakje: "A]3__CQB0klPDyd4".
+
+# Inloggen (niet meer relevant)
 Deze hash kan je bij je medewerker als wachtwoord neerzetten.
 Het wachtwoord is "admin".
 $2y$10$7cuPDEMwyvZIZBBFoZujC.TqRAJewVoCTqigNy1MgdYp4x8XNS7Mm
