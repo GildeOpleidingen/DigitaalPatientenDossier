@@ -7,13 +7,13 @@ $Main = new Main();
 
 $clientId = $_SESSION['clientId'];
 if (!isset($clientId)) {
-    header("Location: ../../inloggen");
+    header("Location: ../../index.php");
 }
 
 $client = $Main->getClientById($clientId);
 
 if ($client == null) {
-    header("Location: ../../inloggen");
+    header("Location: ../../index.php");
 }
 ?>
 <!DOCTYPE html>

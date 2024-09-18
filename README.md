@@ -1,9 +1,10 @@
 # Credentials
-
+```php
 //    public static string $host = "10.250.0.103";
 //    public static string $username = "dpd";
 //    public static string $pass = "A]3__CQB0klPDyd4";
 //    public static string $db = "dpd";
+```
 
 # Digitaal Patienten Dossier
 
