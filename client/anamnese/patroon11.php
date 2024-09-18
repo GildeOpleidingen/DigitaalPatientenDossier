@@ -42,9 +42,11 @@ if (isset($_REQUEST['navbutton'])) {
         include '../../includes/n-header.php';
         include '../../includes/n-sidebar.php';
         ?>
-        <div class="content mt-3">
+        <div class="content">
+            <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
+                <p class="card-text">
             <div class="form-content">
-            <div class="pages">11 Stressverwerkingspatroon (probleemhantering)</div>
+            <div class="h4 text-primary">11 Stressverwerkingspatroon (probleemhantering)</div>
                 <div class="form">
                     <div class="questionnaire">
                         <div class="question"><p>Bent u gelovig?</p>
@@ -131,8 +133,8 @@ if (isset($_REQUEST['navbutton'])) {
                     </div>
                 </div>
                 <div class="submit">
-                    <button name="navbutton" type="submit" value="prev">< Vorige</button>
-                    <button name="navbutton" type="submit" value="next">Volgende ></button>
+                    <button name="navbutton" class="btn btn-secondary" type="submit" value="prev">Vorige</button>
+                    <button name="navbutton" class="btn btn-secondary" type="submit" value="next">Volgende</button>
                 </div>
             </div>
         </div>
