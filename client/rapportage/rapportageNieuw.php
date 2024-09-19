@@ -35,4 +35,4 @@ $rapportage->bind_param("iss", $verzorgerregel, $tijd, $rapport);
 $rapportage->execute();
 $rapportage = $rapportage->insert_id;
 
-header("Location: rapportageAanpassen.php?id=" . $rapportage);
+header("Location: rapportage-aanpassen.php?id=" . $rapportage);

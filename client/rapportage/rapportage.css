@@ -24,38 +24,6 @@ body {
     padding-top: 100px;
 }
 
-input{
-    width: 300px;
-    height: 30px;
-    padding: 10px;
-    border: 2px solid #00365E;
-    border-radius: 3px;
-}
-
-select{
-    width: 70px;
-    height: 30px;
-    border: 2px solid #00365E;
-    border-radius: 3px;
-    color: #00365E;
-    border: 2px solid #00365E;
-}
-
-.inputs{
-    display: flex;
-    flex-direction: row;
-    gap: 40px;
-    color: #00365E;
-    font-weight: 600;
-}
-
-.inputs div{
-    display: flex;
-    gap: 10px;
-    flex-direction: row;
-    align-items: center;
-}
-
 .overzicht{
     display: grid;
     background-color: rgb(240, 240, 240);

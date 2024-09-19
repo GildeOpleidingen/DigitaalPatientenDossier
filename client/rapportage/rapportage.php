@@ -43,7 +43,7 @@ include '../../includes/n-header.php';
                 <?php
                 foreach ($rapportages as $rapport) {
                     echo "<h1>Rapportage van " . $rapport['datumtijd'] . " (" . $rapport['id'] . ")</h1>";
-                    echo "<a href='rapportageAanpassen.php?id=" . $rapport['id'] . "'>";
+                    echo "<a href='rapportage-aanpassen.php?id=" . $rapport['id'] . "'>";
                     echo "<button class='btn btn-secondary'>Aanpassen</button>";
                     echo "</a>";
                 }
