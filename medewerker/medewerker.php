@@ -31,7 +31,7 @@ $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, tel
                 <form action="medewerkeropzoeken.php" method="post">
                     <input type="text" placeholder="Search..." name="search">
                     <button type="submit"><i class="fa fa-search"></i></button>
-                    <a href="Register/register.php" class="link-right">Voeg medewerker toe</a>
+                    <a href="register/register.php" class="link-right">Voeg medewerker toe</a>
                 </form>
                 <table class="table">
                     <tr>

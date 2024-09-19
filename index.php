@@ -3,6 +3,10 @@ session_start();
 
 include 'database/DatabaseConnection.php';
 
+if (isset($_SESSION['loggedin_id'])) {
+    header("Location: dashboard.php");
+}
+
 if(isset($_POST['inloggen'])){
     if (!empty($_POST['email']) && !empty($_POST['wachtwoord'])) {
         $email = $_POST['email'];
