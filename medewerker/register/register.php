@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['loggedin_id']) || $_SESSION['rol'] != "beheerder") {
-    header("Location: ../../index.php");
+if (!isset($_SESSION['loggedin_id'])) {
+    header("Location: index.php");
 }
 
 include '../../database/DatabaseConnection.php';
@@ -106,7 +106,8 @@ if (isset($_POST['submit'])) {
                         <label for="rol"><p style="color:red">*</p>Rol</label>
                         <select name="rol" required>
                             <option value="medewerker">Medewerker</option>
-                            <option value="beheerder">Beheerder</option>
+                            <?php $_SESSION['rol'] != "beheerder" ? '<option value="beheerder">Beheerder</option>' : '' ?>
+                            
                         </select>
 
                         <input class="submit" id="submit" type="submit" name="submit" value="Voeg medewerker toe" disabled>
