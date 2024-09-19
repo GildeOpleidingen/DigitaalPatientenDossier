@@ -4,7 +4,11 @@ require_once('../includes/auth.php');
 
 include '../database/DatabaseConnection.php';
 
-$items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all(MYSQLI_ASSOC);
+if(!isset($_GET['q'])){
+    $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all(MYSQLI_ASSOC);
+} else {    
+    $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker WHERE naam LIKE '%$_GET[q]%' OR klas LIKE '%$_GET[q]%' OR email LIKE '%$_GET[q]%' OR telefoonnummer LIKE '%$_GET[q]%';")->fetch_all(MYSQLI_ASSOC);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,10 +32,16 @@ $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, tel
         <div class="content">
             <div class="mt-4 mb-3 p-3">
                 <p class="card-text">
-                <form action="medewerkeropzoeken.php" method="post">
-                    <input type="text" placeholder="Search..." name="search">
-                    <button type="submit"><i class="fa fa-search"></i></button>
-                    <a href="Register/register.php" class="link-right">Voeg medewerker toe</a>
+                <?php
+                if(isset($_GET['q'])){
+                    echo "<a href='medewerker.php' class='text-decoration-none text-white fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Terug naar overzicht</a>";
+                }
+                ?>
+                <form action="" method="GET">
+                    <div class="input-group mb-3">
+                        <input type="text" name="q" class="form-control" placeholder="Zoeken...">
+                        <span class="input-group-text bg-primary border-primary"><i class="fa fa-search text-white" aria-hidden="true"></i></span>
+                    </div>
                 </form>
                 <table class="table">
                     <tr>
