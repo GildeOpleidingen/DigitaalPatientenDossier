@@ -54,27 +54,29 @@ if (isset($_POST['aanpassen'])) {
         include_once '../../includes/n-sidebar.php';
         ?>
         <div class="content">
-            <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
-                <form method="POST" class="needs-validation" novalidate>
-                    <?php if (isset($_SESSION['succes'])) { ?>
-                        <div class="alert alert-success" role="alert">
-                            <?= $_SESSION['succes'] ?>
+            <div class="mt-4 mb-3 bg-white p-3 d-flex flex-column" style="height: 96%; overflow: auto;">
+                <form method="POST" class="needs-validation flex-grow-1 d-flex flex-column" novalidate>
+                    <div class="flex-grow-1 d-flex flex-column">
+                        <?php if (isset($_SESSION['succes'])) { ?>
+                            <div class="alert alert-success" role="alert">
+                                <?= $_SESSION['succes'] ?>
+                            </div>
+                            <?php session_unset(); ?>
+                        <?php } ?>
+                        <input type="hidden" value="<?= $rapportage['id'] ?>" name="rapportageId">
+                        <div class="rapportage flex-grow-1">
+                            <div class="display-5 text-primary mb-3">Rapportage aanpassen van <?= $rapportage['datumtijd'] ?> (<?= $rapportage['id'] ?>)</div>
+                            <div class="mb-3">
+                                <textarea name="inhoud" id="rapportage" rows="16" placeholder="Rapportage" class="form-control" required><?= $rapportage['inhoud'] ?></textarea>
+                            </div>
                         </div>
-                        <?php session_unset(); ?>
-                    <?php } ?>
-                    <input type="hidden" value="<?= $rapportage['id'] ?>" name="rapportageId">
-                    <div class="rapportage">
-                        <div class="display-5 text-primary mb-3">Rapportage aanpassen van <?= $rapportage['datumtijd'] ?> (<?= $rapportage['id'] ?>)</div>
-                        <div class="mb-3">
-                            <textarea name="inhoud" id="rapportage" rows="10" placeholder="Rapportage" class="form-control" required><?= $rapportage['inhoud'] ?></textarea>
-                        </div>
-                        <button type="submit" name="aanpassen" class="btn btn-secondary w-100">Aanpassen</button>
                     </div>
+                    <button type="submit" name="aanpassen" class="btn btn-secondary w-100 mt-3">Aanpassen</button>
                 </form>
             </div>
         </div>
-
 </body>
 
 <script src="../../assets/js/validatie.js"></script>
+
 </html>
