@@ -46,13 +46,21 @@ include '../../includes/n-header.php';
                     echo "<a href='rapportageAanpassen.php?id=" . $rapport['id'] . "'>";
                     echo "<button class='btn btn-secondary'>Aanpassen</button>";
                     echo "</a>";
+                    echo "<a href='rapportageVerwijderen.php?id=" . $rapport['id'] . "'>";
+                    echo "<button class='btn btn-danger delete'>Verwijderen</button>";
+                    echo "</a>";
                 }
                 ?>
-            </div>
         </div>
+    </div>
+
     </div>
     </div>
 
 </body>
-
+<style>
+    .delete{
+        margin-left: 10px;
+    }
+</style>
 </html>

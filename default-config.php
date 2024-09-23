@@ -2,8 +2,8 @@
 
 class config
 {
-    public static string $host = "";
-    public static string $username = "";
-    public static string $pass = "";
-    public static string $db = "";
+    public static string $host = "localhost";
+    public static string $username = "fatih";
+    public static string $pass = "fatihdb";
+    public static string $db = "dpd";
 }

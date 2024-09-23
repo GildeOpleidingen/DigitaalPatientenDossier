@@ -5,6 +5,7 @@ include_once '../../database/DatabaseConnection.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rapportageInhoud = $_POST['inhoud'];
     $rapportageId = $_POST['rapportageId'];
+    $returnUrl = $_POST['returnUrl']; // Haal de refererende URL op
 
     $tijd = date('Y-m-d H:i:s');
     $stmt = DatabaseConnection::getConn()->prepare("UPDATE rapport SET inhoud = ?, datumtijd = ? WHERE id = ?");
@@ -12,17 +13,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->execute();
     $stmt->close();
     
-    header("Refresh:0");
+    // Redirect naar de refererende URL na het aanpassen
+    header("Location: " . $returnUrl);
     exit();
 } else {
     $rapportageId = $_GET['id'];
 
-    if(!$rapportageId) {
+    if (!$rapportageId) {
         header("Location: ../client.php");
-    }
-
-    if (!isset($_GET['id'])) {
-        header("Location: ../client.php");
+        exit();
     }
 
     $rapportage = DatabaseConnection::getConn()->prepare("SELECT * FROM rapport WHERE id = ?");
@@ -32,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($rapportage == null) {
         header("Location: ../client.php");
+        exit();
     }
 }
 ?>
@@ -41,30 +41,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="rapportage.css">
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Rapportage</title>
 </head>
 <body>
 <div class="main">
-        <?php
-        include '../../includes/header.php';
-        ?>
+    <?php
+    include '../../includes/n-header.php';
+    include '../../includes/n-sidebar.php';
+    ?>
 
-        <?php
-        include '../../includes/sidebar.php';
-        ?>
-
-        <div class="content">
-                    <form method="POST">
-                        <input type="hidden" value="<?= $rapportage['id'] ?>" name="rapportageId">
-                        <div class="rapportage">
-                            <h1>Rapportage aanpassen van <?= $rapportage['datumtijd'] ?> (<?= $rapportage['id'] ?>)</h1>
-                            <textarea name="inhoud" id="rapportage" placeholder="Rapportage" style="width: 100%; height: 100%; box-sizing: border-box;"><?= $rapportage['inhoud'] ?></textarea>
-                            <button class="rapportageButton" type="submit">Submit</button>
-                        </div>
-
-                    </form>
-        </div>
+    <div class="content">
+        <form method="POST">
+            <input type="hidden" value="<?= $rapportage['id'] ?>" name="rapportageId">
+            <input type="hidden" name="returnUrl" value="<?= $_SERVER['HTTP_REFERER'] ?>">
+            <div class="rapportage">
+                <h1>Rapportage aanpassen van <?= $rapportage['datumtijd'] ?> (<?= $rapportage['id'] ?>)</h1>
+                <textarea name="inhoud" id="rapportage" placeholder="Rapportage" style="width: 100%; height: 100%; box-sizing: border-box;"><?= htmlspecialchars($rapportage['inhoud']) ?></textarea>
+                <button class="rapportageButton" type="submit">Submit</button>
+            </div>
+        </form>
     </div>
+</div>
 
 </body>
 </html>

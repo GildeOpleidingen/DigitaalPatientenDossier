@@ -35,4 +35,18 @@ $rapportage->bind_param("iss", $verzorgerregel, $tijd, $rapport);
 $rapportage->execute();
 $rapportage = $rapportage->insert_id;
 
+if ($rapportage) {
+    $rapportageId = $rapportage->insert_id;
+    if ($rapportageId) {
+        header("Location: rapportageAanpassen.php?id=" . $rapportageId);
+        exit();
+    } else {
+        echo "Er is een fout opgetreden bij het ophalen van het nieuwe rapportage-ID.";
+    }
+} else {
+    echo "Er is een fout opgetreden bij het invoegen van de rapportage.";
+}
+
+
+
 header("Location: rapportageAanpassen.php?id=" . $rapportage);
