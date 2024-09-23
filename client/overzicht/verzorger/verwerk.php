@@ -26,5 +26,6 @@ foreach ($verzorgers as $key => $value) {
     }
 }
 
-$_SESSION['verzorgersUpdated'] = true;
+$_SESSION['succes'] = "Verzorgers zijn succesvol aangepast";
 header("Location: ../verzorgers.php?id=$clientId");
+exit;

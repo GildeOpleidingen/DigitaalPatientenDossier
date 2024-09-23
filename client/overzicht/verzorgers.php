@@ -20,7 +20,7 @@ $stmt->execute();
 $stmt = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 // Loop door alle medewerkers heen, als de medewerker al in de database staat, zet dan de checked variabele op true
 foreach ($medewerkers as $key => $medewerker) {
-    foreach($stmt as $relation) {
+    foreach ($stmt as $relation) {
         if ($medewerker['id'] == $relation['medewerkerid']) {
             $medewerkers[$key]['checked'] = true;
         }
@@ -29,54 +29,63 @@ foreach ($medewerkers as $key => $medewerker) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="verzorgers.css">
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Verzorgers van <?= $client['naam'] ?></title>
 </head>
+
 <body>
-<div class="main">
+    <?php
+    include_once '../../includes/n-header.php';
+    ?>
+    <div class="main">
         <?php
-        include '../../includes/header.php';
+        include_once '../../includes/n-sidebar.php';
         ?>
-
-        <?php
-        include '../../includes/sidebar.php';
-        ?>
-
-        <form action="Verzorger/verwerk.php" method="post" class="content">
-            <input type="hidden" name="clientId" value="<?= $clientId ?>">
-            <?php if (isset($_SESSION['verzorgersUpdated'])) { ?>
-                <div class="successMessage">
-                    <h1>De verzorgers zijn succesvol aangepast.</h1>
-                </div>
-            <?php
-                unset($_SESSION['verzorgersUpdated']);
-            } ?>
-            <div class="form-content">
-                <div class="pages">Verzorgers van <?= $client['naam'] ?></div>
-                <div class="form">
-                    <div class="questionnaire">
-                            <?php foreach ($medewerkers as $medewerker) { ?>
-                                <div class="question"><p><?= $medewerker['naam'] ?></p>
-                                    <div class="checkboxes">
-                                        <div>
-                                            <input type="hidden" name="verzorgers[<?= $medewerker['id'] ?>]"> <!-- Hidden input om de waarde mee te geven als hij niet gecheckt is -->
-                                            <input type="checkbox" name="verzorgers[<?= $medewerker['id'] ?>]" <?php if (isset($medewerker['checked'])) { echo "checked"; } ?>>
+        <div class="content">
+            <div class="mt-4 mb-3 bg-white p-3 d-flex flex-column" style="height: 96%; overflow: auto;">
+                <?php if (isset($_SESSION['succes'])) { ?>
+                    <div class="mb-3 alert alert-success" role="alert">
+                        <?php echo $_SESSION['succes']; ?>
+                    </div>
+                <?php unset($_SESSION['succes']);
+                } ?>
+                <h3>Verzorgers van <?= $client['naam'] ?></h3>
+                <form action="verzorger/verwerk.php" method="post" class="flex-grow-1 d-flex flex-column">
+                    <input type="hidden" name="clientId" value="<?= $clientId ?>">
+                    <div class="form-content flex-grow-1">
+                        <div class="form">
+                            <div class="mt-3 questionnaire">
+                                <?php foreach ($medewerkers as $medewerker) { ?>
+                                    <div class="row">
+                                        <div class="col-lg-11 col-md-10 col-sm-9">
+                                            <p><?= $medewerker['naam'] ?></p>
+                                        </div>
+                                        <div class="col-lg-1 col-md-2 col-sm-3">
+                                            <input type="hidden" name="verzorgers[<?= $medewerker['id'] ?>]">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="verzorgers[<?= $medewerker['id'] ?>]" id="verzorger-<?= $medewerker['id'] ?>" <?php if (isset($medewerker['checked'])) {
+                                                                                                                                                                                        echo "checked";
+                                                                                                                                                                                    } ?>>
+                                                <label class="form-check-label" for="verzorger-<?= $medewerker['id'] ?>"></label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            <?php } ?>
+                                <?php } ?>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="submit">
-                    <button type="submit">Opslaan</button>
-                </div>
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-secondary w-100">Opslaan</button>
+                    </div>
+                </form>
             </div>
-        </form>
         </div>
-</div>
-
+    </div>
 </body>
+
 </html>
