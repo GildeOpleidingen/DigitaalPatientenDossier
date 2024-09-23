@@ -198,13 +198,19 @@ class Main
             if (!$this->checkIfClientStoryExistsByClientId($clientid)) {
                 $result = DatabaseConnection::getConn()->prepare("INSERT INTO `clientverhaal`(`id`, `medischoverzichtid`, `foto`, `introductie`, `gezinfamilie`, `belangrijkeinfo`, `hobbies`) VALUES (NULL, ?, ?, ?, ?, ?, ?);");
                 $result->bind_param("isssss", $medischOverzicht['id'], $foto, $introductie, $familie, $belangrijkeinfo, $hobbies);
-                $result->execute();
-                return true;
+                if ($result->execute()) {
+                    return true;
+                } else {
+                    return "Insert failed: " . $result->error;
+                }
             } else {
                 $result = DatabaseConnection::getConn()->prepare("UPDATE `clientverhaal` SET `foto`=?,`introductie`=?,`gezinfamilie`=?,`belangrijkeinfo`=?,`hobbies`=? WHERE medischoverzichtid = ?;");
                 $result->bind_param("sssssi", $foto, $introductie, $familie, $belangrijkeinfo, $hobbies, $medischOverzicht['id']);
-                $result->execute();
-                return true;
+                if ($result->execute()) {
+                    return true;
+                } else {
+                    return "Update failed: " . $result->error;
+                }
             }
         } else {
             return false;
