@@ -1,4 +1,6 @@
-
+.title{
+    font-size: 2em;
+}
 
 .main{
     display: flex;

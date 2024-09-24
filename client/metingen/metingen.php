@@ -85,7 +85,7 @@ foreach ($metingen[1] as $meting) {
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Metingen</title>
-    <link rel="stylesheet" href="metingen.css">
+    <link rel="stylesheet" href="../../assets/css/client/metingen.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
 </head>
 
