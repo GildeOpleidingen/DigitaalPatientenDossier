@@ -17,7 +17,7 @@ if(!isset($_GET['q'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medewerker</title>
-    <link rel="stylesheet" href="medewerker.css">
+    <link rel="stylesheet" href="../assets/css/medewerker/medewerker.css">
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
@@ -51,6 +51,9 @@ if(!isset($_GET['q'])){
                         <th>Telefoonnummer</th>
                     </tr>
                     <?php
+                    if(count($items) == 0){
+                        echo "<tr><td colspan='4' class='text-center'>Geen resultaten gevonden.</td></tr>";
+                    }
                     foreach ($items as $row) {
                         echo "<tr>";
                         echo "<td class='row1'><a href=overzicht/overzicht.php?id=" . $row['id'] . ">" . $row['naam'] . "</a></td>";
