@@ -35,6 +35,7 @@ foreach ($medewerkers as $key => $medewerker) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../assets/css/client/verzorgers.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Verzorgers van <?= $client['naam'] ?></title>
 </head>
 
@@ -54,6 +55,7 @@ foreach ($medewerkers as $key => $medewerker) {
                     </div>
                 <?php unset($_SESSION['succes']);
                 } ?>
+                <a href='../patiëntgegevens/patiëntgegevens.php?id=<?= $clientId ?>' class='mb-3 text-decoration-none text-primary fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Teruggaan</a>
                 <h3>Verzorgers van <?= $client['naam'] ?></h3>
                 <form action="verzorger/verwerk.php" method="post" class="flex-grow-1 d-flex flex-column">
                     <input type="hidden" name="clientId" value="<?= $clientId ?>">

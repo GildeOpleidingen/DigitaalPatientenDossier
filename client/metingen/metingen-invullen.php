@@ -75,6 +75,7 @@ $asisstent_bool = $grens_asistent->get_result()->fetch_array()[0];
     <title>Metingen</title>
     <link rel="stylesheet" href="../../assets/css/client/metingen.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -90,7 +91,7 @@ $asisstent_bool = $grens_asistent->get_result()->fetch_array()[0];
                 <p class="card-text">
                 <form id="patientForm" method="POST" class="needs-validation flex-grow-1 d-flex flex-column" novalidate>
                     <div class="flex-grow-1 d-flex flex-column">
-                        <a href="metingen.php" class="btn btn-sm btn-secondary mb-2">Teruggaan</a>
+                    <a href='metingen.php' class='mb-3 text-decoration-none text-primary fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Teruggaan</a>
                         <?php echo '<input type="hidden" id="shown" value="' . $asisstent_bool . '">'; ?>
 
                         <div class="row">
