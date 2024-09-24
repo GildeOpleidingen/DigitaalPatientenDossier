@@ -22,7 +22,7 @@ if ($client == null) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="Stylesheet" href="formulieren.css">
+    <link rel="Stylesheet" href="../../assets/css/client/formulieren.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Formulieren</title>
 </head>

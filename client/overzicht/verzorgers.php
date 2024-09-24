@@ -33,7 +33,7 @@ foreach ($medewerkers as $key => $medewerker) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="Stylesheet" href="verzorgers.css">
+    <link rel="Stylesheet" href="../../assets/css/client/verzorgers.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Verzorgers van <?= $client['naam'] ?></title>
 </head>
