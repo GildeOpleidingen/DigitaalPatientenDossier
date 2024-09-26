@@ -36,6 +36,7 @@ if(!isset($_GET['q'])){
                     echo "<a href='client.php' class='text-decoration-none text-white fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Terug naar overzicht</a>";
                 }
                 ?>
+                <button onclick="window.location.href='client_toevoegen.php'">Client Toevoegen</button>
                 <form action="" method="GET">
                     <div class="input-group mb-3">
                         <input type="text" name="q" class="form-control" placeholder="Zoeken...">
@@ -48,17 +49,21 @@ if(!isset($_GET['q'])){
                         <th>Naam</th>
                         <th>Woonplaats</th>
                         <th>Geboortedatum</th>
+                        <th>Bewerken</th>
+                        <th>Verwijderen</th>
                     </tr>
                     <?php
-                    if(count($items) == 0){
-                        echo "<tr><td colspan='4' class='text-center'>Geen resultaten gevonden.</td></tr>";
+                    if (count($items) == 0) {
+                        echo "<tr><td colspan='6' class='text-center'>Geen resultaten gevonden.</td></tr>";
                     }
                     foreach ($items as $row) {
                         echo "<tr>";
-                        echo "<td class='row1'>$row[0]</td>";
-                        echo "<td class='row1'><a href=overzicht/overzicht.php?id=$row[0]>$row[1]</a></td>";
-                        echo "<td class='row1'>$row[2]</td>";
-                        echo "<td class='row1'>" . date_create($row[3])->format("d-m-Y") . "</td>";
+                        echo "<td>$row[0]</td>";
+                        echo "<td><a href='overzicht/overzicht.php?id=$row[0]'>$row[1]</a></td>";
+                        echo "<td>$row[2]</td>";
+                        echo "<td>" . date_create($row[3])->format("d-m-Y") . "</td>";
+                        echo "<td><a href='client_bewerken.php?id=$row[0]' class='btn btn-warning'>Bewerk</a></td>";
+                        echo "<td><a href='client_verwijderen.php?id=$row[0]' class='btn btn-danger' onclick='return confirm(\"Weet je zeker dat je deze client wilt verwijderen?\");'>Verwijder</a></td>";
                         echo "</tr>";
                     }
                     ?>
