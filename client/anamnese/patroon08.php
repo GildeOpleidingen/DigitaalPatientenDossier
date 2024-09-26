@@ -30,20 +30,20 @@ if (isset($_REQUEST['navbutton'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="Stylesheet" href="patronen.css">
+    <link rel="Stylesheet" href="../../assets/css/client/patronen.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Anamnese</title>
 </head>
 
-<body>
+<body style="overflow: hidden;">
     <form action="" method="post">
         <div class="main">
             <?php
             include '../../includes/n-header.php';
             include '../../includes/n-sidebar.php';
             ?>
-            <div class="content">
-                <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
+            <div class="mt-5 pt-5 content">
+                <div class="mt-4 mb-3 bg-white p-3" style="height: 90%; overflow: auto;">
                     <p class="card-text">
                     <div class="form-content">
                         <div class="h4 text-primary">8. Rollen- en relatiepatroon</div>
