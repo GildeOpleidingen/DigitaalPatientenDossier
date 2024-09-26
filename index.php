@@ -63,7 +63,7 @@ if(isset($_POST['inloggen'])){
                                     <div class="alert alert-danger" role="alert">
                                         <?= $_SESSION['error'] ?>
                                     </div>
-                                    <?php session_unset(); ?>
+                                    <?php unset($_SESSION['error']); ?>
                                 <?php } ?>
                                 <div class="row gy-2 overflow-hidden">
                                     <div class="col-12">
