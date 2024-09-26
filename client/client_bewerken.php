@@ -138,10 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="foto">Foto</label>
-                <input type="file" name="foto" class="form-control-file">
-            </div>
+            
 
             <button type="submit" class="btn btn-primary mt-3">Opslaan</button>
         </form>
