@@ -61,7 +61,7 @@ if (isset($_POST['aanpassen'])) {
                             <div class="alert alert-success" role="alert">
                                 <?= $_SESSION['succes'] ?>
                             </div>
-                            <?php session_unset(); ?>
+                            <?php unset($_SESSION['error']); ?>
                         <?php } ?>
                         <input type="hidden" value="<?= $rapportage['id'] ?>" name="rapportageId">
                         <div class="rapportage flex-grow-1">

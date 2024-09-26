@@ -35,15 +35,15 @@ if (isset($_REQUEST['navbutton'])) {
     <title>Anamnese</title>
 </head>
 
-<body>
+<body style="overflow: hidden;">
     <form action="" method="post">
         <div class="main">
             <?php
             include '../../includes/n-header.php';
             include '../../includes/n-sidebar.php';
             ?>
-            <div class="content">
-                <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
+            <div class="mt-5 pt-5 content">
+                <div class="mt-4 mb-3 bg-white p-3" style="height: 90%; overflow: auto;">
                     <p class="card-text">
                     <div class="form-content">
                         <div class="h4 text-primary">1. Patroon van gezondheidsbeleving en -instandhouding</div>
