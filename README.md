@@ -35,6 +35,16 @@ digitaalpatientendossier.gds.local
 Om phpmyadmin te benaderen via de url.
 pma.digitaalpatientendossier.gds.local
 
+# Backlog
+
+ - Controleer de backlog dagelijks.
+ - Overleg met elkaar als je iets vindt dat veranderd moet worden en maak zo nodig een nieuw to-do item aan.
+ - Bij het aanmaken van een item, controleer of het geen "duplicate entry" is
+ - geef een descriptieve titel/beschrijving
+  - zet in de beschrijving neer hoe noodzakelijk deze taak is.
+   - (hoge noodzaak) 1 - 5 (kan op het eind naar gekeken worden).
+   - bespreek dit met groepsleden wanneer nodig.
+
 # Deployment
 Deployment worden geregeld door GitHub Actions
 Er zijn op dit moment twee workflows.
