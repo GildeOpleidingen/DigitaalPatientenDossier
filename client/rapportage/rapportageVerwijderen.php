@@ -48,6 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             window.location.href = '<?= $_SERVER['HTTP_REFERER'] ?>';
         }
+
+
+        
     </script>
 </head>
 <body>
