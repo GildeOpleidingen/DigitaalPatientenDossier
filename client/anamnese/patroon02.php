@@ -34,7 +34,7 @@ if (isset($_REQUEST['navbutton'])) {
     $result->execute();
     $result = $result->get_result()->fetch_assoc();
 
-    if ($result != null){
+    if ($result != null) {
         $vragenlijstId = $result['id'];
     } else {
         $sql2 = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
@@ -42,7 +42,7 @@ if (isset($_REQUEST['navbutton'])) {
             FROM verzorgerregel
             WHERE clientid = ?
             AND medewerkerid = ?))");
-            $sql2->bind_param("ii", $_SESSION['clientId'] ,$medewerkerId);
+        $sql2->bind_param("ii", $_SESSION['clientId'], $medewerkerId);
         $sql2->execute();
         $sql2 = $sql2->get_result();
 
@@ -54,8 +54,8 @@ if (isset($_REQUEST['navbutton'])) {
         $result->execute();
         $result = $result->get_result()->fetch_assoc();
 
-        $vragenlijstId=$result['id'];
-}
+        $vragenlijstId = $result['id'];
+    }
 
     // kijken of patroon02 bestaat door te kijken naar vragenlijst id
     $result = DatabaseConnection::getConn()->prepare("
@@ -66,9 +66,9 @@ if (isset($_REQUEST['navbutton'])) {
     $result->execute();
     $result = $result->get_result()->fetch_assoc();
 
-if ($result != null) {
-    //update
-    $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon02voedingstofwisseling`
+    if ($result != null) {
+        //update
+        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon02voedingstofwisseling`
             SET
             `eetlust`=?,
             `dieet`=?,
@@ -81,18 +81,17 @@ if ($result != null) {
             `gevoel`=?,
             `observatie`=?
             WHERE `vragenlijstid`=?");
-    if ($result1) {
-        $result1->bind_param("iisiiiiisii", $eetlust, $dieet, $dieetWelk, $gewichtVerandert, $moeilijkSlikken, $gebitsProblemen, $gebitsProthese, $huidProblemen, $gevoel, $observatie, $vragenlijstId);
-        $result1->execute();
+        if ($result1) {
+            $result1->bind_param("iisiiiiisii", $eetlust, $dieet, $dieetWelk, $gewichtVerandert, $moeilijkSlikken, $gebitsProblemen, $gebitsProthese, $huidProblemen, $gevoel, $observatie, $vragenlijstId);
+            $result1->execute();
+        } else {
+            // Handle error
+            echo "Error preparing statement: " . DatabaseConnection::getConn()->error;
+        }
     } else {
-        // Handle error
-        echo "Error preparing statement: " . DatabaseConnection::getConn()->error;
-    }
-
-}else{
-    //hier insert je alle data in patroon02
-    $dieetWelk = "'$dieetWelk'";
-    $result2 = DatabaseConnection::getConn()->prepare( "INSERT INTO `patroon02voedingstofwisseling`(
+        //hier insert je alle data in patroon02
+        $dieetWelk = "'$dieetWelk'";
+        $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon02voedingstofwisseling`(
                 `vragenlijstid`,
                 `eetlust`,
                 `dieet`,
@@ -116,11 +115,10 @@ if ($result != null) {
                     ?,
                     ?,
                     ?)");
-    $result2->bind_param("iiisiiiiiis", $vragenlijstId, $eetlust, $dieet, $dieetWelk, $gewichtVerandert, $moeilijkSlikken, $gebitsProblemen, $gebitsProthese, $huidProblemen, $gevoel, $observatie);
-    $result2->execute();
-    $result2 = $result2->get_result();
-
-}
+        $result2->bind_param("iiisiiiiiis", $vragenlijstId, $eetlust, $dieet, $dieetWelk, $gewichtVerandert, $moeilijkSlikken, $gebitsProblemen, $gebitsProthese, $huidProblemen, $gevoel, $observatie);
+        $result2->execute();
+        $result2 = $result2->get_result();
+    }
     switch ($_REQUEST['navbutton']) {
         case 'next': //action for next here
             header('Location: patroon03.php');
@@ -140,22 +138,24 @@ if ($result != null) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="Stylesheet" href="patronen.css">
+    <link rel="Stylesheet" href="../../assets/css/client/patronen.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Anamnese</title>
 </head>
 
-<body>
+<body style="overflow: hidden;">
     <form action="" method="post">
         <div class="main">
-        <?php
-        include '../../includes/n-header.php';
-        include '../../includes/n-sidebar.php';
-        ?>
+            <?php
+            include '../../includes/n-header.php';
+            include '../../includes/n-sidebar.php';
+            ?>
 
-                <div class="content mt-3">
+            <div class="mt-5 pt-5 content">
+                <div class="mt-4 mb-3 bg-white p-3" style="height: 90%; overflow: auto;">
+                    <p class="card-text">
                     <div class="form-content">
-                        <div class="pages">2. Voedings- en stofwisselingspatroon</div>
+                        <div class="h4 text-primary">2. Voedings- en stofwisselingspatroon</div>
                         <div class="form">
                             <div class="questionnaire">
                                 <div class="question">
@@ -310,13 +310,12 @@ if ($result != null) {
                             </div>
                         </div>
                         <div class="submit">
-                            <button name="navbutton" type="submit" value="prev">
-                                Vorige</button>
-                            <button name="navbutton" type="submit" value="next">Volgende</button>
+                            <button name="navbutton" class="btn btn-secondary" type="submit" value="prev">Vorige</button>
+                            <button name="navbutton" class="btn btn-secondary" type="submit" value="next">Volgende</button>
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
     </form>
 </body>
 

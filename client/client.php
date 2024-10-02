@@ -1,7 +1,12 @@
 <?php
 session_start();
 include '../database/DatabaseConnection.php';
-$items = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;")->fetch_all();
+
+if(!isset($_GET['q'])){
+    $items = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;")->fetch_all();
+} else {
+    $items = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client WHERE naam LIKE '%$_GET[q]%' OR woonplaats LIKE '%$_GET[q]%' OR geboortedatum LIKE '%$_GET[q]%';")->fetch_all();
+}
 ?>
 
 <!DOCTYPE html>
@@ -11,9 +16,9 @@ $items = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, gebo
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cliënten</title>
-    <link rel="stylesheet" href="client.css">
+    <link rel="stylesheet" href="../assets/css/client/client.css">
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
 </head>
 
@@ -26,24 +31,39 @@ $items = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, gebo
         <div class="content">
             <div class="mt-4 mb-3 p-3">
                 <p class="card-text">
-                <form action="clientpagina/patientenzoeken.php" method="post">
-                    <input type="text" placeholder="Search.." name="search">
-                    <button type="submit"><i class="fa fa-search"></i></button>
+                <?php
+                if(isset($_GET['q'])){
+                    echo "<a href='client.php' class='text-decoration-none text-white fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Terug naar overzicht</a>";
+                }
+                ?>
+                <button onclick="window.location.href='client_toevoegen.php'">Client Toevoegen</button>
+                <form action="" method="GET">
+                    <div class="input-group mb-3">
+                        <input type="text" name="q" class="form-control" placeholder="Zoeken...">
+                        <span class="input-group-text bg-primary border-primary"><i class="fa fa-search text-white" aria-hidden="true"></i></span>
+                    </div>
                 </form>
-                <table class="table">
+                <table class="table table-hover">
                     <tr>
-                        <th>id</th>
-                        <th>naam</th>
-                        <th>woonplaats</th>
-                        <th>geboortedatum</th>
+                        <th>#</th>
+                        <th>Naam</th>
+                        <th>Woonplaats</th>
+                        <th>Geboortedatum</th>
+                        <th>Bewerken</th>
+                        <th>Verwijderen</th>
                     </tr>
                     <?php
+                    if (count($items) == 0) {
+                        echo "<tr><td colspan='6' class='text-center'>Geen resultaten gevonden.</td></tr>";
+                    }
                     foreach ($items as $row) {
                         echo "<tr>";
-                        echo "<td class='row1'>$row[0]</td>";
-                        echo "<td class='row1'><a href=overzicht/overzicht.php?id=$row[0]>$row[1]</a></td>";
-                        echo "<td class='row1'>$row[2]</td>";
-                        echo "<td class='row1'>" . date_create($row[3])->format("d-m-Y") . "</td>";
+                        echo "<td>$row[0]</td>";
+                        echo "<td><a href='overzicht/overzicht.php?id=$row[0]'>$row[1]</a></td>";
+                        echo "<td>$row[2]</td>";
+                        echo "<td>" . date_create($row[3])->format("d-m-Y") . "</td>";
+                        echo "<td><a href='client_bewerken.php?id=$row[0]' class='btn btn-warning'>Bewerk</a></td>";
+                        echo "<td><a href='client_verwijderen.php?id=$row[0]' class='btn btn-danger' onclick='return confirm(\"Weet je zeker dat je deze client wilt verwijderen?\");'>Verwijder</a></td>";
                         echo "</tr>";
                     }
                     ?>

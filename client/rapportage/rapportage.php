@@ -23,7 +23,7 @@ include '../../includes/n-header.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="Stylesheet" href="rapportage.css">
+    <link rel="Stylesheet" href="../../assets/css/client/rapportage.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Rapportage van <?= $client['naam'] ?></title>
 </head>
@@ -39,11 +39,11 @@ include '../../includes/n-header.php';
             <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
                 <p class="card-text">
                 <h1>Rapportages</h1>
-                <a href='rapportageNieuw.php?id=<?= $clientId ?>' class='btn btn-primary'>Nieuwe rapportage</a>
+                <a href='rapportage-nieuw.php?id=<?= $clientId ?>' class='btn btn-primary'>Nieuwe rapportage</a>
                 <?php
                 foreach ($rapportages as $rapport) {
                     echo "<h1>Rapportage van " . $rapport['datumtijd'] . " (" . $rapport['id'] . ")</h1>";
-                    echo "<a href='rapportageAanpassen.php?id=" . $rapport['id'] . "'>";
+                    echo "<a href='rapportage-aanpassen.php?id=" . $rapport['id'] . "'>";
                     echo "<button class='btn btn-secondary'>Aanpassen</button>";
                     echo "</a>";
                 }

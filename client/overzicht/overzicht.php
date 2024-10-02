@@ -32,7 +32,7 @@ foreach ($clientRelations as $relation) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="Stylesheet" href="overzicht.css">
+    <link rel="Stylesheet" href="../../assets/css/client/overzicht.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Overzicht van <?= $client['naam'] ?></title>
 </head>
