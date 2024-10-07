@@ -77,6 +77,9 @@ if (isset($_POST['aanpassen'])) {
         </div>
 </body>
 
+
+
+
 <script src="../../assets/js/validatie.js"></script>
 
 </html>
