@@ -9,6 +9,8 @@ if(!isset($_GET['q'])){
 } else {    
     $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker WHERE naam LIKE '%$_GET[q]%' OR klas LIKE '%$_GET[q]%' OR email LIKE '%$_GET[q]%' OR telefoonnummer LIKE '%$_GET[q]%';")->fetch_all(MYSQLI_ASSOC);
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,12 +57,17 @@ if(!isset($_GET['q'])){
                         echo "<tr><td colspan='4' class='text-center'>Geen resultaten gevonden.</td></tr>";
                     }
                     foreach ($items as $row) {
-                        echo "<tr>";
-                        echo "<td class='row1'><a href=overzicht/overzicht.php?id=" . $row['id'] . ">" . $row['naam'] . "</a></td>";
-                        echo "<td class='row1'>" . $row['klas'] . "</td>";
-                        echo "<td class='row1'>" . $row['email'] . "</td>";
-                        echo "<td class='row1'>" . $row['telefoonnummer'] . "</td>";
-                        echo "</tr>";
+                        if($row['rol'] == "beheerder"){
+                            return;
+                        }
+                        else{
+                            echo "<tr>";
+                            echo "<td class='row1'><a href=overzicht/overzicht.php?id=" . $row['id'] . ">" . $row['naam'] . "</a></td>";
+                            echo "<td class='row1'>" . $row['klas'] . "</td>";
+                            echo "<td class='row1'>" . $row['email'] . "</td>";
+                            echo "<td class='row1'>" . $row['telefoonnummer'] . "</td>";
+                            echo "</tr>";
+                        }
                     }
                     ?>
                 </table>
