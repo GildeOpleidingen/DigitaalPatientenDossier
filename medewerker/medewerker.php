@@ -4,7 +4,7 @@ require_once('../includes/auth.php');
 
 include '../database/DatabaseConnection.php';
 
-$items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all(MYSQLI_ASSOC);
+$items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol FROM medewerker;")->fetch_all(MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,12 +42,17 @@ $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, tel
                     </tr>
                     <?php
                     foreach ($items as $row) {
-                        echo "<tr>";
-                        echo "<td class='row1'><a href=overzicht/overzicht.php?id=" . $row['id'] . ">" . $row['naam'] . "</a></td>";
-                        echo "<td class='row1'>" . $row['klas'] . "</td>";
-                        echo "<td class='row1'>" . $row['email'] . "</td>";
-                        echo "<td class='row1'>" . $row['telefoonnummer'] . "</td>";
-                        echo "</tr>";
+                        if($row['rol'] == "beheerder"){
+                            return;
+                        }
+                        else{
+                            echo "<tr>";
+                            echo "<td class='row1'><a href=overzicht/overzicht.php?id=" . $row['id'] . ">" . $row['naam'] . "</a></td>";
+                            echo "<td class='row1'>" . $row['klas'] . "</td>";
+                            echo "<td class='row1'>" . $row['email'] . "</td>";
+                            echo "<td class='row1'>" . $row['telefoonnummer'] . "</td>";
+                            echo "</tr>";
+                        }
                     }
                     ?>
                 </table>
