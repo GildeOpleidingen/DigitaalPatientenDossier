@@ -17,12 +17,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $afdeling = $_POST['afdeling'];
     $burgelijkestaat = $_POST['burgelijkestaat'];
 
-    // Query om de gegevens in de database in te voegen
-    $sql = "INSERT INTO client (naam, geslacht, adres, postcode, woonplaats, telefoonnummer, email, geboortedatum, reanimatiestatus, nationaliteit, afdeling, burgelijkestaat)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // Verwerk de foto, als die aanwezig is
+    $foto = NULL;
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
+        $foto = file_get_contents($_FILES['foto']['tmp_name']); // Lees de inhoud van het bestand
+    }
+
+    // Query om de gegevens in de database in te voegen, inclusief de optionele foto
+    $sql = "INSERT INTO client (naam, geslacht, adres, postcode, woonplaats, telefoonnummer, email, geboortedatum, reanimatiestatus, nationaliteit, afdeling, burgelijkestaat, foto)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = DatabaseConnection::getConn()->prepare($sql);
-    $stmt->bind_param("ssssssssssss", $naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $geboortedatum, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat);
+
+    // Bind de parameters, de foto wordt als blob gebonden
+    $stmt->bind_param("sssssssssssss", $naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $geboortedatum, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto);
 
     // Controleer of het toevoegen is gelukt
     if ($stmt->execute()) {
@@ -47,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="container">
         <h2>Nieuwe Client Toevoegen</h2>
-        <form action="client_toevoegen.php" method="POST">
+        <form action="client_toevoegen.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="naam">Naam</label>
                 <input type="text" name="naam" class="form-control" required>
@@ -105,9 +113,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <option value="gehuwd">Gehuwd</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label for="foto">Foto (optioneel)</label>
+                <input type="file" name="foto" class="form-control" accept="image/*" id="fotoInput">
+                <div class="mt-2">
+                        <label for="currentPhoto">Huidige Foto:</label><br>
+                        <img id="preview" src="" alt="Client Foto" style="max-width: 150px; display: none;">
+                        <p id="noPhoto" style="display: none;">Geen foto beschikbaar</p>
+                    </div>
+                </div>
             <button type="submit" class="btn btn-primary mt-3">Toevoegen</button>
         </form>
     </div>
 </body>
+<script>
+    // Get the file input and the preview image element
+    const fotoInput = document.getElementById('fotoInput');
+    const preview = document.getElementById('preview');
+    const noPhoto = document.getElementById('noPhoto');
 
+    // Listen for changes on the file input
+    fotoInput.addEventListener('change', function() {
+        const file = fotoInput.files[0]; // Get the selected file
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result; // Set the src of the image to the file's data URL
+                preview.style.display = 'block'; // Show the preview image
+                noPhoto.style.display = 'none'; // Hide the "no photo" message
+            };
+            reader.readAsDataURL(file); // Read the file as a data URL
+        } else {
+            preview.style.display = 'none'; // Hide the preview image if no file is selected
+            noPhoto.style.display = 'block'; // Show the "no photo" message
+        }
+    });
+</script>
 </html>
