@@ -53,7 +53,7 @@ if (isset($_REQUEST['navbutton'])) {
                         <div class="form">
                             <div class="questionnaire">
                                 <div class="question">
-                                    <p>Kunt u uzelf, in het kort, beschijven?</p><textarea rows="1" cols="25" type="text"><?= $antwoorden['zelfbeschrijving'] ?></textarea>
+                                    <p>Kunt u uzelf, in het kort, beschrijven?</p><textarea rows="1" cols="25" type="text"><?= isset($antwoorden['zelfbeschrijving']) ? $antwoorden['zelfbeschrijving'] : '' ?></textarea>
                                 </div>
                                 <div class="question">
                                     <p>Kunt u voor uzelf opkomen?</p>
@@ -69,7 +69,7 @@ if (isset($_REQUEST['navbutton'])) {
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Waar blijkt dat uit?</p><textarea rows="1" cols="25" type="text" name="wel_niet_opkomen_blijktuit"><?= isset($antwoorden['wel_niet_opkomen_blijktuit']) ?></textarea>
+                                    <p>Waar blijkt dat uit?</p><textarea rows="1" cols="25" type="text" name="wel_niet_opkomen_blijktuit"><?= isset($antwoorden['wel_niet_opkomen_blijktuit']) ? $antwoorden['wel_niet_opkomen_blijktuit'] : '' ?></textarea>
                                 </div>
                                 <div class="question">
                                     <p>Is uw stemming de laatste tijd veranderd?</p>
@@ -77,7 +77,7 @@ if (isset($_REQUEST['navbutton'])) {
                                         <div class="question-answer">
                                             <input id="radio" type="radio" name="opkomen_voor_uzelf" <?= isset($antwoorden['verandering_stemming']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_stemming_welke"> <?= isset($antwoorden['verandering_stemming_welke']) ?>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_stemming_welke"> <?= isset($antwoorden['verandering_stemming_welke']) ? $antwoorden['verandering_stemming_welke'] : '' ?>
                                 </div>
                                 <p>
                                     <input type="radio" name="opkomen_voor_uzelf" <?= !isset($antwoorden['verandering_stemming']) ? "checked" : "" ?>>
@@ -158,7 +158,7 @@ if (isset($_REQUEST['navbutton'])) {
                                         <div class="question-answer">
                                             <input id="radio" type="radio" name="sensaties" <?= isset($antwoorden['sensaties']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="wat voelt u?" name="sensaties_wat"> <?= isset($antwoorden['sensaties_wat']) ?> </textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="wat voelt u?" name="sensaties_wat"> <?= isset($antwoorden['sensaties_wat']) ? $antwoorden['sensaties_wat'] : '' ?> </textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="sensaties" <?= !isset($antwoorden['sensaties']) ? "checked" : "" ?>>
@@ -207,7 +207,7 @@ if (isset($_REQUEST['navbutton'])) {
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Zorgt u goed voor u zelf, of vindt u dat het beter kan?</p><textarea rows="1" cols="25" type="text" name="zelfverzorging"><?= isset($antwoorden['zelfverzorging']) ?></textarea>
+                                    <p>Zorgt u goed voor u zelf, of vindt u dat het beter kan?</p><textarea rows="1" cols="25" type="text" name="zelfverzorging"><?= isset($antwoorden['zelfverzorging']) ? $antwoorden['zelfverzorging'] : '' ?></textarea>
                                 </div>
 
                                 <div class="observation">

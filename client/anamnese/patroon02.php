@@ -182,7 +182,7 @@ if (isset($_REQUEST['navbutton'])) {
                                             <input id="radio" type="radio" value="1" name="dieet" <?= isset($antwoorden['dieet']) ? "checked" : "" ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" name="dieet_welk"
-                                                placeholder="en wel?"><?= isset($antwoorden['dieet_welk']) ?></textarea>
+                                                placeholder="en wel?"><?= isset($antwoorden['dieet_welk']) ? $antwoorden['dieet_welk'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="dieet" <?= !isset($antwoorden['dieet']) ? "checked" : "" ?>>
