@@ -43,7 +43,7 @@ foreach ($clientRelations as $relation) {
     ?>
 
     <?php
-    include '../../includes/n-sidebar.php';
+    include '../../includes/medewerker-sidebar.php';
     ?>
         
     <div class="content">
