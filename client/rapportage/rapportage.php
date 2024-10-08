@@ -43,8 +43,13 @@ include '../../includes/n-header.php';
                 <?php
                 foreach ($rapportages as $rapport) {
                     echo "<h1>Rapportage van " . $rapport['datumtijd'] . " (" . $rapport['id'] . ")</h1>";
+                    
                     echo "<a href='rapportage-aanpassen.php?id=" . $rapport['id'] . "'>";
                     echo "<button class='btn btn-secondary'>Aanpassen</button>";
+                    echo "</a>";
+                    
+                    echo "<a href='rapportage-verwijderen.php?id=" . $rapport['id'] . "' class='ml-2'>";
+                    echo "<button id='btn-delete' class='btn btn-danger delete-btn'>Verwijderen</button>";
                     echo "</a>";
                 }
                 ?>
@@ -54,5 +59,9 @@ include '../../includes/n-header.php';
     </div>
 
 </body>
-
+<style>
+    .btn-delete{
+        margin-left: 9px;
+    }
+</style>
 </html>

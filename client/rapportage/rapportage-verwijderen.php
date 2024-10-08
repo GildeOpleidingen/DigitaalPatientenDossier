@@ -8,12 +8,14 @@ $loggedInId = $_SESSION['loggedin_id'];
 
 if ($loggedInId == null) {
     header("Location: ../index.php");
+    exit();
 }
 
 $clientId = $_SESSION['clientId'];
 
-if(!isset($clientId)){
+if (!isset($clientId)) {
     header("Location: ../client.php");
+    exit();
 }
 
 $client = $_SESSION['client'] = $Main->getClientById($clientId);
@@ -26,13 +28,14 @@ if ($verzorgerregel == null) {
     header("Location: ../overzicht/overzicht.php");
     exit();
 }
-$verzorgerregel = $verzorgerregel['id'];
 
-$tijd = date('Y-m-d H:i:s');
-$rapport = "";
-$rapportage = DatabaseConnection::getConn()->prepare("INSERT INTO rapport (verzorgerregelid, datumtijd, inhoud, titel_rapport) VALUES (?, ?, ?, '')");
-$rapportage->bind_param("iss", $verzorgerregel, $tijd, $rapport);
-$rapportage->execute();
-$rapportage = $rapportage->insert_id;
+$rapportageId = $_GET['id']; // Het rapportage ID ophalen uit de URL-parameter
 
-header("Location: rapportage-aanpassen.php?id=" . $rapportage);
+// Verwijderen van de rapportage
+$deleteRapportage = DatabaseConnection::getConn()->prepare("DELETE FROM rapport WHERE id = ?");
+$deleteRapportage->bind_param("i", $rapportageId);
+$deleteRapportage->execute();
+
+header("Location: ../rapportage/rapportage.php"); // Terugsturen naar het overzicht
+exit();
+?>
