@@ -5,7 +5,7 @@ require_once('../includes/auth.php');
 include '../database/DatabaseConnection.php';
 
 if(!isset($_GET['q'])){
-    $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker;")->fetch_all(MYSQLI_ASSOC);
+    $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol FROM medewerker;")->fetch_all(MYSQLI_ASSOC);
 } else {    
     $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker WHERE naam LIKE '%$_GET[q]%' OR klas LIKE '%$_GET[q]%' OR email LIKE '%$_GET[q]%' OR telefoonnummer LIKE '%$_GET[q]%';")->fetch_all(MYSQLI_ASSOC);
 }
@@ -57,17 +57,17 @@ if(!isset($_GET['q'])){
                         echo "<tr><td colspan='4' class='text-center'>Geen resultaten gevonden.</td></tr>";
                     }
                     foreach ($items as $row) {
-                        if($row['rol'] == "beheerder"){
-                            return;
+                        if($_SESSION['rol'] == "medewerker"){
+                            if($row['rol'] == "beheerder"){
+                                return;
+                            }
                         }
-                        else{
-                            echo "<tr>";
-                            echo "<td class='row1'><a href=overzicht/overzicht.php?id=" . $row['id'] . ">" . $row['naam'] . "</a></td>";
-                            echo "<td class='row1'>" . $row['klas'] . "</td>";
-                            echo "<td class='row1'>" . $row['email'] . "</td>";
-                            echo "<td class='row1'>" . $row['telefoonnummer'] . "</td>";
-                            echo "</tr>";
-                        }
+                        echo "<tr>";
+                        echo "<td class='row1'><a href=overzicht/overzicht.php?id=" . $row['id'] . ">" . $row['naam'] . "</a></td>";
+                        echo "<td class='row1'>" . $row['klas'] . "</td>";
+                        echo "<td class='row1'>" . $row['email'] . "</td>";
+                        echo "<td class='row1'>" . $row['telefoonnummer'] . "</td>";
+                        echo "</tr>";
                     }
                     ?>
                 </table>
