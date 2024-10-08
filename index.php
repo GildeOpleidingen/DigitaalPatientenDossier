@@ -3,6 +3,10 @@ session_start();
 
 include 'database/DatabaseConnection.php';
 
+if (isset($_SESSION['loggedin_id'])) {
+    header("Location: dashboard.php");
+}
+
 if(isset($_POST['inloggen'])){
     if (!empty($_POST['email']) && !empty($_POST['wachtwoord'])) {
         $email = $_POST['email'];
@@ -59,7 +63,7 @@ if(isset($_POST['inloggen'])){
                                     <div class="alert alert-danger" role="alert">
                                         <?= $_SESSION['error'] ?>
                                     </div>
-                                    <?php session_unset(); ?>
+                                    <?php unset($_SESSION['error']); ?>
                                 <?php } ?>
                                 <div class="row gy-2 overflow-hidden">
                                     <div class="col-12">
