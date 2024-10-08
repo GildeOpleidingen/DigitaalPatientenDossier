@@ -85,7 +85,7 @@ if (isset($_REQUEST['navbutton'])) {
                                                 <div class="question">
                                                     <div class="observe"><input type="checkbox" <?= isset($boolArrayGeloof[5]) ? "checked" : "" ?> name="geloof6">
                                                         <p>Anders, namelijk:</p>
-                                                    </div><textarea rows="1" cols="25" type="text"><?= isset($antwoorden['geloof_anders']) ? isset($anwoorden['geloof_anders']) : "" ?></textarea>
+                                                    </div><textarea rows="1" cols="25" type="text"><?= isset($antwoorden['geloof_anders']) ? isset($anwoorden['geloof_anders']) : '' ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -114,7 +114,7 @@ if (isset($_REQUEST['navbutton'])) {
                                         <div class="question-answer">
                                             <input id="radio" type="radio" name="gebruiken_tav_geloofsovertuiging" <?= isset($antwoorden['gebruiken_tav_geloofsovertuiging']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_tav_geloofsovertuiging"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_welke']) ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_tav_geloofsovertuiging"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_welke']) ? $antwoorden['gebruiken_tav_geloofsovertuiging_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="gebruiken_tav_geloofsovertuiging" <?= !isset($antwoorden['gebruiken_tav_geloofsovertuiging']) ? "checked" : "" ?>>
@@ -123,7 +123,7 @@ if (isset($_REQUEST['navbutton'])) {
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Ja, wanneer?</p><textarea rows="1" cols="25" type="text" name="gebruiken_tav_geloofsovertuiging_wanneer"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_wanneer']) ?></textarea>
+                                    <p>Ja, wanneer?</p><textarea rows="1" cols="25" type="text" name="gebruiken_tav_geloofsovertuiging_wanneer"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_wanneer']) ? $antwoorden['gebruiken_tav_geloofsovertuiging_wanneer'] : '' ?></textarea>
                                 </div>
                                 <div class="question">
                                     <p>Komen uw waarden en normen overeen met maatschappelijke waarden en normen?</p>
@@ -139,15 +139,15 @@ if (isset($_REQUEST['navbutton'])) {
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Wat is uw etnische achtergrond</p><textarea rows="1" cols="25" type="text" name="etnische_achtergrond"><?= isset($antwoorden['etnische_achtergrond']) ? isset($antwoorden['etnische_achtergrond']) : "" ?></textarea>
+                                    <p>Wat is uw ethische achtergrond?</p><textarea rows="1" cols="25" type="text" name="etnische_achtergrond"><?= isset($antwoorden['etnische_achtergrond']) ? $antwoorden['etnische_achtergrond'] : '' ?></textarea>
                                 </div>
                                 <div class="question">
-                                    <p>- Zijn er gebruiken met betrekking tot uw etnische achtergrond waar rekening mee gehouden moet worden?</p>
+                                    <p>- Zijn er gebruiken met betrekking tot uw ethische achtergrond waar rekening mee gehouden moet worden?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
                                             <input id="radio" type="radio" name="gebruiken_mbt_etnische_achtergrond" <?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_mbt_etnische_achtergrond_welke"><?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond_welke']) ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_mbt_etnische_achtergrond_welke"><?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond_welke']) ? $antwoorden['gebruiken_mbt_etnische_achtergrond_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="gebruiken_mbt_etnische_achtergrond" <?= !isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) ? "checked" : "" ?>>
@@ -156,7 +156,7 @@ if (isset($_REQUEST['navbutton'])) {
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Ja, wanneer?</p><textarea rows="1" cols="25" type="text"><?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) ? isset($antwoorden['gebruiken_mbt_etnische_achtergrond_wanneer']) : "" ?></textarea>
+                                    <p>Ja, wanneer?</p><textarea rows="1" cols="25" type="text"><?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) ? $antwoorden['gebruiken_mbt_etnische_achtergrond_wanneer'] : '' ?></textarea>
                                 </div>
 
                                 <div class="observation">
@@ -173,12 +173,12 @@ if (isset($_REQUEST['navbutton'])) {
                                     </div>
                                     <div class="question">
                                         <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[2]) ? "checked" : "" ?> name="observatie3">
-                                            <p>Verandering in rolopvatting met betrekking tot etnische achtergrond</p>
+                                            <p>Verandering in rolopvatting met betrekking tot ethische achtergrond</p>
                                         </div>
                                     </div>
                                     <div class="question">
                                         <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[3]) ? "checked" : "" ?> name="observatie4">
-                                            <p>Verandering in rolinvulling met betrekking tot etnische achtergrond</p>
+                                            <p>Verandering in rolinvulling met betrekking tot ethische achtergrond</p>
                                         </div>
                                     </div>
                                 </div>
