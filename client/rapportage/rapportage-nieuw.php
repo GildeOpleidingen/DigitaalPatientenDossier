@@ -31,7 +31,7 @@ if (isset($_POST['aanmaken'])) {
     $stmt->close();
 
     $_SESSION['succes'] = 'Nieuwe rapportage aangemaakt.';
-    header("Location: ./rapportage-aanpassen.php?id=$nieuwRapportageId");
+    header("Location: http://fatih/DigitaalPatientenDossier/client/rapportage/rapportage.php?id=$nieuwRapportageId");
     exit();
 }
 ?>
