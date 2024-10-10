@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once '../../database/DatabaseConnection.php';
-include_once '../../classes/Main.php';
+include_once '../../classes/autoload.php';
 $Main = new Main();
 
 $loggedInId = $_SESSION['loggedin_id'];
