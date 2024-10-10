@@ -2,7 +2,7 @@
 session_start();
 require_once('../../includes/auth.php');
 include '../../database/DatabaseConnection.php';
-include_once '../../classes/Main.php';
+require '../../classes/autoload.php';
 $Metingen = new Metingen();
 
 $clientId = $_SESSION['clientId'];

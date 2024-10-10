@@ -2,7 +2,7 @@
 session_start();
 require_once('../../includes/auth.php');
 include '../../database/DatabaseConnection.php';
-include_once '../../classes/Main.php';
+include_once '../../classes/autoload.php';
 $Main = new Main();
 
 $clientId = $_SESSION['clientId'];
