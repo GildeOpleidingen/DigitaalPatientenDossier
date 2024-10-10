@@ -47,7 +47,7 @@ if (isset($_REQUEST['navbutton'])) {
                 <div class="mt-4 mb-3 bg-white p-3" style="height: 90%; overflow: auto;">
                     <p class="card-text">
                     <div class="form-content">
-                        <div class="h4 text-primary">11 Stressverwerkingspatroon (probleemhantering)</div>
+                        <div class="h4 text-primary">11. Stressverwerkingspatroon (probleemhantering)</div>
                         <div class="form">
                             <div class="questionnaire">
                                 <div class="question">
