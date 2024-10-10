@@ -42,14 +42,14 @@ include '../../includes/n-header.php';
                 <a href='rapportage-nieuw.php?id=<?= $clientId ?>' class='btn btn-primary'>Nieuwe rapportage</a>
                 <?php
                 foreach ($rapportages as $rapport) {
-                    echo "<h1>Rapportage van " . $rapport['datumtijd'] . " (" . $rapport['id'] . ")</h1>";
+                    echo "<h1>Rapportage van " . $rapport['titel_rapport'] . "   " .$rapport['datumtijd'] . "</h1>";
                     
                     echo "<a href='rapportage-aanpassen.php?id=" . $rapport['id'] . "'>";
                     echo "<button class='btn btn-secondary'>Aanpassen</button>";
                     echo "</a>";
                     
                     echo "<a href='rapportage-verwijderen.php?id=" . $rapport['id'] . "' class='ml-2'>";
-                    echo "<button id='btn-delete' class='btn btn-danger delete-btn'>Verwijderen</button>";
+                    echo "<button id='btn-delete' class='btn btn-danger delete-btn style='margin-left: 15px;''>Verwijderen</button>";
                     echo "</a>";
                 }
                 ?>
@@ -60,8 +60,8 @@ include '../../includes/n-header.php';
 
 </body>
 <style>
-    .btn-delete{
-        margin-left: 9px;
+    #btn-delete{
+        margin-left: 10px;
     }
 </style>
 </html>

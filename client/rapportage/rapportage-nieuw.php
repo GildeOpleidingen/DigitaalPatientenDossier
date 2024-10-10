@@ -16,6 +16,7 @@ if (!$clientId) {
 }
 
 if (isset($_POST['aanmaken'])) {
+    $rapportageTitel = $_POST['titel'];
     $rapportageInhoud = $_POST['inhoud'];
     $rapportageInhoud = nl2br($rapportageInhoud);
     $tijd = date('Y-m-d H:i:s');
@@ -24,8 +25,8 @@ if (isset($_POST['aanmaken'])) {
     $verzorgerregel->execute();
     $verzorgerregel = $verzorgerregel->get_result()->fetch_assoc()['id'];
     
-    $stmt = DatabaseConnection::getConn()->prepare("INSERT INTO rapport (verzorgerregelid, datumtijd, inhoud, titel_rapport) VALUES (?, ?, ?, '')");
-    $stmt->bind_param("iss", $verzorgerregel, $tijd, $rapportageInhoud);
+    $stmt = DatabaseConnection::getConn()->prepare("INSERT INTO rapport (verzorgerregelid, datumtijd, inhoud, titel_rapport) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("isss", $verzorgerregel, $tijd, $rapportageInhoud, $rapportageTitel);
     $stmt->execute();
     $nieuwRapportageId = $stmt->insert_id;
     $stmt->close();
@@ -62,6 +63,14 @@ if (isset($_POST['aanmaken'])) {
                         <?php } ?>
                         <div class="rapportage flex-grow-1">
                             <div class="display-5 text-primary mb-3">Nieuwe Rapportage Aanmaken</div>
+                            
+                            <div class="rapportage_titel flex-grow-1">
+                                <div class="display-5 text-primary mb-2"></div>
+                                <div class="mb-2">
+                                    <textarea name="titel" id="rapportage" rows="2" placeholder="Titel" class="form-control" required></textarea>
+                                </div>
+                            </div>
+
                             <div class="mb-3">
                                 <textarea name="inhoud" id="rapportage" rows="16" placeholder="Rapportage" class="form-control" required></textarea>
                             </div>
