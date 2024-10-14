@@ -30,7 +30,7 @@ if (isset($_POST['aanpassen'])) {
     $stmt->close();
 
     $_SESSION['succes'] = 'Rapportage aangepast.';
-    header("Location: ./rapportage-aanpassen.php?id=$rapportageId");
+    header("Location: ../rapportage/rapportage.php");
     exit();
 }
 ?>

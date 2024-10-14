@@ -48,9 +48,15 @@ include '../../includes/n-header.php';
                     echo "<button class='btn btn-secondary'>Aanpassen</button>";
                     echo "</a>";
                     
-                    echo "<a href='rapportage-verwijderen.php?id=" . $rapport['id'] . "' class='ml-2'>";
-                    echo "<button id='btn-delete' class='btn btn-danger delete-btn style='margin-left: 15px;''>Verwijderen</button>";
-                    echo "</a>";
+                     // Voorwaardelijke knop voor verwijderen
+                    if ($userRole === 'admin') {
+                        echo "<a href='rapportage-verwijderen.php?id=" . $rapport['id'] . "' class='ml-2'>";
+                        echo "<button id='btn-delete' class='btn btn-danger delete-btn' style='margin-left: 15px;'>Verwijderen</button>";
+                        echo "</a>";
+                    } else {
+                        // JavaScript-alert voor niet-admin gebruikers
+                        echo "<button class='btn btn-danger delete-btn ml-2' style='margin-left: 15px;' onclick='alert(\"Deze actie is alleen beschikbaar voor de admin.\");'>Verwijderen</button>";
+                    }
                 }
                 ?>
             </div>
