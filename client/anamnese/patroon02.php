@@ -6,7 +6,7 @@ $Main = new Main();
 
 $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 2);
 
-$boolArrayObservatie = str_split($antwoorden['observatie']);
+$boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];
 
 $medewerkerId = $_SESSION['loggedin_id'];
 

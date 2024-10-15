@@ -5,7 +5,7 @@ include_once '../../classes/Main.php';
 $Main = new Main();
 
 $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 6);
-$boolArrayObservatie = str_split($antwoorden['observatie']);
+$boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];
 
 if (isset($_REQUEST['navbutton'])) {
     //TODO: hier actie om data op te slaan in database.
