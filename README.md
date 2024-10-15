@@ -1,3 +1,17 @@
+# Database fixes
+```diff
+- HIGH PRIORITY!
+```
+Graag deze kolommen aanpassen. 
+
+## Fix voor issue #347
+Ga naar de database van `dpd->medischoverzicht->opnamedatum` en zet op `null`
+https://github.com/GildeOpleidingen/DigitaalPatientenDossier/issues/347
+
+## Fix voor issue #371
+Ga naar de database van `dpd->vragenlijst->afnamedatumtijd` en zet op `null`
+https://github.com/GildeOpleidingen/DigitaalPatientenDossier/issues/371
+
 # Credentials
 ```php
 //    public static string $host = "10.250.0.103";
