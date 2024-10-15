@@ -196,8 +196,19 @@ class Main
         $medischOverzicht = $this->getMedischOverzichtByClientId($clientid);
         if ($this->checkIfClientExistsById($clientid) && count($medischOverzicht) > 0) {
             if (!$this->checkIfClientStoryExistsByClientId($clientid)) {
+                if (!$this->checkIfMedischOverzichtExistsByClientId($clientid)) {
+                    $result = DatabaseConnection::getConn()->prepare("INSERT INTO `medischoverzicht`(`clientid`) VALUES (?);");
+                    $result->bind_param("i", $clientid);
+                    $result->execute();
+
+                    $medischOverzichtId = DatabaseConnection::getConn()->insert_id;
+                } else {
+                    $medischOverzicht = $this->getMedischOverzichtByClientId($clientid);
+                    $medischOverzichtId = $medischOverzicht['id'];
+                }
+
                 $result = DatabaseConnection::getConn()->prepare("INSERT INTO `clientverhaal`(`id`, `medischoverzichtid`, `foto`, `introductie`, `gezinfamilie`, `belangrijkeinfo`, `hobbies`) VALUES (NULL, ?, ?, ?, ?, ?, ?);");
-                $result->bind_param("isssss", $medischOverzicht['id'], $foto, $introductie, $familie, $belangrijkeinfo, $hobbies);
+                $result->bind_param("isssss", $medischOverzichtId, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies);
                 if ($result->execute()) {
                     return true;
                 } else {
@@ -227,6 +238,23 @@ class Main
         WHERE c.id = ?
         ");
         $result->bind_param("i", $id);
+        $result->execute();
+
+        if ($result->get_result()->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function checkIfMedischOverzichtExistsByClientId($clientid): bool
+    {
+        $result = DatabaseConnection::getConn()->prepare("
+        SELECT *
+        FROM medischoverzicht
+        WHERE clientid = ?
+        ");
+        $result->bind_param("i", $clientid);
         $result->execute();
 
         if ($result->get_result()->num_rows > 0) {
