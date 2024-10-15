@@ -356,7 +356,7 @@ class Main
         $result->execute();
         $opnamedatum = $result->get_result()->fetch_assoc();
 
-        if ($opnamedatum != null) {
+        if (!empty($opnamedatum) && !empty($opnamedatum['opnamedatum'])) {
             return $opnamedatum['opnamedatum'];
         }
 
