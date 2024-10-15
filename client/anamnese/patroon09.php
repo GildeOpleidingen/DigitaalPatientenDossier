@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../../database/DatabaseConnection.php';
-include_once '../../classes/Main.php';
+include_once '../../classes/autoload.php';
 $Main = new Main();
 
 $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 9);
@@ -58,7 +58,7 @@ if (isset($_REQUEST['navbutton'])) {
                                         <div class="question-answer">
                                             <input id="radio" type="radio" name="verandering_seksuele_beleving" <?= isset($antwoorden['verandering_seksuele_beleving']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="door?" name="verandering_seksuele_beleving_door"><?= isset($antwoorden['verandering_seksuele_beleving_door']) ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="door?" name="verandering_seksuele_beleving_door"><?= isset($antwoorden['verandering_seksuele_beleving_door']) ? $antwoorden['verandering_seksuele_beleving_door'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="verandering_seksuele_beleving" <?= !isset($antwoorden['verandering_seksuele_beleving']) ? "checked" : "" ?>>
@@ -111,7 +111,7 @@ if (isset($_REQUEST['navbutton'])) {
                                         <div class="question-answer">
                                             <input id="radio" type="radio" name="anticonceptiemiddel" <?= isset($antwoorden['anticonceptiemiddel']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="anticonceptiemiddel_welke"> <?= isset($antwoorden['anticonceptiemiddel_welke']) ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="anticonceptiemiddel_welke"> <?= isset($antwoorden['anticonceptiemiddel_welke']) ? $antwoorden['anticonceptiemiddel_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="anticonceptiemiddel" <?= !isset($antwoorden['anticonceptiemiddel']) ? "checked" : "" ?>>
@@ -171,7 +171,7 @@ if (isset($_REQUEST['navbutton'])) {
                                         <div class="question-answer">
                                             <input id="radio" type="radio" name="soa" <?= isset($antwoorden['soa']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="soa_welke"> <?= isset($antwoorden['soa_welke']) ? "checked" : "" ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="soa_welke"> <?= isset($antwoorden['soa_welke']) ? $antwoorden['soa_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="soa" <?= !isset($antwoorden['soa']) ? "checked" : "" ?>>

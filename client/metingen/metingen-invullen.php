@@ -2,7 +2,7 @@
 session_start();
 require_once('../../includes/auth.php');
 include '../../database/DatabaseConnection.php';
-include_once '../../classes/Main.php';
+include_once '../../classes/autoload.php';
 $Main = new Main();
 
 $medewerker_id = $_SESSION['loggedin_id'];

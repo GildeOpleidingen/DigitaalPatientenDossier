@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../../database/DatabaseConnection.php';
-include_once '../../classes/Main.php';
+include_once '../../classes/autoload.php';
 $Main = new Main();
 
 $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 5);
@@ -56,7 +56,7 @@ if (isset($_REQUEST['navbutton'])) {
                                         <div class="question-answer">
                                             <input id="radio" type="radio" name="verandering_inslaaptijd" <?= isset($antwoorden['verandering_inslaaptijd']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_inslaaptijd_blijktuit"> <?= isset($antwoorden['verandering_inslaaptijd_blijktuit']) ??  "" ?> </textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_inslaaptijd_blijktuit"> <?= isset($antwoorden['verandering_inslaaptijd_blijktuit']) ?  $antwoorden['verandering_inslaaptijd_blijktuit'] : '' ?> </textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="verandering_inslaaptijd" <?= !isset($antwoorden['verandering_inslaaptijd']) ? "checked" : "" ?>>
@@ -70,7 +70,7 @@ if (isset($_REQUEST['navbutton'])) {
                                         <div class="question-answer">
                                             <input id="radio" type="radio" name="verandering_kwaliteit_slapen" <?= isset($antwoorden['verandering_kwaliteit_slapen']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_kwaliteit_slapen_blijktuit"> <?= isset($antwoorden['verandering_kwaliteit_slapen_blijktuit']) ??  "" ?> </textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_kwaliteit_slapen_blijktuit"> <?= isset($antwoorden['verandering_kwaliteit_slapen_blijktuit']) ? $antwoorden['verandering_kwaliteit_slapen_blijktuit'] : '' ?> </textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="verandering_kwaliteit_slapen" <?= !isset($antwoorden['verandering_kwaliteit_slapen']) ? "checked" : "" ?>>
@@ -125,7 +125,7 @@ if (isset($_REQUEST['navbutton'])) {
                                 </div>
                                 <div class="question">
                                     <p>- Hoe lang slaapt u nomaal?</p>
-                                    <p><input type="number" step=0.5 min="0" max="24" value="<?= isset($antwoorden['slaapduur']) ?>" name="slaapduur"> uur</p>
+                                    <p><input type="number" step=0.5 min="0" max="24" value="<?= isset($antwoorden['slaapduur']) ? $antwoorden['slaapduur'] : '' ?>" name="slaapduur"> uur</p>
                                 </div>
                                 <div class="question">
                                     <p>- Voelt u zich uitgerust als u wakker wordt?</p>

@@ -1,12 +1,18 @@
 <?php
 session_start();
 include '../../database/DatabaseConnection.php';
-include_once '../../classes/Main.php';
+include_once '../../classes/autoload.php';
 $Main = new Main();
 
 $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 2);
 
-$boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];
+
+if(isset($antwoorden['observatie'])){
+    $boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];
+} else {
+    $boolArrayObservatie = array();
+}
+
 
 $medewerkerId = $_SESSION['loggedin_id'];
 
@@ -182,7 +188,7 @@ if (isset($_REQUEST['navbutton'])) {
                                             <input id="radio" type="radio" value="1" name="dieet" <?= isset($antwoorden['dieet']) ? "checked" : "" ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" name="dieet_welk"
-                                                placeholder="en wel?"><?= isset($antwoorden['dieet_welk']) ?></textarea>
+                                                placeholder="en wel?"><?= isset($antwoorden['dieet_welk']) ? $antwoorden['dieet_welk'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="dieet" <?= !isset($antwoorden['dieet']) ? "checked" : "" ?>>
