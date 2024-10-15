@@ -16,10 +16,16 @@ if (!$clientId) {
 }
 
 if (isset($_POST['aanmaken'])) {
+    $rapportageTitel = !empty($_POST['titel']) ? $_POST['titel'] : "Draft";
+    $rapportageInhoud = $_POST['inhoud'];
+    $rapportageInhoud = nl2br($rapportageInhoud);
+    $tijd = date('Y-m-d H:i:s');
+
     $rapportageTitel = $_POST['titel'];
     $rapportageInhoud = $_POST['inhoud'];
     $rapportageInhoud = nl2br($rapportageInhoud);
     $tijd = date('Y-m-d H:i:s');
+
     $verzorgerregel = DatabaseConnection::getConn()->prepare("SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
     $verzorgerregel->bind_param("ii", $clientId, $loggedInId);
     $verzorgerregel->execute();
@@ -32,7 +38,8 @@ if (isset($_POST['aanmaken'])) {
     $stmt->close();
 
     $_SESSION['succes'] = 'Nieuwe rapportage aangemaakt.';
-    header("Location: http://fatih/DigitaalPatientenDossier/client/rapportage/rapportage.php?id=$nieuwRapportageId");
+    //header("Location: http://fatih/DigitaalPatientenDossier/client/rapportage/rapportage.php?id=$nieuwRapportageId");
+    header("Location: ../rapportage/rapportage.php");
     exit();
 }
 ?>

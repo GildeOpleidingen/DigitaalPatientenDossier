@@ -4,19 +4,31 @@ include_once '../../database/DatabaseConnection.php';
 include_once '../../classes/Main.php';
 $Main = new Main();
 
-$clientId = $_SESSION['clientId'];
+if (!isset($_SESSION['clientId'])) {
+    header("Location: ../client.php");
+    exit();
+}
 
+$clientId = $_SESSION['clientId'];
 $client = $_SESSION['client'] = $Main->getClientById($clientId);
-$rapportages = DatabaseConnection::getConn()->prepare("SELECT r.*, vr.id AS verzorgerregel_id FROM rapport r LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id WHERE vr.clientid = ?;");
+
+if ($client == null) {
+    header("Location: ../client.php");
+    exit();
+}
+
+// Query om rapportages op te halen voor de gegeven clientId
+$rapportages = DatabaseConnection::getConn()->prepare("SELECT r.*, vr.id AS verzorgerregel_id FROM rapport r LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id WHERE vr.clientid = ?");
 $rapportages->bind_param("i", $clientId);
 $rapportages->execute();
 $rapportages = $rapportages->get_result()->fetch_all(MYSQLI_ASSOC);
-if ($client == null) {
-    header("Location: ../client.php");
-}
+
+// Query om alle medewerkers op te halen, zonder bind_param()
+$userRole = DatabaseConnection::getConn()->query("SELECT * FROM medewerker ORDER BY naam ASC");
 
 include '../../includes/n-header.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,6 +65,8 @@ include '../../includes/n-header.php';
                         echo "<a href='rapportage-verwijderen.php?id=" . $rapport['id'] . "' class='ml-2'>";
                         echo "<button id='btn-delete' class='btn btn-danger delete-btn' style='margin-left: 15px;'>Verwijderen</button>";
                         echo "</a>";
+
+                
                     } else {
                         // JavaScript-alert voor niet-admin gebruikers
                         echo "<button class='btn btn-danger delete-btn ml-2' style='margin-left: 15px;' onclick='alert(\"Deze actie is alleen beschikbaar voor de admin.\");'>Verwijderen</button>";
