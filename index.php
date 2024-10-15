@@ -7,7 +7,7 @@ if (isset($_SESSION['loggedin_id'])) {
     header("Location: dashboard.php");
 }
 
-if(isset($_POST['inloggen'])){
+if (isset($_POST['form']) && $_POST['form'] == '1') {
     if (!empty($_POST['email']) && !empty($_POST['wachtwoord'])) {
         $email = $_POST['email'];
         $wachtwoord = $_POST['wachtwoord'];
@@ -58,7 +58,7 @@ if(isset($_POST['inloggen'])){
                                     <img src="assets/images/logo.png" alt="Logo" class="img-fluid">
                                 </a>
                             </div>
-                            <form action="" method="POST" class="needs-validation" novalidate>
+                            <form action="" method="POST" id="formulier" class="needs-validation" novalidate>
                                 <?php if(isset($_SESSION['error'])) { ?>
                                     <div class="alert alert-danger" role="alert">
                                         <?= $_SESSION['error'] ?>
@@ -86,7 +86,7 @@ if(isset($_POST['inloggen'])){
                                     </div>
                                     <div class="col-12">
                                         <div class="d-grid my-3">
-                                            <button class="btn btn-primary btn-lg w-100" name="inloggen" type="submit">Inloggen</button>
+                                            <button class="btn btn-primary btn-lg w-100" name="inloggen" type="submit" id="btn">Inloggen</button>
                                         </div>
                                     </div>
                                 </div>
@@ -97,6 +97,7 @@ if(isset($_POST['inloggen'])){
             </div>
         </div>
     </section>
+    <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/validatie.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
 </body>
