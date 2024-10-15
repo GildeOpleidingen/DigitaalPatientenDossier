@@ -7,7 +7,7 @@ $Main = new Main();
 $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 9);
 
 $boolArrayGerichtheid = str_split($antwoorden['seksuele_gerichtheid']);
-$boolArrayObservatie = str_split($antwoorden['observatie']);
+$boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];
 
 if (isset($_REQUEST['navbutton'])) {
     //TODO: hier actie om data op te slaan in database.
