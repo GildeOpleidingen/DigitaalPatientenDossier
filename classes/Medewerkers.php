@@ -1,7 +1,7 @@
 <?php
 class Medewerkers
 {
-    function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwoord): bool
+    public function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwoord): bool
     {
         $conn = DatabaseConnection::getConn();
         $conn->query("UPDATE `medewerker` SET `naam`='$naam',`klas`='$klas',`foto`='$foto',`email`='$email',`telefoonnummer`='$telefoonnummer',`wachtwoord`='$wachtwoord' WHERE `naam`='$naam';");
@@ -20,7 +20,7 @@ class Medewerkers
         return false;
     }
 
-    function checkIfMedewerkerExistsById($id): bool
+    public function checkIfMedewerkerExistsById($id): bool
     {
         $result = $this->getMedewerkerById($id);
         if (sizeof($result) == 0)
@@ -29,7 +29,7 @@ class Medewerkers
         return true;
     }
 
-    function checkIfMedewerkerExistsByName($name): bool
+    public function checkIfMedewerkerExistsByName($name): bool
     {
         $result = $this->getMedewerkerByName($name);
         if (sizeof($result) == 0)
@@ -38,7 +38,7 @@ class Medewerkers
         return true;
     }
 
-    function getMedewerkerById($id): array
+    public function getMedewerkerById($id): array
     {
         $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE id = ?;");
         $result->bind_param("i", $id);
@@ -47,7 +47,7 @@ class Medewerkers
         return $result->get_result()->fetch_array();
     }
 
-    function getMedewerkerByName($name): array
+    public function getMedewerkerByName($name): array
     {
         $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE naam = ?;");
         $result->bind_param("s", $name);

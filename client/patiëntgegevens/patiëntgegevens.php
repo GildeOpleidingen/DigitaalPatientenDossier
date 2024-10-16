@@ -11,25 +11,10 @@ if (!isset($clientId)) {
 }
 
 $client = $Main->getClientById($clientId);
-
-$clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
-$clientRelations->bind_param("i", $clientId);
-$clientRelations->execute();
-$clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
-
-$contactpersonen = DatabaseConnection::getConn()->prepare("SELECT * FROM relatie WHERE clientid = ?");
-$contactpersonen->bind_param("i", $id);
-$contactpersonen->execute();
-$contactpersonen = $contactpersonen->get_result()->fetch_all(MYSQLI_ASSOC);
-
-$medischoverzicht = DatabaseConnection::getConn()->prepare("SELECT * FROM medischoverzicht WHERE clientid = ?");
-$medischoverzicht->bind_param("i", $id);
-$medischoverzicht->execute();
-$medischoverzicht = $medischoverzicht->get_result()->fetch_assoc();
-
-$verzorgerArr = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");
-$verzorgerArr->execute();
-$verzorgerArr = $verzorgerArr->get_result()->fetch_all(MYSQLI_ASSOC);
+$clientRelations = $Main->getPatientGegevens($clientId, 'clientRelations');
+$contactpersonen = $Main->getPatientGegevens($clientId, 'contactPersonen');
+$medischoverzicht = $Main->getPatientGegevens($clientId, 'medischOverzicht');
+$verzorgerArr = $Main->getPatientGegevens($clientId, 'verzorgersArr');
 
 $verzorgers = [];
 foreach ($clientRelations as $relation) {

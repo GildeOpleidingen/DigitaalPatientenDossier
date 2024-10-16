@@ -1,7 +1,7 @@
 <?php
 trait Get
 {
-    function getPatternAnswers(int $clientId, int $patroonType)
+    public function getPatternAnswers(int $clientId, int $patroonType)
     {
         $patroonTypes = [
             "patroon01gezondheidsbeleving",
@@ -71,7 +71,7 @@ trait Get
         return $antwoorden;
     }
 
-    function getClientById($ClientId): array
+    public function getClientById($ClientId): array
     {
         $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE id = ?;");
         $result->bind_param("i", $ClientId);
@@ -80,7 +80,7 @@ trait Get
         return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
     }
 
-    function getClientByName($name): array
+    public function getClientByName($name): array
     {
         $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE naam = ?;");
         $result->bind_param("s", $name);
@@ -89,7 +89,7 @@ trait Get
         return (array) $result->get_result()->fetch_array();
     }
 
-    function getClientStoryByClientId($id): array
+    public function getClientStoryByClientId($id): array
     {
         $result = DatabaseConnection::getConn()->prepare("
         SELECT cv.*
@@ -105,7 +105,7 @@ trait Get
         return (array) $result->get_result()->fetch_array();
     }
 
-    function getCarePlanByClientId($id): array
+    public function getCarePlanByClientId($id): array
     {
         $result = DatabaseConnection::getConn()->prepare("
         SELECT cp.*
@@ -119,13 +119,39 @@ trait Get
         return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
     }
 
-    function getPatternTypes(): ?array
+    public function getVerzorgerregelByClientId($id): array
+    {
+        $result = DatabaseConnection::getConn()->prepare("
+        SELECT *
+        FROM verzorgerregel
+        WHERE clientid = ?
+        ");
+
+        $result->bind_param("i", $id);
+        $result->execute();
+        return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getVerzorgersById($id): array
+    {
+        $result = DatabaseConnection::getConn()->prepare("
+        SELECT *
+        FROM medewerker
+        WHERE id = ?
+        ");
+
+        $result->bind_param("i", $id);
+        $result->execute();
+        return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
+    }
+
+    public function getPatternTypes(): ?array
     {
         $result = DatabaseConnection::getConn()->query("SELECT * FROM `patroontype`");
         return $result->fetch_all(MYSQLI_NUM);
     }
 
-    function getPatternType($patternId): ?array
+    public function getPatternType($patternId): ?array
     {
         $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `zorgplan` WHERE patroontypeid = ?");
         $result->bind_param("i", $patternId);
@@ -133,7 +159,7 @@ trait Get
         return $result->get_result()->fetch_array(MYSQLI_ASSOC);
     }
 
-    function getAdmissionDateByClientId($id): string
+    public function getAdmissionDateByClientId($id): string
     {
         $result = DatabaseConnection::getConn()->prepare("
         select opnamedatum
@@ -144,14 +170,16 @@ trait Get
         $result->execute();
         $opnamedatum = $result->get_result()->fetch_assoc();
 
-        if (!empty($opnamedatum) && !empty($opnamedatum['opnamedatum'])) {
+        if (!empty($opnamedatum) && $opnamedatum['opnamedatum'] !== '0000-00-00 00:00:00') {
             return $opnamedatum['opnamedatum'];
+        } elseif ($opnamedatum['opnamedatum'] === '0000-00-00 00:00:00') {
+            return "Geen opnamedatum ingevuld";
+        } else {
+            return "Geen opnamedatum ingevuld";
         }
-
-        return "Geen opnamedatum ingevuld";
     }
 
-    function getMedischOverzichtByClientId($id): array
+    public function getMedischOverzichtByClientId($id): array
     {
         $result = DatabaseConnection::getConn()->prepare("
         SELECT mo.*
@@ -173,6 +201,54 @@ trait Get
             $legeArray["alergieen"] = "Geen allergieën ingevuld";
             $legeArray["opnamedatum"] = "Geen opnamedatum ingevuld";
             return $legeArray;
+        }
+    }
+
+    public function getPatientGegevens($id, $type)
+    {
+        if ($type == 'clientRelations') {
+            $result = DatabaseConnection::getConn()->prepare("
+            SELECT * 
+            FROM verzorgerregel 
+            WHERE clientid = ?
+            ");
+
+            $result->bind_param("i", $id);
+            $result->execute();
+            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+        } elseif ($type == 'contactPersonen') {
+            $result = DatabaseConnection::getConn()->prepare("
+            SELECT * 
+            FROM relatie 
+            WHERE clientid = ?
+            ");
+
+            $result->bind_param("i", $id);
+            $result->execute();
+            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+        } elseif ($type == 'medischOverzicht') {
+            $result = DatabaseConnection::getConn()->prepare("
+            SELECT * 
+            FROM medischoverzicht 
+            WHERE clientid = ?
+            ");
+
+            $result->bind_param("i", $id);
+            $result->execute();
+            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+        } elseif ($type == 'verzorgersArr') {
+            $result = DatabaseConnection::getConn()->prepare("
+            SELECT m.* 
+            FROM medewerker m
+            JOIN verzorgerregel vr ON m.id = vr.medewerkerid
+            WHERE vr.clientid = ?
+            ");
+
+            $result->bind_param("i", $id);
+            $result->execute();
+            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return false;
         }
     }
 }

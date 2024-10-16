@@ -12,18 +12,10 @@ if (!isset($clientId)) {
 $_SESSION['clientId'] = $clientId;
 
 $client = $Main->getClientById($clientId);
-
-$clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
-$clientRelations->bind_param("i", $clientId);
-$clientRelations->execute();
-$clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
-
+$clientRelations = $Main->getVerzorgerregelByClientId($clientId);
 $verzorgers = [];
 foreach ($clientRelations as $relation) {
-    $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
-    $verzorger->bind_param("i", $relation['medewerkerid']);
-    $verzorger->execute();
-    $verzorger = $verzorger->get_result()->fetch_assoc();
+    $verzorger = $Main->getVerzorgersById($relation['medewerkerid']);
     array_push($verzorgers, $verzorger);
 }
 ?>
