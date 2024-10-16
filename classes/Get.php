@@ -1,5 +1,5 @@
 <?php
-class Get
+trait Get
 {
     function getPatternAnswers(int $clientId, int $patroonType)
     {

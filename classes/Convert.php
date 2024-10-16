@@ -1,5 +1,5 @@
 <?php
-class Convert extends Main
+trait Convert
 {
     function convertNumToBool($numbers, $index = 0): ?bool
     {

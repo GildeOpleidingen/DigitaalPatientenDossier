@@ -1,5 +1,5 @@
 <?php
-class Checks extends Get
+trait Checks
 {
     function checkIfClientExistsById(int $id): bool
     {
