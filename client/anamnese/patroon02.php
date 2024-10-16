@@ -2,7 +2,7 @@
 session_start();
 include '../../database/DatabaseConnection.php';
 include_once '../../classes/autoload.php';
-$Main = new Main();
+$Main = new Convert();
 
 $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 2);
 
