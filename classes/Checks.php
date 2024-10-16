@@ -1,21 +1,21 @@
 <?php
 trait Checks
 {
-    function checkIfClientExistsById(int $id): bool
+    public function checkIfClientExistsById(int $id): bool
     {
         $result = $this->getClientById($id);
 
         return sizeof((array) $result) > 0;
     }
 
-    function checkIfClientExistsByName(string $name): bool
+    public function checkIfClientExistsByName(string $name): bool
     {
         $result = $this->getClientByName($name);
 
         return sizeof((array) $result) > 0;
     }
 
-    function checkIfClientStoryExistsByClientId($id): bool
+    public function checkIfClientStoryExistsByClientId($id): bool
     {
         $result = DatabaseConnection::getConn()->prepare("
         SELECT cv.*
@@ -34,7 +34,7 @@ trait Checks
         }
     }
 
-    function checkIfMedischOverzichtExistsByClientId($clientid): bool
+    public function checkIfMedischOverzichtExistsByClientId($clientid): bool
     {
         $result = DatabaseConnection::getConn()->prepare("
         SELECT *
@@ -51,7 +51,7 @@ trait Checks
         }
     }
 
-    function checkIfCarePlanExistsByClientId($id): bool
+    public function checkIfCarePlanExistsByClientId($id): bool
     {
         $result = DatabaseConnection::getConn()->prepare("
         SELECT cp.*
@@ -69,7 +69,7 @@ trait Checks
         }
     }
 
-    function checkIfCarePlanPatternTypeExists($id, $patternId): bool
+    public function checkIfCarePlanPatternTypeExists($id, $patternId): bool
     {
         $result = DatabaseConnection::getConn()->prepare("
         SELECT cp.*

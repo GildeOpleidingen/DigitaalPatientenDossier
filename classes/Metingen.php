@@ -1,7 +1,7 @@
 <?php
 class Metingen
 {
-    function getMeting($metingtijden)
+    public function getMeting($metingtijden)
     {
         $metingen = [];
         $tijden = [];
@@ -106,7 +106,7 @@ class Metingen
         return $arrays;
     }
 
-    function vindGelijkeWaarde($array, $time)
+    public function vindGelijkeWaarde($array, $time)
     {
         foreach ($array as $measurement) {
             if (isset($measurement[$time]) && $measurement["meting"] === "bloeddrukhoog") {
