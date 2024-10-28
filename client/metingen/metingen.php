@@ -2,8 +2,8 @@
 session_start();
 require_once('../../includes/auth.php');
 include '../../database/DatabaseConnection.php';
-require '../../classes/autoload.php';
-$Metingen = new Metingen();
+require '../../models/autoload.php';
+$Meting = new Meting();
 
 $clientId = $_SESSION['clientId'];
 
@@ -33,7 +33,7 @@ $metingtijden->bind_param("i", $_SESSION['clientId']);
 $metingtijden->execute();
 $metingtijden = $metingtijden->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$metingen = $Metingen->getMeting($metingtijden);
+$metingen = $Meting->getMeting($metingtijden);
 
 foreach ($metingen[1] as $meting) {
     foreach ($meting as $data) {
@@ -177,7 +177,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($value == 0) {
                                                 echo "<td></td>";
                                             } else {
-                                                $matchingValue = $Metingen->vindGelijkeWaarde($bloeddrukhoog, $time);
+                                                $matchingValue = $Meting->vindGelijkeWaarde($bloeddrukhoog, $time);
                                                 echo "<td class='text-center'>$matchingValue/$value</td>";
                                             }
                                         }

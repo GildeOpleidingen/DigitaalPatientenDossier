@@ -1,0 +1,5 @@
+<?php
+class Main {
+    // Roept alle classes aan zodat je overal $Main kan aanroepen
+    use Anamnese, Client, Convert, Formulier, Patroon, Rapportage, Zorgplan;
+}

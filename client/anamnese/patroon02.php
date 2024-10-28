@@ -1,8 +1,8 @@
 <?php
 session_start();
 include '../../database/DatabaseConnection.php';
-include_once '../../classes/autoload.php';
-$Main = new Convert();
+include_once '../../models/autoload.php';
+$Main = new Main();
 
 $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 2);
 
