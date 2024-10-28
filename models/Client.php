@@ -172,10 +172,12 @@ trait Client
         $result->execute();
         $opnamedatum = $result->get_result()->fetch_assoc();
 
-        if (!empty($opnamedatum) && $opnamedatum['opnamedatum'] !== '0000-00-00 00:00:00') {
-            return $opnamedatum['opnamedatum'];
-        } elseif ($opnamedatum['opnamedatum'] === '0000-00-00 00:00:00') {
-            return "Geen opnamedatum ingevuld";
+        if ($opnamedatum && isset($opnamedatum['opnamedatum'])) {
+            if ($opnamedatum['opnamedatum'] !== '0000-00-00 00:00:00') {
+                return $opnamedatum['opnamedatum'];
+            } else {
+                return "Geen opnamedatum ingevuld";
+            }
         } else {
             return "Geen opnamedatum ingevuld";
         }
