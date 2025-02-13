@@ -23,7 +23,7 @@ jobs:
           rm -rf .gitignore
 
       - name: Snyk
-        uses: snyk/actions@0.4.0/php@master
+        uses: snyk/actions/php@master
         env:
           SNYK_TOKEN: e5852573-d3b1-4e85-a793-cdd47b6584bf
 
