@@ -22,6 +22,11 @@ jobs:
           rm -rf .git
           rm -rf .gitignore
 
+      - name: Snyk
+        uses: snyk/actions@0.4.0/php@master
+        env:
+          SNYK_TOKEN: e5852573-d3b1-4e85-a793-cdd47b6584bf
+
       - name: Clean target directory
         run: 
           rm -rf /var/www/digitaalpatientendossier.gds.local/html/*
