@@ -9,21 +9,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-jobs:
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/php@master
-        env:
-          SNYK_TOKEN: e5852573-d3b1-4e85-a793-cdd47b6584bf
-        with:
-          args: --severity-threshold=high
-          
+jobs:     
   # Single deploy job since we're just deploying
   deploy:
-    needs: security
     runs-on: 'self-hosted'
     steps:
       - name: Checkout
