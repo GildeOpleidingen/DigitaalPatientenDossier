@@ -10,8 +10,20 @@ on:
   workflow_dispatch:
 
 jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/php@master
+        env:
+          SNYK_TOKEN: e5852573-d3b1-4e85-a793-cdd47b6584bf
+        with:
+          args: --severity-threshold=high
+          
   # Single deploy job since we're just deploying
   deploy:
+    needs: security
     runs-on: 'self-hosted'
     steps:
       - name: Checkout
@@ -21,11 +33,6 @@ jobs:
         run :
           rm -rf .git
           rm -rf .gitignore
-
-      - name: Snyk
-        uses: snyk/actions@0.4.0
-        env:
-          SNYK_TOKEN: e5852573-d3b1-4e85-a793-cdd47b6584bf
 
       - name: Clean target directory
         run: 
