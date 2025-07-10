@@ -31,41 +31,7 @@ $row1 = $Main->getClientById($clientId);
                         echo " ($leeftijd)";
                         ?>
                     </span>
-                <?php
-                $reanimatieStatus = $row1['reanimatiestatus'];
-                if ($reanimatieStatus == 1) {
-                    echo '<li class="nav-item mb-3">
-                        <span class="nav-link bg-success text-white">
-                            <i class="bi bi-heart-pulse"></i> Wel reanimeren
-                        </span>
-                    </li>';
-                } else {
-                    echo '<li class="nav-item mb-3">
-                        <span class="nav-link bg-danger text-white">
-                            <i class="bi bi-heartbreak"></i> Niet reanimeren
-                        </span>
-                    </li>';
-                }
-                ?>
-                <?php
-                $pages = array(
-                    "overzicht" => "Overzicht",
-                    "patiëntgegevens" => "Patiëntgegevens",
-                    "patroon01" => "Anamnese",
-                    "zorgplan" => "Zorgplan",
-                    "rapportage" => "Rapportage",
-                    "metingen" => "Metingen",
-                    "formulieren" => "formulieren"
-                );
-
-                $currentPage = basename($_SERVER['PHP_SELF'], ".php");
-                foreach ($pages as $key => $value) {
-                    $value = lcfirst($value);
-                    $valueTekst = ucfirst($value);
-                    $active = ($key === $currentPage) ? "active" : "text-white";
-                    echo "<li class='nav-item'><a href='../$value/$key.php?id=$clientId' class='nav-link $active' id='$key'>$valueTekst</a>";
-                }
-                ?>
+                </lI>
             </ul>
         </div>
     </div>

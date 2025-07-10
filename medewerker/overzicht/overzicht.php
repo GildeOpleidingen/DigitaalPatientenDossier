@@ -49,48 +49,7 @@ foreach ($clientRelations as $relation) {
     <div class="content">
         <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
             <p class="card-text">
-                <h2 class="lead text-primary">Episodes</h2>
-                <p class="text">Geen episodes</p>
-
-                <h2 class="lead text-primary">Opgenomen op</h2>
-                <p class="text"><?= $Main->getAdmissionDateByClientId($clientId); ?></p>
-
-                <h2 class="lead text-primary">Medische voorgeschiedenis</h2>
-                <p class="text">
-                    <?php
-                    $mv = $Main->getMedischOverzichtByClientId($clientId)['medischevoorgeschiedenis'];
-                    if ($mv) {
-                        echo $mv;
-                    } else {
-                        echo "Geen medische voorgeschiedenis ingevuld";
-                    }
-                    ?>
-                </p>
-
-                <h2 class="lead text-primary">Allergieën</h2>
-                <p class="text">
-                    <?php
-                    $allergieen = $Main->getMedischOverzichtByClientId($clientId)['alergieen'];
-                    if ($allergieen) {
-                        echo $allergieen;
-                    } else {
-                        echo "Geen allergieën ingevuld";
-                    }
-                    ?>
-                </p>
-
-                <h2 class="lead text-primary">Medicatie</h2>
-                <p class="text">
-                    <?php
-                    $medicatie = $Main->getMedischOverzichtByClientId($clientId)['medicatie'];
-                    if ($medicatie) {
-                        echo $medicatie;
-                    } else {
-                        echo "Geen medicatie ingevuld";
-                    }
-                    ?>
-                </p>
-
+            
             </p>
         </div>
     </div>    
