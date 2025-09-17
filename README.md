@@ -16,7 +16,7 @@ https://github.com/GildeOpleidingen/DigitaalPatientenDossier/issues/371
 ```php
 //    public static string $host = "10.250.0.103";
 //    public static string $username = "dpd";
-//    public static string $pass = "A]3__CQB0klPDyd4";
+//    public static string $pass = "A]3__CQB0klPDyd4"; 
 //    public static string $db = "dpd";
 ```
 
@@ -72,7 +72,7 @@ Ga naar https://digitaalpatientendossier.gdcs.gildedevops.it/index.php (LET OP: 
 
 Als je wil inloggen als admin vul je de volgende gegevens in: 
 
-E-mailadres = "admin@admin.com".
+E-mailadres = "admin@rocgilde.nl".
 
 Wachtwoord = "admin".
 
@@ -97,3 +97,4 @@ Voor het wachtwoord kopieer en plak je het volgende stukje tekst in het wachtwoo
 Deze hash kan je bij je medewerker als wachtwoord neerzetten.
 Het wachtwoord is "admin".
 $2y$10$7cuPDEMwyvZIZBBFoZujC.TqRAJewVoCTqigNy1MgdYp4x8XNS7Mm
+
