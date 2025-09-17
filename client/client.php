@@ -2,10 +2,17 @@
 session_start();
 include '../database/DatabaseConnection.php';
 
+$conn = DatabaseConnection::getConn();
+
 if(!isset($_GET['q'])){
-    $items = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client;")->fetch_all();
+    // Alleen niet-verwijderde cliënten ophalen
+    $items = $conn->query("SELECT id, naam, woonplaats, geboortedatum FROM client WHERE deleted = 0;")->fetch_all();
 } else {
-    $items = DatabaseConnection::getConn()->query("SELECT id, naam, woonplaats, geboortedatum FROM client WHERE naam LIKE '%$_GET[q]%' OR woonplaats LIKE '%$_GET[q]%' OR geboortedatum LIKE '%$_GET[q]%';")->fetch_all();
+    $q = $conn->real_escape_string($_GET['q']); // extra veiligheid tegen SQL-injectie
+    $items = $conn->query("SELECT id, naam, woonplaats, geboortedatum 
+                           FROM client 
+                           WHERE deleted = 0 
+                           AND (naam LIKE '%$q%' OR woonplaats LIKE '%$q%' OR geboortedatum LIKE '%$q%');")->fetch_all();
 }
 ?>
 
