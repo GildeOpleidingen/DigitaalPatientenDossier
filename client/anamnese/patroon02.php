@@ -16,7 +16,7 @@ if(isset($antwoorden['observatie'])){
 
 $medewerkerId = $_SESSION['loggedin_id'];
 
-if (isset($_REQUEST['navbutton'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     $eetlust = $_POST['eetlust'];
     $dieet = $_POST['dieet'];
     $dieetWelk = strval($_POST['dieet_welk']);
@@ -125,6 +125,7 @@ if (isset($_REQUEST['navbutton'])) {
         $result2->execute();
         $result2 = $result2->get_result();
     }
+ 
     switch ($_REQUEST['navbutton']) {
         case 'next': //action for next here
             header('Location: patroon03.php');
