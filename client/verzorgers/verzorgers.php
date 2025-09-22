@@ -62,7 +62,7 @@ foreach ($medewerkers as $key => $medewerker) {
                 } ?>
                 <a href='../patiëntgegevens/patiëntgegevens.php?id=<?= $clientId ?>' class='mb-3 text-decoration-none text-primary fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Teruggaan</a>
                 <h3>Verzorgers van <?= $client['naam'] ?></h3>
-                <form action="verzorger/verwerk.php" method="post" class="flex-grow-1 d-flex flex-column">
+                <form action="../overzicht/verzorger/verwerk.php" method="post" class="flex-grow-1 d-flex flex-column">
                     <input type="hidden" name="clientId" value="<?= $clientId ?>">
                     <div class="form-content flex-grow-1">
                         <div class="form">
