@@ -26,7 +26,6 @@ Voor de database connectie te fixen:
 - maak een nieuwe file genaamd `config.php` in de root folder
 - kopieer de content van `default-config.php` naar `config.php`
 - vul de credentials van je database in `config.php`
-- Verwijder alle comments en whitespaces voor de <?php tag
 
 ```diff
 ! PUSH GEEN DATABASE CREDENTIALS NAAR DE REPOSITORY
