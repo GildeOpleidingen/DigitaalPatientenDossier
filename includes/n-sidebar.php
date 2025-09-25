@@ -55,7 +55,8 @@ $row1 = $Main->getClientById($clientId);
                     "zorgplan" => "Zorgplan",
                     "rapportage" => "Rapportage",
                     "metingen" => "Metingen",
-                    "formulieren" => "formulieren"
+                    "formulieren" => "formulieren",
+                    "verzorgers" => "verzorgers"
                 );
 
                 $currentPage = basename($_SERVER['PHP_SELF'], ".php");
