@@ -72,7 +72,8 @@ Ga naar https://digitaalpatientendossier.gdcs.gildedevops.it/index.php (LET OP: 
 
 Als je wil inloggen als admin vul je de volgende gegevens in: 
 
-E-mailadres = "admin@rocgilde.nl".
+
+E-mailadres = "admin@rocgilde.com".
 
 Wachtwoord = "admin".
 
