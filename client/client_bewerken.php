@@ -132,10 +132,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="nationaliteit">Nationaliteit</label>
                 <input type="text" name="nationaliteit" class="form-control" value="<?php echo htmlspecialchars($client['nationaliteit']); ?>" required>
             </div>
-            <div class="form-group">
-                <label for="afdeling">Afdeling</label>
-                <input type="text" name="afdeling" class="form-control" value="<?php echo htmlspecialchars($client['afdeling']); ?>" required>
-            </div>
+           <div class="form-group">
+    <label for="afdeling">Afdeling</label>
+    <select name="afdeling" class="form-control" required>
+        <?php
+        // Maak een nieuwe query voor alle afdelingen uit de database
+        $conn = DatabaseConnection::getConn();
+        $sqlAfdelingen = "SELECT naam FROM afdelingen"; 
+        $resultAfdelingen = $conn->query($sqlAfdelingen);
+
+        if ($resultAfdelingen && $resultAfdelingen->num_rows > 0) {
+            while ($row = $resultAfdelingen->fetch_assoc()) {
+                // Kijk of dit de huidige afdeling van de client is
+                $selected = ($row['naam'] === $client['afdeling']) ? 'selected' : '';
+                echo "<option value='" . htmlspecialchars($row['naam']) . "' $selected>" . htmlspecialchars($row['naam']) . "</option>";
+            }
+        } else {
+            echo "<option value=''>Geen afdelingen gevonden</option>";
+        }
+        ?>
+    </select>
+</div>
+
             <div class="form-group">
                 <label for="burgelijkestaat">Burgelijke Staat</label>
                 <select name="burgelijkestaat" class="form-control" required>
@@ -156,10 +174,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <img id="preview" src="" alt="Nieuwe Client Foto" style="max-width: 150px; display: none;">
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Bewerken</button>
+                        <button type="submit" class="btn btn-primary mt-3">Bewerken</button>
+            <a href="client.php" class="btn btn-secondary mt-3">Terug</a>
         </form>
     </div>
 </body>
+
 <script>
     // Get the file input and the preview image element
     const fotoInput = document.getElementById('fotoInput');
