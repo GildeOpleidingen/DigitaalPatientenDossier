@@ -58,7 +58,8 @@ $row1 = $Main->getClientById($clientId);
                     "zorgplan" => "Zorgplan",
                     "rapportage" => "Rapportage",
                     "metingen" => "Metingen",
-                    "formulieren" => "formulieren"
+                    "formulieren" => "formulieren",
+                    "verzorgers" => "verzorgers"
                 );
 =======
                     }
