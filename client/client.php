@@ -9,6 +9,7 @@ if (!isset($_GET['q'])) {
     // Alleen niet-verwijderde cliënten ophalen
     if ($medewerkerId === 4) {
         // Admin toont alle clients
+
         $items = $conn->prepare("
         SELECT client.id, naam, woonplaats, geboortedatum
         FROM client
@@ -27,6 +28,7 @@ if (!isset($_GET['q'])) {
 
     $items->execute();
     $items = $items->get_result()->fetch_all();
+
 } else {
     $q = $conn->real_escape_string($_GET['q']); // extra veiligheid tegen SQL-injectie
     $items = $conn->query("SELECT id, naam, woonplaats, geboortedatum 
