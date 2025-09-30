@@ -2,17 +2,14 @@
 session_start();
 $medewerkerId = $_SESSION['loggedin_id'];
 include '../database/DatabaseConnection.php';
-$medewerkerId = $_SESSION['loggedin_id'];
+
 $conn = DatabaseConnection::getConn();
 
 if (!isset($_GET['q'])) {
     // Alleen niet-verwijderde cliënten ophalen
-<<<<<<< Updated upstream
-    $items = $conn->prepare("SELECT client.id, naam, woonplaats, geboortedatum FROM client LEFT JOIN verzorgerregel ON client.id = verzorgerregel.clientid WHERE deleted = 0 AND verzorgerregel.medewerkerid = ?;");
-    $items->bind_param("i", $medewerkerId);
-=======
     if ($medewerkerId === 4) {
         // Admin toont alle clients
+
         $items = $conn->prepare("
         SELECT client.id, naam, woonplaats, geboortedatum
         FROM client
@@ -29,9 +26,9 @@ if (!isset($_GET['q'])) {
         $items->bind_param("i", $medewerkerId);
     }
 
->>>>>>> Stashed changes
     $items->execute();
     $items = $items->get_result()->fetch_all();
+
 } else {
     $q = $conn->real_escape_string($_GET['q']); // extra veiligheid tegen SQL-injectie
     $items = $conn->query("SELECT id, naam, woonplaats, geboortedatum 
@@ -67,11 +64,6 @@ if (!isset($_GET['q'])) {
             <div class="mt-4 mb-3 p-3">
                 <p class="card-text">
                     <?php
-<<<<<<< Updated upstream
-
-                    echo "Ingelogd als medewerker ID: " . htmlspecialchars($medewerkerId);
-=======
->>>>>>> Stashed changes
                     if (isset($_GET['q'])) {
                         echo "<a href='client.php' class='text-decoration-none text-white fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Terug naar overzicht</a>";
                     }
