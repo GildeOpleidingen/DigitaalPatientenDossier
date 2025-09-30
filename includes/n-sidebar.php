@@ -47,20 +47,6 @@ $row1 = $Main->getClientById($clientId);
                             <i class="bi bi-heartbreak"></i> Niet reanimeren
                         </span>
                     </li>';
-<<<<<<< Updated upstream
-                }
-                ?>
-                <?php
-                $pages = array(
-                    "overzicht" => "Overzicht",
-                    "patiëntgegevens" => "Patiëntgegevens",
-                    "patroon01" => "Anamnese",
-                    "zorgplan" => "Zorgplan",
-                    "rapportage" => "Rapportage",
-                    "metingen" => "Metingen",
-                    "formulieren" => "formulieren"
-                );
-=======
                     }
                     ?>
                     <?php
@@ -74,7 +60,6 @@ $row1 = $Main->getClientById($clientId);
                         "formulieren" => "formulieren",
                         "verzorgers" => "verzorgers"
                     );
->>>>>>> Stashed changes
 
                     $currentPage = basename($_SERVER['PHP_SELF'], ".php");
                     foreach ($pages as $key => $value) {
