@@ -52,5 +52,5 @@ foreach ($verzorgers as $key => $value) {
 }
 
 $_SESSION['succes'] = "Verzorgers zijn succesvol aangepast";
-header("Location: ../verzorgers.php?id=$clientId");
+header("Location: ../../verzorgers/verzorgers.php?id=$clientId");
 exit;
