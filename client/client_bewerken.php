@@ -132,7 +132,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="nationaliteit">Nationaliteit</label>
                 <input type="text" name="nationaliteit" class="form-control" value="<?php echo htmlspecialchars($client['nationaliteit']); ?>" required>
             </div>
-            <div class="form-group">
+          
+           <div class="form-group">
+
     <label for="afdeling">Afdeling</label>
     <select name="afdeling" class="form-control" required>
         <?php
@@ -174,10 +176,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <img id="preview" src="" alt="Nieuwe Client Foto" style="max-width: 150px; display: none;">
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Bewerken</button>
+                        <button type="submit" class="btn btn-primary mt-3">Bewerken</button>
+            <a href="client.php" class="btn btn-secondary mt-3">Terug</a>
         </form>
     </div>
 </body>
+
 <script>
     // Get the file input and the preview image element
     const fotoInput = document.getElementById('fotoInput');
