@@ -81,7 +81,7 @@ $medewerker = $result->get_result()->fetch_assoc();
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                         <li><a class="dropdown-item fw-bold"><?= $medewerker['naam'] ?></a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="../uitloggen.php">Uitloggen</a></li>
+                        <li><a class="dropdown-item" href="../../../uitloggen.php">Uitloggen</a></li>
                     </ul>
                 </div>
             </span>

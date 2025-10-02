@@ -10,11 +10,11 @@ if ($loggedInId == null) {
     header("Location: ../index.php");
 }
 
-$clientId = $_SESSION['clientId'];
-
-if(!isset($clientId)){
+if (!isset($_SESSION['clientId'])) {
     header("Location: ../client.php");
+    exit;
 }
+
 
 $client = $_SESSION['client'] = $Main->getClientById($clientId);
 
