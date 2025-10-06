@@ -4,28 +4,16 @@ include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
 
-$clientId = $_GET['id'];
-if (!isset($clientId)) {
+$medewerkerid = $_GET['id'];
+if (!isset($medewerkerid)) {
     header("Location: ../../index.php");
 }
 
-$_SESSION['clientId'] = $clientId;
+$verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
+$verzorger->bind_param("i", $medewerkerid);
+$verzorger->execute();
+$verzorger = $verzorger->get_result()->fetch_assoc();
 
-$client = $Main->getClientById($clientId);
-
-$clientRelations = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
-$clientRelations->bind_param("i", $clientId);
-$clientRelations->execute();
-$clientRelations = $clientRelations->get_result()->fetch_all(MYSQLI_ASSOC);
-
-$verzorgers = [];
-foreach ($clientRelations as $relation) {
-    $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
-    $verzorger->bind_param("i", $relation['medewerkerid']);
-    $verzorger->execute();
-    $verzorger = $verzorger->get_result()->fetch_assoc();
-    array_push($verzorgers, $verzorger);
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +22,7 @@ foreach ($clientRelations as $relation) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../assets/css/medewerker/overzicht.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
-    <title>Overzicht van <?= $client['naam'] ?></title>
+    <title>Overzicht van <?= $verzorger['naam'] ?></title>
 </head>
 <body>
 <div class="main">

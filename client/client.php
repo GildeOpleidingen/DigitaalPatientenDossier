@@ -1,13 +1,14 @@
 <?php
 session_start();
 $medewerkerId = $_SESSION['loggedin_id'];
+$isAdmin = $_SESSION['isAdmin'];
 include '../database/DatabaseConnection.php';
 
 $conn = DatabaseConnection::getConn();
 
 if (!isset($_GET['q'])) {
     // Alleen niet-verwijderde cliënten ophalen
-    if ($medewerkerId === 4) {
+    if ($isAdmin) {
         // Admin toont alle clients
 
         $items = $conn->prepare("
@@ -76,7 +77,7 @@ if (!isset($_GET['q'])) {
                                 aria-hidden="true"></i></span>
                     </div>
                 </form>
-                <table class="table table-hover">
+                <table class="table table-hover table-bordered align-middle text-center">
                     <tr>
                         <th>#</th>
                         <th>Naam</th>
