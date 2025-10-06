@@ -3,8 +3,8 @@ include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
 
-$clientId = $_SESSION['clientId'];
-$row1 = $Main->getClientById($clientId);
+$medewerkerid = $_GET['id'];
+$row1 = $Main->getMedewerkerById($medewerkerid);
 ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
 <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
@@ -24,11 +24,11 @@ $row1 = $Main->getClientById($clientId);
                         </div>
                         <?= $row1['naam'] ?><br>
                         <?php
-                        echo date_create($row1['geboortedatum'])->format('d-m-Y');
-                        $geboortedatum = $row1['geboortedatum'];
-                        $vandaag = date("Y-m-d");
-                        $leeftijd = date_diff(date_create($geboortedatum), date_create($vandaag))->format('%Y');
-                        echo " ($leeftijd)";
+                        // echo date_create($row1['geboortedatum'])->format('d-m-Y');
+                        // $geboortedatum = $row1['geboortedatum'];
+                        // $vandaag = date("Y-m-d");
+                        // $leeftijd = date_diff(date_create($geboortedatum), date_create($vandaag))->format('%Y');
+                        // echo " ($leeftijd)";
                         ?>
                     </span>
                 </lI>
