@@ -72,6 +72,7 @@ if (isset($_POST['aanpassen'])) {
                         </div>
                     </div>
                     <button type="submit" name="aanpassen" class="btn btn-secondary w-100 mt-3">Aanpassen</button>
+                     <a href="rapportage.php" class="btn btn-secondary mt-3">Terug</a>
                 </form>
             </div>
         </div>

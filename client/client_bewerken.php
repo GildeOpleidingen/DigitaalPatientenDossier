@@ -132,9 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="nationaliteit">Nationaliteit</label>
                 <input type="text" name="nationaliteit" class="form-control" value="<?php echo htmlspecialchars($client['nationaliteit']); ?>" required>
             </div>
-          
-           <div class="form-group">
-
+        <div class="form-group">
     <label for="afdeling">Afdeling</label>
     <select name="afdeling" class="form-control" required>
         <?php
