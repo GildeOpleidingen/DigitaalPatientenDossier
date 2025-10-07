@@ -84,10 +84,10 @@ if (!isset($_GET['q'])) {
                         <th>Woonplaats</th>
                         <th>Geboortedatum</th>
                         <?php
-                        if ($medewerkerId === 4 ){
-                        echo "<th>Bewerken</th>";
-                        echo "<th>Verwijderen</th>";
-                        }
+                        if ($isAdmin){
+                            echo "<th>Bewerken</th>";
+                            echo "<th>Verwijderen</th>";
+                            }
 
                         ?>
                     </tr>
@@ -101,12 +101,12 @@ if (!isset($_GET['q'])) {
                         echo "<td><a href='overzicht/overzicht.php?id=$row[0]'>$row[1]</a></td>";
                         echo "<td>$row[2]</td>";
                         echo "<td>" . date_create($row[3])->format("d-m-Y") . "</td>";
-                        if ($medewerkerId !== 4 ){
-                            continue;
+                        if ($isAdmin){
+                            echo "<td><a href='client_bewerken.php?id=$row[0]' class='btn btn-warning'>Bewerk</a></td>";
+                            echo "<td><a href='client_verwijderen.php?id=$row[0]' class='btn btn-danger' onclick='return confirm(\"Weet je zeker dat je deze client wilt verwijderen?\");'>Verwijder</a></td>";
+                            echo "</tr>";
                         }
-                        echo "<td><a href='client_bewerken.php?id=$row[0]' class='btn btn-warning'>Bewerk</a></td>";
-                        echo "<td><a href='client_verwijderen.php?id=$row[0]' class='btn btn-danger' onclick='return confirm(\"Weet je zeker dat je deze client wilt verwijderen?\");'>Verwijder</a></td>";
-                        echo "</tr>";
+
                     }
                     ?>
                 </table>
