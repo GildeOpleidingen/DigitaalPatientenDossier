@@ -40,37 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
    
    
     //Haal vragenlijst ID op.
-    $result = DatabaseConnection::getConn()->prepare("
-                    SELECT vl.id
-                    from vragenlijst vl
-                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
-                    where verzorgerregel.clientid = ?");
-    $result->bind_param("i", $_SESSION['clientId']);
-    $result->execute();
-    $result = $result->get_result()->fetch_assoc();
-
-    if ($result != null) {
-        $vragenlijstId = $result['id'];
-    } else {
-        $sql = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
-            VALUES ((SELECT id
-            FROM verzorgerregel
-            WHERE clientid = ?
-            AND medewerkerid = ?))");
-        $sql->bind_param("ii", $_SESSION['clientId'], $medewerkerId);
-        $sql->execute();
-        $sql = $sql->get_result();
-
-        $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
-                    from vragenlijst vl
-                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
-                    where verzorgerregel.clientid = ?");
-        $result->bind_param("i", $_SESSION['clientId']);
-        $result->execute();
-        $result = $result->get_result()->fetch_assoc();
-
-        $vragenlijstId = $result['id'];
-    }
+    $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
    
     // kijken of patroon11 bestaat door te kijken naar vragenlijst id
     $result = DatabaseConnection::getConn()->prepare("
