@@ -13,12 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     // TODO: hier actie om data op te slaan in database.
     //Lees ingevulde gegevens.
     $gelovig = $_POST['gelovig'];    
-    $gelovig1 = $_POST['geloof1'];
-    $gelovig2 = $_POST['geloof2'];
-    $gelovig3 = $_POST['geloof3'];
-    $gelovig4 = $_POST['geloof4'];
-    $gelovig5 = $_POST['geloof5'];
-    $gelovig6 = $_POST['geloof6'];
     $geloof_anders = $_POST['geloof_anders'];
     $behoefte_religieuze_activiteit = $_POST['behoefte_religieuze_activiteit'];
     $gebruiken_tav_geloofsovertuiging = $_POST['gebruiken_tav_geloofsovertuiging'];
