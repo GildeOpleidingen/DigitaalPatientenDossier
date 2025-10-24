@@ -300,7 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="spanningsvolle_situaties_voorkomen_hoe"><?= isset($antwoorden['spanningsvolle_situaties_voorkomen_hoe']) ? $antwoorden['spanningsvolle_situaties_voorkomen_hoe'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="spanningsvolle_situaties_voorkomen" <?= (isset($antwoorden['spanningsvolle_situaties_voorkomen']) && $antwoorden['spanningsvolle_situaties_voorkomen'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="spanningsvolle_situaties_voorkomen" <?= (!isset($antwoorden['spanningsvolle_situaties_voorkomen']) || $antwoorden['spanningsvolle_situaties_voorkomen'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -314,7 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="spanningsvolle_situaties_oplossen_hoe"><?= isset($antwoorden['spanningsvolle_situaties_oplossen_hoe']) ? $antwoorden['spanningsvolle_situaties_oplossen_hoe'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="spanningsvolle_situaties_oplossen" <?= (isset($antwoorden['spanningsvolle_situaties_oplossen']) && $antwoorden['spanningsvolle_situaties_oplossen'] == '0') ? "checked" : "" ?>>                                            <label>Nee</label>
+                                            <input type="radio" value="0" name="spanningsvolle_situaties_oplossen" <?= (!isset($antwoorden['spanningsvolle_situaties_oplossen']) || $antwoorden['spanningsvolle_situaties_oplossen'] == '0') ? "checked" : "" ?>>                                            <label>Nee</label>
                                         </p>
                                     </div>
                                 </div>
@@ -327,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="omstandigheden_in_war_raken_welke"><?= isset($antwoorden['omstandigheden_in_war_raken_welke']) ? $antwoorden['omstandigheden_in_war_raken_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="omstandigheden_in_war_raken" <?= (isset($antwoorden['omstandigheden_in_war_raken']) && $antwoorden['omstandigheden_in_war_raken'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="omstandigheden_in_war_raken" <?= (!isset($antwoorden['omstandigheden_in_war_raken']) || $antwoorden['omstandigheden_in_war_raken'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -341,7 +341,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="wat doet u dan?" name="angstig_paniek_actie"><?= isset($antwoorden['angstig_paniek_actie']) ? $antwoorden['angstig_paniek_actie'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="angstig_paniek" <?= (isset($antwoorden['angstig_paniek']) && $antwoorden['angstig_paniek'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="angstig_paniek" <?= (!isset($antwoorden['angstig_paniek']) || $antwoorden['angstig_paniek'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -354,7 +354,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="angstig_paniek_lukt_voorkomen" <?= (isset($antwoorden['angstig_paniek_lukt_voorkomen']) && $antwoorden['angstig_paniek_lukt_voorkomen'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="angstig_paniek_lukt_voorkomen" <?= (!isset($antwoorden['angstig_paniek_lukt_voorkomen']) || $antwoorden['angstig_paniek_lukt_voorkomen'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -367,7 +367,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="suicidaal" <?= (isset($antwoorden['suicidaal']) && $antwoorden['suicidaal'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="suicidaal" <?= (!isset($antwoorden['suicidaal']) || $antwoorden['suicidaal'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -380,7 +380,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="suicidaal_momenteel" <?= (isset($antwoorden['suicidaal_momenteel']) && $antwoorden['suicidaal_momenteel'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="suicidaal_momenteel" <?= (!isset($antwoorden['suicidaal_momenteel']) || $antwoorden['suicidaal_momenteel'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -393,7 +393,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="agressief" <?= (isset($antwoorden['agressief']) && $antwoorden['agressief'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="agressief" <?= (!isset($antwoorden['agressief']) || $antwoorden['agressief'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -406,7 +406,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="anderen_iets_aan_willen_doen" <?= (isset($antwoorden['anderen_iets_aan_willen_doen']) && $antwoorden['anderen_iets_aan_willen_doen'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="anderen_iets_aan_willen_doen" <?= (!isset($antwoorden['anderen_iets_aan_willen_doen']) || $antwoorden['anderen_iets_aan_willen_doen'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -420,7 +420,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="door?" name="maatregelen_veiligheid_door"><?= isset($antwoorden['maatregelen_veiligheid_door']) ? $antwoorden['maatregelen_veiligheid_door'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="maatregelen_veiligheid" <?= (isset($antwoorden['maatregelen_veiligheid']) && $antwoorden['maatregelen_veiligheid'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="maatregelen_veiligheid" <?= (!isset($antwoorden['maatregelen_veiligheid']) || $antwoorden['maatregelen_veiligheid'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -433,7 +433,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="moeite_uiten_gevoelens" <?= (isset($antwoorden['moeite_uiten_gevoelens']) && $antwoorden['moeite_uiten_gevoelens'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="moeite_uiten_gevoelens" <?= (!isset($antwoorden['moeite_uiten_gevoelens']) || $antwoorden['moeite_uiten_gevoelens'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>

@@ -234,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="overeenkomst_waarden_normen" <?= (!isset($antwoorden['overeenkomst_waarden_normen']) && $antwoorden['overeenkomst_waarden_normen'] =='0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="overeenkomst_waarden_normen" <?= (!isset($antwoorden['overeenkomst_waarden_normen']) || $antwoorden['overeenkomst_waarden_normen'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
