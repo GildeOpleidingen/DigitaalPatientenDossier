@@ -13,12 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     // TODO: hier actie om data op te slaan in database.
     //Lees ingevulde gegevens.
     $gelovig = $_POST['gelovig'];    
-    $gelovig1 = $_POST['geloof1'];
-    $gelovig2 = $_POST['geloof2'];
-    $gelovig3 = $_POST['geloof3'];
-    $gelovig4 = $_POST['geloof4'];
-    $gelovig5 = $_POST['geloof5'];
-    $gelovig6 = $_POST['geloof6'];
     $geloof_anders = $_POST['geloof_anders'];
     $behoefte_religieuze_activiteit = $_POST['behoefte_religieuze_activiteit'];
     $gebruiken_tav_geloofsovertuiging = $_POST['gebruiken_tav_geloofsovertuiging'];
@@ -41,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
    
     //Haal vragenlijst ID op.
     $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-   
     // kijken of patroon11 bestaat door te kijken naar vragenlijst id
     $result = DatabaseConnection::getConn()->prepare("
                     SELECT p.id
@@ -162,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Bent u gelovig?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="gelovig" <?= isset($antwoorden['gelovig']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" value="1" name="gelovig" <?= (isset($antwoorden['gelovig']) && $antwoorden['gelovig'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
                                             <div id="checkfield">
                                                 <div class="question">
@@ -198,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             </div>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="gelovig" <?= !isset($antwoorden['gelovig']) ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gelovig" <?= (!isset($antwoorden['gelovig']) || $antwoorden['gelovig'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -207,11 +200,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Heeft u behoefte aan religieuze activiteiten?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="behoefte_religieuze_activiteit" <?= isset($antwoorden['behoefte_religieuze_activiteit']) ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="behoefte_religieuze_activiteit" <?= (isset($antwoorden['behoefte_religieuze_activiteit']) && $antwoorden['behoefte_religieuze_activiteit'] =='1') ? "checked" : "" ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="behoefte_religieuze_activiteit" <?= !isset($antwoorden['behoefte_religieuze_activiteit']) ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="behoefte_religieuze_activiteit" <?= (!isset($antwoorden['behoefte_religieuze_activiteit']) || $antwoorden['behoefte_religieuze_activiteit'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -220,12 +213,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Zijn er gebruiken ten aanzien van uw geloofsovertuiging waar rekening mee gehouden moet worden?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="gebruiken_tav_geloofsovertuiging" <?= isset($antwoorden['gebruiken_tav_geloofsovertuiging']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" value="1" name="gebruiken_tav_geloofsovertuiging" <?= (isset($antwoorden['gebruiken_tav_geloofsovertuiging']) && $antwoorden['gebruiken_tav_geloofsovertuiging'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_tav_geloofsovertuiging_welke"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_welke']) ? $antwoorden['gebruiken_tav_geloofsovertuiging_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="gebruiken_tav_geloofsovertuiging" <?= !isset($antwoorden['gebruiken_tav_geloofsovertuiging']) ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gebruiken_tav_geloofsovertuiging" <?= (!isset($antwoorden['gebruiken_tav_geloofsovertuiging']) || $antwoorden['gebruiken_tav_geloofsovertuiging'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -237,11 +230,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Komen uw waarden en normen overeen met maatschappelijke waarden en normen?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="overeenkomst_waarden_normen" <?= isset($antwoorden['overeenkomst_waarden_normen']) ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="overeenkomst_waarden_normen" <?= (isset($antwoorden['overeenkomst_waarden_normen']) && $antwoorden['overeenkomst_waarden_normen'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="overeenkomst_waarden_normen" <?= !isset($antwoorden['overeenkomst_waarden_normen']) ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="overeenkomst_waarden_normen" <?= (!isset($antwoorden['overeenkomst_waarden_normen']) || $antwoorden['overeenkomst_waarden_normen'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -253,12 +246,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Zijn er gebruiken met betrekking tot uw ethische achtergrond waar rekening mee gehouden moet worden?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="gebruiken_mbt_etnische_achtergrond" <?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" value="1" name="gebruiken_mbt_etnische_achtergrond" <?= (isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) && $antwoorden['gebruiken_mbt_etnische_achtergrond'] =='1') ? "checked" : "" ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_mbt_etnische_achtergrond_welke"><?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond_welke']) ? $antwoorden['gebruiken_mbt_etnische_achtergrond_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="gebruiken_mbt_etnische_achtergrond" <?= !isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gebruiken_mbt_etnische_achtergrond" <?= (!isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) || $antwoorden['gebruiken_mbt_etnische_achtergrond'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
