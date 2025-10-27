@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     $result->execute();
     $result = $result->get_result()->fetch_assoc();
 
+    unset($_SESSION['patroonerror']);
 
     //opslaan in database.
     if ($result != null) {
@@ -135,8 +136,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             $result2->execute();
             $result2 = $result2->get_result();
         } catch (Exception $e) {
-            // Display the alert box 
-            echo '<script>alert("Data NIET opgeslagen, vul ALLE velden in!")</script>';
+            // Display the alert box on next of previous page
+            $_SESSION['patroonerror'] = 'Er ging iets fout, wijzigingen zijn NIET opgeslagen.';
+            $_SESSION['patroonnr'] = '9. Seksualiteits- en voorplantingspatroon';
         }
     }
 
@@ -184,6 +186,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                 <div class="mt-4 mb-3 bg-white p-3" style="height: 90%; overflow: auto;">
                     <p class="card-text">
                     <div class="form-content">
+                        <?php if(isset($_SESSION['patroonerror'])){?>
+                            <div class="alert alert-warning">
+                                <strong>Waarschuwing!</strong> <?php echo $_SESSION['patroonerror'] ?> in <?php echo $_SESSION['patroonnr'] ?>
+                            </div>
+                        <?php  }?>
                         <div class="h4 text-primary">9. Seksualiteits- en voorplantingspatroon</div>
                         <div class="form">
                             <div class="questionnaire">
