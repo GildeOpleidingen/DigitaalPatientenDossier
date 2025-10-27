@@ -13,22 +13,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     //Lees ingevulde gegevens.
     $reactie_anders = $_POST['reactie_anders'];
     $spanningsvolle_situaties_voorkomen = $_POST['spanningsvolle_situaties_voorkomen'];
-    $spanningsvolle_situaties_voorkomen_hoe = $_POST['spanningsvolle_situaties_voorkomen_hoe'];
+    $spanningsvolle_situaties_voorkomen_hoe = strval($_POST['spanningsvolle_situaties_voorkomen_hoe']);
     $spanningsvolle_situaties_oplossen = $_POST['spanningsvolle_situaties_oplossen'];
-    $spanningsvolle_situaties_oplossen_hoe = $_POST['spanningsvolle_situaties_oplossen_hoe'];
+    $spanningsvolle_situaties_oplossen_hoe = strval($_POST['spanningsvolle_situaties_oplossen_hoe']);
     $omstandigheden_in_war_raken = $_POST['omstandigheden_in_war_raken'];
-    $omstandigheden_in_war_raken_welke = $_POST['omstandigheden_in_war_raken_welke'];
+    $omstandigheden_in_war_raken_welke = strval($_POST['omstandigheden_in_war_raken_welke']);
     $angstig_paniek = $_POST['angstig_paniek'];
-    $angstig_paniek_actie = $_POST['angstig_paniek_actie'];
+    $angstig_paniek_actie = strval($_POST['angstig_paniek_actie']);
     $angstig_paniek_lukt_voorkomen = $_POST['angstig_paniek_lukt_voorkomen'];
     $suicidaal = $_POST['suicidaal'];
     $suicidaal_momenteel = $_POST['suicidaal_momenteel'];
     $agressief = $_POST['agressief'];
     $anderen_iets_aan_willen_doen = $_POST['anderen_iets_aan_willen_doen'];
     $maatregelen_veiligheid = $_POST['maatregelen_veiligheid'];
-    $maatregelen_veiligheid_door = $_POST['maatregelen_veiligheid_door'];
+    $maatregelen_veiligheid_door = strval($_POST['maatregelen_veiligheid_door']);
     $moeite_uiten_gevoelens = $_POST['moeite_uiten_gevoelens'];
-    $bespreken_gevoelens_met = $_POST['bespreken_gevoelens_met'];
+    $bespreken_gevoelens_met = strval($_POST['bespreken_gevoelens_met']);
 
     // array van checkboxes van reacties tab
     $arr = array(!empty($_POST['reactie1']), !empty($_POST['reactie2']), !empty($_POST['reactie3']), !empty($_POST['reactie4']), !empty($_POST['reactie5']), !empty($_POST['reactie6']), !empty($_POST['reactie7']), !empty($_POST['reactie8']), !empty($_POST['reactie9']), !empty($_POST['reactie10']), !empty($_POST['reactie11']), !empty($_POST['reactie12']), !empty($_POST['reactie13']));
@@ -104,74 +104,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
         }
     } else {
         //hier insert je alle data in patroon02
-        $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon10stressverwerking`(
-                `vragenlijstid`,
-                `reactie_spanningen`,
-                `reactie_anders`,
-                `spanningsvolle_situaties_voorkomen`,
-                `spanningsvolle_situaties_voorkomen_hoe`,
-                `spanningsvolle_situaties_oplossen`,
-                `spanningsvolle_situaties_oplossen_hoe`,
-                `omstandigheden_in_war_raken`,
-                `omstandigheden_in_war_raken_welke`,
-                `angstig_paniek`,
-                `angstig_paniek_actie`,
-                `angstig_paniek_lukt_voorkomen`,
-                `suicidaal`,
-                `suicidaal_momenteel`,
-                `agressief`,
-                `anderen_iets_aan_willen_doen`,
-                `maatregelen_veiligheid`,
-                `maatregelen_veiligheid_door`,
-                `moeite_uiten_gevoelens`,
-                `bespreken_gevoelens_met`,
-                `observatie`)
-            VALUES (
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?)");
-        $result2->bind_param("issisisisisiiiiiisiss", 
-            $vragenlijstId, 
-            $reactie_spanningen, 
-            $reactie_anders,
-            $spanningsvolle_situaties_voorkomen,
-            $spanningsvolle_situaties_voorkomen_hoe,
-            $spanningsvolle_situaties_oplossen,
-            $spanningsvolle_situaties_oplossen_hoe, 
-            $omstandigheden_in_war_raken,
-            $omstandigheden_in_war_raken_welke,
-            $angstig_paniek,
-            $angstig_paniek_actie,
-            $angstig_paniek_lukt_voorkomen,
-            $suicidaal,
-            $suicidaal_momenteel,
-            $agressief,
-            $anderen_iets_aan_willen_doen,
-            $maatregelen_veiligheid,
-            $maatregelen_veiligheid_door,
-            $moeite_uiten_gevoelens,
-            $bespreken_gevoelens_met, 
-            $observatie);
-        $result2->execute();
-        $result2 = $result2->get_result();
+        try{
+            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon10stressverwerking`(
+                    `vragenlijstid`,
+                    `reactie_spanningen`,
+                    `reactie_anders`,
+                    `spanningsvolle_situaties_voorkomen`,
+                    `spanningsvolle_situaties_voorkomen_hoe`,
+                    `spanningsvolle_situaties_oplossen`,
+                    `spanningsvolle_situaties_oplossen_hoe`,
+                    `omstandigheden_in_war_raken`,
+                    `omstandigheden_in_war_raken_welke`,
+                    `angstig_paniek`,
+                    `angstig_paniek_actie`,
+                    `angstig_paniek_lukt_voorkomen`,
+                    `suicidaal`,
+                    `suicidaal_momenteel`,
+                    `agressief`,
+                    `anderen_iets_aan_willen_doen`,
+                    `maatregelen_veiligheid`,
+                    `maatregelen_veiligheid_door`,
+                    `moeite_uiten_gevoelens`,
+                    `bespreken_gevoelens_met`,
+                    `observatie`)
+                VALUES (
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?)");
+            $result2->bind_param("issisisisisiiiiiisiss", 
+                $vragenlijstId, 
+                $reactie_spanningen, 
+                $reactie_anders,
+                $spanningsvolle_situaties_voorkomen,
+                $spanningsvolle_situaties_voorkomen_hoe,
+                $spanningsvolle_situaties_oplossen,
+                $spanningsvolle_situaties_oplossen_hoe, 
+                $omstandigheden_in_war_raken,
+                $omstandigheden_in_war_raken_welke,
+                $angstig_paniek,
+                $angstig_paniek_actie,
+                $angstig_paniek_lukt_voorkomen,
+                $suicidaal,
+                $suicidaal_momenteel,
+                $agressief,
+                $anderen_iets_aan_willen_doen,
+                $maatregelen_veiligheid,
+                $maatregelen_veiligheid_door,
+                $moeite_uiten_gevoelens,
+                $bespreken_gevoelens_met, 
+                $observatie);
+            $result2->execute();
+            $result2 = $result2->get_result();
+        } catch (Exception $e) {
+            // Display the alert box 
+            echo '<script>alert("Data NIET opgeslagen, vul ALLE velden in!")</script>';
+        }
     }
 
     switch ($_REQUEST['navbutton']) {
@@ -322,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Zijn er omstandigheden waarbij u in de war raakt?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="omstandigheden_in_war_raken" <?= (isset($antwoorden['omstandigheden_in_war_raken']) && $antwoorden['omstandigheden_in_war_raken'] = '1') ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" value="1" name="omstandigheden_in_war_raken" <?= (isset($antwoorden['omstandigheden_in_war_raken']) && $antwoorden['omstandigheden_in_war_raken'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="omstandigheden_in_war_raken_welke"><?= isset($antwoorden['omstandigheden_in_war_raken_welke']) ? $antwoorden['omstandigheden_in_war_raken_welke'] : '' ?></textarea>
                                         </div>

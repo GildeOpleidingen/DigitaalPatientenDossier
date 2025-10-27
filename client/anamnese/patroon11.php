@@ -13,16 +13,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     // TODO: hier actie om data op te slaan in database.
     //Lees ingevulde gegevens.
     $gelovig = $_POST['gelovig'];    
-    $geloof_anders = $_POST['geloof_anders'];
+    $geloof_anders = strval($_POST['geloof_anders']);
     $behoefte_religieuze_activiteit = $_POST['behoefte_religieuze_activiteit'];
     $gebruiken_tav_geloofsovertuiging = $_POST['gebruiken_tav_geloofsovertuiging'];
-    $gebruiken_tav_geloofsovertuiging_welke = $_POST['gebruiken_tav_geloofsovertuiging_welke'];
-    $gebruiken_tav_geloofsovertuiging_wanneer = $_POST['gebruiken_tav_geloofsovertuiging_wanneer'];
+    $gebruiken_tav_geloofsovertuiging_welke = strval($_POST['gebruiken_tav_geloofsovertuiging_welke']);
+    $gebruiken_tav_geloofsovertuiging_wanneer = strval($_POST['gebruiken_tav_geloofsovertuiging_wanneer']);
     $overeenkomst_waarden_normen = $_POST['overeenkomst_waarden_normen'];
-    $etnische_achtergrond = $_POST['etnische_achtergrond'];
+    $etnische_achtergrond = strval($_POST['etnische_achtergrond']);
     $gebruiken_mbt_etnische_achtergrond = $_POST['gebruiken_mbt_etnische_achtergrond'];
-    $gebruiken_mbt_etnische_achtergrond_welke = $_POST['gebruiken_mbt_etnische_achtergrond_welke'];
-    $gebruiken_mbt_etnische_achtergrond_wanneer = $_POST['gebruiken_mbt_etnische_achtergrond_wanneer'];
+    $gebruiken_mbt_etnische_achtergrond_welke = strval($_POST['gebruiken_mbt_etnische_achtergrond_welke']);
+    $gebruiken_mbt_etnische_achtergrond_wanneer = strval($_POST['gebruiken_mbt_etnische_achtergrond_wanneer']);
 
     // array van checkboxes van gelovig tab
     $arr = array(!empty($_POST['geloof1']), !empty($_POST['geloof2']), !empty($_POST['geloof3']), !empty($_POST['geloof4']), !empty($_POST['geloof5']), !empty($_POST['geloof6']));
@@ -71,39 +71,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
         }
     } else {
         //hier insert je alle data in patroon02
-        $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon11waardelevensovertuiging`(
-                `vragenlijstid`,
-                `gelovig`,
-                `geloof_welk`,
-                `geloof_anders`,
-                `behoefte_religieuze_activiteit`,
-                `gebruiken_tav_geloofsovertuiging`,
-                `gebruiken_tav_geloofsovertuiging_welke`,
-                `gebruiken_tav_geloofsovertuiging_wanneer`,
-                `overeenkomst_waarden_normen`,
-                `etnische_achtergrond`,
-                `gebruiken_mbt_etnische_achtergrond`,
-                `gebruiken_mbt_etnische_achtergrond_welke`,
-                `gebruiken_mbt_etnische_achtergrond_wanneer`,
-                `observatie`)
-            VALUES (
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?)");
-        $result2->bind_param("iissiissisisss", $vragenlijstId, $gelovig, $gelovig_welk, $geloof_anders, $behoefte_religieuze_activiteit, $gebruiken_tav_geloofsovertuiging,$gebruiken_tav_geloofsovertuiging_welke, $gebruiken_tav_geloofsovertuiging_wanneer, $overeenkomst_waarden_normen,$etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond_welke, $gebruiken_mbt_etnische_achtergrond_wanneer, $observatie);
-        $result2->execute();
-        $result2 = $result2->get_result();
+        try{
+            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon11waardelevensovertuiging`(
+                    `vragenlijstid`,
+                    `gelovig`,
+                    `geloof_welk`,
+                    `geloof_anders`,
+                    `behoefte_religieuze_activiteit`,
+                    `gebruiken_tav_geloofsovertuiging`,
+                    `gebruiken_tav_geloofsovertuiging_welke`,
+                    `gebruiken_tav_geloofsovertuiging_wanneer`,
+                    `overeenkomst_waarden_normen`,
+                    `etnische_achtergrond`,
+                    `gebruiken_mbt_etnische_achtergrond`,
+                    `gebruiken_mbt_etnische_achtergrond_welke`,
+                    `gebruiken_mbt_etnische_achtergrond_wanneer`,
+                    `observatie`)
+                VALUES (
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?)");
+            $result2->bind_param("iissiissisisss", $vragenlijstId, $gelovig, $gelovig_welk, $geloof_anders, $behoefte_religieuze_activiteit, $gebruiken_tav_geloofsovertuiging,$gebruiken_tav_geloofsovertuiging_welke, $gebruiken_tav_geloofsovertuiging_wanneer, $overeenkomst_waarden_normen,$etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond_welke, $gebruiken_mbt_etnische_achtergrond_wanneer, $observatie);
+            $result2->execute();
+            $result2 = $result2->get_result();
+        } catch (Exception $e) {
+            // Display the alert box 
+            echo '<script>alert("Data NIET opgeslagen, vul ALLE velden in!")</script>';
+        }
     }
 
     switch ($_REQUEST['navbutton']) {

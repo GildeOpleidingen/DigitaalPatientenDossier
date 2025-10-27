@@ -12,12 +12,12 @@ $boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observat
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     //Lees ingevulde gegevens.
     $verandering_seksuele_beleving = $_POST['verandering_seksuele_beleving'];
-    $verandering_seksuele_beleving_door = $_POST['verandering_seksuele_beleving_door'] != null ? $_POST['verandering_seksuele_beleving_door'] : '';
+    $verandering_seksuele_beleving_door = strval($_POST['verandering_seksuele_beleving_door']);
     $verandering_seksueel_gedrag = $_POST['verandering_seksueel_gedrag'];
     $wisselende_contacten = $_POST['wisselende_contacten'];
     $veilig_vrijen = $_POST['veilig_vrijen'];
     $anticonceptiemiddel = $_POST['anticonceptiemiddel'];
-    $anticonceptiemiddel_welke = $_POST['anticonceptiemiddel_welke'] != null ? $_POST['anticonceptiemiddel_welke'] : '';
+    $anticonceptiemiddel_welke =strval($_POST['anticonceptiemiddel_welke']) ;
     $anticonceptiemiddel_problemen = $_POST['anticonceptiemiddel_problemen'];
     
     // array van checkboxes van seksuele gerichtheid tab
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     
     $seksuele_gerichtheid_problemen = $_POST['seksuele_gerichtheid_problemen'];
     $soa = $_POST['soa'];
-    $soa_welke = $_POST['soa_welke'] != null ? $_POST['soa_welke'] : '';
+    $soa_welke = strval($_POST['soa_welke']);
 
     // array van checkboxes van observatie tab
     $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']));
@@ -85,54 +85,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             echo "Error preparing statement: " . DatabaseConnection::getConn()->error;
         }
     } else {
-        $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon09seksualiteitvoorplanting`(
-                `vragenlijstid`,
-                `verandering_seksuele_beleving`,
-                `verandering_seksuele_beleving_door`,
-                `verandering_seksueel_gedrag`,
-                `wisselende_contacten`,
-                `veilig_vrijen`,
-                `anticonceptiemiddel`,
-                `anticonceptiemiddel_welke`,
-                `anticonceptiemiddel_problemen`,
-                `seksuele_gerichtheid`,
-                `seksuele_gerichtheid_problemen`,
-                `soa`,
-                `soa_welke`,
-                `observatie`)
-            VALUES (
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?)");
-        $result2->bind_param("iisiiiisisiiss", 
-            $vragenlijstId, 
-            $verandering_seksuele_beleving,
-            $verandering_seksuele_beleving_door,
-            $verandering_seksueel_gedrag,
-            $wisselende_contacten,
-            $veilig_vrijen,
-            $anticonceptiemiddel,
-            $anticonceptiemiddel_welke,
-            $anticonceptiemiddel_problemen,
-            $seksuele_gerichtheid,
-            $seksuele_gerichtheid_problemen,
-            $soa,
-            $soa_welke,
-            $observatie);
-            
-        $result2->execute();
-        $result2 = $result2->get_result();
+        try{
+            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon09seksualiteitvoorplanting`(
+                    `vragenlijstid`,
+                    `verandering_seksuele_beleving`,
+                    `verandering_seksuele_beleving_door`,
+                    `verandering_seksueel_gedrag`,
+                    `wisselende_contacten`,
+                    `veilig_vrijen`,
+                    `anticonceptiemiddel`,
+                    `anticonceptiemiddel_welke`,
+                    `anticonceptiemiddel_problemen`,
+                    `seksuele_gerichtheid`,
+                    `seksuele_gerichtheid_problemen`,
+                    `soa`,
+                    `soa_welke`,
+                    `observatie`)
+                VALUES (
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?)");
+            $result2->bind_param("iisiiiisisiiss", 
+                $vragenlijstId, 
+                $verandering_seksuele_beleving,
+                $verandering_seksuele_beleving_door,
+                $verandering_seksueel_gedrag,
+                $wisselende_contacten,
+                $veilig_vrijen,
+                $anticonceptiemiddel,
+                $anticonceptiemiddel_welke,
+                $anticonceptiemiddel_problemen,
+                $seksuele_gerichtheid,
+                $seksuele_gerichtheid_problemen,
+                $soa,
+                $soa_welke,
+                $observatie);
+                
+            $result2->execute();
+            $result2 = $result2->get_result();
+        } catch (Exception $e) {
+            // Display the alert box 
+            echo '<script>alert("Data NIET opgeslagen, vul ALLE velden in!")</script>';
+        }
     }
 
     switch ($_REQUEST['navbutton']) {
