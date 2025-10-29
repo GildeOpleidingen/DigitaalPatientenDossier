@@ -64,7 +64,9 @@ $row1 = $Main->getClientById($clientId);
                     $currentPage = basename($_SERVER['PHP_SELF'], ".php");
                     foreach ($pages as $key => $value) {
                         if ($key === 'verzorgers' && $medewerkerId != 4) {
+
                             continue;
+
                         }
                         $value = lcfirst($value);
                         $valueTekst = ucfirst($value);

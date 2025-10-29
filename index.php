@@ -22,6 +22,7 @@ if (isset($_POST['form']) && $_POST['form'] == '1') {
             if ($row['wachtwoord'] == password_verify($wachtwoord, $row['wachtwoord'])) {
                 $_SESSION['loggedin_id'] = $row['id'];
                 $_SESSION['loggedin_naam'] = $row['naam'];
+                $_SESSION['isAdmin'] = ($row['rol'] == 'beheerder');
                 $_SESSION['rol'] = $row['rol'];
                 header("Location: dashboard.php");
             } else {
