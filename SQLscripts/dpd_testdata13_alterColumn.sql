@@ -1,1 +1,0 @@
-ALTER TABLE `vragenlijst` CHANGE `afnamedatumtijd` `afnamedatumtijd` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
