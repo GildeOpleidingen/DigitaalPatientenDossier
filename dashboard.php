@@ -6,12 +6,24 @@ if (!isset($_SESSION['loggedin_id'])) {
     header("Location: index.php");
 } else {
     $medewerkerId = $_SESSION['loggedin_id'];
+    $isAdmin = $_SESSION['isAdmin'];
+}
+if($isAdmin === false){
+    $result = DatabaseConnection::getConn()->prepare("SELECT clientid FROM verzorgerregel WHERE medewerkerid = ?");
+    $result->bind_param("i", $medewerkerId);
+    $result->execute();
+    $links = $result->get_result()->fetch_all();
+} else{
+    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");
+    $result->execute();
+    $links = $result->get_result()->fetch_all();
 }
 
-$result = DatabaseConnection::getConn()->prepare("SELECT clientid FROM verzorgerregel WHERE medewerkerid = ?");
-$result->bind_param("i", $medewerkerId);
-$result->execute();
-$links = $result->get_result()->fetch_all();
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,33 +72,53 @@ $links = $result->get_result()->fetch_all();
                             </script>
                 <?php
                         }
+                        
+                       $client = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM client WHERE id=$link[0]")->fetch_array();
 
-                        $client = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM client WHERE id=$link[0]")->fetch_array();
-                        if ($client[2] == null) {
+                        if ($isAdmin === true) {
+                            $admin = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM medewerker WHERE id=$link[0]")->fetch_array();
+                        }
+
+                        if ($client[2] == null && $isAdmin === false) {
+                            
                             echo '<div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-                            <a href="client/overzicht/overzicht.php?id='.$client[0].'" class="card border-0 rounded-0 shadow-sm text-decoration-none">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#868e96"></rect>
-                                <text x="50%" y="50%" text-anchor="middle" fill="#dee2e6" dy=".3em">Geen foto beschikbaar</text>
-                            </svg>
-                            <div class="card-body">
-                                <h5 class="card-title">'.$client[1].'</h5>
-                            </div>
-                            </a>
+                                <a href="client/overzicht/overzicht.php?id='.$client[0].'" class="card border-0 rounded-0 shadow-sm text-decoration-none">
+                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                        <title>Placeholder</title>
+                                        <rect width="100%" height="100%" fill="#868e96"></rect>
+                                        <text x="50%" y="50%" text-anchor="middle" fill="#dee2e6" dy=".3em">Geen foto beschikbaar</text>
+                                    </svg>
+                                    <div class="card-body">
+                                        <h5 class="card-title">'.$client[1].'</h5>
+                                    </div>
+                                </a>
                             </div>';
                             $size++;
                             continue;
                         }
 
-                        echo '<div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-                            <a href="client/overzicht/overzicht.php?id='.$client[0].'" class="card border-0 rounded-0 shadow-sm text-decoration-none">
-                            <img src="data:image/jpeg;base64,' . base64_encode($client[2]) . '" class="card-img-top" style="height: 200px; object-fit: cover;" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">'.$client[1].'</h5>
-                            </div>
-                            </a>
-                        </div>';
+                        echo '<div class="col-lg-3 col-md-6 col-sm-12 mb-3">';
+
+                        if ($isAdmin === true) {
+                        
+                            echo '<a href="medewerker/overzicht/overzicht.php?id='.$admin[0].'" class="card border-0 rounded-0 shadow-sm text-decoration-none">
+                                    <img src="data:image/jpeg;base64,' . base64_encode($admin[2]) . '" class="card-img-top" style="height: 200px; object-fit: cover;" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title">'.$admin[1].'</h5>
+                                    </div>
+                                </a>';
+                        } else {
+                            
+                            echo '<a href="client/overzicht/overzicht.php?id='.$client[0].'" class="card border-0 rounded-0 shadow-sm text-decoration-none">
+                                    <img src="data:image/jpeg;base64,' . base64_encode($client[2]) . '" class="card-img-top" style="height: 200px; object-fit: cover;" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title">'.$client[1].'</h5>
+                                    </div>
+                                </a>';
+                        }
+
+                        echo '</div>';
+
                         $size++;
 
                     }
