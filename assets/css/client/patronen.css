@@ -80,19 +80,15 @@ body {
     padding: 20px;
 }
 
-input[type="text"] {
-    height: 0px;
+/* Make text inputs usable and responsive. Remove the fixed height:0 which collapses inputs. */
+input[type="text"], input, textarea {
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
     padding: 10px;
     border: 2px solid #00365E;
     border-radius: 3px;
-} 
-
-input[type="text"] {
-    height: 0px;
-    padding: 10px;
-    border: 2px solid #00365E;
-    border-radius: 3px;
-} 
+}
 
 #checkfield {
     display: none;
