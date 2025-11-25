@@ -4,115 +4,141 @@ include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
 
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 11);
+$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 3);
 
-$boolArrayGeloof = isset($antwoorden['geloof_welk']) && $antwoorden['geloof_welk'] !== null ? str_split($antwoorden['geloof_welk']) : [];
 $boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
-    // TODO: hier actie om data op te slaan in database.
     //Lees ingevulde gegevens.
-    $gelovig = $_POST['gelovig'];    
-    $geloof_anders = $_POST['geloof_anders'];
-    $behoefte_religieuze_activiteit = $_POST['behoefte_religieuze_activiteit'];
-    $gebruiken_tav_geloofsovertuiging = $_POST['gebruiken_tav_geloofsovertuiging'];
-    $gebruiken_tav_geloofsovertuiging_welke = $_POST['gebruiken_tav_geloofsovertuiging_welke'];
-    $gebruiken_tav_geloofsovertuiging_wanneer = $_POST['gebruiken_tav_geloofsovertuiging_wanneer'];
-    $overeenkomst_waarden_normen = $_POST['overeenkomst_waarden_normen'];
-    $etnische_achtergrond = $_POST['etnische_achtergrond'];
-    $gebruiken_mbt_etnische_achtergrond = $_POST['gebruiken_mbt_etnische_achtergrond'];
-    $gebruiken_mbt_etnische_achtergrond_welke = $_POST['gebruiken_mbt_etnische_achtergrond_welke'];
-    $gebruiken_mbt_etnische_achtergrond_wanneer = $_POST['gebruiken_mbt_etnische_achtergrond_wanneer'];
-
-    // array van checkboxes van gelovig tab
-    $arr = array(!empty($_POST['geloof1']), !empty($_POST['geloof2']), !empty($_POST['geloof3']), !empty($_POST['geloof4']), !empty($_POST['geloof5']), !empty($_POST['geloof6']));
-    $gelovig_welk = $Main->convertBoolArrayToString($arr);
+    $ontlasting_probleem = $_POST['ontlasting_probleem'];
+    $onlasting_op_welke = strval($_POST['op_welke']);
+    $ontlasting_probleem_oplossing = strval($_POST['ontlasting_probleem_oplossing']);
+    $op_medicijnen = $_POST['op_medicijnen'];
+    $op_medicijnen_welke = strval($_POST['op_medicijnen_welke']);
+    $urineer_probleem = $_POST['urineer_probleem'];
+    $up_incontinentie = $_POST['up_incontinentie'];
+    $up_incontinentie_behandeling = $_POST['up_incontinentie_behandeling'];
+    $up_incontinentie_behandeling_welke = strval($_POST['up_incontinentie_behandeling_welke']);
+    $transpiratie = $_POST['transpiratie'];
+    $transpiratie_welke = strval($_POST['transpiratie_welke']);
 
     // array van checkboxes van observatie tab
-    $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']));
+    $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']));
     $observatie = $Main->convertBoolArrayToString($arr);
-   
-   
-    //Haal vragenlijst ID op.
+
+     //Haal vragenlijst ID op.
     $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-    // kijken of patroon11 bestaat door te kijken naar vragenlijst id
+
+    // kijken of patroon10 bestaat door te kijken naar vragenlijst id
     $result = DatabaseConnection::getConn()->prepare("
                     SELECT p.id
-                    FROM patroon11waardelevensovertuiging p
+                    FROM patroon03uitscheiding p
                     WHERE p.vragenlijstid =  ?");
     $result->bind_param("i", $vragenlijstId);
     $result->execute();
     $result = $result->get_result()->fetch_assoc();
 
+    unset($_SESSION['patroonerror']);
+    
+    //opslaan in database.
     if ($result != null) {
         //update
-        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon11waardelevensovertuiging`
+        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon03uitscheiding`
             SET
-            `gelovig`= ?,
-            `geloof_welk`= ?,
-            `geloof_anders`= ?,
-            `behoefte_religieuze_activiteit`= ?,
-            `gebruiken_tav_geloofsovertuiging`= ?,
-            `gebruiken_tav_geloofsovertuiging_welke`= ?,
-            `gebruiken_tav_geloofsovertuiging_wanneer`= ?,
-            `overeenkomst_waarden_normen`= ?,
-            `etnische_achtergrond`= ?,
-            `gebruiken_mbt_etnische_achtergrond`= ?,
-            `gebruiken_mbt_etnische_achtergrond_welke`= ?,
-            `gebruiken_mbt_etnische_achtergrond_wanneer`= ?,
+            `ontlasting_probleem`= ?,
+            `op_welke`= ?,
+            `op_preventie`= ?,
+            `op_medicijnen`= ?,
+            `op_medicijnen_welke`= ?,
+            `urineer_probleem`= ?,
+            `up_incontinentie`= ?,
+            `up_incontinentie_behandeling`= ?,
+            `up_incontinentie_behandeling_welke`= ?,
+            `transpiratie`= ?,
+            `transpiratie_welke`= ?,
             `observatie`= ?
             WHERE `vragenlijstid`=?");
         if ($result1) {
-            $result1->bind_param("issiissisisssi", $gelovig, $gelovig_welk, $geloof_anders, $behoefte_religieuze_activiteit, $gebruiken_tav_geloofsovertuiging,$gebruiken_tav_geloofsovertuiging_welke, $gebruiken_tav_geloofsovertuiging_wanneer, $overeenkomst_waarden_normen,$etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond_welke, $gebruiken_mbt_etnische_achtergrond_wanneer, $observatie, $vragenlijstId);
+            $result1->bind_param("issisiiisissi", 
+            $ontlasting_probleem,
+            $onlasting_op_welke,
+            $ontlasting_probleem_oplossing,
+            $op_medicijnen,
+            $op_medicijnen_welke,
+            $urineer_probleem,
+            $up_incontinentie,
+            $up_incontinentie_behandeling,
+            $up_incontinentie_behandeling_welke,
+            $transpiratie,
+            $transpiratie_welke,
+            $observatie, 
+            $vragenlijstId);
             $result1->execute();
         } else {
             // Handle error
             echo "Error preparing statement: " . DatabaseConnection::getConn()->error;
         }
     } else {
-        //hier insert je alle data in patroon02
-        $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon11waardelevensovertuiging`(
-                `vragenlijstid`,
-                `gelovig`,
-                `geloof_welk`,
-                `geloof_anders`,
-                `behoefte_religieuze_activiteit`,
-                `gebruiken_tav_geloofsovertuiging`,
-                `gebruiken_tav_geloofsovertuiging_welke`,
-                `gebruiken_tav_geloofsovertuiging_wanneer`,
-                `overeenkomst_waarden_normen`,
-                `etnische_achtergrond`,
-                `gebruiken_mbt_etnische_achtergrond`,
-                `gebruiken_mbt_etnische_achtergrond_welke`,
-                `gebruiken_mbt_etnische_achtergrond_wanneer`,
-                `observatie`)
-            VALUES (
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?)");
-        $result2->bind_param("iissiissisisss", $vragenlijstId, $gelovig, $gelovig_welk, $geloof_anders, $behoefte_religieuze_activiteit, $gebruiken_tav_geloofsovertuiging,$gebruiken_tav_geloofsovertuiging_welke, $gebruiken_tav_geloofsovertuiging_wanneer, $overeenkomst_waarden_normen,$etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond_welke, $gebruiken_mbt_etnische_achtergrond_wanneer, $observatie);
-        $result2->execute();
-        $result2 = $result2->get_result();
+        try{
+            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon03uitscheiding`(
+                    `vragenlijstid`,
+                    `ontlasting_probleem`,
+                    `op_welke`,
+                    `op_preventie`,
+                    `op_medicijnen`,
+                    `op_medicijnen_welke`,
+                    `urineer_probleem`,
+                    `up_incontinentie`,
+                    `up_incontinentie_behandeling`,
+                    `up_incontinentie_behandeling_welke`,
+                    `transpiratie`,
+                    `transpiratie_welke`,
+                    `observatie`)
+                VALUES (
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?)");
+            $result2->bind_param("iissisiiisiss", 
+                $vragenlijstId, 
+                $ontlasting_probleem,
+                $onlasting_op_welke,
+                $ontlasting_probleem_oplossing,
+                $op_medicijnen,
+                $op_medicijnen_welke,
+                $urineer_probleem,
+                $up_incontinentie,
+                $up_incontinentie_behandeling,
+                $up_incontinentie_behandeling_welke,
+                $transpiratie,
+                $transpiratie_welke,
+                $observatie);
+                
+            $result2->execute();
+            $result2 = $result2->get_result();
+        } catch (Exception $e) {
+            // Display the alert box on next of previous page
+            $_SESSION['patroonerror'] = 'Er ging iets fout, wijzigingen zijn NIET opgeslagen.';
+            $_SESSION['patroonnr'] = '3. Uitscheidingspatroon';
+        }
     }
 
     switch ($_REQUEST['navbutton']) {
         case 'next': //action for next here
-            header('Location: patroon01.php'); //TODO: hier moet naar de hoofdpagina genavigeerd worden.
+            header('Location: patroon04.php');
             break;
 
         case 'prev': //action for previous here
-            header('Location: patroon10.php');
+            header('Location: patroon02.php');
             break;
     }
     exit;
@@ -148,140 +174,147 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                 <div class="mt-4 mb-3 bg-white p-3" style="height: 90%; overflow: auto;">
                     <p class="card-text">
                     <div class="form-content">
-                        <div class="h4 text-primary">11. Stressverwerkingspatroon (probleemhantering)</div>
+                        <div class="h4 text-primary">3. Uitscheidingspatroon</div>
                         <div class="form">
                             <div class="questionnaire">
                                 <div class="question">
-                                    <p>Bent u gelovig?</p>
+                                    <p>Heeft u problemen met ontlasting?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="gelovig" <?= (isset($antwoorden['gelovig']) && $antwoorden['gelovig'] == '1') ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" value="1" name="ontlasting_probleem" <?= (isset($antwoorden['ontlasting_probleem']) && $antwoorden['ontlasting_probleem'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <div id="checkfield">
-                                                <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[0]) && $boolArrayGeloof[0] == '1') ? "checked" : "" ?> name="geloof1">
-                                                        <p>R-K</p>
-                                                    </div>
-                                                </div>
-                                                <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[1]) && $boolArrayGeloof[1] == '1') ? "checked" : "" ?> name="geloof2">
-                                                        <p>Nederlands hervormd</p>
-                                                    </div>
-                                                </div>
-                                                <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[2]) && $boolArrayGeloof[2] == '1') ? "checked" : "" ?> name="geloof3">
-                                                        <p>Gereformeerd</p>
-                                                    </div>
-                                                </div>
-                                                <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[3]) && $boolArrayGeloof[3] == '1') ? "checked" : "" ?> name="geloof4">
-                                                        <p>Moslim</p>
-                                                    </div>
-                                                </div>
-                                                <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[4]) && $boolArrayGeloof[4] == '1') ? "checked" : "" ?> name="geloof5">
-                                                        <p>Joods</p>
-                                                    </div>
-                                                </div>
-                                                <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[5]) && $boolArrayGeloof[5] == '1') ? "checked" : "" ?> name="geloof6">
-                                                        <p>Anders, namelijk:</p>
-                                                    </div><textarea rows="1" cols="25" type="text" name="geloof_anders"><?= isset($antwoorden['geloof_anders']) ? $antwoorden['geloof_anders'] : '' ?></textarea>
-                                                </div>
-                                            </div>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="op_welke"><?= isset($antwoorden['op_welke']) ? $antwoorden['op_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="gelovig" <?= (!isset($antwoorden['gelovig']) || $antwoorden['gelovig'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="ontlasting_probleem" <?= (!isset($antwoorden['ontlasting_probleem']) || $antwoorden['ontlasting_probleem'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>- Heeft u behoefte aan religieuze activiteiten?</p>
-                                    <div class="checkboxes">
-                                        <p>
-                                            <input type="radio" value="1" name="behoefte_religieuze_activiteit" <?= (isset($antwoorden['behoefte_religieuze_activiteit']) && $antwoorden['behoefte_religieuze_activiteit'] =='1') ? "checked" : "" ?>>
-                                            <label>Ja</label>
-                                        </p>
-                                        <p>
-                                            <input type="radio" value="0" name="behoefte_religieuze_activiteit" <?= (!isset($antwoorden['behoefte_religieuze_activiteit']) || $antwoorden['behoefte_religieuze_activiteit'] == '0') ? "checked" : "" ?>>
-                                            <label>Nee</label>
-                                        </p>
-                                    </div>
+                                    <p>- Wat doet u om deze problemen te bestrijden?</p><textarea rows="1" cols="25" type="text" name="ontlasting_probleem_oplossing"><?= isset($antwoorden['op_preventie']) ? $antwoorden['op_preventie'] : '' ?></textarea>
                                 </div>
                                 <div class="question">
-                                    <p>- Zijn er gebruiken ten aanzien van uw geloofsovertuiging waar rekening mee gehouden moet worden?</p>
+                                    <p>- Gebruikt u iets om uw stoelgang te reguleren?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="gebruiken_tav_geloofsovertuiging" <?= (isset($antwoorden['gebruiken_tav_geloofsovertuiging']) && $antwoorden['gebruiken_tav_geloofsovertuiging'] == '1') ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" value="1" name="op_medicijnen" <?= (isset($antwoorden['op_medicijnen']) && $antwoorden['op_medicijnen'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_tav_geloofsovertuiging_welke"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_welke']) ? $antwoorden['gebruiken_tav_geloofsovertuiging_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="op_medicijnen_welke"><?= isset($antwoorden['op_medicijnen_welke']) ? $antwoorden['op_medicijnen_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="gebruiken_tav_geloofsovertuiging" <?= (!isset($antwoorden['gebruiken_tav_geloofsovertuiging']) || $antwoorden['gebruiken_tav_geloofsovertuiging'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="op_medicijnen" <?= (!isset($antwoorden['op_medicijnen']) || $antwoorden['op_medicijnen'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Ja, wanneer?</p><textarea rows="1" cols="25" type="text" name="gebruiken_tav_geloofsovertuiging_wanneer"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_wanneer']) ? $antwoorden['gebruiken_tav_geloofsovertuiging_wanneer'] : '' ?></textarea>
-                                </div>
-                                <div class="question">
-                                    <p>Komen uw waarden en normen overeen met maatschappelijke waarden en normen?</p>
+                                    <p>Heeft u problemen ten aanzien van het urineren?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="overeenkomst_waarden_normen" <?= (isset($antwoorden['overeenkomst_waarden_normen']) && $antwoorden['overeenkomst_waarden_normen'] == '1') ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="urineer_probleem" <?= (isset($antwoorden['urineer_probleem']) && $antwoorden['urineer_probleem'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="overeenkomst_waarden_normen" <?= (!isset($antwoorden['overeenkomst_waarden_normen']) || $antwoorden['overeenkomst_waarden_normen'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="urineer_probleem" <?= (!isset($antwoorden['urineer_probleem']) || $antwoorden['urineer_probleem'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Wat is uw ethische achtergrond?</p><textarea rows="1" cols="25" type="text" name="etnische_achtergrond"><?= isset($antwoorden['etnische_achtergrond']) ? $antwoorden['etnische_achtergrond'] : '' ?></textarea>
+                                    <p>- Heeft u last van incontinentie?</p>
+                                    <div class="checkboxes">
+                                        <p>
+                                            <input type="radio" value="1" name="up_incontinentie" <?= (isset($antwoorden['up_incontinentie']) && $antwoorden['up_incontinentie'] == '1') ? "checked" : "" ?>>
+                                            <label>Ja</label>
+                                        </p>
+                                        <p>
+                                            <input type="radio" value="0" name="up_incontinentie" <?= (!isset($antwoorden['up_incontinentie']) || $antwoorden['up_incontinentie'] == '0') ? "checked" : "" ?>>
+                                            <label>Nee</label>
+                                        </p>
+                                    </div>
                                 </div>
                                 <div class="question">
-                                    <p>- Zijn er gebruiken met betrekking tot uw ethische achtergrond waar rekening mee gehouden moet worden?</p>
+                                    <p>- Bent u hiervoor in behandeling?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="gebruiken_mbt_etnische_achtergrond" <?= (isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) && $antwoorden['gebruiken_mbt_etnische_achtergrond'] =='1') ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" value="1" name="up_incontinentie_behandeling" <?= (isset($antwoorden['up_incontinentie_behandeling']) && $antwoorden['up_incontinentie_behandeling'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="gebruiken_mbt_etnische_achtergrond_welke"><?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond_welke']) ? $antwoorden['gebruiken_mbt_etnische_achtergrond_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="up_incontinentie_behandeling_welke"><?= isset($antwoorden['up_incontinentie_behandeling_welke']) ? $antwoorden['up_incontinentie_behandeling_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="gebruiken_mbt_etnische_achtergrond" <?= (!isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) || $antwoorden['gebruiken_mbt_etnische_achtergrond'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="up_incontinentie_behandeling" <?= (!isset($antwoorden['up_incontinentie_behandeling']) || $antwoorden['up_incontinentie_behandeling'] == '0') ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Ja, wanneer?</p><textarea rows="1" cols="25" type="text" name="gebruiken_mbt_etnische_achtergrond_wanneer"><?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) ? $antwoorden['gebruiken_mbt_etnische_achtergrond_wanneer'] : '' ?></textarea>
+                                    <p>Hebt u last van transpiratie?</p>
+                                    <div class="checkboxes">
+                                        <div class="question-answer">
+                                            <input id="radio" type="radio" value="1" name="transpiratie" <?= (isset($antwoorden['transpiratie']) && $antwoorden['transpiratie'] == '1') ? "checked" : "" ?>>
+                                            <label>Ja</label>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="transpiratie_welke"><?= isset($antwoorden['transpiratie_welke']) ? $antwoorden['transpiratie_welke'] : '' ?></textarea>
+                                        </div>
+                                        <p>
+                                            <input type="radio" value="0" name="transpiratie" <?= (!isset($antwoorden['transpiratie']) || $antwoorden['transpiratie'] == '0') ? "checked" : "" ?>>
+                                            <label>Nee</label>
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <div class="observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
                                         <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[0]) && $boolArrayObservatie[0] == '1') ? "checked" : "" ?> name="observatie1">
-                                            <p>Geestelijke nood</p>
+                                            <p>Colon-obstipatie</p>
                                         </div>
                                     </div>
                                     <div class="question">
                                         <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[1]) && $boolArrayObservatie[1] == '1') ? "checked" : "" ?> name="observatie2">
-                                            <p>Verandering in waarden en normen</p>
+                                            <p>Subjectief ervaren obstipatie</p>
                                         </div>
                                     </div>
                                     <div class="question">
                                         <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[2]) && $boolArrayObservatie[2] == '1') ? "checked" : "" ?> name="observatie3">
-                                            <p>Verandering in rolopvatting met betrekking tot ethische achtergrond</p>
+                                            <p>Diarree</p>
                                         </div>
                                     </div>
                                     <div class="question">
                                         <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[3]) && $boolArrayObservatie[3] == '1') ? "checked" : "" ?> name="observatie4">
-                                            <p>Verandering in rolinvulling met betrekking tot ethische achtergrond</p>
+                                            <p>Incontinentie van feces</p>
                                         </div>
                                     </div>
+                                    <div class="question">
+                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[4]) && $boolArrayObservatie[4] == '1') ? "checked" : "" ?> name="observatie5">
+                                            <p>Verstoorde urine-uitscheiding</p>
+                                        </div>
+                                    </div>
+                                    <div class="question">
+                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[5]) && $boolArrayObservatie[5] == '1') ? "checked" : "" ?> name="observatie6">
+                                            <p>Functionele urine-incontinentie</p>
+                                        </div>
+                                    </div>
+                                    <div class="question">
+                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[6]) && $boolArrayObservatie[6] == '1') ? "checked" : "" ?> name="observatie7">
+                                            <p>Reflex-urine-incontinentie</p>
+                                        </div>
+                                    </div>
+                                    <div class="question">
+                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[7]) && $boolArrayObservatie[7] == '1') ? "checked" : "" ?> name="observatie8">
+                                            <p>Stress-urine-incontinentie</p>
+                                        </div>
+                                    </div>
+                                    <div class="question">
+                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[8]) && $boolArrayObservatie[8] == '1') ? "checked" : "" ?> name="observatie9">
+                                            <p>Volledige urine-incontinentie</p>
+                                        </div>
+                                    </div>
+                                    <div class="question">
+                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[9]) && $boolArrayObservatie[9] == '1') ? "checked" : "" ?> name="observatie10">
+                                            <p>Urineretentie</p>
+                                        </div>
+</div>
                                 </div>
                             </div>
                         </div>
