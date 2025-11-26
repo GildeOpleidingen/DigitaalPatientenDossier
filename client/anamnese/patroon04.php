@@ -8,217 +8,14 @@ $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 4);
 
 $boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
-    //Lees ingevulde gegevens.
-    $voeding = isset($_POST['voeding']) ? intval($_POST['voeding']) : null;
-    $aankleden = isset($_POST['aankleden']) ? intval($_POST['aankleden']) : null;
-    $alg_mobiliteit = isset($_POST['alg_mobiliteit']) ? intval($_POST['alg_mobiliteit']) : null;
-    $koken = isset($_POST['koken']) ? intval($_POST['koken']) : null;
-    $huishouden = isset($_POST['huishouden']) ? intval($_POST['huishouden']) : null;
-    $financien = isset($_POST['financien']) ? intval($_POST['financien']) : null;
-    $verzorging = isset($_POST['verzorging']) ? intval($_POST['verzorging']) : null;
-    $baden = isset($_POST['baden']) ? intval($_POST['baden']) : null;
-    $toiletgang = isset($_POST['toiletgang']) ? intval($_POST['toiletgang']) : null;
-    $uit_bed_komen = isset($_POST['uit_bed_komen']) ? intval($_POST['uit_bed_komen']) : null;
-    $winkelen = isset($_POST['winkelen']) ? intval($_POST['winkelen']) : null;
-    $tijd_voor_uzelf_nodig = isset($_POST['tijd_voor_uzelf']) ? 1 : 0;
-    $tijd_voor_uzelf_nodig_blijktuit = isset($_POST['tijd_voor_uzelf_nodig_blijktuit']) ? $_POST['tijd_voor_uzelf_nodig_blijktuit'] : '';
-    $dagelijkse_activiteiten = isset($_POST['dagelijkse_activiteiten']) ? $_POST['dagelijkse_activiteiten'] : '';
-    $dagelijkse_gewoontes = isset($_POST['dagelijkse_gewoontes']) ? 1 : 0;
-    $dagelijkse_gewoontes_welke = isset($_POST['dagelijkse_gewoontes_welke']) ? $_POST['dagelijkse_gewoontes_welke'] : '';
-    $lichamelijke_beperking = isset($_POST['lichamelijke_beperking']) ? 1 : 0;
-    $lichamelijke_beperking_welke = isset($_POST['lichamelijke_beperking_welke']) ? $_POST['lichamelijke_beperking_welke'] : '';
-    $vermoeidheids_klachten = isset($_POST['vermoeidheids_klachten']) ? 1 : 0;
-    $passiever = isset($_POST['passiever']) ? 1 : 0;
-    $passiever_blijktuit = isset($_POST['passiever_blijktuit']) ? $_POST['passiever_blijktuit'] : '';
-    $problemen_starten_dag = isset($_POST['problemen_starten_dag']) ? 1 : 0;
-    $problemen_starten_dag_blijktuit = isset($_POST['problemen_starten_dag_blijktuit']) ? $_POST['problemen_starten_dag_blijktuit'] : '';
-    $hobbys = isset($_POST['hobbys']) ? 1 : 0;
-    $hobbys_bestedingstijd = isset($_POST['hobbys_bestedingstijd']) ? $_POST['hobbys_bestedingstijd'] : '';
-    $activiteiten_weggevallen = isset($_POST['activiteiten_weggevallen']) ? 1 : 0;
-    $activiteiten_weggevallen_welke = isset($_POST['activiteiten_weggevallen_welke']) ? $_POST['activiteiten_weggevallen_welke'] : '';
-
-    // array van checkboxes van observatie tab
-    $observatie = '';
-    for ($i = 1; $i <= 11; $i++) {
-        $observatie .= isset($_POST['observatie'.$i]) ? '1' : '0';
-    }
-
-    //Haal vragenlijst ID op.
-    $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-    if (!$vragenlijstId) {
-        die("Could not get vragenlijstId");
-    }
-    
-    // kijken of patroon04 bestaat door te kijken naar vragenlijst id
-    $result = DatabaseConnection::getConn()->prepare("
-        SELECT p.id
-        FROM patroon04activiteiten p
-        WHERE p.vragenlijstid = ?");
-    
-    if (!$result) {
-        die("Error preparing SELECT statement: " . DatabaseConnection::getConn()->error);
-    }
-    
-    $result->bind_param("i", $vragenlijstId);
-    if (!$result->execute()) {
-        die("Error executing SELECT: " . $result->error);
-    }
-    
-    $result = $result->get_result()->fetch_assoc();
-    
-    unset($_SESSION['patroonerror']);
-
-    try {
-        if ($result != null) {
-            //update
-            $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon04activiteiten` 
-                SET
-                `voeding` = ?,
-                `aankleden` = ?,
-                `alg_mobiliteit` = ?,
-                `koken` = ?,
-                `huishouden` = ?,
-                `financien` = ?,
-                `verzorging` = ?,
-                `baden` = ?,
-                `toiletgang` = ?,
-                `uit_bed_komen` = ?,
-                `winkelen` = ?,
-                `tijd_voor_uzelf_nodig` = ?,
-                `tijd_voor_uzelf_nodig_blijktuit` = ?,
-                `dagelijkse_activiteiten` = ?,
-                `dagelijkse_gewoontes` = ?,
-                `dagelijkse_gewoontes_welke` = ?,
-                `lichamelijke_beperking` = ?,
-                `lichamelijke_beperking_welke` = ?,
-                `vermoeitheids_klachten` = ?,
-                `passiever` = ?,
-                `passiever_blijktuit` = ?,
-                `problemen_starten_dag` = ?,
-                `problemen_starten_dag_blijktuit` = ?,
-                `hobbys` = ?,
-                `hobbys_bestedingstijd` = ?,
-                `activiteiten_weggevallen` = ?,
-                `activiteiten_weggevallen_welke` = ?,
-                `observatie` = ?
-                WHERE vragenlijstid = ?");
-            if ($result1) {
-                $result1->bind_param("iiiiiiiiiiiisissisissisissisi", 
-                    $voeding, 
-                    $aankleden, 
-                    $alg_mobiliteit,
-                    $koken,
-                    $huishouden,
-                    $financien,
-                    $verzorging,
-                    $baden,
-                    $toiletgang,
-                    $uit_bed_komen,
-                    $winkelen,
-                    $tijd_voor_uzelf_nodig,
-                    $tijd_voor_uzelf_nodig_blijktuit,
-                    $dagelijkse_activiteiten,
-                    $dagelijkse_gewoontes,
-                    $dagelijkse_gewoontes_welke,
-                    $lichamelijke_beperking,
-                    $lichamelijke_beperking_welke,
-                    $vermoeidheids_klachten,
-                    $passiever,
-                    $passiever_blijktuit,
-                    $problemen_starten_dag,
-                    $problemen_starten_dag_blijktuit,
-                    $hobbys,
-                    $hobbys_bestedingstijd,
-                    $activiteiten_weggevallen,
-                    $activiteiten_weggevallen_welke,
-                    $observatie,
-                    $vragenlijstId
-                );
-                $result1->execute();
-            } else {
-                throw new Exception("Error preparing UPDATE statement: " . DatabaseConnection::getConn()->error);
-            }
-        } else {
-            //insert
-            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon04activiteiten`(
-                `vragenlijstid`,
-                `voeding`,
-                `aankleden`,
-                `alg_mobiliteit`,
-                `koken`,
-                `huishouden`,
-                `financien`,
-                `verzorging`,
-                `baden`,
-                `toiletgang`,
-                `uit_bed_komen`,
-                `winkelen`,
-                `tijd_voor_uzelf_nodig`,
-                `tijd_voor_uzelf_nodig_blijktuit`,
-                `dagelijkse_activiteiten`,
-                `dagelijkse_gewoontes`,
-                `dagelijkse_gewoontes_welke`,
-                `lichamelijke_beperking`,
-                `lichamelijke_beperking_welke`,
-                `vermoeitheids_klachten`,
-                `passiever`,
-                `passiever_blijktuit`,
-                `problemen_starten_dag`,
-                `problemen_starten_dag_blijktuit`,
-                `hobbys`,
-                `hobbys_bestedingstijd`,
-                `activiteiten_weggevallen`,
-                `activiteiten_weggevallen_welke`,
-                `observatie`)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            
-            if ($result2) {
-                $result2->bind_param("iiiiiiiiiiiisisissisissisissss", 
-                    $vragenlijstId,
-                    $voeding, 
-                    $aankleden, 
-                    $alg_mobiliteit,
-                    $koken,
-                    $huishouden,
-                    $financien,
-                    $verzorging,
-                    $baden,
-                    $toiletgang,
-                    $uit_bed_komen,
-                    $winkelen,
-                    $tijd_voor_uzelf_nodig,
-                    $tijd_voor_uzelf_nodig_blijktuit,
-                    $dagelijkse_activiteiten,
-                    $dagelijkse_gewoontes,
-                    $dagelijkse_gewoontes_welke,
-                    $lichamelijke_beperking,
-                    $lichamelijke_beperking_welke,
-                    $vermoeidheids_klachten,
-                    $passiever,
-                    $passiever_blijktuit,
-                    $problemen_starten_dag,
-                    $problemen_starten_dag_blijktuit,
-                    $hobbys,
-                    $hobbys_bestedingstijd,
-                    $activiteiten_weggevallen,
-                    $activiteiten_weggevallen_welke,
-                    $observatie
-                );
-                $result2->execute();
-            } else {
-                throw new Exception("Error preparing INSERT statement: " . DatabaseConnection::getConn()->error);
-            }
-        }
-    } catch (Exception $e) {
-        $_SESSION['patroonerror'] = 'Er ging iets fout, wijzigingen zijn NIET opgeslagen.';
-        $_SESSION['patroonnr'] = '4. Activiteitenpatroon';
-    }
+if (isset($_REQUEST['navbutton'])) {
+    //TODO: hier actie om data op te slaan in database.
     switch ($_REQUEST['navbutton']) {
-        case 'next':
+        case 'next': //action for next here
             header('Location: patroon05.php');
             break;
-        case 'prev':
+
+        case 'prev': //action for previous here
             header('Location: patroon03.php');
             break;
     }
@@ -234,13 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../assets/css/client/patronen.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
-          rel="stylesheet" 
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
-          crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
-          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" 
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Anamnese</title>
 </head>
 
@@ -263,126 +58,166 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>In hoeverre bent u in staat de volgende activiteiten te doen?</p>
                                 </div>
                                 <div class="question">
-                                    <p><i>0 - volledige zelfzorg<br>1 - gebruik van hulpmiddelen of plan<br>2 - vereist assistentie/supervisie van anderen<br>3 - Vereidst gebruik van hulpmiddelen of plan/methoden en assistentie van anderen<br>4 - is afhankelijk en/of participeert niet)</i></p>
+                                    <p><i>0 - volledige zelfzorg<br>1 - gebruik van hulpmiddelen of plan<br>2 - vereist
+                                            assistentie/supervisie van anderen<br>3 - Vereidst gebruik van hulpmiddelen
+                                            of plan/methoden en assistentie van anderen<br>4 - is afhankelijk en/of
+                                            participeert niet)</i></p>
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="voedingCheckbox" <?php if (isset($antwoorden['voeding']) == "0" || isset($antwoorden['voeding']) > 0) {
-                                                                                                            echo "checked";
-                                                                                                        } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Voeding</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['voeding']) ? $antwoorden['voeding'] : '' ?>" name="voeding">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['voeding']) ? $antwoorden['voeding'] : '' ?>"
+                                        name="voeding">
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="aankledenCheckbox" <?php if (isset($antwoorden['aankleden']) == "0" || isset($antwoorden['aankleden']) > 0) {
-                                                                                                                echo "checked";
-                                                                                                            } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Aankleden</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['aankleden']) ? $antwoorden['aankleden'] : '' ?>" name="aankleden">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['aankleden']) ? $antwoorden['aankleden'] : '' ?>"
+                                        name="aankleden">
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="alg_mobiliteitCheckbox" <?php if (isset($antwoorden['alg_mobiliteit']) == "0" || isset($antwoorden['alg_mobiliteit']) > 0) {
-                                                                                                                    echo "checked";
-                                                                                                                } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Algemene mobiliteit</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['alg_mobiliteit']) ? $antwoorden['alg_mobiliteit'] : '' ?>" name="alg_mobiliteit">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['alg_mobiliteit']) ? $antwoorden['alg_mobiliteit'] : '' ?>"
+                                        name="alg_mobiliteit">
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="kokenCheckbox" <?php if (isset($antwoorden['koken']) == "0" || isset($antwoorden['koken']) > 0) {
-                                                                                                            echo "checked";
-                                                                                                        } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Koken</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['koken']) ? $antwoorden['koken'] : '' ?>" name="koken">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['koken']) ? $antwoorden['koken'] : '' ?>"
+                                        name="koken">
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="huishoudenCheckbox" <?php if (isset($antwoorden['huishouden']) == "0" || isset($antwoorden['huishouden']) > 0) {
-                                                                                                                echo "checked";
-                                                                                                            } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Huishouden</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['huishouden']) ? $antwoorden['huishouden'] : '' ?>" name="huishouden">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['huishouden']) ? $antwoorden['huishouden'] : '' ?>"
+                                        name="huishouden">
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="financienCheckbox" <?php if (isset($antwoorden['financien']) == "0" || isset($antwoorden['financien']) > 0) {
-                                                                                                                echo "checked";
-                                                                                                            } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Financiën</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['financien']) ? $antwoorden['financien'] : '' ?>" name="financien">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['financien']) ? $antwoorden['financien'] : '' ?>"
+                                        name="financien">
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="verzorgingCheckbox" <?php if (isset($antwoorden['verzorging']) == "0" || isset($antwoorden['verzorging']) > 0) {
-                                                                                                                echo "checked";
-                                                                                                            } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Verzorging</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['verzorging']) ? $antwoorden['verzorging'] : '' ?>" name="verzorging">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['verzorging']) ? $antwoorden['verzorging'] : '' ?>"
+                                        name="verzorging">
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="badenCheckbox" <?php if (isset($antwoorden['baden']) == "0" || isset($antwoorden['baden']) > 0) {
-                                                                                                            echo "checked";
-                                                                                                        } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Baden</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['baden']) ? $antwoorden['baden'] : '' ?>" name="baden">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['baden']) ? $antwoorden['baden'] : '' ?>"
+                                        name="baden">
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="toiletgangCheckbox" <?php if (isset($antwoorden['toiletgang']) == "0" || isset($antwoorden['toiletgang']) > 0) {
-                                                                                                                echo "checked";
-                                                                                                            } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Toiletgang</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['toiletgang']) ? $antwoorden['toiletgang'] : '' ?>" name="toiletgang">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['toiletgang']) ? $antwoorden['toiletgang'] : '' ?>"
+                                        name="toiletgang">
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="uit_bed_komenCheckbox" <?php if (isset($antwoorden['uit_bed_komen']) == "0" || isset($antwoorden['uit_bed_komen']) > 0) {
-                                                                                                                    echo "checked";
-                                                                                                                } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Uit bed komen</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['uit_bed_komen']) ? $antwoorden['uit_bed_komen'] : '' ?>" name="uit_bed_komen">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['uit_bed_komen']) ? $antwoorden['uit_bed_komen'] : '' ?>"
+                                        name="uit_bed_komen">
                                 </div>
                                 <div class="question">
                                     <div class="observe"><input type="checkbox" name="winkelenCheckbox" <?php if (isset($antwoorden['winkelen']) == "0" || isset($antwoorden['winkelen']) > 0) {
-                                                                                                            echo "checked";
-                                                                                                        } ?>>
+                                        echo "checked";
+                                    } ?>>
                                         <p>Winkelen</p>
-                                    </div><input type="number" min="0" max="4" value="<?= isset($antwoorden['winkelen']) ? $antwoorden['winkelen'] : '' ?>" name="winkelen">
+                                    </div><input type="number" min="0" max="4"
+                                        value="<?= isset($antwoorden['winkelen']) ? $antwoorden['winkelen'] : '' ?>"
+                                        name="winkelen">
                                 </div>
                                 <div class="question">
                                     <p>Neemt u meer tijd voor uzelf wanneer u dat nodig heeft?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="tijd_voor_uzelf_nodig" <?= isset($antwoorden['tijd_voor_uzelf_nodig']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" name="tijd_voor_uzelf_nodig"
+                                                <?= isset($antwoorden['tijd_voor_uzelf_nodig']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="blijkt uit?" name="tijd_voor_uzelf_nodig_blijktuit"><?= isset($antwoorden['tijd_voor_uzelf_nodig_blijktuit']) ? $antwoorden['tijd_voor_uzelf_nodig_blijktuit'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                                placeholder="blijkt uit?"
+                                                name="tijd_voor_uzelf_nodig_blijktuit"><?= isset($antwoorden['tijd_voor_uzelf_nodig_blijktuit']) ? $antwoorden['tijd_voor_uzelf_nodig_blijktuit'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="tijd_voor_uzelf_nodig" <?= !isset($antwoorden['tijd_voor_uzelf_nodig']) ? "checked" : "" ?>>
+                                            <input type="radio" name="tijd_voor_uzelf_nodig"
+                                                <?= !isset($antwoorden['tijd_voor_uzelf_nodig']) ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>- Wat zijn uw belangrijkste dagelijkse activiteiten?</p><textarea rows="1" cols="25" type="text" name="dagelijkse_activiteiten"><?= isset($antwoorden['dagelijkse_activiteiten']) ? $antwoorden['dagelijkse_activiteiten'] : '' ?></textarea>
+                                    <p>- Wat zijn uw belangrijkste dagelijkse activiteiten?</p><textarea rows="1"
+                                        cols="25" type="text"
+                                        name="dagelijkse_activiteiten"><?= isset($antwoorden['dagelijkse_activiteiten']) ? $antwoorden['dagelijkse_activiteiten'] : '' ?></textarea>
                                 </div>
                                 <div class="question">
                                     <p>- Heeft u dagelijkse gewoonten?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="dagelijkse_gewoontes" <?= isset($antwoorden['dagelijkse_gewoontes']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" name="dagelijkse_gewoontes"
+                                                <?= isset($antwoorden['dagelijkse_gewoontes']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="dagelijkse_gewoontes_welke"><?= isset($antwoorden['dagelijkse_gewoontes_welke']) ? $antwoorden['dagelijkse_gewoontes_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                                placeholder="welke?"
+                                                name="dagelijkse_gewoontes_welke"><?= isset($antwoorden['dagelijkse_gewoontes_welke']) ? $antwoorden['dagelijkse_gewoontes_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="dagelijkse_gewoontes" <?= !isset($antwoorden['dagelijkse_gewoontes']) ? "checked" : "" ?>>
+                                            <input type="radio" name="dagelijkse_gewoontes"
+                                                <?= !isset($antwoorden['dagelijkse_gewoontes']) ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Zijn er lichamelijke beperkingen waardoor u in uw activiteiten wordt belemmerd?</p>
+                                    <p>Zijn er lichamelijke beperkingen waardoor u in uw activiteiten wordt belemmerd?
+                                    </p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="lichamelijke_beperking" <?= isset($antwoorden['lichamelijke_beperking']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" name="lichamelijke_beperking"
+                                                <?= isset($antwoorden['lichamelijke_beperking']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="lichamelijke_beperking_welke"><?= isset($antwoorden['lichamelijke_beperkingen_welke']) ? $antwoorden['lichamelijke_beperkingen_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                                placeholder="welke?"
+                                                name="lichamelijke_beperking_welke"><?= isset($antwoorden['lichamelijke_beperkingen_welke']) ? $antwoorden['lichamelijke_beperkingen_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="lichamelijke_beperking" <?= !isset($antwoorden['lichamelijke_beperking']) ? "checked" : "" ?>>
+                                            <input type="radio" name="lichamelijke_beperking"
+                                                <?= !isset($antwoorden['lichamelijke_beperking']) ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -391,11 +226,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Heeft u vermoeidheidsklachten?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" name="vermoeidheids_klachten" <?= isset($antwoorden['vermoeidheids_klachten']) ? "checked" : "" ?>>
+                                            <input type="radio" name="vermoeidheids_klachten"
+                                                <?= isset($antwoorden['vermoeidheids_klachten']) ? "checked" : "" ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" name="vermoeidheids_klachten" <?= !isset($antwoorden['vermoeidheids_klachten']) ? "checked" : "" ?>>
+                                            <input type="radio" name="vermoeidheids_klachten"
+                                                <?= !isset($antwoorden['vermoeidheids_klachten']) ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -404,9 +241,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Bent u de afgelopen tijd passiever geworden?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="passiever" <?= isset($antwoorden['passiever']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" name="passiever"
+                                                <?= isset($antwoorden['passiever']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="blijkt uit?" name="passiever_blijktuit"><?= isset($antwoorden['passiever_blijktuit']) ? $antwoorden['passiever_blijktuit'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                                placeholder="blijkt uit?"
+                                                name="passiever_blijktuit"><?= isset($antwoorden['passiever_blijktuit']) ? $antwoorden['passiever_blijktuit'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="passiever" <?= !isset($antwoorden['passiever']) ? "checked" : "" ?>>
@@ -418,12 +258,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Heeft u problemen met het starten van de dag?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="problemen_starten_dag" <?= isset($antwoorden['problemen_starten_dag']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" name="problemen_starten_dag"
+                                                <?= isset($antwoorden['problemen_starten_dag']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="blijkt uit?" name="problemen_starten_dag_blijktuit"><?= isset($antwoorden['problemen_starten_dag_blijktuit']) ? $antwoorden['problemen_starten_dag_blijktuit'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                                placeholder="blijkt uit?"
+                                                name="problemen_starten_dag_blijktuit"><?= isset($antwoorden['problemen_starten_dag_blijktuit']) ? $antwoorden['problemen_starten_dag_blijktuit'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="problemen_starten_dag" <?= !isset($antwoorden['problemen_starten_dag']) ? "checked" : "" ?>>
+                                            <input type="radio" name="problemen_starten_dag"
+                                                <?= !isset($antwoorden['problemen_starten_dag']) ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -442,18 +286,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>- Hoeveel tijd per dag besteedt u aan hobby's, vrijetijdsinvulling?</p><textarea rows="1" cols="25" type="text" name="hobbys_bestedingstijd"><?= isset($antwoorden['hobbys_bestedingstijd']) ? $antwoorden['hobbys_bestedingstijd'] : '' ?></textarea>
+                                    <p>- Hoeveel tijd per dag besteedt u aan hobby's, vrijetijdsinvulling?</p><textarea
+                                        rows="1" cols="25" type="text"
+                                        name="hobbys_bestedingstijd"><?= isset($antwoorden['hobbys_bestedingstijd']) ? $antwoorden['hobbys_bestedingstijd'] : '' ?></textarea>
                                 </div>
                                 <div class="question">
                                     <p>Zijn er activiteiten weggevallen als gevolg van uw huidige problemen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="activiteiten_weggevallen" <?= isset($antwoorden['activiteiten_weggevallen']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" name="activiteiten_weggevallen"
+                                                <?= isset($antwoorden['activiteiten_weggevallen']) ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="activiteiten_weggevallen_welke"><?= isset($antwoorden['activiteiten_weggevallen_welke']) ? $antwoorden['activiteiten_weggevallen_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                                placeholder="en wel?"
+                                                name="activiteiten_weggevallen_welke"><?= isset($antwoorden['activiteiten_weggevallen_welke']) ? $antwoorden['activiteiten_weggevallen_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="activiteiten_weggevallen" <?= !isset($antwoorden['activiteiten_weggevallen']) ? "checked" : "" ?>>
+                                            <input type="radio" name="activiteiten_weggevallen"
+                                                <?= !isset($antwoorden['activiteiten_weggevallen']) ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -525,16 +375,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                             </div>
                         </div>
                         <div class="submit">
-                            <button name="navbutton" class="btn btn-secondary" type="submit" value="prev">Vorige</button>
-                            <button name="navbutton" class="btn btn-secondary" type="submit" value="next">Volgende</button>
+                            <button name="navbutton" class="btn btn-secondary" type="submit"
+                                value="prev">Vorige</button>
+                            <button name="navbutton" class="btn btn-secondary" type="submit"
+                                value="next">Volgende</button>
                         </div>
                     </div>
                 </div>
             </div>
     </form>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
-            crossorigin="anonymous"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
