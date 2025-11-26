@@ -1,6 +1,42 @@
 <?php
 trait Patroon
 {
+    public function getVragenlijstId(int $clientId, int $medewerkerId)
+    {
+        $result = DatabaseConnection::getConn()->prepare("
+                    SELECT vl.id
+                    from vragenlijst vl
+                    left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
+                    where verzorgerregel.clientid = ?");
+        $result->bind_param("i", $clientId);
+        $result->execute();
+        $result = $result->get_result()->fetch_assoc();
+
+        if ($result != null) {
+            $vragenlijstId = $result['id'];
+        } else {
+            $sql = DatabaseConnection::getConn()->prepare("INSERT INTO `vragenlijst`(`verzorgerregelid`)
+                VALUES ((SELECT id
+                FROM verzorgerregel
+                WHERE clientid = ?
+                AND medewerkerid = ?))");
+            $sql->bind_param("ii", $clientId, $medewerkerId);
+            $sql->execute();
+            $sql = $sql->get_result();
+
+            $result = DatabaseConnection::getConn()->prepare("SELECT vl.id
+                        from vragenlijst vl
+                        left join verzorgerregel on verzorgerregel.id = vl.verzorgerregelid
+                        where verzorgerregel.clientid = ?");
+            $result->bind_param("i", $clientId);
+            $result->execute();
+            $result = $result->get_result()->fetch_assoc();
+
+            $vragenlijstId = $result['id'];
+        }
+        return $vragenlijstId;
+    }
+    
     public function getPatternAnswers(int $clientId, int $patroonType)
     {
         $patroonTypes = [
