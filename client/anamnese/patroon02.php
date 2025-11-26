@@ -34,32 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
     $observatie = implode("", $observatieArray);
 
     $medewerkerId = $_SESSION['loggedin_id'];
-
-    // --- 3. Ophalen of er al een vragenlijst bestaat ---
-    $stmt = $db->prepare("
-        SELECT vl.id 
-        FROM vragenlijst vl 
-        JOIN verzorgerregel vr ON vr.id = vl.verzorgerregelid
-        WHERE vr.clientid = ?
-    ");
-    $stmt->bind_param("i", $_SESSION['clientId']);
-    $stmt->execute();
-    $row = $stmt->get_result()->fetch_assoc();
-
-    if ($row) {
-        $vragenlijstId = $row['id'];
-    } else {
-        // Insert nieuwe vragenlijst
-        $stmt = $db->prepare("
-            INSERT INTO vragenlijst (verzorgerregelid)
-            SELECT id 
-            FROM verzorgerregel 
-            WHERE clientid = ? AND medewerkerid = ?
-        ");
-        $stmt->bind_param("ii", $_SESSION['clientId'], $medewerkerId);
-        $stmt->execute();
-
-        // Opnieuw ophalen
+    try {
+        // --- 3. Ophalen of er al een vragenlijst bestaat ---
         $stmt = $db->prepare("
             SELECT vl.id 
             FROM vragenlijst vl 
@@ -68,100 +44,104 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
         ");
         $stmt->bind_param("i", $_SESSION['clientId']);
         $stmt->execute();
-        $vragenlijstId = $stmt->get_result()->fetch_assoc()['id'];
-    }
+        $row = $stmt->get_result()->fetch_assoc();
 
-    // --- 4. Kijken of patroon02 al bestaat ---
-    $stmt = $db->prepare("
-        SELECT id 
-        FROM patroon02voedingstofwisseling 
-        WHERE vragenlijstid = ?
-    ");
-    $stmt->bind_param("i", $vragenlijstId);
-    $stmt->execute();
-    $patroonRow = $stmt->get_result()->fetch_assoc();
+        $vragenlijstId = $Main->getVragenlijstId();
 
-    // --- 5. UPDATE of INSERT ---
-    if ($patroonRow) {
-
-        // UPDATE
+        // --- 4. Kijken of patroon02 al bestaat ---
         $stmt = $db->prepare("
-            UPDATE patroon02voedingstofwisseling
-            SET 
-                eetlust=?, 
-                dieet=?, 
-                dieet_welk=?, 
-                gewicht_verandert=?, 
-                moeilijk_slikken=?, 
-                gebitsproblemen=?, 
-                gebitsprothese=?, 
-                huidproblemen=?, 
-                gevoel=?, 
-                observatie=?
-            WHERE vragenlijstid=?
+            SELECT id 
+            FROM patroon02voedingstofwisseling 
+            WHERE vragenlijstid = ?
         ");
+        $stmt->bind_param("i", $vragenlijstId);
+        $stmt->execute();
+        $patroonRow = $stmt->get_result()->fetch_assoc();
 
-        $stmt->bind_param(
-            "iisiiiiisii",
-            $eetlust,
-            $dieet,
-            $dieetWelk,
-            $gewichtVerandert,
-            $moeilijkSlikken,
-            $gebitsProblemen,
-            $gebitsProthese,
-            $huidProblemen,
-            $gevoel,
-            $observatie,
-            $vragenlijstId
-        );
+        // --- 5. UPDATE of INSERT ---
+        if ($patroonRow) {
 
-    } else {
+            // UPDATE
+            $stmt = $db->prepare("
+                UPDATE patroon02voedingstofwisseling
+                SET 
+                    eetlust=?, 
+                    dieet=?, 
+                    dieet_welk=?, 
+                    gewicht_verandert=?, 
+                    moeilijk_slikken=?, 
+                    gebitsproblemen=?, 
+                    gebitsprothese=?, 
+                    huidproblemen=?, 
+                    gevoel=?, 
+                    observatie=?
+                WHERE vragenlijstid=?
+            ");
 
-        // INSERT
-        $stmt = $db->prepare("
-            INSERT INTO patroon02voedingstofwisseling
-            (
-                vragenlijstid,
-                eetlust,
-                dieet,
-                dieet_welk,
-                gewicht_verandert,
-                moeilijk_slikken,
-                gebitsproblemen,
-                gebitsprothese,
-                huidproblemen,
-                gevoel,
-                observatie
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ");
+            $stmt->bind_param(
+                "iisiiiiisii",
+                $eetlust,
+                $dieet,
+                $dieetWelk,
+                $gewichtVerandert,
+                $moeilijkSlikken,
+                $gebitsProblemen,
+                $gebitsProthese,
+                $huidProblemen,
+                $gevoel,
+                $observatie,
+                $vragenlijstId
+            );
 
-        $stmt->bind_param(
-            "iiisiiiiis",
-            $vragenlijstId,
-            $eetlust,
-            $dieet,
-            $dieetWelk,
-            $gewichtVerandert,
-            $moeilijkSlikken,
-            $gebitsProblemen,
-            $gebitsProthese,
-            $huidProblemen,
-            $gevoel,
-            $observatie
-        );
+        } else {
+
+            // INSERT
+            $stmt = $db->prepare("
+                INSERT INTO patroon02voedingstofwisseling
+                (
+                    vragenlijstid,
+                    eetlust,
+                    dieet,
+                    dieet_welk,
+                    gewicht_verandert,
+                    moeilijk_slikken,
+                    gebitsproblemen,
+                    gebitsprothese,
+                    huidproblemen,
+                    gevoel,
+                    observatie
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");
+
+            $stmt->bind_param(
+                "iiisiiiiis",
+                $vragenlijstId,
+                $eetlust,
+                $dieet,
+                $dieetWelk,
+                $gewichtVerandert,
+                $moeilijkSlikken,
+                $gebitsProblemen,
+                $gebitsProthese,
+                $huidProblemen,
+                $gevoel,
+                $observatie
+            );
+        }
+
+        $stmt->execute();
+
+        // --- 6. Navigatie ---
+        if ($_POST['navbutton'] === "next") {
+            header("Location: patroon03.php");
+        } else {
+            header("Location: patroon01.php");
+        }
+        exit;
+    } catch (Exception $e) {
+            echo "Fout bij opslaan: " . $e->getMessage();
     }
-
-    $stmt->execute();
-
-    // --- 6. Navigatie ---
-    if ($_POST['navbutton'] === "next") {
-        header("Location: patroon03.php");
-    } else {
-        header("Location: patroon01.php");
-    }
-    exit;
 }
 
 // Functie om XSS te voorkomen

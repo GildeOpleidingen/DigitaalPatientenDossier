@@ -24,139 +24,109 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $observatieString .= isset($_POST["observatie$i"]) ? "1" : "0";
     }
 
-    // 2 — Vragenlijst ID ophalen
-    $stmt = $conn->prepare("
-        SELECT vl.id
-        FROM vragenlijst vl
-        LEFT JOIN verzorgerregel vr ON vr.id = vl.verzorgerregelid
-        WHERE vr.clientid = ?
-    ");
-    $stmt->bind_param("i", $clientId);
-    $stmt->execute();
-    $vragenlijst = $stmt->get_result()->fetch_assoc();
+    $vragenlijstId = $Main->getVragenlijstId();
 
-    if ($vragenlijst) {
-        $vragenlijstId = $vragenlijst['id'];
-    } else {
-        // Geen vragenlijst? → Aanmaken
-        $stmt2 = $conn->prepare("
-            INSERT INTO vragenlijst (verzorgerregelid)
-            VALUES (
-                (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?)
-            )
-        ");
-        $stmt2->bind_param("ii", $clientId, $_SESSION['loggedin_id']);
-        $stmt2->execute();
-
-        // Opnieuw ophalen
+    try {
+        // 3 — Bestaat patroon01 al?
         $stmt = $conn->prepare("
-            SELECT vl.id
-            FROM vragenlijst vl
-            LEFT JOIN verzorgerregel vr ON vr.id = vl.verzorgerregelid
-            WHERE vr.clientid = ?
+            SELECT id FROM patroon01gezondheidsbeleving WHERE vragenlijstid = ?
         ");
-        $stmt->bind_param("i", $clientId);
+        $stmt->bind_param("i", $vragenlijstId);
         $stmt->execute();
-        $vragenlijstId = $stmt->get_result()->fetch_assoc()['id'];
+        $existing = $stmt->get_result()->fetch_assoc();
+
+        // 4 — DATA ARRAY
+        $data = [
+            field('algemene_gezondheid'),
+            field('gezondheids_bezigheid'),
+            field('rookt') ?? 0,
+            field('rookt_hoeveelheid'),
+            field('drinkt') ?? 0,
+            field('drinkt_hoeveelheid'),
+            field('besmettelijke_aandoening') ?? 0,
+            field('besmettelijke_aandoening_welke'),
+            field('alergieen') ?? 0,
+            field('alergieen_welke'),
+            field('oorzaak_huidige_toestand'),
+            field('oht_actie'),
+            field('oht_hoe_effectief'),
+            field('oht_wat_nodig'),
+            field('oht_wat_belangrijk'),
+            field('oht_reactie_op_advies'),
+            field('preventie'),
+            $observatieString,
+            $vragenlijstId
+        ];
+
+        // 5 — UPDATE
+        if ($existing) {
+
+            $sql = "
+                UPDATE patroon01gezondheidsbeleving SET
+                    algemene_gezondheid = ?,
+                    gezondheids_bezigheid = ?,
+                    rookt = ?,
+                    rookt_hoeveelheid = ?,
+                    drinkt = ?,
+                    drinkt_hoeveelheid = ?,
+                    besmettelijke_aandoening = ?,
+                    besmettelijke_aandoening_welke = ?,
+                    alergieen = ?,
+                    alergieen_welke = ?,
+                    oorzaak_huidige_toestand = ?,
+                    oht_actie = ?,
+                    oht_hoe_effectief = ?,
+                    oht_wat_nodig = ?,
+                    oht_wat_belangrijk = ?,
+                    oht_reactie_op_advies = ?,
+                    preventie = ?,
+                    observatie = ?
+                WHERE vragenlijstid = ?
+            ";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param(
+                "ssissississssssssss",
+                ...$data
+            );
+
+        } else {
+            // 6 — INSERT
+            $sql = "
+                INSERT INTO patroon01gezondheidsbeleving (
+                    algemene_gezondheid,
+                    gezondheids_bezigheid,
+                    rookt,
+                    rookt_hoeveelheid,
+                    drinkt,
+                    drinkt_hoeveelheid,
+                    besmettelijke_aandoening,
+                    besmettelijke_aandoening_welke,
+                    alergieen,
+                    alergieen_welke,
+                    oorzaak_huidige_toestand,
+                    oht_actie,
+                    oht_hoe_effectief,
+                    oht_wat_nodig,
+                    oht_wat_belangrijk,
+                    oht_reactie_op_advies,
+                    preventie,
+                    observatie,
+                    vragenlijstid
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            ";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param(
+                "ssissississssssssss",
+                ...$data
+            );
+        }
+
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo "Fout bij opslaan: " . $e->getMessage();
     }
-
-    // 3 — Bestaat patroon01 al?
-    $stmt = $conn->prepare("
-        SELECT id FROM patroon01gezondheidsbeleving WHERE vragenlijstid = ?
-    ");
-    $stmt->bind_param("i", $vragenlijstId);
-    $stmt->execute();
-    $existing = $stmt->get_result()->fetch_assoc();
-
-    // 4 — DATA ARRAY
-    $data = [
-        field('algemene_gezondheid'),
-        field('gezondheids_bezigheid'),
-        field('rookt') ?? 0,
-        field('rookt_hoeveelheid'),
-        field('drinkt') ?? 0,
-        field('drinkt_hoeveelheid'),
-        field('besmettelijke_aandoening') ?? 0,
-        field('besmettelijke_aandoening_welke'),
-        field('alergieen') ?? 0,
-        field('alergieen_welke'),
-        field('oorzaak_huidige_toestand'),
-        field('oht_actie'),
-        field('oht_hoe_effectief'),
-        field('oht_wat_nodig'),
-        field('oht_wat_belangrijk'),
-        field('oht_reactie_op_advies'),
-        field('preventie'),
-        $observatieString,
-        $vragenlijstId
-    ];
-
-    // 5 — UPDATE
-    if ($existing) {
-
-        $sql = "
-            UPDATE patroon01gezondheidsbeleving SET
-                algemene_gezondheid = ?,
-                gezondheids_bezigheid = ?,
-                rookt = ?,
-                rookt_hoeveelheid = ?,
-                drinkt = ?,
-                drinkt_hoeveelheid = ?,
-                besmettelijke_aandoening = ?,
-                besmettelijke_aandoening_welke = ?,
-                alergieen = ?,
-                alergieen_welke = ?,
-                oorzaak_huidige_toestand = ?,
-                oht_actie = ?,
-                oht_hoe_effectief = ?,
-                oht_wat_nodig = ?,
-                oht_wat_belangrijk = ?,
-                oht_reactie_op_advies = ?,
-                preventie = ?,
-                observatie = ?
-            WHERE vragenlijstid = ?
-        ";
-
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param(
-            "ssissississssssssss",
-            ...$data
-        );
-
-    } else {
-        // 6 — INSERT
-        $sql = "
-            INSERT INTO patroon01gezondheidsbeleving (
-                algemene_gezondheid,
-                gezondheids_bezigheid,
-                rookt,
-                rookt_hoeveelheid,
-                drinkt,
-                drinkt_hoeveelheid,
-                besmettelijke_aandoening,
-                besmettelijke_aandoening_welke,
-                alergieen,
-                alergieen_welke,
-                oorzaak_huidige_toestand,
-                oht_actie,
-                oht_hoe_effectief,
-                oht_wat_nodig,
-                oht_wat_belangrijk,
-                oht_reactie_op_advies,
-                preventie,
-                observatie,
-                vragenlijstid
-            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-        ";
-
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param(
-            "ssissississssssssss",
-            ...$data
-        );
-    }
-
-    $stmt->execute();
 
     // 7 — NAVIGATIE
     if (isset($_POST['navbutton'])) {
