@@ -39,6 +39,9 @@ $medewerker = $result->get_result()->fetch_assoc();
   border-bottom: 0.3em solid;
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand" href="/dashboard.php">
@@ -71,9 +74,9 @@ $medewerker = $result->get_result()->fetch_assoc();
                 }
             }
             ?>
-            <span class="ps-3 align">
+            <span class="ps-3 align"></span>
                 <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="profile-pic">
                             <img src="data:image/png;base64,<?php echo base64_encode($medewerker['foto']); ?>" alt="Profile Picture">
                         </div>
