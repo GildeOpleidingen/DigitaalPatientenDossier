@@ -46,13 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Update query met of zonder foto
     if ($foto) {
         // Update query met nieuwe foto
-        $sql = "UPDATE client SET naam = ?, geslacht = ?, adres = ?, postcode = ?, woonplaats = ?, telefoonnummer = ?, email = ?, geboortedatum = ?, reanimatiestatus = ?, nationaliteit = ?, afdeling = ?, burgelijkestaat = ?, foto = ? WHERE id = ?";
+        $sql = "UPDATE client SET naam = ?, geslacht = ?, adres = ?, postcode = ?, woonplaats = ?, telefoonnummer = ?, email = ?, geboortedatum = ?, reanimatiestatus = ?, nationaliteit = ?, afdeling_id = ?, burgelijkestaat = ?, foto = ? WHERE id = ?";
         $stmt = DatabaseConnection::getConn()->prepare($sql);
         $stmt->bind_param("sssssssssssssi", $naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $geboortedatum, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto, $id);
         $stmt->send_long_data(12, $foto); // Stuur de foto als BLOB
     } else {
         // Update query zonder nieuwe foto (oud blijft)
-        $sql = "UPDATE client SET naam = ?, geslacht = ?, adres = ?, postcode = ?, woonplaats = ?, telefoonnummer = ?, email = ?, geboortedatum = ?, reanimatiestatus = ?, nationaliteit = ?, afdeling = ?, burgelijkestaat = ? WHERE id = ?";
+        $sql = "UPDATE client SET naam = ?, geslacht = ?, adres = ?, postcode = ?, woonplaats = ?, telefoonnummer = ?, email = ?, geboortedatum = ?, reanimatiestatus = ?, nationaliteit = ?, afdeling_id = ?, burgelijkestaat = ? WHERE id = ?";
         $stmt = DatabaseConnection::getConn()->prepare($sql);
         $stmt->bind_param("ssssssssssssi", $naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $geboortedatum, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $id);
     }
@@ -138,14 +138,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php
         // Maak een nieuwe query voor alle afdelingen uit de database
         $conn = DatabaseConnection::getConn();
-        $sqlAfdelingen = "SELECT naam FROM afdelingen"; 
+        $sqlAfdelingen = "SELECT naam, id FROM afdelingen"; 
         $resultAfdelingen = $conn->query($sqlAfdelingen);
 
         if ($resultAfdelingen && $resultAfdelingen->num_rows > 0) {
             while ($row = $resultAfdelingen->fetch_assoc()) {
                 // Kijk of dit de huidige afdeling van de client is
-                $selected = ($row['naam'] === $client['afdeling']) ? 'selected' : '';
-                echo "<option value='" . htmlspecialchars($row['naam']) . "' $selected>" . htmlspecialchars($row['naam']) . "</option>";
+                $selected = ($row['id'] === $client['afdeling_id']) ? 'selected' : '';
+                echo "<option value='" . htmlspecialchars($row['id']) . "' $selected>" . htmlspecialchars($row['naam']) . "</option>";
             }
         } else {
             echo "<option value=''>Geen afdelingen gevonden</option>";

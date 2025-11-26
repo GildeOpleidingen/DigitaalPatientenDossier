@@ -17,7 +17,6 @@ $clientId = $_SESSION['clientId'] ?? null;
 if (!$clientId) {
     header("Location: ../client.php");
     exit;
-    exit;
 }
 
 // Haal clientgegevens op

@@ -1,7 +1,21 @@
+Installatie:
+1. Kopieer het bestand `default-config.php` en verander de naam `default-config.php` => `config.php` en verander waarden in het bestand.
+
+Requirements:
+sudo apt install mysql-server
+sudo apt install apache2
+
+sudo apt-get install php-mbstring	
+sudo apt install php-xml
+sudo apt-get install php-gd	
+
+# Credentials
+Database user
+Naam: dpd_user
+Wachtwoord: q220@Wgz0]I9uq!J
+
+
 Documentatie van issues en fixes van website Digitaal patienten dossier
-
-
-
 Issue 1: Main logo link stuurt naar onbestaand page.
 Issue 2: Dashboard voor admin is leeg.
 Issue 3: Client verwijder functie werkt niet.
