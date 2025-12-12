@@ -1,5 +1,5 @@
 <?php
-class Medewerkers
+trait Medewerker
 {
     public function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwoord): bool
     {
