@@ -11,20 +11,20 @@ $boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observat
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     //Lees ingevulde gegevens.
-    $verandering_seksuele_beleving = $_POST['verandering_seksuele_beleving'];
+    $verandering_seksuele_beleving = $_POST['verandering_seksuele_beleving'] ?? 0;
     $verandering_seksuele_beleving_door = strval($_POST['verandering_seksuele_beleving_door']);
-    $verandering_seksueel_gedrag = $_POST['verandering_seksueel_gedrag'];
-    $wisselende_contacten = $_POST['wisselende_contacten'];
-    $veilig_vrijen = $_POST['veilig_vrijen'];
-    $anticonceptiemiddel = $_POST['anticonceptiemiddel'];
+    $verandering_seksueel_gedrag = $_POST['verandering_seksueel_gedrag'] ?? 0;
+    $wisselende_contacten = $_POST['wisselende_contacten'] ?? 0;
+    $veilig_vrijen = $_POST['veilig_vrijen'] ?? 0;
+    $anticonceptiemiddel = $_POST['anticonceptiemiddel'] ?? 0;
     $anticonceptiemiddel_welke =strval($_POST['anticonceptiemiddel_welke']) ;
-    $anticonceptiemiddel_problemen = $_POST['anticonceptiemiddel_problemen'];
+    $anticonceptiemiddel_problemen = $_POST['anticonceptiemiddel_problemen'] ?? 0;
     
     // array van checkboxes van seksuele gerichtheid tab
     $arr = array(!empty($_POST['gerichtheid1']), !empty($_POST['gerichtheid2']), !empty($_POST['gerichtheid3']));
     $seksuele_gerichtheid = $Main->convertBoolArrayToString($arr);
     
-    $seksuele_gerichtheid_problemen = $_POST['seksuele_gerichtheid_problemen'];
+    $seksuele_gerichtheid_problemen = $_POST['seksuele_gerichtheid_problemen'] ?? 0;
     $soa = $_POST['soa'];
     $soa_welke = strval($_POST['soa_welke']);
 
