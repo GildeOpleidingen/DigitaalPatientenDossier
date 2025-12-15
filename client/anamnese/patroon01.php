@@ -4,46 +4,148 @@ include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
 
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 1);
+$clientId = $_SESSION['clientId'];
+$antwoorden = $Main->getPatternAnswers($clientId, 1);
+$boolArrayObservatie = isset($antwoorden['observatie']) ? str_split($antwoorden['observatie']) : [];
 
-$boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];
-
-
-if (isset($_REQUEST['navbutton'])) {
-    //TODO: hier actie om data op te slaan in database.
-    switch ($_REQUEST['navbutton']) {
-        case 'next': //action for next here
-            header('Location: patroon02.php');
-            break;
-
-        case 'prev': //action for previous here
-            header('Location: patroon11.php'); //TODO: hier moet naar de hoofdpagina genavigeerd worden.
-            break;
-    }
-    exit;
+// HELPERS
+function field($name) {
+    return isset($_POST[$name]) && $_POST[$name] !== '' ? trim($_POST[$name]) : null;
 }
 
+$conn = DatabaseConnection::getConn();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
+
+    // 1 — Observaties omzetten naar 10-cijferige binaire string
+    $observatieString = "";
+    for ($i = 1; $i <= 10; $i++) {
+        $observatieString .= isset($_POST["observatie$i"]) && $_POST["observatie$i"] == 1 ? "1" : "0";
+    }
+
+    $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
+
+    try {
+        // 4 — DATA ARRAY
+        $data = [
+            field('algemene_gezondheid'),
+            field('gezondheids_bezigheid'),
+            field('rookt') !== null && field('rookt') == 1 ? 1 : 0,
+            field('rookt_hoeveelheid'),
+            field('drinkt') !== null && field('drinkt') == 1 ? 1 : 0,
+            field('drinkt_hoeveelheid'),
+            field('besmettelijke_aandoening') !== null && field('dribesmettelijke_aandoeningkt') == 1 ? 1 : 0,
+            field('besmettelijke_aandoening_welke'),
+            field('alergieen') !== null && field('alergieen') == 1 ? 1 : 0,
+            field('alergieen_welke'),
+            field('oorzaak_huidige_toestand'),
+            field('oht_actie'),
+            field('oht_hoe_effectief'),
+            field('oht_wat_nodig'),
+            field('oht_wat_belangrijk'),
+            field('oht_reactie_op_advies'),
+            field('preventie'),
+            $observatieString,
+            $vragenlijstId
+        ];
+        // 5 — UPDATE
+        if ($antwoorden) {
+            $sql = "
+                UPDATE patroon01gezondheidsbeleving SET
+                    algemene_gezondheid = ?,
+                    gezondheids_bezigheid = ?,
+                    rookt = ?,
+                    rookt_hoeveelheid = ?,
+                    drinkt = ?,
+                    drinkt_hoeveelheid = ?,
+                    besmettelijke_aandoening = ?,
+                    besmettelijke_aandoening_welke = ?,
+                    alergieen = ?,
+                    alergieen_welke = ?,
+                    oorzaak_huidige_toestand = ?,
+                    oht_actie = ?,
+                    oht_hoe_effectief = ?,
+                    oht_wat_nodig = ?,
+                    oht_wat_belangrijk = ?,
+                    oht_reactie_op_advies = ?,
+                    preventie = ?,
+                    observatie = ?
+                WHERE vragenlijstid = ?
+            ";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param(
+                "ssissississssssssss",
+                ...$data
+            );
+
+        } else {
+            // 6 — INSERT
+            $sql = "
+                INSERT INTO patroon01gezondheidsbeleving (
+                    algemene_gezondheid,
+                    gezondheids_bezigheid,
+                    rookt,
+                    rookt_hoeveelheid,
+                    drinkt,
+                    drinkt_hoeveelheid,
+                    besmettelijke_aandoening,
+                    besmettelijke_aandoening_welke,
+                    alergieen,
+                    alergieen_welke,
+                    oorzaak_huidige_toestand,
+                    oht_actie,
+                    oht_hoe_effectief,
+                    oht_wat_nodig,
+                    oht_wat_belangrijk,
+                    oht_reactie_op_advies,
+                    preventie,
+                    observatie,
+                    vragenlijstid
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            ";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param(
+                "ssissississssssssss",
+                ...$data
+            );
+        }
+
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo "Fout bij opslaan: " . $e->getMessage();
+    }
+
+    // 7 — NAVIGATIE
+    if (isset($_POST['navbutton'])) {
+        switch ($_POST['navbutton']) {
+            case 'next':
+                header("Location: patroon02.php");
+                exit;
+            case 'prev':
+                header("Location: patroon11.php");
+                exit;
+        }
+    }
+}
 ?>
 
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="Stylesheet" href="../../assets/css/client/patronen.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
-          rel="stylesheet" 
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
-          crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
-          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" 
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Anamnese</title>
+    <title>Anamnese – Patroon 1</title>
+
+    <link rel="stylesheet" href="../../assets/css/client/patronen.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body style="overflow: hidden;">
-    <form action="" method="post">
+    <form method="POST">
         <div class="main">
             <?php
             include '../../includes/n-header.php';
@@ -66,12 +168,12 @@ if (isset($_REQUEST['navbutton'])) {
                                     <p>- Rookt u?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="rookt" <?= isset($antwoorden['rookt']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" name="rookt" <?= $antwoorden['rookt'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="hoeveel?" name="rookt_hoeveelheid"><?= isset($antwoorden['rookt_hoeveelheid']) ? $antwoorden['rookt_hoeveelheid'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="rookt" <?= !isset($antwoorden['rookt']) ? "checked" : "" ?>>
+                                            <input type="radio" name="rookt" <?= $antwoorden['rookt'] == 0 ? "checked" : "" ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -80,12 +182,12 @@ if (isset($_REQUEST['navbutton'])) {
                                     <p>- Drinkt u?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="drinkt" <?= isset($antwoorden['drinkt']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" name="drinkt" <?= $antwoorden['drinkt'] == 1 ? "checked" : "" ?> value="1">
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="hoeveel?" name="drinkt_hoeveelheid"><?= isset($antwoorden['drinkt_hoeveelheid']) ? $antwoorden['drinkt_hoeveelheid'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="drinkt" <?= !isset($antwoorden['drinkt']) ? "checked" : "" ?>>
+                                            <input type="radio" name="drinkt" <?= $antwoorden['drinkt'] == 0 ? "checked" : "" ?> value="0">
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -94,12 +196,12 @@ if (isset($_REQUEST['navbutton'])) {
                                     <p>Heeft u momenteel een infectie of overdraagbare besmettelijke aandoening?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="besmettelijke_aandoening" <?= isset($antwoorden['besmettelijke_aandoening']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] == 1 ? "checked" : "" ?> value="1">
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="besmettelijke_aandoening_welke"><?= isset($antwoorden['besmettelijke_aandoening_welke']) ? $antwoorden['besmettelijke_aandoening_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="besmettelijke_aandoening">
+                                            <input type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] != 1 ? "checked" : "" ?>  value="0">
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -108,12 +210,12 @@ if (isset($_REQUEST['navbutton'])) {
                                     <p>Bent u ergens allergisch voor?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="alergieen" <?= isset($antwoorden['alergieen']) ? "checked" : "" ?>>
+                                            <input id="radio" type="radio" name="alergieen" <?= $antwoorden['alergieen'] == 1 ? "checked" : "" ?> value="1">
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="alergieen_welke"><?= isset($antwoorden['alergieen_welke']) ? $antwoorden['alergieen_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="alergieen" <?= !isset($antwoorden['alergieen']) ? "checked" : "" ?>>
+                                            <input type="radio" name="alergieen" <?= $antwoorden['alergieen'] == 0 ? "checked" : "" ?> value="0">
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -144,52 +246,52 @@ if (isset($_REQUEST['navbutton'])) {
                                 <div class="observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[0]) ? "checked" : "" ?> name="observatie1">
+                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[0]) && $boolArrayObservatie[0] == 1 ? "checked" : "" ?> value="1" name="observatie1">
                                             <p>Gezondheidszoekend gedrag</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[1]) ? "checked" : "" ?> name="observatie2">
+                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[1]) && $boolArrayObservatie[1] == 1 ? "checked" : "" ?> value="1" name="observatie2">
                                             <p>Tekort in gezondheidsonderhoud</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[2]) ? "checked" : "" ?> name="observatie3">
+                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[2]) && $boolArrayObservatie[2] == 1 ? "checked" : "" ?> value="1" name="observatie3">
                                             <p>(Dreigende) inadequate opvolging van de behandeling</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[3]) ? "checked" : "" ?> name="observatie4">
+                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[3]) && $boolArrayObservatie[3] == 1 ? "checked" : "" ?> value="1" name="observatie4">
                                             <p>(Dreigend) tekort in gezondheidsinstandhouding</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[4]) ? "checked" : "" ?> name="observatie5">
+                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[4]) && $boolArrayObservatie[4] == 1 ? "checked" : "" ?> value="1" name="observatie5">
                                             <p>(Dreigende) therapieontrouw</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[5]) ? "checked" : "" ?> name="observatie6">
+                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[5]) && $boolArrayObservatie[5] == 1 ? "checked" : "" ?> value="1" name="observatie6">
                                             <p>Vergiftigingsgevaar</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[6]) ? "checked" : "" ?> name="observatie7">
+                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[6]) && $boolArrayObservatie[6] == 1 ? "checked" : "" ?> value="1" name="observatie7">
                                             <p>Infectiegevaar</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[7]) ? "checked" : "" ?> name="observatie8">
+                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[7]) && $boolArrayObservatie[7] == 1 ? "checked" : "" ?> value="1" name="observatie8">
                                             <p>Gevaar voor letsel (trauma)</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[8]) ? "checked" : "" ?> name="observatie9">
+                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[8]) && $boolArrayObservatie[8] == 1 ? "checked" : "" ?> value="1" name="observatie9">
                                             <p>Verstikkingsgevaar</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[9]) ? "checked" : "" ?> name="observatie10">
+                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[9]) && $boolArrayObservatie[9] == 1 ? "checked" : "" ?> value="1" name="observatie10">
                                             <p>Beschermingstekort</p>
                                         </div>
                                     </div>
@@ -204,9 +306,8 @@ if (isset($_REQUEST['navbutton'])) {
                 </div>
             </div>
     </form>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
-            crossorigin="anonymous"></script> 
-</body>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
 </html>

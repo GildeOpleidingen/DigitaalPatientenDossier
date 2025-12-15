@@ -12,7 +12,7 @@ $boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observat
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     // TODO: hier actie om data op te slaan in database.
     //Lees ingevulde gegevens.
-    $gelovig = $_POST['gelovig'];    
+    $gelovig = $_POST['gelovig'] ?? 0;    
     $geloof_anders = strval($_POST['geloof_anders']);
     $behoefte_religieuze_activiteit = $_POST['behoefte_religieuze_activiteit'];
     $gebruiken_tav_geloofsovertuiging = $_POST['gebruiken_tav_geloofsovertuiging'];
