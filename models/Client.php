@@ -224,7 +224,7 @@ trait Client
 
     public function getClientById($ClientId): array
     {
-        $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE id = ?;");
+        $result = DatabaseConnection::getConn()->prepare("SELECT c.*, a.naam as afdeling FROM client c LEFT JOIN afdelingen a on a.id = c.afdeling_id WHERE c.id =?;");
         $result->bind_param("i", $ClientId);
         $result->execute();
 
