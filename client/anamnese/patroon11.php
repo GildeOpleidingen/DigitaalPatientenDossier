@@ -69,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             $result1->execute();
         } else {
             // Handle error
-            echo "Error preparing statement: " . DatabaseConnection::getConn()->error;
+            $_SESSION['patroonerror'] = 'Er ging iets fout (wijzigen), wijzigingen zijn NIET opgeslagen.';
+            $_SESSION['patroonnr'] = '11. Stressverwerkingspatroon (probleemhantering)';
         }
     } else {
         //hier insert je alle data in patroon02
@@ -109,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             $result2 = $result2->get_result();
         } catch (Exception $e) {
             // Display the alert box on next of previous page
-            $_SESSION['patroonerror'] = 'Er ging iets fout, wijzigingen zijn NIET opgeslagen.';
+            $_SESSION['patroonerror'] = 'Er ging iets fout (toevoegen), wijzigingen zijn NIET opgeslagen.';
             $_SESSION['patroonnr'] = '11. Stressverwerkingspatroon (probleemhantering)';
         }
     }
