@@ -278,7 +278,7 @@ function e($v) {
                                             <label>Koud</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="2" name="gevoel" <?= $antwoorden['gevoel'] == 2 ? "checked" : "" ?>>
+                                            <input type="radio" value="2" name="gevoel" <?= $antwoorden['gevoel'] == 1 ? "checked" : "" ?>>
                                             <label>Warm</label>
                                         </p>
                                     </div>
