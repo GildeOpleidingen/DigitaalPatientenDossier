@@ -48,9 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
         $row = $stmt->get_result()->fetch_assoc();
 
         $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-
         // --- 5. UPDATE of INSERT ---
-        if ($antwoorden) {
+        if (!empty($antwoorden['vragenlijstid'])) {
 
             // UPDATE
             $stmt = $db->prepare("
@@ -106,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
             ");
 
             $stmt->bind_param(
-                "iiisiiiiis",
+                "iiisiiiiiss",
                 $vragenlijstId,
                 $eetlust,
                 $dieet,

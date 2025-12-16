@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     }
 
     $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-
     try {
         // 4 — DATA ARRAY
         $data = [
@@ -48,8 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             $observatieString,
             $vragenlijstId
         ];
+
         // 5 — UPDATE
-        if ($antwoorden) {
+        if (!empty($antwoorden['vragenlijstid'])) {
             $sql = "
                 UPDATE patroon01gezondheidsbeleving SET
                     algemene_gezondheid = ?,
