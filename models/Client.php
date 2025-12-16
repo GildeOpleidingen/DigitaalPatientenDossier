@@ -1,6 +1,34 @@
 <?php
 trait Client
 {
+    public function CheckIfVerzorgregelExists($clientId, $medewerkerId)
+    {
+        try{
+            $result = DatabaseConnection::getConn()->prepare("
+                        SELECT id
+                        FROM verzorgerregel
+                        WHERE clientid = ?
+                        AND medewerkerid = ?");
+            $result->bind_param("ii", $clientId, $medewerkerId);
+            $result->execute();
+
+            if ($result->num_rows() == 0) {
+                $result->close();
+                $toegang = 1;
+                $result = DatabaseConnection::getConn()->prepare("INSERT INTO verzorgerregel (clientid, medewerkerid, toegang) VALUES (?, ?, ?)");
+                $result->bind_param("iii", $clientId, $medewerkerId, $toegang);
+                $result->execute();
+                return true;
+            } 
+            else{
+                return true;
+            }
+        } catch(Exception $e) {
+            return false;
+        }
+         
+    }
+
     public function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies): bool
     {
         $medischOverzicht = $this->getMedischOverzichtByClientId($clientid);
@@ -224,7 +252,7 @@ trait Client
 
     public function getClientById($ClientId): array
     {
-        $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE id = ?;");
+        $result = DatabaseConnection::getConn()->prepare("SELECT c.*, a.naam as afdeling FROM client c LEFT JOIN afdelingen a on a.id = c.afdeling_id WHERE c.id =?;");
         $result->bind_param("i", $ClientId);
         $result->execute();
 
