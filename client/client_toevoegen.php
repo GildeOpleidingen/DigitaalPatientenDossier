@@ -1,6 +1,8 @@
 <?php
 session_start();
 include '../database/DatabaseConnection.php';
+include_once '../models/autoload.php';
+$Main = new Main();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Verkrijg de gegevens van het formulier
@@ -14,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $geboortedatum = $_POST['geboortedatum'];
     $reanimatiestatus = $_POST['reanimatiestatus'];
     $nationaliteit = $_POST['nationaliteit'];
-    $afdeling = $_POST['afdeling'];
+    $afdeling = $Main->getAfdelingIDByName(strval($_POST['afdeling']));
     $burgelijkestaat = $_POST['burgelijkestaat'];
 
     // Verwerk de foto, als die aanwezig is
@@ -22,18 +24,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
         $foto = file_get_contents($_FILES['foto']['tmp_name']); // Lees de inhoud van het bestand
     }
+    $deleted = 0;
 
     // Query om de gegevens in de database in te voegen, inclusief de optionele foto
-    $sql = "INSERT INTO client (naam, geslacht, adres, postcode, woonplaats, telefoonnummer, email, geboortedatum, reanimatiestatus, nationaliteit, afdeling, burgelijkestaat, foto)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+    //TODO deze aanpassen
+    $sql = "INSERT INTO client (naam, geslacht, adres, postcode, woonplaats, telefoonnummer, email, geboortedatum,
+                    reanimatiestatus, nationaliteit, burgelijkestaat, foto, afdeling_id, deleted)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $stmt = DatabaseConnection::getConn()->prepare($sql);
 
     // Bind de parameters, de foto wordt als blob gebonden
-    $stmt->bind_param("sssssssssssss", $naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $geboortedatum, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto);
+    $stmt->bind_param("ssssssssssssii", $naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $geboortedatum, $reanimatiestatus, $nationaliteit, $burgelijkestaat, $foto, $afdeling, $deleted);
 
-    // Controleer of het toevoegen is gelukt
     if ($stmt->execute()) {
+        //koppel nieuw client aan huidige medewerker
+        $newClientId = DatabaseConnection::getConn()->insert_id; 
+        $Main->CheckIfVerzorgregelExists($newClientId, $_SESSION['loggedin_id']);
         header('Location: client.php');
         exit;
     } else {
