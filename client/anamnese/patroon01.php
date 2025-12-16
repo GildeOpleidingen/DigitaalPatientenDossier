@@ -202,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="besmettelijke_aandoening_welke"><?= isset($antwoorden['besmettelijke_aandoening_welke']) ? $antwoorden['besmettelijke_aandoening_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] != 1 ? "checked" : "" ?>  value="0">
+                                            <input type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] == 0 ? "checked" : "" ?>  value="0">
                                             <label>Nee</label>
                                         </p>
                                     </div>
