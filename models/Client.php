@@ -1,6 +1,34 @@
 <?php
 trait Client
 {
+    public function CheckIfVerzorgregelExists($clientId, $medewerkerId)
+    {
+        try{
+            $result = DatabaseConnection::getConn()->prepare("
+                        SELECT id
+                        FROM verzorgerregel
+                        WHERE clientid = ?
+                        AND medewerkerid = ?");
+            $result->bind_param("ii", $clientId, $medewerkerId);
+            $result->execute();
+
+            if ($result->num_rows() == 0) {
+                $result->close();
+                $toegang = 1;
+                $result = DatabaseConnection::getConn()->prepare("INSERT INTO verzorgerregel (clientid, medewerkerid, toegang) VALUES (?, ?, ?)");
+                $result->bind_param("iii", $clientId, $medewerkerId, $toegang);
+                $result->execute();
+                return true;
+            } 
+            else{
+                return true;
+            }
+        } catch(Exception $e) {
+            return false;
+        }
+         
+    }
+
     public function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies): bool
     {
         $medischOverzicht = $this->getMedischOverzichtByClientId($clientid);
