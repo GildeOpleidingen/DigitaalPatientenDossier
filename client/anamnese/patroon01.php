@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             field('rookt_hoeveelheid'),
             field('drinkt') !== null && field('drinkt') == 1 ? 1 : 0,
             field('drinkt_hoeveelheid'),
-            field('besmettelijke_aandoening') !== null && field('dribesmettelijke_aandoeningkt') == 1 ? 1 : 0,
+            field('besmettelijke_aandoening') !== null && field('besmettelijke_aandoening') == 1 ? 1 : 0,
             field('besmettelijke_aandoening_welke'),
             field('alergieen') !== null && field('alergieen') == 1 ? 1 : 0,
             field('alergieen_welke'),
