@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../../includes/auth.php';
 require '../../database/DatabaseConnection.php';
 require_once '../../models/autoload.php';
 

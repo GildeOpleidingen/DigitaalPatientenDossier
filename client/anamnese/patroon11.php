@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../../includes/auth.php';
 include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
