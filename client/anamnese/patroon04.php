@@ -64,6 +64,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
 
     unset($_SESSION['patroonerror']);
+
+    
+    if (isset($_REQUEST['navbutton'])) {
+        switch ($_REQUEST['navbutton']) {
+            case 'next': //action for next here
+                header('Location: patroon05.php');
+                break;
+
+            case 'prev': //action for previous here
+                header('Location: patroon03.php');
+                break;
+        }
+        exit;
+    }
     
     //opslaan in database.
     if ($antwoorden) {
