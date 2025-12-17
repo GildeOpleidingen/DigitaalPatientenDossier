@@ -24,22 +24,22 @@ foreach ($verzorgers as $key => $value) {
         $stmt->execute();
     } else {
         $queries = [
-            "DELETE FROM rapport WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?)",
-            "DELETE FROM patroon01gezondheidsbeleving WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM patroon02voedingstofwisseling WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM patroon03uitscheiding WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM patroon04activiteiten WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM patroon05slaaprust WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM patroon06cognitiewaarneming WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM patroon07zelfbeleving WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM patroon08rollenrelatie WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM patroon09seksualiteitvoorplanting WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM patroon10stressverwerking WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM patroon11waardelevensovertuiging WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM metingontlasting WHERE metingid IN (SELECT id FROM meting WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM metingurine WHERE metingid IN (SELECT id FROM meting WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            "DELETE FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?)",
-            "DELETE FROM meting WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?)",
+            // "DELETE FROM rapport WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?)",
+            // "DELETE FROM patroon01gezondheidsbeleving WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM patroon02voedingstofwisseling WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM patroon03uitscheiding WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM patroon04activiteiten WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM patroon05slaaprust WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM patroon06cognitiewaarneming WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM patroon07zelfbeleving WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM patroon08rollenrelatie WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM patroon09seksualiteitvoorplanting WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM patroon10stressverwerking WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM patroon11waardelevensovertuiging WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM metingontlasting WHERE metingid IN (SELECT id FROM meting WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM metingurine WHERE metingid IN (SELECT id FROM meting WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
+            // "DELETE FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?)",
+            // "DELETE FROM meting WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?)",
             "DELETE FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?"
         ];
 

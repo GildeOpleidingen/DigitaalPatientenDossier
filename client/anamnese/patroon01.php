@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../../includes/auth.php';
 include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
@@ -23,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     }
 
     $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-
     try {
         // 4 — DATA ARRAY
         $data = [
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             field('rookt_hoeveelheid'),
             field('drinkt') !== null && field('drinkt') == 1 ? 1 : 0,
             field('drinkt_hoeveelheid'),
-            field('besmettelijke_aandoening') !== null && field('dribesmettelijke_aandoeningkt') == 1 ? 1 : 0,
+            field('besmettelijke_aandoening') !== null && field('besmettelijke_aandoening') == 1 ? 1 : 0,
             field('besmettelijke_aandoening_welke'),
             field('alergieen') !== null && field('alergieen') == 1 ? 1 : 0,
             field('alergieen_welke'),
@@ -47,8 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             $observatieString,
             $vragenlijstId
         ];
+
         // 5 — UPDATE
-        if ($antwoorden) {
+        if (!empty($antwoorden['vragenlijstid'])) {
             $sql = "
                 UPDATE patroon01gezondheidsbeleving SET
                     algemene_gezondheid = ?,
@@ -201,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="besmettelijke_aandoening_welke"><?= isset($antwoorden['besmettelijke_aandoening_welke']) ? $antwoorden['besmettelijke_aandoening_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] != 1 ? "checked" : "" ?>  value="0">
+                                            <input type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] == 0 ? "checked" : "" ?>  value="0">
                                             <label>Nee</label>
                                         </p>
                                     </div>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+include '../../includes/auth.php';
 include '../../database/DatabaseConnection.php';
 include '../../models/autoload.php';
 
@@ -9,7 +10,7 @@ $Main = new Main();
 $antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 4);
 $boolArrayObservatie = isset($antwoorden['observatie']) ? str_split($antwoorden['observatie']) : [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     // Haal alle antwoorden uit het formulier
    $voedingCheckbox = $_POST['voedingCheckbox'] ?? 0;
    $voeding = $voedingCheckbox != 0 && $Main->CheckValue($_POST['voeding'], 0, 4) ? strval($_POST['voeding']) : null;
@@ -59,177 +60,104 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $observatie .= isset($_POST["observatie$i"]) && $_POST["observatie$i"] == 1 ? "1" : "0";
     }
 
-    //Haal vragenlijst ID op.
+     //Haal vragenlijst ID op.
     $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-    // kijken of patroon10 bestaat door te kijken naar vragenlijst id
-    $result = DatabaseConnection::getConn()->prepare("
-                    SELECT p.id
-                    FROM patroon04activiteiten p
-                    WHERE p.vragenlijstid =  ?");
-    $result->bind_param("i", $vragenlijstId);
-    $result->execute();
-    $result = $result->get_result()->fetch_assoc();
 
     unset($_SESSION['patroonerror']);
-
- if ($result != null) {
+    
+    //opslaan in database.
+    if ($antwoorden) {
         //update
-        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon04activiteiten` 
-        SET 
-            `voeding`= ?,
-            `aankleden`= ?,
-            `alg_mobiliteit`= ?,
-            `koken`= ?,
-            `huishouden` = ?,
-            `financien`= ?,
-            `verzorging`= ?,
-            `baden`= ?,
-            `toiletgang`= ?,
-            `uit_bed_komen`= ?,
-            `winkelen` = ?,
-            `tijd_voor_uzelf_nodig` = ?,
-            `tijd_voor_uzelf_nodig_blijktuit`= ?,
-            `dagelijkse_activiteiten`= ?,
-            `dagelijkse_gewoontes`= ?,
-            `dagelijkse_gewoontes_welke`= ?,
-            `lichamelijke_beperking`= ?,
-            `lichamelijke_beperking_welke`= ?,
-            `vermoeidheids_klachten`= ?,
-            `passiever`= ?,
-            `passiever_blijktuit`= ?,
-            `problemen_starten_dag` = ?,
-            `problemen_starten_dag_blijktuit`= ?,
-            `hobbys`= ?,
-            `hobbys_bestedingstijd`= ?,
-            `activiteiten_weggevallen`= ?,
-            `activiteiten_weggevallen_welke`= ?,
+        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon04activiteiten`
+            SET
+            `ontlasting_probleem`= ?,
+            `op_welke`= ?,
+            `op_preventie`= ?,
+            `op_medicijnen`= ?,
+            `op_medicijnen_welke`= ?,
+            `urineer_probleem`= ?,
+            `up_incontinentie`= ?,
+            `up_incontinentie_behandeling`= ?,
+            `up_incontinentie_behandeling_welke`= ?,
+            `transpiratie`= ?,
+            `transpiratie_welke`= ?,
             `observatie`= ?
-        WHERE `vragenlijstid`=?");
+            WHERE `vragenlijstid`=?");
         if ($result1) {
-            $result1->bind_param("iiiiiiiiiiisisssssssssssssssi", 
-                $voeding, 
-                $aankleden,
-                $alg_mobiliteit,
-                $koken,
-                $huishouden,
-                $financien,
-                $verzorging,
-                $baden,
-                $toiletgang,
-                $uit_bed_komen,
-                $winkelen,
-                $tijd_voor_uzelf_nodig,
-                $tijd_voor_uzelf_nodig_blijktuit,
-                $dagelijkse_activiteiten,
-                $dagelijkse_gewoontes,
-                $dagelijkse_gewoontes_welke,
-                $lichamelijke_beperking,
-                $lichamelijke_beperking_welke,
-                $vermoeidheids_klachten,
-                $passiever,
-                $passiever_blijktuit,
-                $problemen_starten_dag,
-                $problemen_starten_dag_blijktuit,
-                $hobbys,
-                $hobbys_bestedingstijd,
-                $activiteiten_weggevallen,
-                $activiteiten_weggevallen_welke,
-                    $observatie,
-                 $vragenlijstId);
+            $result1->bind_param("issisiiisissi", 
+            $ontlasting_probleem,
+            $onlasting_op_welke,
+            $ontlasting_probleem_oplossing,
+            $op_medicijnen,
+            $op_medicijnen_welke,
+            $urineer_probleem,
+            $up_incontinentie,
+            $up_incontinentie_behandeling,
+            $up_incontinentie_behandeling_welke,
+            $transpiratie,
+            $transpiratie_welke,
+            $observatie, 
+            $vragenlijstId);
             $result1->execute();
-        
-
         } else {
-             // Display the alert box on next of previous page
-            $_SESSION['patroonerror'] = 'Er ging iets fout (wijziging), wijzigingen zijn NIET opgeslagen.';
-            $_SESSION['patroonnr'] = '04. activiteitenpatroon';
+            // Handle error
+            echo "Error preparing statement: " . DatabaseConnection::getConn()->error;
         }
     } else {
-        //hier insert je alle data in patroon02
         try{
-            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon04activiteiten`(
-    
-            vragenlijstid, 
-                voeding,
-                aankleden,
-                `alg_mobiliteit`,
-                `koken`,
-                `huishouden`, 
-                `financien`,
-                `verzorging`,
-                `baden`,
-                `toiletgang`, 
-                `uit_bed_komen`,
-                `winkelen`, 
-                `tijd_voor_uzelf_nodig`, 
-                `tijd_voor_uzelf_nodig_blijktuit`, 
-                `dagelijkse_activiteiten`, 
-                `dagelijkse_gewoontes`,
-                `dagelijkse_gewoontes_welke`,
-                `lichamelijke_beperking`,
-                `lichamelijke_beperking_welke`,
-                `vermoeidheids_klachten`,
-                `passiever`,
-                `passiever_blijktuit`,
-                `problemen_starten_dag`,
-                `problemen_starten_dag_blijktuit`,
-                `hobbys`,
-                `hobbys_bestedingstijd`,
-                `activiteiten_weggevallen`,
-                `activiteiten_weggevallen_welke`,
-                `observatie`) 
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $result2->bind_param("iiiiiiiiiiiiissssssssssssssss", 
-                 
-            $vragenlijstId,
-                $voeding, 
-                $aankleden,
-                $alg_mobiliteit,
-                $koken,
-                $huishouden,
-                $financien,
-                $verzorging,
-                $baden,
-                $toiletgang,
-                $uit_bed_komen,
-                $winkelen,
-                $tijd_voor_uzelf_nodig,
-                $tijd_voor_uzelf_nodig_blijktuit,
-                $dagelijkse_activiteiten,
-                $dagelijkse_gewoontes,
-                $dagelijkse_gewoontes_welke,
-                $lichamelijke_beperking,
-                $lichamelijke_beperking_welke,
-                $vermoeidheids_klachten,
-                $passiever,
-                $passiever_blijktuit,
-                $problemen_starten_dag,
-                $problemen_starten_dag_blijktuit,
-                $hobbys,
-                $hobbys_bestedingstijd,
-                $activiteiten_weggevallen,
-                $activiteiten_weggevallen_welke,
+            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon03uitscheiding`(
+                    `vragenlijstid`,
+                    `ontlasting_probleem`,
+                    `op_welke`,
+                    `op_preventie`,
+                    `op_medicijnen`,
+                    `op_medicijnen_welke`,
+                    `urineer_probleem`,
+                    `up_incontinentie`,
+                    `up_incontinentie_behandeling`,
+                    `up_incontinentie_behandeling_welke`,
+                    `transpiratie`,
+                    `transpiratie_welke`,
+                    `observatie`)
+                VALUES (
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?)");
+            $result2->bind_param("iissisiiisiss", 
+                $vragenlijstId, 
+                $ontlasting_probleem,
+                $onlasting_op_welke,
+                $ontlasting_probleem_oplossing,
+                $op_medicijnen,
+                $op_medicijnen_welke,
+                $urineer_probleem,
+                $up_incontinentie,
+                $up_incontinentie_behandeling,
+                $up_incontinentie_behandeling_welke,
+                $transpiratie,
+                $transpiratie_welke,
                 $observatie);
+                
             $result2->execute();
             $result2 = $result2->get_result();
         } catch (Exception $e) {
             // Display the alert box on next of previous page
-            $_SESSION['patroonerror'] = 'Er ging iets fout (toevoegen), wijzigingen zijn NIET opgeslagen.';
-            $_SESSION['patroonnr'] = '04. activiteitenpatroon';
+            $_SESSION['patroonerror'] = 'Er ging iets fout, wijzigingen zijn NIET opgeslagen.';
+            $_SESSION['patroonnr'] = '3. Uitscheidingspatroon';
         }
     }
-
-
-    if ($_POST['navbutton'] === 'next') {
-        header('Location: patroon05.php');
-        exit;
-    }
-
-    if ($_POST['navbutton'] === 'prev') {
-        header('Location: patroon03.php');
-        exit;
-    }
 }
+
 ?>
 
 <!DOCTYPE html>
