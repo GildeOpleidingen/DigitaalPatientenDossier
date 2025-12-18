@@ -9,12 +9,6 @@ sudo apt-get install php-mbstring
 sudo apt install php-xml
 sudo apt-get install php-gd	
 
-# Credentials
-Database user
-Naam: dpd_user
-Wachtwoord: q220@Wgz0]I9uq!J
-
-
 Documentatie van issues en fixes van website Digitaal patienten dossier
 Issue 1: Main logo link stuurt naar onbestaand page.
 Issue 2: Dashboard voor admin is leeg.

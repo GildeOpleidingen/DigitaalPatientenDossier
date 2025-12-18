@@ -91,7 +91,7 @@ foreach ($clientRelations as $relation) {
                         <p><?= $client['nationaliteit'] ?></p>
                     </div>
                     <div class="infotext">
-                        <a href="../Overzicht/verzorgers.php?id=<?= $_GET['id']?>" style="text-decoration: underline dotted;">
+                        <a href="../verzorgers/verzorgers.php?id=<?= $_GET['id']?>" style="text-decoration: underline dotted;">
                             <strong class="text-primary">Verzorgers:</strong>
                         </a>
                         <?php $i=0?>
