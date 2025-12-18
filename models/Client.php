@@ -12,11 +12,10 @@ trait Client
             $result->bind_param("ii", $clientId, $medewerkerId);
             $result->execute();
 
-            if ($result->num_rows() == 0) {
+            if ($result->num_rows == 0) {
                 $result->close();
-                $toegang = 1;
-                $result = DatabaseConnection::getConn()->prepare("INSERT INTO verzorgerregel (clientid, medewerkerid, toegang) VALUES (?, ?, ?)");
-                $result->bind_param("iii", $clientId, $medewerkerId, $toegang);
+                $result = DatabaseConnection::getConn()->prepare("INSERT INTO verzorgerregel (clientid, medewerkerid) VALUES (?, ?)");
+                $result->bind_param("ii", $clientId, $medewerkerId);
                 $result->execute();
                 return true;
             } 
