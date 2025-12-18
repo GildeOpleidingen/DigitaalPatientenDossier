@@ -175,8 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             $result2->execute();
             $result2 = $result2->get_result();
         } catch (Exception $e) {
-            print_r($e->getMessage());
-            die();
             // Display the alert box on next of previous page
             $_SESSION['patroonerror'] = 'Er ging iets fout, wijzigingen zijn NIET opgeslagen.';
             $_SESSION['patroonnr'] = '10. Stressverwerkingspatroon (probleemhantering)';
