@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../../includes/auth.php';
 include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 
@@ -34,19 +35,11 @@ $stmt = $conn->prepare(
 $stmt->bind_param("ii", $clientId, $loggedInId);
 $stmt->execute();
 $result = $stmt->get_result();
-
-// Als er geen verzorgerregel is, maak er een aan
-if ($result->num_rows > 0) {
-    $verzorgerregelId = $result->fetch_assoc()['id'];
-} else {
-    $stmtInsert = $conn->prepare(
-        "INSERT INTO verzorgerregel (clientid, medewerkerid, toegang) VALUES (?, ?,0)"
-    );
-    $stmtInsert->bind_param("ii", $clientId, $loggedInId);
-    $stmtInsert->execute();
-    $verzorgerregelId = $stmtInsert->insert_id;
+if (!$result) {
+    header("Location: ../client.php");
+    exit;
 }
-
+$verzorgerregelId = $result->fetch_assoc()['id'];
 // Maak een nieuwe lege rapportage aan
 $tijd = date('Y-m-d H:i:s');
 $rapport = "";
