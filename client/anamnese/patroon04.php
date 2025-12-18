@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             `observatie`= ?
         WHERE `vragenlijstid`=?");
         if ($result1) {
-            $result1->bind_param("iiiiiiiiiiisisssssssssssssssi", 
+            $result1->bind_param("iiiiiiiiiiiissssssssssssssssi", 
                 $voeding, 
                 $aankleden,
                 $alg_mobiliteit,
