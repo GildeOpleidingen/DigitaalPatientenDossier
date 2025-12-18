@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($stmt->execute()) {
         //koppel nieuw client aan huidige medewerker
         $newClientId = DatabaseConnection::getConn()->insert_id; 
+        $stmt->close();
         $Main->CheckIfVerzorgregelExists($newClientId, $_SESSION['loggedin_id']);
         header('Location: client.php');
         exit;
@@ -115,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Maak een nieuwe query voor alle afdelingen uit de database
         $conn = DatabaseConnection::getConn();
         $sqlAfdelingen = "SELECT naam FROM afdelingen"; 
-        $resultAfdelingen = $conn->query($sqlAfdelingen);
+        $resultAfdelingen = $conn->execute_query($sqlAfdelingen);
 
         if ($resultAfdelingen && $resultAfdelingen->num_rows > 0) {
             while ($row = $resultAfdelingen->fetch_assoc()) {
