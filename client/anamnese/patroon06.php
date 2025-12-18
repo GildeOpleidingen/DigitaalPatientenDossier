@@ -16,34 +16,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
 
     $moeilijk_horen = intval($_POST['moeilijk_horen'] ?? 0);
     $hoort_stemmen = intval($_POST['hoort_stemmen'] ?? 0);
-    $hoort_stemmen_wat = trim($_POST['hoort_stemmen_wat'] ?? "");
+    $hoort_stemmen_wat = trim($_POST['hoort_stemmen_wat']) ?? "";
     $moeite_met_zien = intval($_POST['moeite_met_zien'] ?? 0);
     $ziet_dingen = intval($_POST['ziet_dingen'] ?? 0);
-    $ziet_dingen_wat = trim($_POST['ziet_dingen_wat'] ?? "");
+    $ziet_dingen_wat = trim($_POST['ziet_dingen_wat']) ?? "";
     $ruikt_iets_onverklaarbaar = intval($_POST['ruikt_iets_onverklaarbaar'] ?? 0);
-    $ruikt_iets_onverklaarbaar_wat = trim($_POST['ruikt_iets_onverklaarbaar_wat'] ?? "");
+    $ruikt_iets_onverklaarbaar_wat = trim($_POST['ruikt_iets_onverklaarbaar_wat']) ?? "";
     $verandering_denken = intval($_POST['verandering_denken'] ?? 0);
     $moeite_spreken = intval($_POST['moeite_spreken'] ?? 0);
-    $taal_thuis = trim($_POST['taal_thuis'] ?? "");
+    $taal_thuis = trim($_POST['taal_thuis']) ?? "";
     $verandering_concentratievermogen = intval($_POST['verandering_concentratievermogen'] ?? 0);
     $moeilijker_beslissen = intval($_POST['moeilijker_beslissen'] ?? 0);
     $verandering_geheugen = intval($_POST['verandering_geheugen'] ?? 0);
     $verandering_orientatie = intval($_POST['verandering_orientatie'] ?? 0);
     $invloed_medicatie = intval($_POST['invloed_medicatie'] ?? 0);
-    $invloed_medicatie_welke = trim($_POST['invloed_medicatie_welke'] ?? "");
+    $invloed_medicatie_welke = trim($_POST['invloed_medicatie_welke']) ?? "";
     $gebruikt_middelen = intval($_POST['gebruikt_middelen'] ?? 0);
     $gebruikt_middelen_softdrugs = intval($_POST['gebruikt_middelen_softdrugs'] ?? 0);
-    $gebruikt_middelen_softdrugs_welke = trim($_POST['gebruikt_middelen_softdrugs_welke'] ?? "");
+    $gebruikt_middelen_softdrugs_welke = trim($_POST['gebruikt_middelen_softdrugs_welke']) ?? "";
     $gebruikt_middelen_harddrugs = intval($_POST['gebruikt_middelen_harddrugs'] ?? 0);
-    $gebruikt_middelen_harddrugs_welke = trim($_POST['gebruikt_middelen_harddrugs_welke'] ?? "");
+    $gebruikt_middelen_harddrugs_welke = trim($_POST['gebruikt_middelen_harddrugs_welke']) ?? "";
     $gebruikt_middelen_alcohol = intval($_POST['gebruikt_middelen_alcohol'] ?? 0);
-    $gebruikt_middelen_alcohol_welke = trim($_POST['gebruikt_middelen_alcohol_welke'] ?? "");
+    $gebruikt_middelen_alcohol_welke = trim($_POST['gebruikt_middelen_alcohol_welke']) ?? "";
     $gebruikt_middelen_anders = intval($_POST['gebruikt_middelen_anders'] ?? 0);
-    $gebruikt_middelen_anders_welke = trim($_POST['gebruikt_middelen_anders_welke'] ?? "");
+    $gebruikt_middelen_anders_welke = trim($_POST['gebruikt_middelen_anders_welke']) ?? "";
     $pijnklachten = intval($_POST['pijnklachten'] ?? 0);
-    $pijnklachten_waar_wanneer_soort = trim($_POST['pijnklachten_waar_wanneer_soort'] ?? "");
-    $pijnklachten_tegengaan_pijn = trim($_POST['pijnklachten_tegengaan_pijn'] ?? "");
-    $pijnklachten_preventie = trim($_POST['pijnklachten_preventie'] ?? "");
+    $pijnklachten_waar_wanneer_soort = trim($_POST['pijnklachten_waar_wanneer_soort']) ?? "";
+    $pijnklachten_tegengaan_pijn = trim($_POST['pijnklachten_tegengaan_pijn']) ?? "";
+    $pijnklachten_preventie = trim($_POST['pijnklachten_preventie']) ?? "";
 
     $observatieArray = [];
     for ($i = 1; $i <= 12; $i++) {
@@ -103,9 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                     observatie=?
                 WHERE vragenlijstid=?
             ");
-            $types = str_repeat("i", 18) . str_repeat("s", 13) . "i";
             $stmt->bind_param(
-                $types,
+                "iissssisiisiiiiisissssissssssssi",
                 $moeilijk_horen,
                 $hoort_stemmen,
                 $hoort_stemmen_wat,
@@ -176,9 +175,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                     observatie
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
-            $types = "i" . str_repeat("i", 18) . str_repeat("s", 13);
             $stmt->bind_param(
-                $types,
+                "iissssissisiiiiisissssissssssssi",
                 $vragenlijstId,
                 $moeilijk_horen,
                 $hoort_stemmen,
@@ -278,10 +276,10 @@ function e($v)
                                         (kunnen) worden?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input type="radio" value="1" name="hoort_stemmen"
+                                            <input class="radio" type="radio" value="1" name="hoort_stemmen"
                                                 <?= isset($antwoorden['hoort_stemmen']) && $antwoorden['hoort_stemmen'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" name="hoort_stemmen_wat"
+                                            <textarea rows="1" cols="25" class="checkfield" name="hoort_stemmen_wat"
                                                 placeholder="wat hoort u?"><?= e($antwoorden['hoort_stemmen_wat'] ?? "") ?></textarea>
                                         </div>
                                         <p>
@@ -313,10 +311,10 @@ function e($v)
                                         omgeving niet gezien (kunnen) worden?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input type="radio" value="1" name="ziet_dingen"
+                                            <input class="radio" type="radio" value="1" name="ziet_dingen"
                                                 <?= isset($antwoorden['ziet_dingen']) && $antwoorden['ziet_dingen'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" name="ziet_dingen_wat"
+                                            <textarea rows="1" cols="25" class="checkfield" name="ziet_dingen_wat"
                                                 placeholder="wat ziet u?"><?= e($antwoorden['ziet_dingen_wat'] ?? "") ?></textarea>
                                         </div>
                                         <p>
@@ -332,10 +330,10 @@ function e($v)
                                         worden?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input type="radio" value="1" name="ruikt_iets_onverklaarbaar"
+                                            <input class="radio" type="radio" value="1" name="ruikt_iets_onverklaarbaar"
                                                 <?= isset($antwoorden['ruikt_iets_onverklaarbaar']) && $antwoorden['ruikt_iets_onverklaarbaar'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield"
+                                            <textarea rows="1" cols="25" class="checkfield"
                                                 name="ruikt_iets_onverklaarbaar_wat"
                                                 placeholder="wat ruikt u?"><?= e($antwoorden['ruikt_iets_onverklaarbaar_wat'] ?? "") ?></textarea>
                                         </div>
@@ -455,10 +453,10 @@ function e($v)
                                     </p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input type="radio" value="1" name="invloed_medicatie"
+                                            <input class="radio" type="radio" value="1" name="invloed_medicatie"
                                                 <?= isset($antwoorden['invloed_medicatie']) && $antwoorden['invloed_medicatie'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" name="invloed_medicatie_welke"
+                                            <textarea rows="1" cols="25" class="checkfield" name="invloed_medicatie_welke"
                                                 placeholder="welke?"><?= e($antwoorden['invloed_medicatie_welke'] ?? "") ?></textarea>
                                         </div>
                                         <p>
@@ -473,10 +471,10 @@ function e($v)
                                     <p>Gebruikt u verdovende/stimulerende middelen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input type="radio" value="1" name="gebruikt_middelen"
+                                            <input class="radio" type="radio" value="1" name="gebruikt_middelen"
                                                 <?= isset($antwoorden['gebruikt_middelen']) && $antwoorden['gebruikt_middelen'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <div id="checkfield">
+                                            <div class="checkfield">
                                                 <div class="question">
                                                     <div class="observe">
                                                         <input type="checkbox" value="1"

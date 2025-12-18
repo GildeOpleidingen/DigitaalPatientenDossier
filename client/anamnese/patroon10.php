@@ -13,28 +13,27 @@ $boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observat
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     //Lees ingevulde gegevens.
     $reactie_anders = $_POST['reactie_anders'];
-    $spanningsvolle_situaties_voorkomen = $_POST['spanningsvolle_situaties_voorkomen'];
+    $spanningsvolle_situaties_voorkomen = $_POST['spanningsvolle_situaties_voorkomen'] ?? 0;
     $spanningsvolle_situaties_voorkomen_hoe = strval($_POST['spanningsvolle_situaties_voorkomen_hoe']);
-    $spanningsvolle_situaties_oplossen = $_POST['spanningsvolle_situaties_oplossen'];
+    $spanningsvolle_situaties_oplossen = $_POST['spanningsvolle_situaties_oplossen'] ?? 0;
     $spanningsvolle_situaties_oplossen_hoe = strval($_POST['spanningsvolle_situaties_oplossen_hoe']);
-    $omstandigheden_in_war_raken = $_POST['omstandigheden_in_war_raken'];
+    $omstandigheden_in_war_raken = $_POST['omstandigheden_in_war_raken'] ?? 0;
     $omstandigheden_in_war_raken_welke = strval($_POST['omstandigheden_in_war_raken_welke']);
-    $angstig_paniek = $_POST['angstig_paniek'];
+    $angstig_paniek = $_POST['angstig_paniek'] ?? 0;
     $angstig_paniek_actie = strval($_POST['angstig_paniek_actie']);
-    $angstig_paniek_lukt_voorkomen = $_POST['angstig_paniek_lukt_voorkomen'];
-    $suicidaal = $_POST['suicidaal'];
-    $suicidaal_momenteel = $_POST['suicidaal_momenteel'];
-    $agressief = $_POST['agressief'];
-    $anderen_iets_aan_willen_doen = $_POST['anderen_iets_aan_willen_doen'];
-    $maatregelen_veiligheid = $_POST['maatregelen_veiligheid'];
+    $angstig_paniek_lukt_voorkomen = $_POST['angstig_paniek_lukt_voorkomen'] ?? 0;
+    $suicidaal = $_POST['suicidaal'] ?? 0;
+    $suicidaal_momenteel = $_POST['suicidaal_momenteel'] ?? 0;
+    $agressief = $_POST['agressief'] ?? 0;
+    $anderen_iets_aan_willen_doen = $_POST['anderen_iets_aan_willen_doen'] ?? 0;
+    $maatregelen_veiligheid = $_POST['maatregelen_veiligheid'] ?? 0;
     $maatregelen_veiligheid_door = strval($_POST['maatregelen_veiligheid_door']);
-    $moeite_uiten_gevoelens = $_POST['moeite_uiten_gevoelens'];
+    $moeite_uiten_gevoelens = $_POST['moeite_uiten_gevoelens'] ?? 0;
     $bespreken_gevoelens_met = strval($_POST['bespreken_gevoelens_met']);
 
     // array van checkboxes van reacties tab
     $arr = array(!empty($_POST['reactie1']), !empty($_POST['reactie2']), !empty($_POST['reactie3']), !empty($_POST['reactie4']), !empty($_POST['reactie5']), !empty($_POST['reactie6']), !empty($_POST['reactie7']), !empty($_POST['reactie8']), !empty($_POST['reactie9']), !empty($_POST['reactie10']), !empty($_POST['reactie11']), !empty($_POST['reactie12']), !empty($_POST['reactie13']));
     $reactie_spanningen = $Main->convertBoolArrayToString($arr);
-
     // array van checkboxes van observatie tab
     $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']));
     $observatie = $Main->convertBoolArrayToString($arr);
@@ -51,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     $result = $result->get_result()->fetch_assoc();
 
     unset($_SESSION['patroonerror']);
-
     if ($result != null) {
         //update
         $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon10stressverwerking`
@@ -177,6 +175,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
             $result2->execute();
             $result2 = $result2->get_result();
         } catch (Exception $e) {
+            print_r($e->getMessage());
+            die();
             // Display the alert box on next of previous page
             $_SESSION['patroonerror'] = 'Er ging iets fout, wijzigingen zijn NIET opgeslagen.';
             $_SESSION['patroonnr'] = '10. Stressverwerkingspatroon (probleemhantering)';
@@ -309,9 +309,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Probeert u spanningsvolle situaties zo goed mogelijk te voorkomen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="spanningsvolle_situaties_voorkomen" <?= (isset($antwoorden['spanningsvolle_situaties_voorkomen']) && $antwoorden['spanningsvolle_situaties_voorkomen'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="spanningsvolle_situaties_voorkomen" <?= (isset($antwoorden['spanningsvolle_situaties_voorkomen']) && $antwoorden['spanningsvolle_situaties_voorkomen'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="spanningsvolle_situaties_voorkomen_hoe"><?= isset($antwoorden['spanningsvolle_situaties_voorkomen_hoe']) ? $antwoorden['spanningsvolle_situaties_voorkomen_hoe'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="spanningsvolle_situaties_voorkomen_hoe"><?= isset($antwoorden['spanningsvolle_situaties_voorkomen_hoe']) ? $antwoorden['spanningsvolle_situaties_voorkomen_hoe'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="spanningsvolle_situaties_voorkomen" <?= (!isset($antwoorden['spanningsvolle_situaties_voorkomen']) || $antwoorden['spanningsvolle_situaties_voorkomen'] == '0') ? "checked" : "" ?>>
@@ -323,9 +323,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Probeert u spanningsvolle situaties zo goed mogelijk op te lossen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="spanningsvolle_situaties_oplossen" <?= (isset($antwoorden['spanningsvolle_situaties_oplossen']) && $antwoorden['spanningsvolle_situaties_oplossen'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="spanningsvolle_situaties_oplossen" <?= (isset($antwoorden['spanningsvolle_situaties_oplossen']) && $antwoorden['spanningsvolle_situaties_oplossen'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="spanningsvolle_situaties_oplossen_hoe"><?= isset($antwoorden['spanningsvolle_situaties_oplossen_hoe']) ? $antwoorden['spanningsvolle_situaties_oplossen_hoe'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="spanningsvolle_situaties_oplossen_hoe"><?= isset($antwoorden['spanningsvolle_situaties_oplossen_hoe']) ? $antwoorden['spanningsvolle_situaties_oplossen_hoe'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="spanningsvolle_situaties_oplossen" <?= (!isset($antwoorden['spanningsvolle_situaties_oplossen']) || $antwoorden['spanningsvolle_situaties_oplossen'] == '0') ? "checked" : "" ?>>                                            <label>Nee</label>
@@ -336,9 +336,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Zijn er omstandigheden waarbij u in de war raakt?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="omstandigheden_in_war_raken" <?= (isset($antwoorden['omstandigheden_in_war_raken']) && $antwoorden['omstandigheden_in_war_raken'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="omstandigheden_in_war_raken" <?= (isset($antwoorden['omstandigheden_in_war_raken']) && $antwoorden['omstandigheden_in_war_raken'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="omstandigheden_in_war_raken_welke"><?= isset($antwoorden['omstandigheden_in_war_raken_welke']) ? $antwoorden['omstandigheden_in_war_raken_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="welke?" name="omstandigheden_in_war_raken_welke"><?= isset($antwoorden['omstandigheden_in_war_raken_welke']) ? $antwoorden['omstandigheden_in_war_raken_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="omstandigheden_in_war_raken" <?= (!isset($antwoorden['omstandigheden_in_war_raken']) || $antwoorden['omstandigheden_in_war_raken'] == '0') ? "checked" : "" ?>>
@@ -350,9 +350,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Bent u wel eens angstig of in paniek?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="angstig_paniek" <?= (isset($antwoorden['angstig_paniek']) && $antwoorden['angstig_paniek'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="angstig_paniek" <?= (isset($antwoorden['angstig_paniek']) && $antwoorden['angstig_paniek'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="wat doet u dan?" name="angstig_paniek_actie"><?= isset($antwoorden['angstig_paniek_actie']) ? $antwoorden['angstig_paniek_actie'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="wat doet u dan?" name="angstig_paniek_actie"><?= isset($antwoorden['angstig_paniek_actie']) ? $antwoorden['angstig_paniek_actie'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="angstig_paniek" <?= (!isset($antwoorden['angstig_paniek']) || $antwoorden['angstig_paniek'] == '0') ? "checked" : "" ?>>
@@ -429,9 +429,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Neemt u maatregelen om de veiligheid van u zelf en anderen te waarborgen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="maatregelen_veiligheid" <?= (isset($antwoorden['maatregelen_veiligheid']) && $antwoorden['maatregelen_veiligheid'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="maatregelen_veiligheid" <?= (isset($antwoorden['maatregelen_veiligheid']) && $antwoorden['maatregelen_veiligheid'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="door?" name="maatregelen_veiligheid_door"><?= isset($antwoorden['maatregelen_veiligheid_door']) ? $antwoorden['maatregelen_veiligheid_door'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="door?" name="maatregelen_veiligheid_door"><?= isset($antwoorden['maatregelen_veiligheid_door']) ? $antwoorden['maatregelen_veiligheid_door'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="maatregelen_veiligheid" <?= (!isset($antwoorden['maatregelen_veiligheid']) || $antwoorden['maatregelen_veiligheid'] == '0') ? "checked" : "" ?>>
