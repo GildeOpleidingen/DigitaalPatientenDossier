@@ -15,7 +15,7 @@ https://github.com/GildeOpleidingen/DigitaalPatientenDossier/issues/371
 # Credentials
 ```php
 //    public static string $host = "10.250.0.103";
-//    public static string $username = "dpd";
+//    public static string $username = "dpd_user";
 //    public static string $pass = "q220@Wgz0]I9uq!J"; 
 //    public static string $db = "dpd_dev"; of dpd of dpv_test
 ```
