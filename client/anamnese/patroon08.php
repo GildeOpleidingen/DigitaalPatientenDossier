@@ -294,9 +294,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Is er de afgelopen tijd een verandering geweest in uw financiële situatie?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="verandering_fin_sit_vroeger" value="1" <?= (isset($antwoorden['verandering_fin_sit_vroeger']) && $antwoorden['verandering_fin_sit_vroeger'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" name="verandering_fin_sit_vroeger" value="1" <?= (isset($antwoorden['verandering_fin_sit_vroeger']) && $antwoorden['verandering_fin_sit_vroeger'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="verandering_fin_sit_vroeger_welke"><?= isset($antwoorden['verandering_fin_sit_vroeger_welke']) ? $antwoorden['verandering_fin_sit_vroeger_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="welke?" name="verandering_fin_sit_vroeger_welke"><?= isset($antwoorden['verandering_fin_sit_vroeger_welke']) ? $antwoorden['verandering_fin_sit_vroeger_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="verandering_fin_sit_vroeger" value="0" <?= (!isset($antwoorden['verandering_fin_sit_vroeger']) || $antwoorden['verandering_fin_sit_vroeger'] == '0') ? "checked" : "" ?>>
@@ -308,9 +308,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Verwacht u in de nabije toekomst een verandering in uw financiële situatie?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="verandering_fin_sit_toekomst" value="1" <?= (isset($antwoorden['verandering_fin_sit_toekomst']) && $antwoorden['verandering_fin_sit_toekomst'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" name="verandering_fin_sit_toekomst" value="1" <?= (isset($antwoorden['verandering_fin_sit_toekomst']) && $antwoorden['verandering_fin_sit_toekomst'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="verandering_fin_sit_toekomst_welke"><?= isset($antwoorden['verandering_fin_sit_toekomst_welke']) ? $antwoorden['verandering_fin_sit_toekomst_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="welke?" name="verandering_fin_sit_toekomst_welke"><?= isset($antwoorden['verandering_fin_sit_toekomst_welke']) ? $antwoorden['verandering_fin_sit_toekomst_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="verandering_fin_sit_toekomst" value="0" <?= (!isset($antwoorden['verandering_fin_sit_toekomst']) || $antwoorden['verandering_fin_sit_toekomst'] == '0') ? "checked" : "" ?>>
@@ -325,9 +325,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Is er de laatste tijd verandering gekomen in uw sociale contacten?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="verandering_sociale_contacten" value="1" <?= (isset($antwoorden['verandering_sociale_contacten']) && $antwoorden['verandering_sociale_contacten'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" name="verandering_sociale_contacten" value="1" <?= (isset($antwoorden['verandering_sociale_contacten']) && $antwoorden['verandering_sociale_contacten'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="verandering_sociale_contacten_welke"><?= isset($antwoorden['verandering_sociale_contacten_welke']) ? $antwoorden['verandering_sociale_contacten_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="welke?" name="verandering_sociale_contacten_welke"><?= isset($antwoorden['verandering_sociale_contacten_welke']) ? $antwoorden['verandering_sociale_contacten_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="verandering_sociale_contacten" value="0" <?= (!isset($antwoorden['verandering_sociale_contacten']) || $antwoorden['verandering_sociale_contacten'] == '0') ? "checked" : "" ?> >
@@ -371,9 +371,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Bent u lid van verenigingen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="verenigingslid" value="1" <?= (isset($antwoorden['verenigingslid']) && $antwoorden['verenigingslid'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" name="verenigingslid" value="1" <?= (isset($antwoorden['verenigingslid']) && $antwoorden['verenigingslid'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="welke?" name="vereniging_welke"><?= isset($antwoorden['vereniging_welke']) ? $antwoorden['vereniging_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="welke?" name="vereniging_welke"><?= isset($antwoorden['vereniging_welke']) ? $antwoorden['vereniging_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="verenigingslid" value="0" <?= (!isset($antwoorden['verenigingslid']) || $antwoorden['verenigingslid'] == '0') ? "checked" : "" ?>>
@@ -388,9 +388,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Heeft u de laatst tijd een verlies geleden (werk, personen, enzovoort)?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="verlies_geleden" value="1" <?= (isset($antwoorden['verlies_geleden']) && $antwoorden['verlies_geleden'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" name="verlies_geleden" value="1" <?= (isset($antwoorden['verlies_geleden']) && $antwoorden['verlies_geleden'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verlies_geleden_welke"><?= isset($antwoorden['verlies_geleden_welke']) ? $antwoorden['verlies_geleden_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="verlies_geleden_welke"><?= isset($antwoorden['verlies_geleden_welke']) ? $antwoorden['verlies_geleden_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="verlies_geleden" value="0" <?= (!isset($antwoorden['verlies_geleden']) || $antwoorden['verlies_geleden'] == '0') ? "checked" : "" ?>>

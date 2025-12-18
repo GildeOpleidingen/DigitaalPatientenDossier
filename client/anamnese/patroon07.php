@@ -256,9 +256,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Is uw stemming de laatste tijd veranderd?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="verandering_stemming" <?= (isset($antwoorden['verandering_stemming']) && $antwoorden['verandering_stemming'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="verandering_stemming" <?= (isset($antwoorden['verandering_stemming']) && $antwoorden['verandering_stemming'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_stemming_welke"> <?= isset($antwoorden['verandering_stemming_welke']) ? $antwoorden['verandering_stemming_welke'] : '' ?> </textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="verandering_stemming_welke"> <?= isset($antwoorden['verandering_stemming_welke']) ? $antwoorden['verandering_stemming_welke'] : '' ?> </textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="verandering_stemming" <?= (!isset($antwoorden['verandering_stemming']) || $antwoorden['verandering_stemming'] == '0') ? "checked" : "" ?>>
@@ -279,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                         <div class="question"><div class="observe"><input type="checkbox" <?= (isset($boolArrayGevoelOpDitMoment[6]) && $boolArrayGevoelOpDitMoment[6] == '1') ? "checked" : "" ?> name="gevoel7"><p>Labiel</p></div></div>
                                         <div class="question"><div class="observe"><input type="checkbox" <?= (isset($boolArrayGevoelOpDitMoment[7]) && $boolArrayGevoelOpDitMoment[7] == '1') ? "checked" : "" ?> name="gevoel8"><p>Gespannen</p></div></div>
                                         <div class="question"><div class="observe"><input type="checkbox" <?= (isset($boolArrayGevoelOpDitMoment[8]) && $boolArrayGevoelOpDitMoment[8] == '1') ? "checked" : "" ?> name="gevoel9"><p>Verdrietig</p></div></div>
-                                        <div class="question"><div class="observe"><input type="checkbox" <?= (isset($boolArrayGevoelOpDitMoment[9]) && $boolArrayGevoelOpDitMoment[9] == '1') ? "checked" : "" ?> name="gevoel10"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text" name="gevoel_op_dit_moment_anders"><?= isset($antwoorden['anders']) ?></textarea></div>
+                                        <div class="question"><div class="observe"><input type="checkbox" <?= (isset($boolArrayGevoelOpDitMoment[9]) && $boolArrayGevoelOpDitMoment[9] == '1') ? "checked" : "" ?> name="gevoel10"><p>Anders, namelijk:</p></div><textarea  rows="1" cols="25" type="text" name="gevoel_op_dit_moment_anders"><?= $antwoorden['gevoel_op_dit_moment_anders'] ?></textarea></div>
                                     </div>
                                 </div>
 
@@ -339,9 +339,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Voelt u (lichamelijke) sensaties?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="sensaties" <?= (isset($antwoorden['sensaties']) && $antwoorden['sensaties'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="sensaties" <?= (isset($antwoorden['sensaties']) && $antwoorden['sensaties'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="wat voelt u?" name="sensaties_welk_gevoel"> <?= isset($antwoorden['sensaties_welk_gevoel']) ? $antwoorden['sensaties_welk_gevoel'] : '' ?> </textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="wat voelt u?" name="sensaties_welk_gevoel"><?= isset($antwoorden['sensaties_welk_gevoel']) ? $antwoorden['sensaties_welk_gevoel'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="sensaties" <?= (!isset($antwoorden['sensaties']) | $antwoorden['sensaties'] == '0') ? "checked" : "" ?>>

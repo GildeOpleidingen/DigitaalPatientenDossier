@@ -375,10 +375,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Neemt u meer tijd voor uzelf wanneer u dat nodig heeft?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="tijd_voor_uzelf_nodig"
+                                            <input class="radio" type="radio" value="1" name="tijd_voor_uzelf_nodig"
                                                 <?= isset($antwoorden['tijd_voor_uzelf_nodig']) && $antwoorden['tijd_voor_uzelf_nodig'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                            <textarea rows="1" cols="25" class="checkfield" type="text"
                                                 placeholder="blijkt uit?"
                                                 name="tijd_voor_uzelf_nodig_blijktuit"><?= isset($antwoorden['tijd_voor_uzelf_nodig_blijktuit']) ? $antwoorden['tijd_voor_uzelf_nodig_blijktuit'] : '' ?></textarea>
                                         </div>
@@ -398,10 +398,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Heeft u dagelijkse gewoonten?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="dagelijkse_gewoontes"
+                                            <input class="radio" type="radio" value="1" name="dagelijkse_gewoontes"
                                                 <?= isset($antwoorden['dagelijkse_gewoontes']) && $antwoorden['dagelijkse_gewoontes'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                            <textarea rows="1" cols="25" class="checkfield" type="text"
                                                 placeholder="welke?"
                                                 name="dagelijkse_gewoontes_welke"><?= isset($antwoorden['dagelijkse_gewoontes_welke']) ? $antwoorden['dagelijkse_gewoontes_welke'] : '' ?></textarea>
                                         </div>
@@ -417,10 +417,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     </p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="lichamelijke_beperking"
+                                            <input class="radio" type="radio" value="1" name="lichamelijke_beperking"
                                                 <?= isset($antwoorden['lichamelijke_beperking']) && $antwoorden['lichamelijke_beperking'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                            <textarea rows="1" cols="25" class="checkfield" type="text"
                                                 placeholder="welke?"
                                                 name="lichamelijke_beperking_welke"><?= isset($antwoorden['lichamelijke_beperking_welke']) ? $antwoorden['lichamelijke_beperking_welke'] : '' ?></textarea>
                                         </div>
@@ -450,10 +450,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Bent u de afgelopen tijd passiever geworden?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="passiever"
+                                            <input class="radio" type="radio" value="1" name="passiever"
                                                 <?= isset($antwoorden['passiever']) && $antwoorden['passiever'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                            <textarea rows="1" cols="25" class="checkfield" type="text"
                                                 placeholder="blijkt uit?"
                                                 name="passiever_blijktuit"><?= isset($antwoorden['passiever_blijktuit']) ? $antwoorden['passiever_blijktuit'] : '' ?></textarea>
                                         </div>
@@ -467,10 +467,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Heeft u problemen met het starten van de dag?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="problemen_starten_dag"
+                                            <input class="radio" type="radio" value="1" name="problemen_starten_dag"
                                                 <?= isset($antwoorden['problemen_starten_dag']) && $antwoorden['problemen_starten_dag'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                            <textarea rows="1" cols="25" class="checkfield" type="text"
                                                 placeholder="blijkt uit?"
                                                 name="problemen_starten_dag_blijktuit"><?= isset($antwoorden['problemen_starten_dag_blijktuit']) ? $antwoorden['problemen_starten_dag_blijktuit'] : '' ?></textarea>
                                         </div>
@@ -503,10 +503,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Zijn er activiteiten weggevallen als gevolg van uw huidige problemen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="activiteiten_weggevallen"
+                                            <input class="radio" type="radio" value="1" name="activiteiten_weggevallen"
                                                 <?= isset($antwoorden['activiteiten_weggevallen']) && $antwoorden['activiteiten_weggevallen'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                            <textarea rows="1" cols="25" class="checkfield" type="text"
                                                 placeholder="en wel?"
                                                 name="activiteiten_weggevallen_welke"><?= isset($antwoorden['activiteiten_weggevallen_welke']) ? $antwoorden['activiteiten_weggevallen_welke'] : '' ?></textarea>
                                         </div>
