@@ -1,0 +1,1 @@
+INSERT INTO `medewerker` (`id`, `naam`, `klas`, `foto`, `email`, `telefoonnummer`, `wachtwoord`, `grens_assistent`, `rol`) VALUES (NULL, 'admin', '', NULL, 'admin@rocgilde.nl', '', '$2y$10$GeyYblF4Oa1Fy.lEwWJbZuAoCWr7KcFbcidhib51p/EhK0HoIu6Im', '', 'beheerder');

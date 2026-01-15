@@ -74,7 +74,7 @@ Als je wil inloggen als admin vul je de volgende gegevens in:
 
 E-mailadres = "admin@rocgilde.nl".
 
-Wachtwoord = "admin".
+Wachtwoord = "Gilde123".
 
 Als je wil inloggen als medewerker vul je de volgende gegevens in:
 
