@@ -55,7 +55,7 @@ if (isset($_POST['submit'])) {
             }
         }
         
-        $result = DatabaseConnection::getConn()->prepare("INSERT INTO `medewerker` (naam, klas, foto, email, telefoonnummer, wachtwoord, rol) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $result = DatabaseConnection::getConn()->prepare("INSERT INTO `medewerker` (naam, klas, foto, email, telefoonnummer, wachtwoord, rol, grens_assistent) VALUES (?, ?, ?, ?, ?, ?, ?,0)");
         $result->bind_param("sssssss", $name, $klas, $foto, $email, $telefoonnummer, $hashedPassword, $rol);
         $result->execute();
         $success = "Medewerker toegevoegd!";

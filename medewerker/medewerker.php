@@ -1,82 +1,118 @@
 <?php
 session_start();
 require_once('../includes/auth.php');
-
 include '../database/DatabaseConnection.php';
 
 if(!isset($_GET['q'])){
-    $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol FROM medewerker;")->fetch_all(MYSQLI_ASSOC);
+    $items = DatabaseConnection::getConn()
+        ->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol FROM medewerker;")
+        ->fetch_all(MYSQLI_ASSOC);
 } else {    
-    $items = DatabaseConnection::getConn()->query("SELECT id, naam, klas, email, telefoonnummer, foto FROM medewerker WHERE naam LIKE '%$_GET[q]%' OR klas LIKE '%$_GET[q]%' OR email LIKE '%$_GET[q]%' OR telefoonnummer LIKE '%$_GET[q]%';")->fetch_all(MYSQLI_ASSOC);
+    $q = $_GET['q'];
+    $items = DatabaseConnection::getConn()
+        ->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol 
+                 FROM medewerker 
+                 WHERE naam LIKE '%$q%' 
+                 OR klas LIKE '%$q%' 
+                 OR email LIKE '%$q%' 
+                 OR telefoonnummer LIKE '%$q%';")
+        ->fetch_all(MYSQLI_ASSOC);
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medewerker</title>
+
     <link rel="stylesheet" href="../assets/css/medewerker/medewerker.css">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
-          rel="stylesheet" 
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
-          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" 
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" />
+
     <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
 </head>
 
 <body>
-    <?php
-    include '../includes/n-header.php';
-    ?>
+<?php include '../includes/n-header.php'; ?>
 
-    <div class="main">
-        <div class="content">
-            <div class="mt-4 mb-3 p-3">
-                <p class="card-text">
+<div class="main">
+    <div class="content">
+        <div class="mt-4 mb-3 p-3">
+
+            <?php
+            if(isset($_GET['q'])){
+                echo "
+                <a href='medewerker.php' class='text-decoration-none text-white fw-bold d-block mb-3'>
+                    <i class='fa-xs fa-solid fa-arrow-left'></i> Terug naar overzicht
+                </a>";
+            }
+            ?>
+
+            <!-- NIEUWE KNOP -->
+            <a href="../medewerker/register/register.php"
+               class="btn btn-primary mb-3">
+                <i class="fa fa-plus"></i> Medewerker toevoegen
+            </a>
+
+            <!-- ZOEKEN -->
+            <form action="" method="GET">
+                <div class="input-group mb-3">
+                    <input type="text" name="q" class="form-control" placeholder="Zoeken...">
+                    <span class="input-group-text bg-primary border-primary">
+                        <i class="fa fa-search text-white"></i>
+                    </span>
+                </div>
+            </form>
+
+            <!-- TABEL -->
+            <table class="table">
+                <tr>
+                    <th>Naam</th>
+                    <th>Klas</th>
+                    <th>E-mail</th>
+                    <th>Telefoonnummer</th>
+                </tr>
+
                 <?php
-                if(isset($_GET['q'])){
-                    echo "<a href='medewerker.php' class='text-decoration-none text-white fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Terug naar overzicht</a>";
+                if(count($items) == 0){
+                    echo "<tr>
+                            <td colspan='4' class='text-center'>
+                                Geen resultaten gevonden.
+                            </td>
+                          </tr>";
+                }
+
+                foreach ($items as $row) {
+                    if($_SESSION['rol'] == "medewerker" && $row['rol'] == "beheerder"){
+                        continue;
+                    }
+
+                    echo "<tr>";
+                    echo "<td class='row1'>
+                            <a href='overzicht/overzicht.php?id={$row['id']}'>
+                                {$row['naam']}
+                            </a>
+                          </td>";
+                    echo "<td class='row1'>{$row['klas']}</td>";
+                    echo "<td class='row1'>{$row['email']}</td>";
+                    echo "<td class='row1'>{$row['telefoonnummer']}</td>";
+                    echo "</tr>";
                 }
                 ?>
-                <form action="" method="GET">
-                    <div class="input-group mb-3">
-                        <input type="text" name="q" class="form-control" placeholder="Zoeken...">
-                        <span class="input-group-text bg-primary border-primary"><i class="fa fa-search text-white" aria-hidden="true"></i></span>
-                    </div>
-                </form>
-                <table class="table">
-                    <tr>
-                        <th>Naam</th>
-                        <th>Klas</th>
-                        <th>E-mail</th>
-                        <th>Telefoonnummer</th>
-                    </tr>
-                    <?php
-                    if(count($items) == 0){
-                        echo "<tr><td colspan='4' class='text-center'>Geen resultaten gevonden.</td></tr>";
-                    }
-                    foreach ($items as $row) {
-                        if($_SESSION['rol'] == "medewerker"){
-                            if($row['rol'] == "beheerder"){
-                                return;
-                            }
-                        }
-                        echo "<tr>";
-                        echo "<td class='row1'><a href=overzicht/overzicht.php?id=" . $row['id'] . ">" . $row['naam'] . "</a></td>";
-                        echo "<td class='row1'>" . $row['klas'] . "</td>";
-                        echo "<td class='row1'>" . $row['email'] . "</td>";
-                        echo "<td class='row1'>" . $row['telefoonnummer'] . "</td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </table>
-            </div>
+            </table>
+
         </div>
     </div>
+</div>
 </body>
-
 </html>
