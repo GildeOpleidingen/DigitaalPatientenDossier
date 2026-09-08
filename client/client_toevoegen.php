@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         //koppel nieuw client aan huidige medewerker
-        $newClientId = DatabaseConnection::getConn()->insert_id; 
+        $newClientId = DatabaseConnection::getConn()->insert_id;
         $stmt->close();
         $Main->CheckIfVerzorgregelExists($newClientId, $_SESSION['loggedin_id']);
         header('Location: client.php');
@@ -110,26 +110,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" name="nationaliteit" class="form-control" required>
             </div>
             <div class="form-group">
-    <label for="afdeling">Afdeling</label>
-    <select name="afdeling" class="form-control" required>
-        <?php
-        // Maak een nieuwe query voor alle afdelingen uit de database
-        $conn = DatabaseConnection::getConn();
-        $sqlAfdelingen = "SELECT naam FROM afdelingen"; 
-        $resultAfdelingen = $conn->execute_query($sqlAfdelingen);
+                <label for="afdeling">Afdeling</label>
+                <select name="afdeling" class="form-control" required>
+                    <?php
+                    // Maak een nieuwe query voor alle afdelingen uit de database
+                    $conn = DatabaseConnection::getConn();
+                    $sqlAfdelingen = "SELECT naam FROM afdelingen";
+                    $resultAfdelingen = $conn->execute_query($sqlAfdelingen);
 
-        if ($resultAfdelingen && $resultAfdelingen->num_rows > 0) {
-            while ($row = $resultAfdelingen->fetch_assoc()) {
-                // Kijk of dit de huidige afdeling van de client is
-                $selected = ($row['naam'] === $client['afdeling']) ? 'selected' : '';
-                echo "<option value='" . htmlspecialchars($row['naam']) . "' $selected>" . htmlspecialchars($row['naam']) . "</option>";
-            }
-        } else {
-            echo "<option value=''>Geen afdelingen gevonden</option>";
-        }
-        ?>
-    </select>
-</div>
+                    if ($resultAfdelingen && $resultAfdelingen->num_rows > 0) {
+                        while ($row = $resultAfdelingen->fetch_assoc()) {
+                            // Kijk of dit de huidige afdeling van de client is
+                            $selected = ($row['naam'] === $client['afdeling']) ? 'selected' : '';
+                            echo "<option value='" . htmlspecialchars($row['naam']) . "' $selected>" . htmlspecialchars($row['naam']) . "</option>";
+                        }
+                    } else {
+                        echo "<option value=''>Geen afdelingen gevonden</option>";
+                    }
+                    ?>
+                </select>
+            </div>
 
             <div class="form-group">
                 <label for="burgelijkestaat">Burgelijke Staat</label>
@@ -142,11 +142,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="foto">Foto (optioneel)</label>
                 <input type="file" name="foto" class="form-control" accept="image/*" id="fotoInput">
                 <div class="mt-2">
-                        <label for="currentPhoto">Huidige Foto:</label><br>
-                        <img id="preview" src="" alt="Client Foto" style="max-width: 150px; display: none;">
-                        <p id="noPhoto" style="display: none;">Geen foto beschikbaar</p>
-                    </div>
+                    <label for="currentPhoto">Huidige Foto:</label><br>
+                    <img id="preview" src="" alt="Client Foto" style="max-width: 150px; display: none;">
+                    <p id="noPhoto" style="display: none;">Geen foto beschikbaar</p>
                 </div>
+            </div>
             <button type="submit" class="btn btn-primary mt-3">Toevoegen</button>
             <a href="client.php" class="btn btn-secondary mt-3">Terug</a>
         </form>
@@ -175,4 +175,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     });
 </script>
+
 </html>
