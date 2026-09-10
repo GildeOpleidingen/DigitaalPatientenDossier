@@ -1,14 +1,13 @@
 <?php
 
-if (file_exists(dirname(__FILE__) . "/../../config.php")){
-    include_once dirname(__FILE__) . "/../../config.php";
-} elseif (file_exists(dirname(__FILE__) . "/../config.php")) {
+if (file_exists(dirname(__FILE__) . "/../config.php")) {
     include_once dirname(__FILE__) . "/../config.php";
+} elseif (file_exists(dirname(__FILE__) . "/../../config.php")) {
+    include_once dirname(__FILE__) . "/../../config.php";
 }
 else{
     echo "geen config gevonden";
 }
-
 class DatabaseConnection
 {
     private static ?mysqli $conn = null;
