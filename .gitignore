@@ -1,3 +1,14 @@
-
+# IDE & Editors
 .idea/
+.vscode/
+
+# Config & Credentials
 config.php
+.env
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
