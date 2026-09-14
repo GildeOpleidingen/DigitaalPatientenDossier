@@ -1,9 +1,9 @@
 <?php
-trait Client
+class Client
 {
     public function CheckIfVerzorgregelExists($clientId, $medewerkerId)
     {
-        try{
+        try {
             $result = DatabaseConnection::getConn()->prepare("
                         SELECT id
                         FROM verzorgerregel
@@ -18,14 +18,12 @@ trait Client
                 $result->bind_param("ii", $clientId, $medewerkerId);
                 $result->execute();
                 return true;
-            } 
-            else{
+            } else {
                 return true;
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
-         
     }
 
     public function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies): bool

@@ -13,8 +13,8 @@ if ($clientId <= 0) {
 
 $_SESSION['clientId'] = $clientId;
 
-$client = $ClientModel->getById($clientId);
-$clientRelations = $Main->getVerzorgerregelByClientId($clientId);
+$client = $Main->clientModel->getById($clientId);
+$clientRelations = $ClientModel->getVerzorgerregelByClientId($clientId);
 $verzorgers = [];
 foreach ($clientRelations as $relation) {
     $verzorger = $Main->getVerzorgersById($relation['medewerkerid']);
