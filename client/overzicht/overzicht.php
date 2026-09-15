@@ -2,7 +2,6 @@
 session_start();
 include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
-$Main = new Main();
 $ClientModel = new ClientModel();
 
 $clientId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -13,11 +12,11 @@ if ($clientId <= 0) {
 
 $_SESSION['clientId'] = $clientId;
 
-$client = $Main->clientModel->getById($clientId);
+$client = $ClientModel->getById($clientId);
 $clientRelations = $ClientModel->getVerzorgerregelByClientId($clientId);
 $verzorgers = [];
 foreach ($clientRelations as $relation) {
-    $verzorger = $Main->getVerzorgersById($relation['medewerkerid']);
+    $verzorger = $ClientModel->getVerzorgersById($relation['medewerkerid']);
     array_push($verzorgers, $verzorger);
 }
 ?>
@@ -55,12 +54,12 @@ foreach ($clientRelations as $relation) {
                 <p class="text">Geen episodes</p>
 
                 <h2 class="lead text-primary">Opgenomen op</h2>
-                <p class="text"><?= $Main->getAdmissionDateByClientId($clientId); ?></p>
+                <p class="text"><?= $ClientModel->getAdmissionDateByClientId($clientId); ?></p>
 
                 <h2 class="lead text-primary">Medische voorgeschiedenis</h2>
                 <p class="text">
                     <?php
-                    $mv = $Main->getMedischOverzichtByClientId($clientId)['medischevoorgeschiedenis'];
+                    $mv = $ClientModel->getMedischOverzichtByClientId($clientId)['medischevoorgeschiedenis'];
                     if ($mv) {
                         echo $mv;
                     } else {
@@ -72,7 +71,7 @@ foreach ($clientRelations as $relation) {
                 <h2 class="lead text-primary">Allergieën</h2>
                 <p class="text">
                     <?php
-                    $allergieen = $Main->getMedischOverzichtByClientId($clientId)['alergieen'];
+                    $allergieen = $ClientModel->getMedischOverzichtByClientId($clientId)['alergieen'];
                     if ($allergieen) {
                         echo $allergieen;
                     } else {
@@ -84,7 +83,7 @@ foreach ($clientRelations as $relation) {
                 <h2 class="lead text-primary">Medicatie</h2>
                 <p class="text">
                     <?php
-                    $medicatie = $Main->getMedischOverzichtByClientId($clientId)['medicatie'];
+                    $medicatie = $ClientModel->getMedischOverzichtByClientId($clientId)['medicatie'];
                     if ($medicatie) {
                         echo $medicatie;
                     } else {
