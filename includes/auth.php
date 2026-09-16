@@ -1,6 +1,4 @@
 <?php
-if (!isset($_SESSION['loggedin_id'])) {
-    header('Location: ../../index.php');
-    exit;
-}
-?>
+require_once __DIR__ . '/../models/Auth.php';
+
+Auth::requireLogin();

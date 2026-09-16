@@ -8,7 +8,6 @@ if (file_exists(dirname(__FILE__) . "/../config.php")) {
 else{
     echo "geen config gevonden";
 }
-
 class DatabaseConnection
 {
     private static ?mysqli $conn = null;
