@@ -1,5 +1,5 @@
 <?php
-class Client
+trait Client
 {
     public function CheckIfVerzorgregelExists($clientId, $medewerkerId)
     {

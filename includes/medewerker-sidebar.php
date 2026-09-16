@@ -2,7 +2,7 @@
 include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
-$$medewerkerid = $_GET['id'];
+$medewerkerid = $_GET['id'];
 $row1 = $Main->getMedewerkerById($medewerkerid);
 ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">

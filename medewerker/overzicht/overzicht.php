@@ -8,6 +8,7 @@ $ClientModel = new ClientModel();
 $medewerkerid = $_GET['id'];
 if (!isset($medewerkerid)) {
     header("Location: ../../index.php");
+    exit;
 }
 
 $verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");

@@ -4,7 +4,7 @@ require_once('../../includes/auth.php');
 include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
-$Clientmodel = new ClientModel();
+$ClientModel = new ClientModel();
 
 $patroonTypes = $Main->getPatternTypes();
 
