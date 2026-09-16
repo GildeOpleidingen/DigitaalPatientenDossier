@@ -33,4 +33,19 @@ class Main
     {
         return MedewerkerModel::findById($id) !== null;
     }
+
+    public ClientModel $clientModel;
+
+    public function __construct()
+    {
+        $this->clientModel = new ClientModel();
+    }
+
+    /**
+     * Haal een cliënt op via het nieuwe ClientModel.
+     */
+    public function getById($clientId): ?array
+    {
+        return $this->clientModel->getById((int)$clientId);
+    }
 }
