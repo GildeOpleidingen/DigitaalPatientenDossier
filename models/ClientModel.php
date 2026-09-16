@@ -9,24 +9,33 @@ class ClientModel
         $this->db = $db ?? DatabaseConnection::getConn();
     }
 
-    public function CheckIfVerzorgregelExists($clientId, $medewerkerId)
+    public function CheckIfVerzorgregelExists($clientId, $medewerkerId): bool
     {
         try {
-            $result = $this->db->prepare("
+            $stmt = $this->db->prepare("
                         SELECT id
                         FROM verzorgerregel
                         WHERE clientid = ?
                         AND medewerkerid = ?");
-            $result->bind_param("ii", $clientId, $medewerkerId);
-            $result->execute();
+            if (!$stmt) {
+                return false;
+            }
+            $stmt->bind_param("ii", $clientId, $medewerkerId);
+            $stmt->execute();
+            $stmt->store_result();
 
-            if ($result->num_rows == 0) {
-                $result->close();
-                $result = $this->db->prepare("INSERT INTO verzorgerregel (clientid, medewerkerid) VALUES (?, ?)");
-                $result->bind_param("ii", $clientId, $medewerkerId);
-                $result->execute();
-                return true;
+            if ($stmt->num_rows == 0) {
+                $stmt->close();
+                $insert = $this->db->prepare("INSERT INTO verzorgerregel (clientid, medewerkerid) VALUES (?, ?)");
+                if (!$insert) {
+                    return false;
+                }
+                $insert->bind_param("ii", $clientId, $medewerkerId);
+                $success = $insert->execute();
+                $insert->close();
+                return (bool)$success;
             } else {
+                $stmt->close();
                 return true;
             }
         } catch (Exception $e) {
@@ -37,12 +46,16 @@ class ClientModel
     public function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies): bool
     {
         $medischOverzicht = $this->getMedischOverzichtByClientId($clientid);
-        if ($this->checkIfClientExistsById($clientid) && count($medischOverzicht) > 0) {
+        if ($this->checkIfClientExistsById((int)$clientid) && count($medischOverzicht) > 0) {
             if (!$this->checkIfClientStoryExistsByClientId($clientid)) {
                 if (!$this->checkIfMedischOverzichtExistsByClientId($clientid)) {
                     $result = $this->db->prepare("INSERT INTO `medischoverzicht`(`clientid`) VALUES (?);");
+                    if (!$result) {
+                        return false;
+                    }
                     $result->bind_param("i", $clientid);
                     $result->execute();
+                    $result->close();
 
                     $medischOverzichtId = $this->db->insert_id;
                 } else {
@@ -51,20 +64,22 @@ class ClientModel
                 }
 
                 $result = $this->db->prepare("INSERT INTO `clientverhaal`(`id`, `medischoverzichtid`, `foto`, `introductie`, `gezinfamilie`, `belangrijkeinfo`, `hobbies`) VALUES (NULL, ?, ?, ?, ?, ?, ?);");
-                $result->bind_param("isssss", $medischOverzichtId, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies);
-                if ($result->execute()) {
-                    return true;
-                } else {
-                    return "Insert failed: " . $result->error;
+                if (!$result) {
+                    return false;
                 }
+                $result->bind_param("isssss", $medischOverzichtId, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies);
+                $success = $result->execute();
+                $result->close();
+                return (bool)$success;
             } else {
                 $result = $this->db->prepare("UPDATE `clientverhaal` SET `foto`=?,`introductie`=?,`gezinfamilie`=?,`belangrijkeinfo`=?,`hobbies`=? WHERE medischoverzichtid = ?;");
-                $result->bind_param("sssssi", $foto, $introductie, $familie, $belangrijkeinfo, $hobbies, $medischOverzicht['id']);
-                if ($result->execute()) {
-                    return true;
-                } else {
-                    return "Update failed: " . $result->error;
+                if (!$result) {
+                    return false;
                 }
+                $result->bind_param("sssssi", $foto, $introductie, $familie, $belangrijkeinfo, $hobbies, $medischOverzicht['id']);
+                $success = $result->execute();
+                $result->close();
+                return (bool)$success;
             }
         } else {
             return false;
@@ -74,24 +89,37 @@ class ClientModel
     public function updateClient($naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto): bool
     {
         $result = $this->db->prepare("UPDATE `client` SET `geslacht`=?,`adres`=?,`postcode`=?,`woonplaats`=?,`telefoonnummer`=?,`email`=?,`reanimatiestatus`=?,`nationaliteit`=?,`afdeling`=?,`burgelijkestaat`=?,`foto`=? WHERE `naam`=?;");
+        if (!$result) {
+            return false;
+        }
         $result->bind_param("ssssssssssss", $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto, $naam);
         $result->execute();
 
-        if ($result->affected_rows == 1)
+        if ($result->affected_rows == 1) {
+            $result->close();
             return true;
+        }
+        $result->close();
 
-        if ($result->affected_rows <= 0) {
-            $query = $this->db->prepare("SELECT * FROM `client` WHERE naam= ?");
-            $query->execute();
-            $query = $query->get_result()->fetch_all();
-            $result->bind_param("s", $naam);
-            if (sizeof($query) == 0) {
-                //            DatabaseConnection::getConn()->prepare("INSERT INTO `client`(`naam`, `geslacht`, `adres`, `postcode`, `woonplaats`, `telefoonnummer`, `email`, `reanimatiestatus`, `nationaliteit`, `afdeling`, `burgelijkestaat`, `foto`) VALUES ('$naam','$geslacht','$adres','$postcode','$woonplaats','$telefoonnummer','$email','$reanimatiestatus','$nationaliteit','$afdeling','$burgelijkestaat','$foto');");
-                $result = $this->db->prepare("INSERT INTO `client`(`naam`, `geslacht`, `adres`, `postcode`, `woonplaats`, `telefoonnummer`, `email`, `reanimatiestatus`, `nationaliteit`, `afdeling`, `burgelijkestaat`, `foto`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
-                $result->bind_param("sssssssssss", $naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto);
-                $result->execute();
-                return true;
+        // Als client nog niet bestond, controleer of de naam voorkomt
+        $query = $this->db->prepare("SELECT id FROM `client` WHERE naam = ?");
+        if (!$query) {
+            return false;
+        }
+        $query->bind_param("s", $naam);
+        $query->execute();
+        $queryResult = $query->get_result()->fetch_all();
+        $query->close();
+
+        if (count($queryResult) == 0) {
+            $insert = $this->db->prepare("INSERT INTO `client`(`naam`, `geslacht`, `adres`, `postcode`, `woonplaats`, `telefoonnummer`, `email`, `reanimatiestatus`, `nationaliteit`, `afdeling`, `burgelijkestaat`, `foto`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+            if (!$insert) {
+                return false;
             }
+            $insert->bind_param("ssssssssssss", $naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto);
+            $success = $insert->execute();
+            $insert->close();
+            return (bool)$success;
         }
 
         return false;
@@ -100,55 +128,61 @@ class ClientModel
     public function checkIfClientStoryExistsByClientId($id): bool
     {
         $result = $this->db->prepare("
-        SELECT cv.*
+        SELECT cv.id
         FROM client c
         JOIN medischoverzicht mo on mo.clientid = c.id 
         JOIN clientverhaal cv on cv.medischoverzichtid = mo.id
         WHERE c.id = ?
         ");
-        $result->bind_param("i", $id);
-        $result->execute();
-
-        if ($result->get_result()->num_rows > 0) {
-            return true;
-        } else {
+        if (!$result) {
             return false;
         }
+        $result->bind_param("i", $id);
+        $result->execute();
+        $res = $result->get_result();
+        $exists = ($res && $res->num_rows > 0);
+        $result->close();
+
+        return $exists;
     }
 
     public function checkIfMedischOverzichtExistsByClientId($clientid): bool
     {
         $result = $this->db->prepare("
-        SELECT *
+        SELECT id
         FROM medischoverzicht
         WHERE clientid = ?
         ");
-        $result->bind_param("i", $clientid);
-        $result->execute();
-
-        if ($result->get_result()->num_rows > 0) {
-            return true;
-        } else {
+        if (!$result) {
             return false;
         }
+        $result->bind_param("i", $clientid);
+        $result->execute();
+        $res = $result->get_result();
+        $exists = ($res && $res->num_rows > 0);
+        $result->close();
+
+        return $exists;
     }
 
     public function checkIfCarePlanExistsByClientId($id): bool
     {
         $result = $this->db->prepare("
-        SELECT cp.*
+        SELECT cp.id
         FROM client c
         JOIN zorgplan cp on cp.clientid = c.id
         WHERE c.id = ?
         ");
-        $result->bind_param("i", $id);
-        $result->execute();
-
-        if ($result->get_result()->num_rows > 0) {
-            return true;
-        } else {
+        if (!$result) {
             return false;
         }
+        $result->bind_param("i", $id);
+        $result->execute();
+        $res = $result->get_result();
+        $exists = ($res && $res->num_rows > 0);
+        $result->close();
+
+        return $exists;
     }
 
     public function getClientStoryByClientId($id): array
@@ -160,11 +194,16 @@ class ClientModel
         join clientverhaal cv on cv.medischoverzichtid = mo.id
         where c.id = ?
         ");
+        if (!$result) {
+            return [];
+        }
 
         $result->bind_param("i", $id);
         $result->execute();
+        $row = $result->get_result()->fetch_assoc();
+        $result->close();
 
-        return (array) $result->get_result()->fetch_array();
+        return $row ?: [];
     }
 
     public function getCarePlanByClientId($id): array
@@ -175,10 +214,16 @@ class ClientModel
         JOIN zorgplan cp on cp.clientid = c.id
         WHERE c.id = ?
         ");
+        if (!$result) {
+            return [];
+        }
 
         $result->bind_param("i", $id);
         $result->execute();
-        return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
+        $row = $result->get_result()->fetch_assoc();
+        $result->close();
+
+        return $row ?: [];
     }
 
     public function getVerzorgerregelByClientId($id): array
@@ -188,10 +233,16 @@ class ClientModel
         FROM verzorgerregel
         WHERE clientid = ?
         ");
+        if (!$result) {
+            return [];
+        }
 
         $result->bind_param("i", $id);
         $result->execute();
-        return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+        $rows = $result->get_result()->fetch_all(MYSQLI_ASSOC);
+        $result->close();
+
+        return $rows ?: [];
     }
 
     public function getAdmissionDateByClientId($id): string
@@ -201,16 +252,17 @@ class ClientModel
         from medischoverzicht
         where clientid = ?
         ");
+        if (!$result) {
+            return "Geen opnamedatum ingevuld";
+        }
         $result->bind_param("i", $id);
         $result->execute();
-        $opnamedatum = $result->get_result()->fetch_assoc();
+        $res = $result->get_result();
+        $opnamedatum = $res ? $res->fetch_assoc() : null;
+        $result->close();
 
-        if ($opnamedatum && isset($opnamedatum['opnamedatum'])) {
-            if ($opnamedatum['opnamedatum'] !== '0000-00-00 00:00:00') {
-                return $opnamedatum['opnamedatum'];
-            } else {
-                return "Geen opnamedatum ingevuld";
-            }
+        if ($opnamedatum && !empty($opnamedatum['opnamedatum']) && $opnamedatum['opnamedatum'] !== '0000-00-00 00:00:00' && $opnamedatum['opnamedatum'] !== '0000-00-00') {
+            return (string)$opnamedatum['opnamedatum'];
         } else {
             return "Geen opnamedatum ingevuld";
         }
@@ -224,35 +276,44 @@ class ClientModel
         JOIN medischoverzicht mo on mo.clientid = c.id 
         where c.id = ?
         ");
+        if (!$result) {
+            return $this->getDefaultMedischOverzicht();
+        }
 
         $result->bind_param("i", $id);
         $result->execute();
 
-        $mo =  (array) $result->get_result()->fetch_array();
-        if ($mo != null) {
+        $mo = $result->get_result()->fetch_assoc();
+        $result->close();
+        if (!empty($mo)) {
             return $mo;
         } else {
-            $legeArray = [];
-            $legeArray["medischevoorgeschiedenis"] = "Geen medische voorgeschiedenis ingevuld";
-            $legeArray["medicatie"] = "Geen medicatie ingevuld";
-            $legeArray["alergieen"] = "Geen allergieën ingevuld";
-            $legeArray["opnamedatum"] = "Geen opnamedatum ingevuld";
-            return $legeArray;
+            return $this->getDefaultMedischOverzicht();
         }
+    }
+
+    private function getDefaultMedischOverzicht(): array
+    {
+        return [
+            "medischevoorgeschiedenis" => "Geen medische voorgeschiedenis ingevuld",
+            "medicatie" => "Geen medicatie ingevuld",
+            "alergieen" => "Geen allergieën ingevuld",
+            "opnamedatum" => "Geen opnamedatum ingevuld"
+        ];
     }
 
     public function checkIfClientExistsById(int $id): bool
     {
         $result = $this->getClientById($id);
 
-        return sizeof((array) $result) > 0;
+        return !empty($result);
     }
 
     public function checkIfClientExistsByName(string $name): bool
     {
         $result = $this->getClientByName($name);
 
-        return sizeof((array) $result) > 0;
+        return !empty($result);
     }
 
     public function getById(int $id): ?array
@@ -286,10 +347,15 @@ class ClientModel
     public function getClientByName($name): array
     {
         $result = $this->db->prepare("SELECT * FROM `client` WHERE naam = ?;");
+        if (!$result) {
+            return [];
+        }
         $result->bind_param("s", $name);
         $result->execute();
+        $row = $result->get_result()->fetch_assoc();
+        $result->close();
 
-        return (array) $result->get_result()->fetch_array();
+        return $row ?: [];
     }
 
     public function getVerzorgersById($id): array
@@ -299,57 +365,41 @@ class ClientModel
         FROM medewerker
         WHERE id = ?
         ");
+        if (!$result) {
+            return [];
+        }
 
         $result->bind_param("i", $id);
         $result->execute();
-        return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
+        $row = $result->get_result()->fetch_assoc();
+        $result->close();
+        return $row ?: [];
     }
 
-    public function getPatientGegevens($id, $type)
+    public function getPatientGegevens($id, $type): array
     {
-        if ($type == 'clientRelations') {
-            $result = $this->db->prepare("
-            SELECT * 
-            FROM verzorgerregel 
-            WHERE clientid = ?
-            ");
+        $sql = match ($type) {
+            'clientRelations' => "SELECT * FROM verzorgerregel WHERE clientid = ?",
+            'contactPersonen' => "SELECT * FROM relatie WHERE clientid = ?",
+            'medischOverzicht' => "SELECT * FROM medischoverzicht WHERE clientid = ?",
+            'verzorgersArr' => "SELECT m.* FROM medewerker m JOIN verzorgerregel vr ON m.id = vr.medewerkerid WHERE vr.clientid = ?",
+            default => null,
+        };
 
-            $result->bind_param("i", $id);
-            $result->execute();
-            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
-        } elseif ($type == 'contactPersonen') {
-            $result = $this->db->prepare("
-            SELECT * 
-            FROM relatie 
-            WHERE clientid = ?
-            ");
-
-            $result->bind_param("i", $id);
-            $result->execute();
-            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
-        } elseif ($type == 'medischOverzicht') {
-            $result = $this->db->prepare("
-            SELECT * 
-            FROM medischoverzicht 
-            WHERE clientid = ?
-            ");
-
-            $result->bind_param("i", $id);
-            $result->execute();
-            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
-        } elseif ($type == 'verzorgersArr') {
-            $result = $this->db->prepare("
-            SELECT m.* 
-            FROM medewerker m
-            JOIN verzorgerregel vr ON m.id = vr.medewerkerid
-            WHERE vr.clientid = ?
-            ");
-
-            $result->bind_param("i", $id);
-            $result->execute();
-            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
-        } else {
-            return false;
+        if ($sql === null) {
+            return [];
         }
+
+        $result = $this->db->prepare($sql);
+        if (!$result) {
+            return [];
+        }
+
+        $result->bind_param("i", $id);
+        $result->execute();
+        $rows = $result->get_result()->fetch_all(MYSQLI_ASSOC);
+        $result->close();
+
+        return $rows ?: [];
     }
 }
