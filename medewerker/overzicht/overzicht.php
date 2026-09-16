@@ -3,6 +3,7 @@ session_start();
 include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
+$ClientModel = new ClientModel();
 
 $medewerkerid = $_GET['id'];
 if (!isset($medewerkerid)) {
