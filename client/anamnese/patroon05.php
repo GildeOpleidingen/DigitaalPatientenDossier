@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                 `gemakkelijk_ontspannen`,
                 `observatie`)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $result2->bind_param("isisisisiiiiis",
+            $result2->bind_param("iisississiiiis",
                 $vragenlijstId,
                 $verandering_inslaaptijd,
                 $verandering_inslaaptijd_blijktuit,
@@ -181,9 +181,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Is er in de afgelopen periode verandering in de de duur van uw slaap gekomen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="verandering_inslaaptijd" <?= (isset($antwoorden['verandering_inslaaptijd']) && $antwoorden['verandering_inslaaptijd'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="verandering_inslaaptijd" <?= (isset($antwoorden['verandering_inslaaptijd']) && $antwoorden['verandering_inslaaptijd'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_inslaaptijd_blijktuit"><?= isset($antwoorden['verandering_inslaaptijd_blijktuit']) ? $antwoorden['verandering_inslaaptijd_blijktuit'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="verandering_inslaaptijd_blijktuit"><?= isset($antwoorden['verandering_inslaaptijd_blijktuit']) ? $antwoorden['verandering_inslaaptijd_blijktuit'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="verandering_inslaaptijd" <?= (!isset($antwoorden['verandering_inslaaptijd']) || $antwoorden['verandering_inslaaptijd'] == '0') ? "checked" : "" ?>>
@@ -195,9 +195,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Is er verandering ontstaan in de kwaliteit van uw slaap (in- en/of doorslaapprobleem)?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="verandering_kwaliteit_slapen" <?= (isset($antwoorden['verandering_kwaliteit_slapen']) && $antwoorden['verandering_kwaliteit_slapen'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="verandering_kwaliteit_slapen" <?= (isset($antwoorden['verandering_kwaliteit_slapen']) && $antwoorden['verandering_kwaliteit_slapen'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="verandering_kwaliteit_slapen_blijktuit"><?= isset($antwoorden['verandering_kwaliteit_slapen_blijktuit']) ? $antwoorden['verandering_kwaliteit_slapen_blijktuit'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="verandering_kwaliteit_slapen_blijktuit"><?= isset($antwoorden['verandering_kwaliteit_slapen_blijktuit']) ? $antwoorden['verandering_kwaliteit_slapen_blijktuit'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="verandering_kwaliteit_slapen" <?= (!isset($antwoorden['verandering_kwaliteit_slapen']) || $antwoorden['verandering_kwaliteit_slapen'] == '0') ? "checked" : "" ?>>
@@ -209,9 +209,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Doet u iets om (in) te kunnen slapen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="gebruik_inslaapmiddel" <?= (isset($antwoorden['gebruik_inslaapmiddel']) && $antwoorden['gebruik_inslaapmiddel'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="gebruik_inslaapmiddel" <?= (isset($antwoorden['gebruik_inslaapmiddel']) && $antwoorden['gebruik_inslaapmiddel'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <div id="checkfield">
+                                            <div class="checkfield">
                                                 <div class="question">
                                                     <div class="observe"><input type="checkbox" <?= (isset($boolArrayInslaapmiddel[0]) && $boolArrayInslaapmiddel[0] === '1') ? "checked" : "" ?> name="inslaapmiddel1">
                                                         <p>Medicijngebruik</p>

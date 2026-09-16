@@ -90,7 +90,7 @@ input[type="text"], input, textarea {
     border-radius: 3px;
 }
 
-#checkfield {
+.checkfield {
     display: none;
     width: 100%;
 }
@@ -104,7 +104,7 @@ textarea{
     border-radius: 3px;
 }
 
-#radio:checked ~ #checkfield {
+.radio:checked ~ .checkfield {
     display: block;
 }
 

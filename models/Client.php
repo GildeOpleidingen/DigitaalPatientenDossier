@@ -1,9 +1,9 @@
 <?php
-trait Client
+class Client
 {
     public function CheckIfVerzorgregelExists($clientId, $medewerkerId)
     {
-        try{
+        try {
             $result = DatabaseConnection::getConn()->prepare("
                         SELECT id
                         FROM verzorgerregel
@@ -12,21 +12,18 @@ trait Client
             $result->bind_param("ii", $clientId, $medewerkerId);
             $result->execute();
 
-            if ($result->num_rows() == 0) {
+            if ($result->num_rows == 0) {
                 $result->close();
-                $toegang = 1;
-                $result = DatabaseConnection::getConn()->prepare("INSERT INTO verzorgerregel (clientid, medewerkerid, toegang) VALUES (?, ?, ?)");
-                $result->bind_param("iii", $clientId, $medewerkerId, $toegang);
+                $result = DatabaseConnection::getConn()->prepare("INSERT INTO verzorgerregel (clientid, medewerkerid) VALUES (?, ?)");
+                $result->bind_param("ii", $clientId, $medewerkerId);
                 $result->execute();
                 return true;
-            } 
-            else{
+            } else {
                 return true;
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
-         
     }
 
     public function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies): bool

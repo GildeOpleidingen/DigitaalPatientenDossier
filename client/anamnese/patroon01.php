@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
 
             $stmt = $conn->prepare($sql);
             $stmt->bind_param(
-                "ssissississssssssss",
+                "ssisssssissssssssss",
                 ...$data
             );
 
@@ -169,9 +169,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Rookt u?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="rookt" <?= $antwoorden['rookt'] == 1 ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" name="rookt" <?= $antwoorden['rookt'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="hoeveel?" name="rookt_hoeveelheid"><?= isset($antwoorden['rookt_hoeveelheid']) ? $antwoorden['rookt_hoeveelheid'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="hoeveel?" name="rookt_hoeveelheid"><?= isset($antwoorden['rookt_hoeveelheid']) ? $antwoorden['rookt_hoeveelheid'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="rookt" <?= $antwoorden['rookt'] == 0 ? "checked" : "" ?>>
@@ -183,9 +183,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Drinkt u?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="drinkt" <?= $antwoorden['drinkt'] == 1 ? "checked" : "" ?> value="1">
+                                            <input class="radio" type="radio" name="drinkt" <?= $antwoorden['drinkt'] == 1 ? "checked" : "" ?> value="1">
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="hoeveel?" name="drinkt_hoeveelheid"><?= isset($antwoorden['drinkt_hoeveelheid']) ? $antwoorden['drinkt_hoeveelheid'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="hoeveel?" name="drinkt_hoeveelheid"><?= isset($antwoorden['drinkt_hoeveelheid']) ? $antwoorden['drinkt_hoeveelheid'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="drinkt" <?= $antwoorden['drinkt'] == 0 ? "checked" : "" ?> value="0">
@@ -197,9 +197,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Heeft u momenteel een infectie of overdraagbare besmettelijke aandoening?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] == 1 ? "checked" : "" ?> value="1">
+                                            <input class="radio" type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] == 1 ? "checked" : "" ?> value="1">
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="besmettelijke_aandoening_welke"><?= isset($antwoorden['besmettelijke_aandoening_welke']) ? $antwoorden['besmettelijke_aandoening_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="besmettelijke_aandoening_welke"><?= isset($antwoorden['besmettelijke_aandoening_welke']) ? $antwoorden['besmettelijke_aandoening_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="besmettelijke_aandoening" <?= $antwoorden['besmettelijke_aandoening'] == 0 ? "checked" : "" ?>  value="0">
@@ -211,9 +211,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Bent u ergens allergisch voor?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" name="alergieen" <?= $antwoorden['alergieen'] == 1 ? "checked" : "" ?> value="1">
+                                            <input class="radio" type="radio" name="alergieen" <?= $antwoorden['alergieen'] == 1 ? "checked" : "" ?> value="1">
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="alergieen_welke"><?= isset($antwoorden['alergieen_welke']) ? $antwoorden['alergieen_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="alergieen_welke"><?= isset($antwoorden['alergieen_welke']) ? $antwoorden['alergieen_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" name="alergieen" <?= $antwoorden['alergieen'] == 0 ? "checked" : "" ?> value="0">

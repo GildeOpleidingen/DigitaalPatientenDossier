@@ -182,9 +182,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Heeft u problemen met ontlasting?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="ontlasting_probleem" <?= (isset($antwoorden['ontlasting_probleem']) && $antwoorden['ontlasting_probleem'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="ontlasting_probleem" <?= (isset($antwoorden['ontlasting_probleem']) && $antwoorden['ontlasting_probleem'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="op_welke"><?= isset($antwoorden['op_welke']) ? $antwoorden['op_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="op_welke"><?= isset($antwoorden['op_welke']) ? $antwoorden['op_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="ontlasting_probleem" <?= (!isset($antwoorden['ontlasting_probleem']) || $antwoorden['ontlasting_probleem'] == '0') ? "checked" : "" ?>>
@@ -199,9 +199,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Gebruikt u iets om uw stoelgang te reguleren?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="op_medicijnen" <?= (isset($antwoorden['op_medicijnen']) && $antwoorden['op_medicijnen'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="op_medicijnen" <?= (isset($antwoorden['op_medicijnen']) && $antwoorden['op_medicijnen'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="op_medicijnen_welke"><?= isset($antwoorden['op_medicijnen_welke']) ? $antwoorden['op_medicijnen_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="op_medicijnen_welke"><?= isset($antwoorden['op_medicijnen_welke']) ? $antwoorden['op_medicijnen_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="op_medicijnen" <?= (!isset($antwoorden['op_medicijnen']) || $antwoorden['op_medicijnen'] == '0') ? "checked" : "" ?>>
@@ -239,9 +239,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>- Bent u hiervoor in behandeling?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="up_incontinentie_behandeling" <?= (isset($antwoorden['up_incontinentie_behandeling']) && $antwoorden['up_incontinentie_behandeling'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="up_incontinentie_behandeling" <?= (isset($antwoorden['up_incontinentie_behandeling']) && $antwoorden['up_incontinentie_behandeling'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="up_incontinentie_behandeling_welke"><?= isset($antwoorden['up_incontinentie_behandeling_welke']) ? $antwoorden['up_incontinentie_behandeling_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="up_incontinentie_behandeling_welke"><?= isset($antwoorden['up_incontinentie_behandeling_welke']) ? $antwoorden['up_incontinentie_behandeling_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="up_incontinentie_behandeling" <?= (!isset($antwoorden['up_incontinentie_behandeling']) || $antwoorden['up_incontinentie_behandeling'] == '0') ? "checked" : "" ?>>
@@ -253,9 +253,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Hebt u last van transpiratie?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="transpiratie" <?= (isset($antwoorden['transpiratie']) && $antwoorden['transpiratie'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="transpiratie" <?= (isset($antwoorden['transpiratie']) && $antwoorden['transpiratie'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="en wel?" name="transpiratie_welke"><?= isset($antwoorden['transpiratie_welke']) ? $antwoorden['transpiratie_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="transpiratie_welke"><?= isset($antwoorden['transpiratie_welke']) ? $antwoorden['transpiratie_welke'] : '' ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="transpiratie" <?= (!isset($antwoorden['transpiratie']) || $antwoorden['transpiratie'] == '0') ? "checked" : "" ?>>

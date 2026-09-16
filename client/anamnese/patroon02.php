@@ -190,9 +190,9 @@ function e($v) {
                                     <p>- Heeft u een dieet?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="dieet" <?= $antwoorden['dieet'] == 1 ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="dieet" <?= $antwoorden['dieet'] == 1 ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" name="dieet_welk"
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" name="dieet_welk"
                                                 placeholder="en wel?"><?= isset($antwoorden['dieet_welk']) ? $antwoorden['dieet_welk'] : '' ?></textarea>
                                         </div>
                                         <p>

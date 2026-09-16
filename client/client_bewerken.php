@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/Auth.php';
 Auth::requireAdmin();
-
 include '../database/DatabaseConnection.php';
 
 // Zorg ervoor dat je de ID van de client hebt om te bewerken

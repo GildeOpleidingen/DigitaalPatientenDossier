@@ -120,4 +120,12 @@ trait Patroon
         $result->execute();
         return $result->get_result()->fetch_array(MYSQLI_ASSOC);
     }
+
+    public function CheckValue($value, $min, $max){
+        if($value >= $min && $value <= $max){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

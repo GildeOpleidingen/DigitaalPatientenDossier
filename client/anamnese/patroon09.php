@@ -204,11 +204,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Is uw seksuele beleving veranderd?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1"
+                                            <input class="radio" type="radio" value="1"
                                                 name="verandering_seksuele_beleving"
                                                 <?= (isset($antwoorden['verandering_seksuele_beleving']) && $antwoorden['verandering_seksuele_beleving'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text" placeholder="door?"
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="door?"
                                                 name="verandering_seksuele_beleving_door"><?= isset($antwoorden['verandering_seksuele_beleving_door']) ? $antwoorden['verandering_seksuele_beleving_door'] : '' ?></textarea>
                                         </div>
                                         <p>
@@ -267,10 +267,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Gebruikt u anticonceptiemiddelen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="anticonceptiemiddel"
+                                            <input class="radio" type="radio" value="1" name="anticonceptiemiddel"
                                                 <?= (isset($antwoorden['anticonceptiemiddel']) && $antwoorden['anticonceptiemiddel'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                            <textarea rows="1" cols="25" class="checkfield" type="text"
                                                 placeholder="welke?"
                                                 name="anticonceptiemiddel_welke"> <?= isset($antwoorden['anticonceptiemiddel_welke']) ? $antwoorden['anticonceptiemiddel_welke'] : '' ?></textarea>
                                         </div>
@@ -342,10 +342,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Heeft u last (gehad) van seksueel overdraagbare aandoeningen (soa)?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input id="radio" type="radio" value="1" name="soa"
+                                            <input class="radio" type="radio" value="1" name="soa"
                                                 <?= (isset($antwoorden['soa']) && $antwoorden['soa'] == '1') ? "checked" : "" ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" id="checkfield" type="text"
+                                            <textarea rows="1" cols="25" class="checkfield" type="text"
                                                 placeholder="en wel?"
                                                 name="soa_welke"> <?= isset($antwoorden['soa_welke']) ? $antwoorden['soa_welke'] : '' ?></textarea>
                                         </div>

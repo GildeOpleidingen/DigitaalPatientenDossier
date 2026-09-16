@@ -69,6 +69,8 @@ $medewerker = $result->get_result()->fetch_assoc();
                 // Gebruik absolute paden
                 if ($key == "dashboard") {
                     echo "<li class='nav-item'><a href='/dashboard.php' class='nav-link $active' id='$key'>" . ucfirst($value) . "</a></li>";
+                } else if ($key == "medewerker" && $_SESSION['rol'] != 'beheerder' ) {
+
                 } else {
                     echo "<li class='nav-item'><a href='/{$value}/{$key}.php' class='nav-link $active' id='$key'>" . ucfirst($value) . "</a></li>";
                 }
