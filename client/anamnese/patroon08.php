@@ -10,7 +10,7 @@ $clientId = $_SESSION['clientId'];
  $patternId = 8; // Dit is patroon 8, pas aan per pagina
 
 // Haal eerder opgeslagen antwoorden op zodat het formulier correct voorgevuld wordt
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], $patternId);
+$antwoorden = $Main->getAnswers($_SESSION['clientId'], $patternId);
 // observatie array ophalen en splitsen zoals in patroon11
 $boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : array_fill(0, 17, '0');
 

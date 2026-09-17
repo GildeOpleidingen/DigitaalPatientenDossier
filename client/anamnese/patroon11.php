@@ -5,7 +5,7 @@ include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
 
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 11);
+$antwoorden = $Main->getAnswers($_SESSION['clientId'], 11);
 
 $boolArrayGeloof = isset($antwoorden['geloof_welk']) && $antwoorden['geloof_welk'] !== null ? str_split($antwoorden['geloof_welk']) : [];
 $boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];

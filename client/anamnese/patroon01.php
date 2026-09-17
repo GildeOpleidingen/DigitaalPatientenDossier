@@ -3,10 +3,11 @@ session_start();
 include '../../includes/auth.php';
 include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
+
 $Main = new Main();
 
 $clientId = $_SESSION['clientId'];
-$antwoorden = $Main->getPatternAnswers($clientId, 1);
+$antwoorden = $Main->getAnswers($clientId, 1);
 $boolArrayObservatie = isset($antwoorden['observatie']) ? str_split($antwoorden['observatie']) : [];
 
 // HELPERS

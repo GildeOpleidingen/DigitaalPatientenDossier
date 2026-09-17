@@ -2,7 +2,7 @@
 
 class Main
 {
-    use Anamnese, Client, Convert, Formulier, Patroon, Rapportage, Zorgplan, Afdeling;
+    use Anamnese, Client, Convert, Formulier, Rapportage, Zorgplan, Afdeling;
 
     public function findById(int $id): ?array
     {
@@ -42,10 +42,44 @@ class Main
     }
 
     /**
-     * Haal een cliënt op via het nieuwe ClientModel.
+     * Fetch a client via ClientModel.
      */
     public function getById($clientId): ?array
     {
         return $this->clientModel->getById((int)$clientId);
+    }
+
+    // ==========================================
+    // PatroonModel Functions
+    // ==========================================
+
+    public function getQuestionnaireId(int $clientId, int $employeeId): ?int
+    {
+        return PatroonModel::getQuestionnaireId($clientId, $employeeId);
+    }
+
+    public function getPatternTypes(): ?array
+    {
+        return PatroonModel::getPatternTypes();
+    }
+
+    public function getPatternType(int $patternId): ?array
+    {
+        return PatroonModel::getPatternType($patternId);
+    }
+
+    public function checkValue(int $value, int $min, int $max): bool
+    {
+        return PatroonModel::checkValue($value, $min, $max);
+    }
+
+    public function getAnswers(int $clientId, int $patternType): array
+    {
+        return PatroonModel::getAnswers($clientId, $patternType);
+    }
+
+    public function saveAnswers(int $clientId, int $medewerkerId, int $patternNum, array $data): bool
+    {
+        return PatroonModel::saveAnswers($clientId, $medewerkerId, $patternNum, $data);
     }
 }

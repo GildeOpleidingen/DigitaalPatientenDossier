@@ -8,7 +8,7 @@ $Main = new Main();
 $db = DatabaseConnection::getConn();
 
 // --- 1. Ophalen eerder opgeslagen antwoorden ---
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 2);
+$antwoorden = $Main->getAnswers($_SESSION['clientId'], 2);
 $boolArrayObservatie = isset($antwoorden['observatie'])
     ? str_split($antwoorden['observatie'])
     : array_fill(0, 6, 0);

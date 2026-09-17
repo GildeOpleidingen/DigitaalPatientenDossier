@@ -7,7 +7,7 @@ include '../../models/autoload.php';
 
 $Main = new Main();
 
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 4);
+$antwoorden = $Main->getAnswers($_SESSION['clientId'], 4);
 $boolArrayObservatie = isset($antwoorden['observatie']) ? str_split($antwoorden['observatie']) : [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {

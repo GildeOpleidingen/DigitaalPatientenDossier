@@ -7,7 +7,7 @@ require_once '../../models/autoload.php';
 $Main = new Main();
 $db = DatabaseConnection::getConn();
 
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 6);
+$antwoorden = $Main->getAnswers($_SESSION['clientId'], 6);
 $boolArrayObservatie = isset($antwoorden['observatie'])
     ? str_split($antwoorden['observatie'])
     : array_fill(0, 12, 0);
