@@ -12,10 +12,10 @@ if (!isset($clientId)) {
 }
 
 $client = $ClientModel->getClientById($clientId);
-$clientRelations = $ClientModel->getPatientGegevens($clientId, 'clientRelations');
-$contactpersonen = $ClientModel->getPatientGegevens($clientId, 'contactPersonen');
-$medischoverzicht = $ClientModel->getPatientGegevens($clientId, 'medischOverzicht');
-$verzorgerArr = $ClientModel->getPatientGegevens($clientId, 'verzorgersArr');
+$clientRelations = $ClientModel->getPatientData($clientId, 'clientRelations');
+$contactpersonen = $ClientModel->getPatientData($clientId, 'contactPersonen');
+$medischoverzicht = $ClientModel->getPatientData($clientId, 'medischOverzicht');
+$verzorgerArr = $ClientModel->getPatientData($clientId, 'verzorgersArr');
 
 $verzorgers = [];
 foreach ($clientRelations as $relation) {

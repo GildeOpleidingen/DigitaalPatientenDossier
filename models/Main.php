@@ -48,4 +48,14 @@ class Main
     {
         return $this->clientModel->getById((int)$clientId);
     }
+
+    public function checkIfCareRelationExists(int $clientId, int $employeeId): bool
+    {
+        return $this->clientModel->checkIfCareRelationExists($clientId, $employeeId);
+    }
+
+    public function getMedicalOverviewByClientId(int $clientId): array
+    {
+        return $this->clientModel->getMedicalOverviewByClientId($clientId);
+    }
 }

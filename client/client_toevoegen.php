@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //koppel nieuw client aan huidige medewerker
         $newClientId = DatabaseConnection::getConn()->insert_id;
         $stmt->close();
-        $Main->CheckIfVerzorgregelExists($newClientId, $_SESSION['loggedin_id']);
+        $Main->checkIfCareRelationExists($newClientId, $_SESSION['loggedin_id']);
         header('Location: client.php');
         exit;
     } else {

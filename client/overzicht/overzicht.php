@@ -13,10 +13,10 @@ if ($clientId <= 0) {
 $_SESSION['clientId'] = $clientId;
 
 $client = $ClientModel->getById($clientId);
-$clientRelations = $ClientModel->getVerzorgerregelByClientId($clientId);
+$clientRelations = $ClientModel->getCareRelationsByClientId($clientId);
 $verzorgers = [];
 foreach ($clientRelations as $relation) {
-    $verzorger = $ClientModel->getVerzorgersById($relation['medewerkerid']);
+    $verzorger = $ClientModel->getCaregiversById($relation['medewerkerid']);
     array_push($verzorgers, $verzorger);
 }
 ?>
@@ -59,7 +59,7 @@ foreach ($clientRelations as $relation) {
                 <h2 class="lead text-primary">Medische voorgeschiedenis</h2>
                 <p class="text">
                     <?php
-                    $mv = $ClientModel->getMedischOverzichtByClientId($clientId)['medischevoorgeschiedenis'];
+                    $mv = $ClientModel->getMedicalOverviewByClientId($clientId)['medischevoorgeschiedenis'];
                     if ($mv) {
                         echo $mv;
                     } else {
@@ -71,7 +71,7 @@ foreach ($clientRelations as $relation) {
                 <h2 class="lead text-primary">Allergieën</h2>
                 <p class="text">
                     <?php
-                    $allergieen = $ClientModel->getMedischOverzichtByClientId($clientId)['alergieen'];
+                    $allergieen = $ClientModel->getMedicalOverviewByClientId($clientId)['alergieen'];
                     if ($allergieen) {
                         echo $allergieen;
                     } else {
@@ -83,7 +83,7 @@ foreach ($clientRelations as $relation) {
                 <h2 class="lead text-primary">Medicatie</h2>
                 <p class="text">
                     <?php
-                    $medicatie = $ClientModel->getMedischOverzichtByClientId($clientId)['medicatie'];
+                    $medicatie = $ClientModel->getMedicalOverviewByClientId($clientId)['medicatie'];
                     if ($medicatie) {
                         echo $medicatie;
                     } else {
