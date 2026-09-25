@@ -319,17 +319,17 @@ class PatroonModel
         return self::$patterns[$patternType]['fields'] ?? null;
     }
 
-    public static function saveAnswers(int $clientId, int $medewerkerId, int $patternNum, array $data): bool
+    public static function saveAnswers(int $clientId, int $employeeId, int $patternNum, array $data): bool
     {
         $tableName = self::getPatternTable($patternNum);
         $metadata = self::getTableMetadata($patternNum);
-        $questionnaireId = self::getQuestionnaireId($clientId, $medewerkerId);
+        $questionnaireId = self::getQuestionnaireId($clientId, $employeeId);
 
         if (!$tableName || !$metadata || !$questionnaireId) {
             return false;
         }
 
-        [$columns, $types, $values] = self::filterFields($metadata, $data);
+        [$columns, $types, $values] = self::filterFields($patternNum, $metadata, $data);
         if (empty($columns)) {
             return false;
         }
@@ -345,30 +345,70 @@ class PatroonModel
         }
     }
 
-    private static function filterFields(array $metadata, array $data): array
+    private static function filterFields(int $patternNum, array $metadata, array $data): array
     {
+        $observationCounts = [
+            1 => 10,
+            2 => 6,
+            3 => 10,
+            4 => 11,
+            5 => 1,
+            6 => 12,
+            7 => 19,
+            8 => 17,
+            9 => 4,
+            10 => 10,
+            11 => 4,
+        ];
+        $obsCount = $observationCounts[$patternNum] ?? 10;
+
+        if (array_key_exists('observatie', $metadata)) {
+            if (!isset($data['observatie'])) {
+                $data['observatie'] = self::formatCheckboxes($data, 'observatie', $obsCount);
+            } else {
+                $data['observatie'] = substr((string)$data['observatie'], 0, $obsCount);
+            }
+        }
+        if (array_key_exists('gebruik_inslaapmiddel_welke', $metadata) && !isset($data['gebruik_inslaapmiddel_welke'])) {
+            $data['gebruik_inslaapmiddel_welke'] = self::formatCheckboxes($data, 'inslaapmiddel', 6);
+        }
+        if (array_key_exists('gevoel_op_dit_moment', $metadata) && !isset($data['gevoel_op_dit_moment'])) {
+            $data['gevoel_op_dit_moment'] = self::formatCheckboxes($data, 'gevoel', 10);
+        }
+        if (array_key_exists('gevoel_momenteel', $metadata) && !isset($data['gevoel_momenteel'])) {
+            $data['gevoel_momenteel'] = self::formatCheckboxes($data, 'gevoelMomenteel', 3);
+        }
+        if (array_key_exists('lichamelijke_energie', $metadata) && !isset($data['lichamelijke_energie'])) {
+            $data['lichamelijke_energie'] = self::formatCheckboxes($data, 'lichamelijkeEnergie', 3);
+        }
+        if (array_key_exists('seksuele_gerichtheid', $metadata) && !isset($data['seksuele_gerichtheid'])) {
+            $data['seksuele_gerichtheid'] = self::formatCheckboxes($data, 'gerichtheid', 3);
+        }
+        if (array_key_exists('reactie_spanningen', $metadata) && !isset($data['reactie_spanningen'])) {
+            $data['reactie_spanningen'] = self::formatCheckboxes($data, 'reactie', 13);
+        }
+        if (array_key_exists('geloof_welk', $metadata) && !isset($data['geloof_welk'])) {
+            $data['geloof_welk'] = self::formatCheckboxes($data, 'geloof', 6);
+        }
+
         $columns = [];
         $types = "";
         $values = [];
 
         foreach ($metadata as $column => $type) {
-            // Check if the form actually submitted this column
-            if (array_key_exists($column, $data)) {
-                $val = $data[$column];
+            $val = $data[$column] ?? null;
 
-                // Convert/sanitize value based on the expected database type
-                if ($type === 'i') {
-                    $cleanedValue = ($val === '' || $val === null) ? 0 : (int)$val;
-                } elseif ($type === 'd') {
-                    $cleanedValue = ($val === '' || $val === null) ? 0.0 : (float)$val;
-                } else {
-                    $cleanedValue = ($val === null) ? '' : trim((string)$val);
-                }
-
-                $columns[] = $column;
-                $types .= $type;
-                $values[] = $cleanedValue;
+            if ($type === 'i') {
+                $cleanedValue = ($val === '' || $val === null) ? 0 : (int)$val;
+            } elseif ($type === 'd') {
+                $cleanedValue = ($val === '' || $val === null) ? 0.0 : (float)$val;
+            } else {
+                $cleanedValue = ($val === null) ? '' : trim((string)$val);
             }
+
+            $columns[] = $column;
+            $types .= $type;
+            $values[] = $cleanedValue;
         }
 
         return [$columns, $types, $values];
@@ -499,5 +539,29 @@ class PatroonModel
     public static function checkValue(int $value, int $min, int $max): bool
     {
         return $value >= $min && $value <= $max;
+    }
+
+    public static function formatObservations(array $formData, int $count = 20): string
+    {
+        return self::formatCheckboxes($formData, 'observatie', $count);
+    }
+
+    public static function formatCheckboxes(array $formData, string $prefix, int $count): string
+    {
+        $binaryString = "";
+
+        for ($i = 1; $i <= $count; $i++) {
+            $fieldName = $prefix . $i;
+            $val = $formData[$fieldName] ?? null;
+            $isChecked = ($val === 1 || $val === '1' || $val === true || $val === 'on');
+            $binaryString .= $isChecked ? "1" : "0";
+        }
+
+        return $binaryString;
+    }
+
+    public static function isChecked(?string $bitstring, int $index): string
+    {
+        return (isset($bitstring[$index]) && $bitstring[$index] === '1') ? 'checked' : '';
     }
 }

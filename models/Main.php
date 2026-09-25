@@ -78,8 +78,8 @@ class Main
         return PatroonModel::getAnswers($clientId, $patternType);
     }
 
-    public function saveAnswers(int $clientId, int $medewerkerId, int $patternNum, array $data): bool
+    public function saveAnswers(int $clientId, int $employeeId, int $patternNum, array $data): bool
     {
-        return PatroonModel::saveAnswers($clientId, $medewerkerId, $patternNum, $data);
+        return PatroonModel::saveAnswers($clientId, $employeeId, $patternNum, $data);
     }
 }

@@ -1,198 +1,31 @@
 <?php
-session_start();
-include '../../includes/auth.php';
-include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
+Auth::requireLogin();
+
 $Main = new Main();
 
-$antwoorden = $Main->getAnswers($_SESSION['clientId'], 10);
+$clientId = $_SESSION['clientId'];
+$antwoorden = $Main->getAnswers($clientId, 10);
 
-$boolArrayReacties = isset($antwoorden['reactie_spanningen']) && $antwoorden['reactie_spanningen'] !== null ? str_split($antwoorden['reactie_spanningen']) : [];
-$boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
-    //Lees ingevulde gegevens.
-    $reactie_anders = $_POST['reactie_anders'];
-    $spanningsvolle_situaties_voorkomen = $_POST['spanningsvolle_situaties_voorkomen'] ?? 0;
-    $spanningsvolle_situaties_voorkomen_hoe = strval($_POST['spanningsvolle_situaties_voorkomen_hoe']);
-    $spanningsvolle_situaties_oplossen = $_POST['spanningsvolle_situaties_oplossen'] ?? 0;
-    $spanningsvolle_situaties_oplossen_hoe = strval($_POST['spanningsvolle_situaties_oplossen_hoe']);
-    $omstandigheden_in_war_raken = $_POST['omstandigheden_in_war_raken'] ?? 0;
-    $omstandigheden_in_war_raken_welke = strval($_POST['omstandigheden_in_war_raken_welke']);
-    $angstig_paniek = $_POST['angstig_paniek'] ?? 0;
-    $angstig_paniek_actie = strval($_POST['angstig_paniek_actie']);
-    $angstig_paniek_lukt_voorkomen = $_POST['angstig_paniek_lukt_voorkomen'] ?? 0;
-    $suicidaal = $_POST['suicidaal'] ?? 0;
-    $suicidaal_momenteel = $_POST['suicidaal_momenteel'] ?? 0;
-    $agressief = $_POST['agressief'] ?? 0;
-    $anderen_iets_aan_willen_doen = $_POST['anderen_iets_aan_willen_doen'] ?? 0;
-    $maatregelen_veiligheid = $_POST['maatregelen_veiligheid'] ?? 0;
-    $maatregelen_veiligheid_door = strval($_POST['maatregelen_veiligheid_door']);
-    $moeite_uiten_gevoelens = $_POST['moeite_uiten_gevoelens'] ?? 0;
-    $bespreken_gevoelens_met = strval($_POST['bespreken_gevoelens_met']);
+    PatroonModel::saveAnswers(
+        (int)$_SESSION['clientId'],
+        (int)$_SESSION['loggedin_id'],
+        10,
+        $_POST
+    );
 
-    // array van checkboxes van reacties tab
-    $arr = array(!empty($_POST['reactie1']), !empty($_POST['reactie2']), !empty($_POST['reactie3']), !empty($_POST['reactie4']), !empty($_POST['reactie5']), !empty($_POST['reactie6']), !empty($_POST['reactie7']), !empty($_POST['reactie8']), !empty($_POST['reactie9']), !empty($_POST['reactie10']), !empty($_POST['reactie11']), !empty($_POST['reactie12']), !empty($_POST['reactie13']));
-    $reactie_spanningen = $Main->convertBoolArrayToString($arr);
-    // array van checkboxes van observatie tab
-    $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']), !empty($_POST['observatie5']), !empty($_POST['observatie6']), !empty($_POST['observatie7']), !empty($_POST['observatie8']), !empty($_POST['observatie9']), !empty($_POST['observatie10']));
-    $observatie = $Main->convertBoolArrayToString($arr);
-
-    //Haal vragenlijst ID op.
-    $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-    // kijken of patroon10 bestaat door te kijken naar vragenlijst id
-    $result = DatabaseConnection::getConn()->prepare("
-                    SELECT p.id
-                    FROM patroon10stressverwerking p
-                    WHERE p.vragenlijstid =  ?");
-    $result->bind_param("i", $vragenlijstId);
-    $result->execute();
-    $result = $result->get_result()->fetch_assoc();
-
-    unset($_SESSION['patroonerror']);
-    if ($result != null) {
-        //update
-        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon10stressverwerking`
-            SET
-            `reactie_spanningen`= ?,
-            `reactie_anders`= ?,
-            `spanningsvolle_situaties_voorkomen`= ?,
-            `spanningsvolle_situaties_voorkomen_hoe`= ?,
-            `spanningsvolle_situaties_oplossen`= ?,
-            `spanningsvolle_situaties_oplossen_hoe`= ?,
-            `omstandigheden_in_war_raken`= ?,
-            `omstandigheden_in_war_raken_welke`= ?,
-            `angstig_paniek`= ?,
-            `angstig_paniek_actie`= ?,
-            `angstig_paniek_lukt_voorkomen`= ?,
-            `suicidaal`= ?,
-            `suicidaal_momenteel`= ?,
-            `agressief`= ?,
-            `anderen_iets_aan_willen_doen`= ?,
-            `maatregelen_veiligheid`= ?,
-            `maatregelen_veiligheid_door`= ?,
-            `moeite_uiten_gevoelens`= ?,
-            `bespreken_gevoelens_met`= ?,
-            `observatie`= ?
-            WHERE `vragenlijstid`=?");
-        if ($result1) {
-            $result1->bind_param("ssisisisisiiiiiisissi", 
-                $reactie_spanningen, 
-                $reactie_anders,
-                $spanningsvolle_situaties_voorkomen,
-                $spanningsvolle_situaties_voorkomen_hoe,
-                $spanningsvolle_situaties_oplossen,
-                $spanningsvolle_situaties_oplossen_hoe, 
-                $omstandigheden_in_war_raken,
-                $omstandigheden_in_war_raken_welke,
-                $angstig_paniek,
-                $angstig_paniek_actie,
-                $angstig_paniek_lukt_voorkomen,
-                $suicidaal,
-                $suicidaal_momenteel,
-                $agressief,
-                $anderen_iets_aan_willen_doen,
-                $maatregelen_veiligheid,
-                $maatregelen_veiligheid_door,
-                $moeite_uiten_gevoelens,
-                $bespreken_gevoelens_met, 
-                $observatie, 
-                $vragenlijstId);
-            $result1->execute();
-        } else {
-            // Handle error
-            echo "Error preparing statement: " . DatabaseConnection::getConn()->error;
-        }
-    } else {
-        //hier insert je alle data in patroon02
-        try{
-            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon10stressverwerking`(
-                    `vragenlijstid`,
-                    `reactie_spanningen`,
-                    `reactie_anders`,
-                    `spanningsvolle_situaties_voorkomen`,
-                    `spanningsvolle_situaties_voorkomen_hoe`,
-                    `spanningsvolle_situaties_oplossen`,
-                    `spanningsvolle_situaties_oplossen_hoe`,
-                    `omstandigheden_in_war_raken`,
-                    `omstandigheden_in_war_raken_welke`,
-                    `angstig_paniek`,
-                    `angstig_paniek_actie`,
-                    `angstig_paniek_lukt_voorkomen`,
-                    `suicidaal`,
-                    `suicidaal_momenteel`,
-                    `agressief`,
-                    `anderen_iets_aan_willen_doen`,
-                    `maatregelen_veiligheid`,
-                    `maatregelen_veiligheid_door`,
-                    `moeite_uiten_gevoelens`,
-                    `bespreken_gevoelens_met`,
-                    `observatie`)
-                VALUES (
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?)");
-            $result2->bind_param("issisisisisiiiiiisiss", 
-                $vragenlijstId, 
-                $reactie_spanningen, 
-                $reactie_anders,
-                $spanningsvolle_situaties_voorkomen,
-                $spanningsvolle_situaties_voorkomen_hoe,
-                $spanningsvolle_situaties_oplossen,
-                $spanningsvolle_situaties_oplossen_hoe, 
-                $omstandigheden_in_war_raken,
-                $omstandigheden_in_war_raken_welke,
-                $angstig_paniek,
-                $angstig_paniek_actie,
-                $angstig_paniek_lukt_voorkomen,
-                $suicidaal,
-                $suicidaal_momenteel,
-                $agressief,
-                $anderen_iets_aan_willen_doen,
-                $maatregelen_veiligheid,
-                $maatregelen_veiligheid_door,
-                $moeite_uiten_gevoelens,
-                $bespreken_gevoelens_met, 
-                $observatie);
-            $result2->execute();
-            $result2 = $result2->get_result();
-        } catch (Exception $e) {
-            // Display the alert box on next of previous page
-            $_SESSION['patroonerror'] = 'Er ging iets fout, wijzigingen zijn NIET opgeslagen.';
-            $_SESSION['patroonnr'] = '10. Stressverwerkingspatroon (probleemhantering)';
-        }
+    // Navigation
+    switch ($_POST['navbutton']) {
+        case 'next':
+            header("Location: patroon11.php");
+            exit;
+        case 'prev':
+            header("Location: patroon09.php");
+            exit;
     }
-
-    switch ($_REQUEST['navbutton']) {
-        case 'next': //action for next here
-            header('Location: patroon11.php');
-            break;
-
-        case 'prev': //action for previous here
-            header('Location: patroon09.php');
-            break;
-    }
-    exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -213,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
 </head>
 
 <body style="overflow: hidden;">
-    <form action="" method="post">
+    <form action="" method="post" data-client-id="<?= htmlspecialchars((string)($_SESSION['clientId'] ?? '')) ?>">
         <div class="main">
             <?php
             include '../../includes/n-header.php';
@@ -237,67 +70,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <p>Hoe reageert u gewoonlijk op situaties die spanningen oproepen?</p>
                                     <div class="observation">
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[0]) && $boolArrayReacties[0] == '1') ? "checked" : "" ?> name="reactie1">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 0) ?> name="reactie1">
                                                 <p>Zoveel mogelijk vermijden</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[1]) && $boolArrayReacties[1] == '1') ? "checked" : "" ?> name="reactie2">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 1) ?> name="reactie2">
                                                 <p>Drugs gebruiken</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[2]) && $boolArrayReacties[2] == '1') ? "checked" : "" ?> name="reactie3">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 2) ?> name="reactie3">
                                                 <p>Ontwikkeling van lichamelijke symptomen</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[3]) && $boolArrayReacties[3] == '1') ? "checked" : "" ?> name="reactie4">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 3) ?> name="reactie4">
                                                 <p>Medicatie</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[4]) && $boolArrayReacties[4] == '1') ? "checked" : "" ?> name="reactie5">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 4) ?> name="reactie5">
                                                 <p>Meer/minder eten</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[5]) && $boolArrayReacties[5] == '1') ? "checked" : "" ?> name="reactie6">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 5) ?> name="reactie6">
                                                 <p>Agressie</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[6]) && $boolArrayReacties[6] == '1') ? "checked" : "" ?> name="reactie7">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 6) ?> name="reactie7">
                                                 <p>Praten met anderen</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[7]) && $boolArrayReacties[7] == '1') ? "checked" : "" ?> name="reactie8">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 7) ?> name="reactie8">
                                                 <p>Alcohol drinken</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[8]) && $boolArrayReacties[8] == '1') ? "checked" : "" ?> name="reactie9">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 8) ?> name="reactie9">
                                                 <p>Houd mijn gevoelens voor me</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[9]) && $boolArrayReacties[9] == '1') ? "checked" : "" ?> name="reactie10">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 9) ?> name="reactie10">
                                                 <p>Slapen/terugtrekken</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[10]) && $boolArrayReacties[10] == '1') ? "checked" : "" ?> name="reactie11">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 10) ?> name="reactie11">
                                                 <p>Vertrouwen op religie</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[11]) && $boolArrayReacties[11] == '1') ? "checked" : "" ?> name="reactie12">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 11) ?> name="reactie12">
                                                 <p>Zo goed mogelijk zelf oplossen</p>
                                             </div>
                                         </div>
                                         <div class="question">
-                                            <div class="observe"><input type="checkbox" <?= (isset($boolArrayReacties[12]) && $boolArrayReacties[12] == '1') ? "checked" : "" ?> name="reactie13">
+                                            <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['reactie_spanningen'], 12) ?> name="reactie13">
                                                 <p>Anders, namelijk:</p>
                                             </div><textarea rows="1" cols="25" type="text" name="reactie_anders"><?= isset($antwoorden['reactie_anders']) ? $antwoorden['reactie_anders'] : '' ?></textarea>
                                         </div>
@@ -457,52 +290,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                 <div class="observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[0]) && $boolArrayObservatie[0] == '1') ? "checked" : "" ?> name="observatie1">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 0) ?> name="observatie1">
                                             <p>Defensieve coping</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[1]) && $boolArrayObservatie[1] == '1') ? "checked" : "" ?> name="observatie2">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 1) ?> name="observatie2">
                                             <p>Probleemvermijding</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[2]) && $boolArrayObservatie[2] == '1') ? "checked" : "" ?> name="observatie3">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 2) ?> name="observatie3">
                                             <p>Ineffectieve coping</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[3]) && $boolArrayObservatie[3] == '1') ? "checked" : "" ?> name="observatie4">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 3) ?> name="observatie4">
                                             <p>Ineffectieve ontkenning</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[4]) && $boolArrayObservatie[4] == '1') ? "checked" : "" ?> name="observatie5">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 4) ?> name="observatie5">
                                             <p>Posttraumatische reactie</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[5]) && $boolArrayObservatie[5] == '1') ? "checked" : "" ?> name="observatie6">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 5) ?> name="observatie6">
                                             <p>Verminderd aanpassingsvermogen</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[6]) && $boolArrayObservatie[6] == '1') ? "checked" : "" ?> name="observatie7">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 6) ?> name="observatie7">
                                             <p>Gezinscoping: ontplooiingsmogelijkheden</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[7]) && $boolArrayObservatie[7] == '1') ? "checked" : "" ?> name="observatie8">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 7) ?> name="observatie8">
                                             <p>Bedreigde gezinscoping</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[8]) && $boolArrayObservatie[8] == '1') ? "checked" : "" ?> name="observatie9">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 8) ?> name="observatie9">
                                             <p>Gebrekkige gezinscoping</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[9]) && $boolArrayObservatie[9] == '1') ? "checked" : "" ?> name="observatie10">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 9) ?> name="observatie10">
                                             <p>Dreiging van suïcidaliteit</p>
                                         </div>
                                     </div>
@@ -520,6 +353,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
             crossorigin="anonymous"></script> 
+    <script src="../../assets/js/form-autosave.js"></script> 
 </body>
 
 </html>
