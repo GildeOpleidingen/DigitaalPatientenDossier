@@ -1,144 +1,30 @@
 <?php
-session_start();
-include '../../includes/auth.php';
-include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
+Auth::requireLogin();
 $Main = new Main();
 
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 5);
+$clientId = $_SESSION['clientId'];
+$antwoorden = $Main->getAnswers($clientId, 5);
 
-$boolArrayInslaapmiddel = isset($antwoorden['gebruik_inslaapmiddel_welke']) && $antwoorden['gebruik_inslaapmiddel_welke'] !== null ? str_split($antwoorden['gebruik_inslaapmiddel_welke']) : array_fill(0, 6, '0');
-$boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] != null ? str_split($antwoorden['observatie']) : [];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
-    $verandering_inslaaptijd = $_POST['verandering_inslaaptijd'];
-    $verandering_inslaaptijd_blijktuit = strval($_POST['verandering_inslaaptijd_blijktuit']);
-    $verandering_kwaliteit_slapen = $_POST['verandering_kwaliteit_slapen'];
-    $verandering_kwaliteit_slapen_blijktuit = strval($_POST['verandering_kwaliteit_slapen_blijktuit']);
-    $gebruik_inslaapmiddel = $_POST['gebruik_inslaapmiddel'];
-    
-    $arr = array(
-        isset($_POST['inslaapmiddel1']) ? '1' : '0',
-        isset($_POST['inslaapmiddel2']) ? '1' : '0',
-        isset($_POST['inslaapmiddel3']) ? '1' : '0',
-        isset($_POST['inslaapmiddel4']) ? '1' : '0',
-        isset($_POST['inslaapmiddel5']) ? '1' : '0',
-        isset($_POST['inslaapmiddel6']) ? '1' : '0'
+    PatroonModel::saveAnswers(
+        (int)$_SESSION['clientId'],
+        (int)$_SESSION['loggedin_id'],
+        5,
+        $_POST
     );
-    $gebruik_inslaapmiddel_welke = implode('', $arr);
-    $gebruik_inslaapmiddel_anders = isset($_POST['gebruik_inslaapmiddel_anders']) ? strval($_POST['gebruik_inslaapmiddel_anders']) : '';
-    
-    $slaapduur = $_POST['slaapduur'];
-    $uitgerust_wakker = $_POST['uitgerust_wakker'];
-    $dromen_nachtmerries = $_POST['dromen_nachtmerries'];
-    $rustperiodes_overdag = $_POST['rustperiodes_overdag'];
-    $gemakkelijk_ontspannen = $_POST['gemakkelijk_ontspannen'];
-    
-    $arr = array(!empty($_POST['observatie1']));
-    $observatie = $Main->convertBoolArrayToString($arr);
 
-    $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-    
-    $result = DatabaseConnection::getConn()->prepare("
-        SELECT p.id
-        FROM patroon05slaaprust p
-        WHERE p.vragenlijstid = ?");
-    $result->bind_param("i", $vragenlijstId);
-    $result->execute();
-    $result = $result->get_result()->fetch_assoc();
-
-    unset($_SESSION['patroonerror']);
-
-    if ($result != null) {
-        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon05slaaprust` 
-            SET
-            `verandering_inslaaptijd` = ?,
-            `verandering_inslaaptijd_blijktuit` = ?,
-            `verandering_kwaliteit_slapen` = ?,
-            `verandering_kwaliteit_slapen_blijktuit` = ?,
-            `gebruik_inslaapmiddel` = ?,
-            `gebruik_inslaapmiddel_welke` = ?,
-            `gebruik_inslaapmiddel_anders` = ?,
-            `slaapduur` = ?,
-            `uitgerust_wakker` = ?,
-            `dromen_nachtmerries` = ?,
-            `rustperiodes_overdag` = ?,
-            `gemakkelijk_ontspannen` = ?,
-            `observatie` = ?
-            WHERE `vragenlijstid` = ?");
-        if ($result1) {
-            $result1->bind_param("isisisisiiiiis",
-                $verandering_inslaaptijd,
-                $verandering_inslaaptijd_blijktuit,
-                $verandering_kwaliteit_slapen,
-                $verandering_kwaliteit_slapen_blijktuit,
-                $gebruik_inslaapmiddel,
-                $gebruik_inslaapmiddel_welke,
-                $gebruik_inslaapmiddel_anders,
-                $slaapduur,
-                $uitgerust_wakker,
-                $dromen_nachtmerries,
-                $rustperiodes_overdag,
-                $gemakkelijk_ontspannen,
-                $observatie,
-                $vragenlijstId);
-            $result1->execute();
-        } else {
-            echo "Error preparing statement: " . DatabaseConnection::getConn()->error;
-        }
-    } else {
-        try {
-            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon05slaaprust`(
-                `vragenlijstid`,
-                `verandering_inslaaptijd`,
-                `verandering_inslaaptijd_blijktuit`,
-                `verandering_kwaliteit_slapen`,
-                `verandering_kwaliteit_slapen_blijktuit`,
-                `gebruik_inslaapmiddel`,
-                `gebruik_inslaapmiddel_welke`,
-                `gebruik_inslaapmiddel_anders`,
-                `slaapduur`,
-                `uitgerust_wakker`,
-                `dromen_nachtmerries`,
-                `rustperiodes_overdag`,
-                `gemakkelijk_ontspannen`,
-                `observatie`)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $result2->bind_param("iisississiiiis",
-                $vragenlijstId,
-                $verandering_inslaaptijd,
-                $verandering_inslaaptijd_blijktuit,
-                $verandering_kwaliteit_slapen,
-                $verandering_kwaliteit_slapen_blijktuit,
-                $gebruik_inslaapmiddel,
-                $gebruik_inslaapmiddel_welke,
-                $gebruik_inslaapmiddel_anders,
-                $slaapduur,
-                $uitgerust_wakker,
-                $dromen_nachtmerries,
-                $rustperiodes_overdag,
-                $gemakkelijk_ontspannen,
-                $observatie);
-            
-            $result2->execute();
-        } catch (Exception $e) {
-            $_SESSION['patroonerror'] = 'Er ging iets fout, wijzigingen zijn NIET opgeslagen.';
-            $_SESSION['patroonnr'] = '5. Slaap- en rustpatroon';
-        }
+    // Navigation
+    switch ($_POST['navbutton']) {
+        case 'next':
+            header("Location: patroon06.php");
+            exit;
+        case 'prev':
+            header("Location: patroon04.php");
+            exit;
     }
-
-    switch ($_REQUEST['navbutton']) {
-        case 'next': //action for next here
-            header('Location: patroon06.php');
-            break;
-
-        case 'prev': //action for previous here
-            header('Location: patroon04.php');
-            break;
-    }
-    exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -159,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
 </head>
 
 <body style="overflow: hidden;">
-    <form action="" method="post">
+    <form action="" method="post" data-client-id="<?= htmlspecialchars((string)($_SESSION['clientId'] ?? '')) ?>">
         <div class="main">
             <?php
             include '../../includes/n-header.php';
@@ -213,27 +99,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <label>Ja</label>
                                             <div class="checkfield">
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayInslaapmiddel[0]) && $boolArrayInslaapmiddel[0] === '1') ? "checked" : "" ?> name="inslaapmiddel1">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['gebruik_inslaapmiddel_welke'], 0) ?> name="inslaapmiddel1">
                                                         <p>Medicijngebruik</p>
                                                     </div>
                                                 </div>
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayInslaapmiddel[1]) && $boolArrayInslaapmiddel[1] === '1') ? "checked" : "" ?> name="inslaapmiddel2">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['gebruik_inslaapmiddel_welke'], 1) ?> name="inslaapmiddel2">
                                                         <p>Beweging</p>
                                                     </div>
                                                 </div>
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayInslaapmiddel[2]) && $boolArrayInslaapmiddel[2] === '1') ? "checked" : "" ?> name="inslaapmiddel3">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['gebruik_inslaapmiddel_welke'], 2) ?> name="inslaapmiddel3">
                                                         <p>Alcohol/drugs</p>
                                                     </div>
                                                 </div>
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayInslaapmiddel[3]) && $boolArrayInslaapmiddel[3] === '1') ? "checked" : "" ?> name="inslaapmiddel4">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['gebruik_inslaapmiddel_welke'], 3) ?> name="inslaapmiddel4">
                                                         <p>Eten/drinken</p>
                                                     </div>
                                                 </div>
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayInslaapmiddel[4]) && $boolArrayInslaapmiddel[4] === '1') ? "checked" : "" ?> name="inslaapmiddel5">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['gebruik_inslaapmiddel_welke'], 4) ?> name="inslaapmiddel5">
                                                         <p>Douche/bad</p>
                                                     </div>
                                                 </div>
@@ -306,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                 <div class="observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[0]) && $boolArrayObservatie[0] == '1') ? "checked" : "" ?> name="observatie1">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 0) ?> name="observatie1">
                                             <p>Verstoord slaap- en rustpatroon</p>
                                         </div>
                                     </div>
@@ -324,6 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
             crossorigin="anonymous"></script> 
+    <script src="../../assets/js/form-autosave.js"></script> 
 </body>
 
 </html>

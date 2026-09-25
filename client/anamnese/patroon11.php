@@ -1,133 +1,31 @@
 <?php
-session_start();
-include '../../includes/auth.php';
-include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
+Auth::requireLogin();
+
 $Main = new Main();
 
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 11);
+$clientId = $_SESSION['clientId'];
+$antwoorden = $Main->getAnswers($clientId, 11);
 
-$boolArrayGeloof = isset($antwoorden['geloof_welk']) && $antwoorden['geloof_welk'] !== null ? str_split($antwoorden['geloof_welk']) : [];
-$boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] !== null ? str_split($antwoorden['observatie']) : [];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
-    // TODO: hier actie om data op te slaan in database.
-    //Lees ingevulde gegevens.
-    $gelovig = $_POST['gelovig'] ?? 0;    
-    $geloof_anders = strval($_POST['geloof_anders']);
-    $behoefte_religieuze_activiteit = $_POST['behoefte_religieuze_activiteit'] ?? 0;
-    $gebruiken_tav_geloofsovertuiging = $_POST['gebruiken_tav_geloofsovertuiging'] ?? 0;
-    $gebruiken_tav_geloofsovertuiging_welke = strval($_POST['gebruiken_tav_geloofsovertuiging_welke']);
-    $gebruiken_tav_geloofsovertuiging_wanneer = strval($_POST['gebruiken_tav_geloofsovertuiging_wanneer']);
-    $overeenkomst_waarden_normen = $_POST['overeenkomst_waarden_normen'] ?? 0;
-    $etnische_achtergrond = strval($_POST['etnische_achtergrond']);
-    $gebruiken_mbt_etnische_achtergrond = $_POST['gebruiken_mbt_etnische_achtergrond'] ?? 0;
-    $gebruiken_mbt_etnische_achtergrond_welke = strval($_POST['gebruiken_mbt_etnische_achtergrond_welke']);
-    $gebruiken_mbt_etnische_achtergrond_wanneer = strval($_POST['gebruiken_mbt_etnische_achtergrond_wanneer']);
+    PatroonModel::saveAnswers(
+        (int)$_SESSION['clientId'],
+        (int)$_SESSION['loggedin_id'],
+        11,
+        $_POST
+    );
 
-    // array van checkboxes van gelovig tab
-    $arr = array(!empty($_POST['geloof1']), !empty($_POST['geloof2']), !empty($_POST['geloof3']), !empty($_POST['geloof4']), !empty($_POST['geloof5']), !empty($_POST['geloof6']));
-    $gelovig_welk = $Main->convertBoolArrayToString($arr);
-
-    // array van checkboxes van observatie tab
-    $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']));
-    $observatie = $Main->convertBoolArrayToString($arr);
-   
-   
-    //Haal vragenlijst ID op.
-    $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-    // kijken of patroon11 bestaat door te kijken naar vragenlijst id
-    $result = DatabaseConnection::getConn()->prepare("
-                    SELECT p.id
-                    FROM patroon11waardelevensovertuiging p
-                    WHERE p.vragenlijstid =  ?");
-    $result->bind_param("i", $vragenlijstId);
-    $result->execute();
-    $result = $result->get_result()->fetch_assoc();
-
-    unset($_SESSION['patroonerror']);
-
-    if ($result != null) {
-        //update
-        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon11waardelevensovertuiging`
-            SET
-            `gelovig`= ?,
-            `geloof_welk`= ?,
-            `geloof_anders`= ?,
-            `behoefte_religieuze_activiteit`= ?,
-            `gebruiken_tav_geloofsovertuiging`= ?,
-            `gebruiken_tav_geloofsovertuiging_welke`= ?,
-            `gebruiken_tav_geloofsovertuiging_wanneer`= ?,
-            `overeenkomst_waarden_normen`= ?,
-            `etnische_achtergrond`= ?,
-            `gebruiken_mbt_etnische_achtergrond`= ?,
-            `gebruiken_mbt_etnische_achtergrond_welke`= ?,
-            `gebruiken_mbt_etnische_achtergrond_wanneer`= ?,
-            `observatie`= ?
-            WHERE `vragenlijstid`=?");
-        if ($result1) {
-            $result1->bind_param("issiissisisssi", $gelovig, $gelovig_welk, $geloof_anders, $behoefte_religieuze_activiteit, $gebruiken_tav_geloofsovertuiging,$gebruiken_tav_geloofsovertuiging_welke, $gebruiken_tav_geloofsovertuiging_wanneer, $overeenkomst_waarden_normen,$etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond_welke, $gebruiken_mbt_etnische_achtergrond_wanneer, $observatie, $vragenlijstId);
-            $result1->execute();
-        } else {
-            // Handle error
-            $_SESSION['patroonerror'] = 'Er ging iets fout (wijzigen), wijzigingen zijn NIET opgeslagen.';
-            $_SESSION['patroonnr'] = '11. Stressverwerkingspatroon (probleemhantering)';
-        }
-    } else {
-        //hier insert je alle data in patroon02
-        try{
-            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon11waardelevensovertuiging`(
-                    `vragenlijstid`,
-                    `gelovig`,
-                    `geloof_welk`,
-                    `geloof_anders`,
-                    `behoefte_religieuze_activiteit`,
-                    `gebruiken_tav_geloofsovertuiging`,
-                    `gebruiken_tav_geloofsovertuiging_welke`,
-                    `gebruiken_tav_geloofsovertuiging_wanneer`,
-                    `overeenkomst_waarden_normen`,
-                    `etnische_achtergrond`,
-                    `gebruiken_mbt_etnische_achtergrond`,
-                    `gebruiken_mbt_etnische_achtergrond_welke`,
-                    `gebruiken_mbt_etnische_achtergrond_wanneer`,
-                    `observatie`)
-                VALUES (
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?)");
-            $result2->bind_param("iissiissisisss", $vragenlijstId, $gelovig, $gelovig_welk, $geloof_anders, $behoefte_religieuze_activiteit, $gebruiken_tav_geloofsovertuiging,$gebruiken_tav_geloofsovertuiging_welke, $gebruiken_tav_geloofsovertuiging_wanneer, $overeenkomst_waarden_normen,$etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond,$gebruiken_mbt_etnische_achtergrond_welke, $gebruiken_mbt_etnische_achtergrond_wanneer, $observatie);
-            $result2->execute();
-            $result2 = $result2->get_result();
-        } catch (Exception $e) {
-            // Display the alert box on next of previous page
-            $_SESSION['patroonerror'] = 'Er ging iets fout (toevoegen), wijzigingen zijn NIET opgeslagen.';
-            $_SESSION['patroonnr'] = '11. Stressverwerkingspatroon (probleemhantering)';
-        }
+    // Navigation
+    switch ($_POST['navbutton']) {
+        case 'next':
+            header("Location: patroon01.php");
+            exit;
+        case 'prev':
+            header("Location: patroon10.php");
+            exit;
     }
-
-    switch ($_REQUEST['navbutton']) {
-        case 'next': //action for next here
-            header('Location: patroon01.php'); //TODO: hier moet naar de hoofdpagina genavigeerd worden.
-            break;
-
-        case 'prev': //action for previous here
-            header('Location: patroon10.php');
-            break;
-    }
-    exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -148,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
 </head>
 
 <body style="overflow: hidden;">
-    <form action="" method="post">
+    <form action="" method="post" data-client-id="<?= htmlspecialchars((string)($_SESSION['clientId'] ?? '')) ?>">
         <div class="main">
             <?php
             include '../../includes/n-header.php';
@@ -174,32 +72,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                             <label>Ja</label>
                                             <div class="checkfield">
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[0]) && $boolArrayGeloof[0] == '1') ? "checked" : "" ?> name="geloof1">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['geloof_welk'], 0) ?> name="geloof1">
                                                         <p>R-K</p>
                                                     </div>
                                                 </div>
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[1]) && $boolArrayGeloof[1] == '1') ? "checked" : "" ?> name="geloof2">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['geloof_welk'], 1) ?> name="geloof2">
                                                         <p>Nederlands hervormd</p>
                                                     </div>
                                                 </div>
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[2]) && $boolArrayGeloof[2] == '1') ? "checked" : "" ?> name="geloof3">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['geloof_welk'], 2) ?> name="geloof3">
                                                         <p>Gereformeerd</p>
                                                     </div>
                                                 </div>
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[3]) && $boolArrayGeloof[3] == '1') ? "checked" : "" ?> name="geloof4">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['geloof_welk'], 3) ?> name="geloof4">
                                                         <p>Moslim</p>
                                                     </div>
                                                 </div>
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[4]) && $boolArrayGeloof[4] == '1') ? "checked" : "" ?> name="geloof5">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['geloof_welk'], 4) ?> name="geloof5">
                                                         <p>Joods</p>
                                                     </div>
                                                 </div>
                                                 <div class="question">
-                                                    <div class="observe"><input type="checkbox" <?= (isset($boolArrayGeloof[5]) && $boolArrayGeloof[5] == '1') ? "checked" : "" ?> name="geloof6">
+                                                    <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['geloof_welk'], 5) ?> name="geloof6">
                                                         <p>Anders, namelijk:</p>
                                                     </div><textarea rows="1" cols="25" type="text" name="geloof_anders"><?= isset($antwoorden['geloof_anders']) ? $antwoorden['geloof_anders'] : '' ?></textarea>
                                                 </div>
@@ -278,22 +176,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                 <div class="observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[0]) && $boolArrayObservatie[0] == '1') ? "checked" : "" ?> name="observatie1">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 0) ?> name="observatie1">
                                             <p>Geestelijke nood</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[1]) && $boolArrayObservatie[1] == '1') ? "checked" : "" ?> name="observatie2">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 1) ?> name="observatie2">
                                             <p>Verandering in waarden en normen</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[2]) && $boolArrayObservatie[2] == '1') ? "checked" : "" ?> name="observatie3">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 2) ?> name="observatie3">
                                             <p>Verandering in rolopvatting met betrekking tot ethische achtergrond</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[3]) && $boolArrayObservatie[3] == '1') ? "checked" : "" ?> name="observatie4">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 3) ?> name="observatie4">
                                             <p>Verandering in rolinvulling met betrekking tot ethische achtergrond</p>
                                         </div>
                                     </div>
@@ -311,6 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
             crossorigin="anonymous"></script> 
+    <script src="../../assets/js/form-autosave.js"></script> 
 </body>
 
 </html>
