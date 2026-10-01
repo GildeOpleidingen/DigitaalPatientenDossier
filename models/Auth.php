@@ -2,6 +2,9 @@
 
 class Auth
 {
+    /**
+     * @return void
+     */
     public static function startSession(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -9,25 +12,39 @@ class Auth
         }
     }
 
+    /**
+     * @return int|null
+     */
     public static function id(): ?int
     {
         self::startSession();
         return isset($_SESSION['loggedin_id']) ? (int)$_SESSION['loggedin_id'] : null;
     }
 
-        public static function requireLogin(): void
-        {
-            if (!self::id()) {
-                header("Location: /index.php");
-                exit;
-            }
+    /**
+     * @return void
+     */
+    public static function requireLogin(): void
+    {
+        if (!self::id()) {
+            header("Location: /index.php");
+            exit;
         }
+    }
 
+    /**
+     * @return bool
+     */
     public static function isAdmin(): bool
     {
         return self::id() !== null && ($_SESSION['rol'] ?? '') === 'beheerder';
     }
+
     // extra functie waar we niet aan hadden gedacht als een student naar http://digitaalpatientdosier/client/client_bewerken.php?id=1 gaat zonder deze funcite hebben ze toegang om patiente stam gegevens te bewerken wat we niet willen
+    /**
+     * @param string $redirect
+     * @return void
+     */
     public static function requireAdmin(string $redirect = '/client/client.php'): void
     {
         self::requireLogin();
@@ -37,6 +54,9 @@ class Auth
         }
     }
 
+    /**
+     * @return array|null
+     */
     public static function user(): ?array
     {
         if (!self::id()) {

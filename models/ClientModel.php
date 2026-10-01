@@ -4,11 +4,19 @@ class ClientModel
 {
     private mysqli $db;
 
+    /**
+     * @param mysqli|null $db
+     */
     public function __construct(?mysqli $db = null)
     {
         $this->db = $db ?? DatabaseConnection::getConn();
     }
 
+    /**
+     * @param int $clientId
+     * @param int $medewerkerId
+     * @return bool
+     */
     public function CheckIfVerzorgregelExists($clientId, $medewerkerId): bool
     {
         try {
@@ -43,6 +51,15 @@ class ClientModel
         }
     }
 
+    /**
+     * @param int $clientid
+     * @param string|null $foto
+     * @param string|null $introductie
+     * @param string|null $familie
+     * @param string|null $belangrijkeinfo
+     * @param string|null $hobbies
+     * @return bool
+     */
     public function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies): bool
     {
         $medischOverzicht = $this->getMedischOverzichtByClientId($clientid);
@@ -86,6 +103,21 @@ class ClientModel
         }
     }
 
+    /**
+     * @param string $naam
+     * @param string|null $geslacht
+     * @param string|null $adres
+     * @param string|null $postcode
+     * @param string|null $woonplaats
+     * @param string|null $telefoonnummer
+     * @param string|null $email
+     * @param string|null $reanimatiestatus
+     * @param string|null $nationaliteit
+     * @param string|null $afdeling
+     * @param string|null $burgelijkestaat
+     * @param string|null $foto
+     * @return bool
+     */
     public function updateClient($naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto): bool
     {
         $result = $this->db->prepare("UPDATE `client` SET `geslacht`=?,`adres`=?,`postcode`=?,`woonplaats`=?,`telefoonnummer`=?,`email`=?,`reanimatiestatus`=?,`nationaliteit`=?,`afdeling`=?,`burgelijkestaat`=?,`foto`=? WHERE `naam`=?;");
@@ -125,6 +157,10 @@ class ClientModel
         return false;
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfClientStoryExistsByClientId($id): bool
     {
         $result = $this->db->prepare("
@@ -146,6 +182,10 @@ class ClientModel
         return $exists;
     }
 
+    /**
+     * @param int $clientid
+     * @return bool
+     */
     public function checkIfMedischOverzichtExistsByClientId($clientid): bool
     {
         $result = $this->db->prepare("
@@ -165,6 +205,10 @@ class ClientModel
         return $exists;
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfCarePlanExistsByClientId($id): bool
     {
         $result = $this->db->prepare("
@@ -185,6 +229,10 @@ class ClientModel
         return $exists;
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getClientStoryByClientId($id): array
     {
         $result = $this->db->prepare("
@@ -206,6 +254,10 @@ class ClientModel
         return $row ?: [];
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getCarePlanByClientId($id): array
     {
         $result = $this->db->prepare("
@@ -226,6 +278,10 @@ class ClientModel
         return $row ?: [];
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getVerzorgerregelByClientId($id): array
     {
         $result = $this->db->prepare("
@@ -245,6 +301,10 @@ class ClientModel
         return $rows ?: [];
     }
 
+    /**
+     * @param int $id
+     * @return string
+     */
     public function getAdmissionDateByClientId($id): string
     {
         $result = $this->db->prepare("
@@ -268,6 +328,10 @@ class ClientModel
         }
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getMedischOverzichtByClientId($id): array
     {
         $result = $this->db->prepare("
@@ -292,6 +356,9 @@ class ClientModel
         }
     }
 
+    /**
+     * @return array
+     */
     private function getDefaultMedischOverzicht(): array
     {
         return [
@@ -302,6 +369,10 @@ class ClientModel
         ];
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfClientExistsById(int $id): bool
     {
         $result = $this->getClientById($id);
@@ -309,6 +380,10 @@ class ClientModel
         return !empty($result);
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function checkIfClientExistsByName(string $name): bool
     {
         $result = $this->getClientByName($name);
@@ -316,6 +391,10 @@ class ClientModel
         return !empty($result);
     }
 
+    /**
+     * @param int $id
+     * @return array|null
+     */
     public function getById(int $id): ?array
     {
         $stmt = $this->db->prepare("
@@ -339,11 +418,19 @@ class ClientModel
         return $client ?: null;
     }
 
+    /**
+     * @param int $clientId
+     * @return array
+     */
     public function getClientById($clientId): array
     {
         return $this->getById((int)$clientId) ?? [];
     }
 
+    /**
+     * @param string $name
+     * @return array
+     */
     public function getClientByName($name): array
     {
         $result = $this->db->prepare("SELECT * FROM `client` WHERE naam = ?;");
@@ -358,6 +445,10 @@ class ClientModel
         return $row ?: [];
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getVerzorgersById($id): array
     {
         $result = $this->db->prepare("
@@ -376,6 +467,11 @@ class ClientModel
         return $row ?: [];
     }
 
+    /**
+     * @param int $id
+     * @param 'clientRelations'|'contactPersonen'|'medischOverzicht'|'verzorgersArr'|string $type
+     * @return array
+     */
     public function getPatientGegevens($id, $type): array
     {
         $sql = match ($type) {

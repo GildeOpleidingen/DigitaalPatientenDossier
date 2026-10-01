@@ -12,11 +12,17 @@ class DatabaseConnection
 {
     private static ?mysqli $conn = null;
 
+    /**
+     * @return mysqli
+     */
     public static function getConn(): mysqli {
         self::checkConnection();
         return self::$conn;
     }
 
+    /**
+     * @return void
+     */
     private static function checkConnection(): void {
         if (self::$conn == null) {
             try {
