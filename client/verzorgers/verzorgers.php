@@ -1,13 +1,23 @@
 <?php
-session_start();
 include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
+
+Auth::startSession();
+
 $Main = new Main();
 
-$clientId = $_SESSION['clientId'];
-$client = $Main->getClientById($clientId);
+$clientId = $_SESSION['clientId'] ?? null;
+$client = $clientId ? $Main->getClientById($clientId) : null;
+
 if (!isset($clientId) || $client == null) {
     header("Location: ../../index.php");
+    exit;
+}
+
+// Controleer of de gebruiker beheerder is met de statische methode
+if (!Auth::isAdmin()) {
+    header("Location: ../patiëntgegevens/patiëntgegevens.php?id=$clientId");
+    exit;
 }
 
 $medewerkers = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");
@@ -18,6 +28,7 @@ $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHE
 $stmt->bind_param("i", $clientId);
 $stmt->execute();
 $stmt = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
 // Loop door alle medewerkers heen, als de medewerker al in de database staat, zet dan de checked variabele op true
 foreach ($medewerkers as $key => $medewerker) {
     foreach ($stmt as $relation) {
@@ -34,13 +45,13 @@ foreach ($medewerkers as $key => $medewerker) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../assets/css/client/verzorgers.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
-          rel="stylesheet" 
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
-          crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
-          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" 
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Verzorgers van <?= $client['naam'] ?></title>
 </head>
 
@@ -93,9 +104,9 @@ foreach ($medewerkers as $key => $medewerker) {
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
-            crossorigin="anonymous"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
