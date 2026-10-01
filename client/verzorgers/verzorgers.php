@@ -1,17 +1,21 @@
 <?php
-session_start();
 include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
-$Main = new Main();
-$auth = new Auth();
 
-$clientId = $_SESSION['clientId'];
-$client = $Main->getClientById($clientId);
+Auth::startSession();
+
+$Main = new Main();
+
+$clientId = $_SESSION['clientId'] ?? null;
+$client = $clientId ? $Main->getClientById($clientId) : null;
+
 if (!isset($clientId) || $client == null) {
     header("Location: ../../index.php");
     exit;
 }
-if (!$auth->isAdmin()) {
+
+// Controleer of de gebruiker beheerder is met de statische methode
+if (!Auth::isAdmin()) {
     header("Location: ../patiëntgegevens/patiëntgegevens.php?id=$clientId");
     exit;
 }
@@ -24,6 +28,7 @@ $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHE
 $stmt->bind_param("i", $clientId);
 $stmt->execute();
 $stmt = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
 // Loop door alle medewerkers heen, als de medewerker al in de database staat, zet dan de checked variabele op true
 foreach ($medewerkers as $key => $medewerker) {
     foreach ($stmt as $relation) {
