@@ -45,7 +45,7 @@ if (isset($_GET['pt'])) {
             <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
                 <p class="card-text">
                     <?php if (!isset($patroonId)) { ?>
-                        <?php if ($ClientModel->getMedischOverzichtByClientId($_SESSION['clientId'])) { ?>
+                        <?php if ($ClientModel->getMedicalOverviewByClientId($_SESSION['clientId'])) { ?>
                 <div class="header">
                     <a href='../clientverhaal/clientverhaal.php?id=<?= $_SESSION['clientId'] ?>' class="h1 fw-bold text-decoration-none text-primary">Clientverhaal invullen <i class="h3 bi bi-plus-square-dotted"></i></a>
 
