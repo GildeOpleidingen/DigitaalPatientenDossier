@@ -1,6 +1,10 @@
 <?php
 class Meting
 {
+    /**
+     * @param array $metingtijden
+     * @return array
+     */
     public function getMeting($metingtijden)
     {
         $metingen = [];
@@ -106,6 +110,11 @@ class Meting
         return $arrays;
     }
 
+    /**
+     * @param array $array
+     * @param string $time
+     * @return string
+     */
     public function vindGelijkeWaarde($array, $time)
     {
         foreach ($array as $measurement) {

@@ -1,6 +1,18 @@
 <?php
 trait Zorgplan
 {
+    /**
+     * @param int $clientId
+     * @param string $opsteldatumtijd
+     * @param int $patroontypeid
+     * @param string $P
+     * @param string $E
+     * @param string $S
+     * @param string $doelen
+     * @param string $interventies
+     * @param string $evaluatiedoelen
+     * @return bool
+     */
     public function insertCarePlan($clientId, $opsteldatumtijd, $patroontypeid, $P, $E, $S, $doelen, $interventies, $evaluatiedoelen): bool
     {
         if ($this->checkIfClientExistsById($clientId)) {
@@ -20,6 +32,11 @@ trait Zorgplan
         }
     }
 
+    /**
+     * @param int $id
+     * @param int $patternId
+     * @return bool
+     */
     public function checkIfCarePlanPatternTypeExists($id, $patternId): bool
     {
         $result = DatabaseConnection::getConn()->prepare("

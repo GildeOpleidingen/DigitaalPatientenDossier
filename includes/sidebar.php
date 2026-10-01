@@ -4,10 +4,13 @@
     * {
         margin: 0;
         padding: 0;
-        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-        -moz-box-sizing: border-box; /* Firefox, other Gecko */
-        box-sizing: border-box; /* Opera/IE 8+ */
-        font-family: 'Inter Tight' , sans-serif;
+        -webkit-box-sizing: border-box;
+        /* Safari/Chrome, other WebKit */
+        -moz-box-sizing: border-box;
+        /* Firefox, other Gecko */
+        box-sizing: border-box;
+        /* Opera/IE 8+ */
+        font-family: 'Inter Tight', sans-serif;
     }
 
     ::-webkit-scrollbar {
@@ -113,9 +116,10 @@
     include_once '../../database/DatabaseConnection.php';
     include_once '../../models/autoload.php';
     $Main = new Main();
+    $ClientModel = new ClientModel();
 
     $clientId = $_SESSION['clientId'];
-    $row1 = $Main->getClientById($clientId);
+    $row1 = $ClientModel->getClientById($clientId);
     ?>
     <div class="profile">
         <div class="profile-img">
@@ -130,12 +134,12 @@
         <div class="personal-information">
             <p><?php echo $row1['naam']; ?></p>
             <p id="birth"><?php
-                echo date_create($row1['geboortedatum'])->format('d-m-Y');
-                $geboortedatum = $row1['geboortedatum'];
-                $vandaag = date("Y-m-d");
-                $leeftijd = date_diff(date_create($geboortedatum), date_create($vandaag))->format('%Y');
-                echo " ($leeftijd)";
-                ?></p>
+                            echo date_create($row1['geboortedatum'])->format('d-m-Y');
+                            $geboortedatum = $row1['geboortedatum'];
+                            $vandaag = date("Y-m-d");
+                            $leeftijd = date_diff(date_create($geboortedatum), date_create($vandaag))->format('%Y');
+                            echo " ($leeftijd)";
+                            ?></p>
         </div>
     </div>
     <?php
@@ -155,8 +159,6 @@
         echo '</div>';
         echo "<p>Niet reanimeren</p>";
         echo "</div></button>";
-
-
     }
 
 

@@ -5,7 +5,7 @@ include_once '../../models/autoload.php';
 $Main = new Main();
 
 $clientId = $_SESSION['clientId'];
-if (!isset($clientId) || !$Main->checkIfClientExistsById($clientId) || !$Main->getMedischOverzichtByClientId($clientId)) {
+if (!isset($clientId) || !$Main->checkIfClientExistsById($clientId) || !$Main->getMedicalOverviewByClientId($clientId)) {
     header("Location: ../../index.php");
     exit;
 }
@@ -42,7 +42,6 @@ if (isset($_POST['clientverhaal-opslaan'])) {
                 $_SESSION['error'] = "Het bestand is te groot, het bestand mag maximaal 16MB groot zijn.";
                 header("Location: ./clientverhaal.php");
                 exit;
-
             }
         }
     }
@@ -59,11 +58,10 @@ if (isset($_POST['clientverhaal-opslaan'])) {
         header("Location: ./clientverhaal.php");
         exit;
     } else {
-        $_SESSION['error'] = $result; 
+        $_SESSION['error'] = $result;
         header("Location: ./clientverhaal.php");
         exit;
     }
-    
 }
 ?>
 
@@ -87,47 +85,49 @@ if (isset($_POST['clientverhaal-opslaan'])) {
         <div class="content">
             <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
                 <p class="card-text">
-                <?php if(isset($_SESSION['succes'])){ ?>
+                    <?php if (isset($_SESSION['succes'])) { ?>
                 <div class="mb-3 alert alert-success" role="alert">
                     <?php echo $_SESSION['succes']; ?>
                 </div>
-                <?php unset($_SESSION['succes']); } ?>
-                <?php if(isset($_SESSION['error'])){ ?>
+            <?php unset($_SESSION['succes']);
+                    } ?>
+            <?php if (isset($_SESSION['error'])) { ?>
                 <div class="mb-3 alert alert-danger" role="alert">
                     <?php echo $_SESSION['error']; ?>
                 </div>
-                <?php unset($_SESSION['error']); } ?>
-                <form class="invulformulier" method="POST" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label">Foto</label>
-                        <input class="form-control" type="file" id="file-selector" name="foto" accept="image/png, image/jpg, image/jpeg">
-                        <?php if (isset($clientStory['foto'])){ ?>
+            <?php unset($_SESSION['error']);
+            } ?>
+            <form class="invulformulier" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Foto</label>
+                    <input class="form-control" type="file" id="file-selector" name="foto" accept="image/png, image/jpg, image/jpeg">
+                    <?php if (isset($clientStory['foto'])) { ?>
                         <img id="image" src="data:image/png;base64,<?= base64_encode($clientStory['foto'] ?? "") ?? "" ?>" alt=" " width="200" height="200">
-                        <?php } ?>
-                    </div>
+                    <?php } ?>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="introductie">Introductie</label>
-                        <textarea name="introductie" class="form-control"><?= $clientStory['introductie'] ?? "" ?></textarea>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="gezinfamilie">Gezin en familie</label>
-                        <textarea name="gezinfamilie" class="form-control"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
-                    </div>
-                    
-                    <div class="mb-3 w-100">
-                        <label for="hobbies">Hobbies</label=>
+                <div class="mb-3">
+                    <label for="introductie">Introductie</label>
+                    <textarea name="introductie" class="form-control"><?= $clientStory['introductie'] ?? "" ?></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="gezinfamilie">Gezin en familie</label>
+                    <textarea name="gezinfamilie" class="form-control"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
+                </div>
+
+                <div class="mb-3 w-100">
+                    <label for="hobbies">Hobbies</label=>
                         <textarea name="hobbies" class="form-control w-100"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="belangrijkeinfo">Belangrijke informatie voor omgang</label>
-                        <textarea name="belangrijkeinfo" class="form-control"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
-                    </div>
-                    
-                    <button type="submit" name="clientverhaal-opslaan" class="btn btn-secondary w-100">Opslaan</button>
-                </form>
+                </div>
+
+                <div class="mb-3">
+                    <label for="belangrijkeinfo">Belangrijke informatie voor omgang</label>
+                    <textarea name="belangrijkeinfo" class="form-control"><?= $clientStory['gezinfamilie'] ?? "" ?></textarea>
+                </div>
+
+                <button type="submit" name="clientverhaal-opslaan" class="btn btn-secondary w-100">Opslaan</button>
+            </form>
             </div>
         </div>
 
