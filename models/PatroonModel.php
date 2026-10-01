@@ -2,6 +2,10 @@
 
 class PatroonModel
 {
+    /**
+     * @param int $clientId
+     * @return int|null
+     */
     private static function findQuestionnaireId(int $clientId): ?int
     {
         try {
@@ -24,6 +28,11 @@ class PatroonModel
         }
     }
 
+    /**
+     * @param int $clientId
+     * @param int $employeeId
+     * @return int|null
+     */
     private static function createQuestionnaire(int $clientId, int $employeeId): ?int
     {
         try {
@@ -43,6 +52,11 @@ class PatroonModel
         }
     }
 
+    /**
+     * @param int $clientId
+     * @param int $employeeId
+     * @return int|null
+     */
     public static function getQuestionnaireId(int $clientId, int $employeeId): ?int
     {
         $id = self::findQuestionnaireId($clientId);
@@ -309,16 +323,31 @@ class PatroonModel
         ],
     ];
 
+    /**
+     * @param int $patternType
+     * @return string|null
+     */
     public static function getPatternTable(int $patternType): ?string
     {
         return self::$patterns[$patternType]['table'] ?? null;
     }
 
+    /**
+     * @param int $patternType
+     * @return array|null
+     */
     public static function getTableMetadata(int $patternType): ?array
     {
         return self::$patterns[$patternType]['fields'] ?? null;
     }
 
+    /**
+     * @param int $clientId
+     * @param int $employeeId
+     * @param int $patternNum
+     * @param array $data
+     * @return bool
+     */
     public static function saveAnswers(int $clientId, int $employeeId, int $patternNum, array $data): bool
     {
         $tableName = self::getPatternTable($patternNum);
@@ -345,6 +374,12 @@ class PatroonModel
         }
     }
 
+    /**
+     * @param int $patternNum
+     * @param array $metadata
+     * @param array $data
+     * @return array
+     */
     private static function filterFields(int $patternNum, array $metadata, array $data): array
     {
         $observationCounts = [
@@ -414,6 +449,12 @@ class PatroonModel
         return [$columns, $types, $values];
     }
 
+    /**
+     * @param mysqli $conn
+     * @param string $tableName
+     * @param int $questionnaireId
+     * @return bool
+     */
     private static function hasRecord(mysqli $conn, string $tableName, int $questionnaireId): bool
     {
         $stmt = $conn->prepare("SELECT id FROM `$tableName` WHERE `vragenlijstid` = ? LIMIT 1");
@@ -424,6 +465,15 @@ class PatroonModel
         return $row !== null;
     }
 
+    /**
+     * @param mysqli $conn
+     * @param string $tableName
+     * @param int $questionnaireId
+     * @param array $columns
+     * @param string $types
+     * @param array $values
+     * @return bool
+     */
     private static function executeUpdate(mysqli $conn, string $tableName, int $questionnaireId, array $columns, string $types, array $values): bool
     {
         // 1. Build the "`column` = ?" pairs
@@ -446,6 +496,15 @@ class PatroonModel
         return $stmt->execute();
     }
 
+    /**
+     * @param mysqli $conn
+     * @param string $tableName
+     * @param int $questionnaireId
+     * @param array $columns
+     * @param string $types
+     * @param array $values
+     * @return bool
+     */
     private static function executeInsert(mysqli $conn, string $tableName, int $questionnaireId, array $columns, string $types, array $values): bool
     {
         // 1. Add 'vragenlijstid' as the very first column and value
@@ -473,6 +532,10 @@ class PatroonModel
         return $stmt->execute();
     }
 
+    /**
+     * @param int $patternType
+     * @return array
+     */
     public static function getDefaultAnswers(int $patternType): array
     {
         $metadata = self::getTableMetadata($patternType);
@@ -485,6 +548,11 @@ class PatroonModel
         return $defaults;
     }
 
+    /**
+     * @param int $clientId
+     * @param int $patternType
+     * @return array
+     */
     public static function getAnswers(int $clientId, int $patternType): array
     {
         $tableName = self::getPatternTable($patternType);
@@ -510,6 +578,9 @@ class PatroonModel
         }
     }
 
+    /**
+     * @return array|null
+     */
     public static function getPatternTypes(): ?array
     {
         try {
@@ -521,6 +592,10 @@ class PatroonModel
         }
     }
 
+    /**
+     * @param int $patternId
+     * @return array|null
+     */
     public static function getPatternType(int $patternId): ?array
     {
         try {
@@ -536,16 +611,33 @@ class PatroonModel
         }
     }
 
+    /**
+     * @param int $value
+     * @param int $min
+     * @param int $max
+     * @return bool
+     */
     public static function checkValue(int $value, int $min, int $max): bool
     {
         return $value >= $min && $value <= $max;
     }
 
+    /**
+     * @param array $formData
+     * @param int $count
+     * @return string
+     */
     public static function formatObservations(array $formData, int $count = 20): string
     {
         return self::formatCheckboxes($formData, 'observatie', $count);
     }
 
+    /**
+     * @param array $formData
+     * @param string $prefix
+     * @param int $count
+     * @return string
+     */
     public static function formatCheckboxes(array $formData, string $prefix, int $count): string
     {
         $binaryString = "";
@@ -560,6 +652,11 @@ class PatroonModel
         return $binaryString;
     }
 
+    /**
+     * @param string|null $bitstring
+     * @param int $index
+     * @return string
+     */
     public static function isChecked(?string $bitstring, int $index): string
     {
         return (isset($bitstring[$index]) && $bitstring[$index] === '1') ? 'checked' : '';

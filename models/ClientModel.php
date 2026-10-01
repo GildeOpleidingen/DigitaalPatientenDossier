@@ -4,13 +4,20 @@ class ClientModel
 {
     private mysqli $db;
 
+    /**
+     * @param mysqli|null $db
+     */
     public function __construct(?mysqli $db = null)
     {
         $this->db = $db ?? DatabaseConnection::getConn();
     }
 
-    // ── Query Helpers ────────────────────────────────────────────────
-
+    /**
+     * @param string $sql
+     * @param string $types
+     * @param mixed ...$params
+     * @return array|null
+     */
     private function queryOne(string $sql, string $types, mixed ...$params): ?array
     {
         try {
@@ -34,6 +41,12 @@ class ClientModel
         }
     }
 
+    /**
+     * @param string $sql
+     * @param string $types
+     * @param mixed ...$params
+     * @return array
+     */
     private function queryAll(string $sql, string $types, mixed ...$params): array
     {
         try {
@@ -57,6 +70,12 @@ class ClientModel
         }
     }
 
+    /**
+     * @param string $sql
+     * @param string $types
+     * @param mixed ...$params
+     * @return bool
+     */
     private function queryExists(string $sql, string $types, mixed ...$params): bool
     {
         try {
@@ -80,6 +99,12 @@ class ClientModel
         }
     }
 
+    /**
+     * @param string $sql
+     * @param string $types
+     * @param mixed ...$params
+     * @return bool
+     */
     private function execute(string $sql, string $types, mixed ...$params): bool
     {
         try {
@@ -100,8 +125,10 @@ class ClientModel
         }
     }
 
-    // ── Client Lookups ───────────────────────────────────────────────
-
+    /**
+     * @param int $id
+     * @return array|null
+     */
     public function getById(int $id): ?array
     {
         return $this->queryOne("
@@ -113,11 +140,19 @@ class ClientModel
         ", "i", $id);
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getClientById(int $id): array
     {
         return $this->getById($id) ?? [];
     }
 
+    /**
+     * @param string $name
+     * @return array
+     */
     public function getClientByName(string $name): array
     {
         return $this->queryOne("
@@ -125,6 +160,10 @@ class ClientModel
         ", "s", $name) ?? [];
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfClientExistsById(int $id): bool
     {
         return $this->queryExists("
@@ -132,6 +171,10 @@ class ClientModel
         ", "i", $id);
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function checkIfClientExistsByName(string $name): bool
     {
         return $this->queryExists("
@@ -139,8 +182,11 @@ class ClientModel
         ", "s", $name);
     }
 
-    // ── Care Relations (verzorgerregel) ──────────────────────────────
-
+    /**
+     * @param int $clientId
+     * @param int $employeeId
+     * @return bool
+     */
     public function checkIfCareRelationExists(int $clientId, int $employeeId): bool
     {
         try {
@@ -162,6 +208,20 @@ class ClientModel
         }
     }
 
+    /**
+     * @param int $clientId
+     * @param int $medewerkerId
+     * @return bool
+     */
+    public function CheckIfVerzorgregelExists($clientId, $medewerkerId): bool
+    {
+        return $this->checkIfCareRelationExists((int)$clientId, (int)$medewerkerId);
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getCareRelationsByClientId(int $id): array
     {
         return $this->queryAll("
@@ -169,6 +229,19 @@ class ClientModel
         ", "i", $id);
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function getVerzorgerregelByClientId($id): array
+    {
+        return $this->getCareRelationsByClientId((int)$id);
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getCaregiversById(int $id): array
     {
         return $this->queryOne("
@@ -176,8 +249,20 @@ class ClientModel
         ", "i", $id) ?? [];
     }
 
-    // ── Patient Data ─────────────────────────────────────────────────
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function getVerzorgersById($id): array
+    {
+        return $this->getCaregiversById((int)$id);
+    }
 
+    /**
+     * @param int $id
+     * @param 'clientRelations'|'contactPersonen'|'medischOverzicht'|'verzorgersArr'|string $type
+     * @return array
+     */
     public function getPatientData(int $id, string $type): array
     {
         $sql = match ($type) {
@@ -200,8 +285,20 @@ class ClientModel
         return $this->queryAll($sql, "i", $id);
     }
 
-    // ── Medical Overview ─────────────────────────────────────────────
+    /**
+     * @param int $id
+     * @param 'clientRelations'|'contactPersonen'|'medischOverzicht'|'verzorgersArr'|string $type
+     * @return array
+     */
+    public function getPatientGegevens($id, $type): array
+    {
+        return $this->getPatientData((int)$id, (string)$type);
+    }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getMedicalOverviewByClientId(int $id): array
     {
         $overview = $this->queryOne("
@@ -213,13 +310,26 @@ class ClientModel
         ", "i", $id);
 
         return $overview ?? [
-            "medischevoorgeschiedenis" => "No medical history recorded",
-            "medicatie"                => "No medication recorded",
-            "alergieen"                => "No allergies recorded",
-            "opnamedatum"              => "No admission date recorded",
+            "medischevoorgeschiedenis" => "Geen medische voorgeschiedenis ingevuld",
+            "medicatie"                => "Geen medicatie ingevuld",
+            "alergieen"                => "Geen allergieën ingevuld",
+            "opnamedatum"              => "Geen opnamedatum ingevuld",
         ];
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function getMedischOverzichtByClientId($id): array
+    {
+        return $this->getMedicalOverviewByClientId((int)$id);
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     */
     public function getAdmissionDateByClientId(int $id): string
     {
         $row = $this->queryOne("
@@ -238,9 +348,13 @@ class ClientModel
             return (string) $row['opnamedatum'];
         }
 
-        return "No admission date recorded";
+        return "Geen opnamedatum ingevuld";
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfMedicalOverviewExistsByClientId(int $id): bool
     {
         return $this->queryExists("
@@ -248,8 +362,19 @@ class ClientModel
         ", "i", $id);
     }
 
-    // ── Client Story ─────────────────────────────────────────────────
+    /**
+     * @param int $clientid
+     * @return bool
+     */
+    public function checkIfMedischOverzichtExistsByClientId($clientid): bool
+    {
+        return $this->checkIfMedicalOverviewExistsByClientId((int)$clientid);
+    }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfClientStoryExistsByClientId(int $id): bool
     {
         return $this->queryExists("
@@ -262,6 +387,10 @@ class ClientModel
         ", "i", $id);
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getClientStoryByClientId(int $id): array
     {
         return $this->queryOne("
@@ -274,6 +403,15 @@ class ClientModel
         ", "i", $id) ?? [];
     }
 
+    /**
+     * @param int $clientId
+     * @param string|null $photo
+     * @param string $introduction
+     * @param string $family
+     * @param string $importantInfo
+     * @param string $hobbies
+     * @return bool
+     */
     public function insertClientStory(
         int     $clientId,
         ?string $photo,
@@ -311,11 +449,19 @@ class ClientModel
         ", "sssssi", $photo, $introduction, $family, $importantInfo, $hobbies, $overviewId);
     }
 
+    /**
+     * @return bool
+     */
     public function 🥶()
     {
         return true;
     }
 
+    /**
+     * @param int $clientId
+     * @param array $overview
+     * @return int|null
+     */
     private function ensureMedicalOverviewId(int $clientId, array $overview): ?int
     {
         if ($this->checkIfMedicalOverviewExistsByClientId($clientId)) {
@@ -329,8 +475,10 @@ class ClientModel
         return (int) $this->db->insert_id;
     }
 
-    // ── Care Plan ────────────────────────────────────────────────────
-
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfCarePlanExistsByClientId(int $id): bool
     {
         return $this->queryExists("
@@ -342,6 +490,10 @@ class ClientModel
         ", "i", $id);
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getCarePlanByClientId(int $id): array
     {
         return $this->queryOne("
@@ -353,8 +505,21 @@ class ClientModel
         ", "i", $id) ?? [];
     }
 
-    // ── Client Update / Insert ───────────────────────────────────────
-
+    /**
+     * @param string $name
+     * @param string $gender
+     * @param string $address
+     * @param string $postalCode
+     * @param string $city
+     * @param string $phone
+     * @param string $email
+     * @param string $resuscitationStatus
+     * @param string $nationality
+     * @param string $department
+     * @param string $maritalStatus
+     * @param string|null $photo
+     * @return bool
+     */
     public function updateClient(
         string  $name,
         string  $gender,
@@ -430,6 +595,21 @@ class ClientModel
         }
     }
 
+    /**
+     * @param string $name
+     * @param string $gender
+     * @param string $address
+     * @param string $postalCode
+     * @param string $city
+     * @param string $phone
+     * @param string $email
+     * @param string $resuscitationStatus
+     * @param string $nationality
+     * @param string $department
+     * @param string $maritalStatus
+     * @param string|null $photo
+     * @return bool
+     */
     private function insertNewClient(
         string  $name,
         string  $gender,

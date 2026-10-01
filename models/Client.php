@@ -1,6 +1,11 @@
 <?php
 trait Client
 {
+    /**
+     * @param int $clientId
+     * @param int $medewerkerId
+     * @return bool
+     */
     public function CheckIfVerzorgregelExists($clientId, $medewerkerId)
     {
         try {
@@ -26,6 +31,15 @@ trait Client
         }
     }
 
+    /**
+     * @param int $clientid
+     * @param string|null $foto
+     * @param string|null $introductie
+     * @param string|null $familie
+     * @param string|null $belangrijkeinfo
+     * @param string|null $hobbies
+     * @return bool
+     */
     public function insertClientStory($clientid, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies): bool
     {
         $medischOverzicht = $this->getMedischOverzichtByClientId($clientid);
@@ -63,6 +77,21 @@ trait Client
         }
     }
 
+    /**
+     * @param string $naam
+     * @param string|null $geslacht
+     * @param string|null $adres
+     * @param string|null $postcode
+     * @param string|null $woonplaats
+     * @param string|null $telefoonnummer
+     * @param string|null $email
+     * @param string|null $reanimatiestatus
+     * @param string|null $nationaliteit
+     * @param string|null $afdeling
+     * @param string|null $burgelijkestaat
+     * @param string|null $foto
+     * @return bool
+     */
     public function updateClient($naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto): bool
     {
         $result = DatabaseConnection::getConn()->prepare("UPDATE `client` SET `geslacht`=?,`adres`=?,`postcode`=?,`woonplaats`=?,`telefoonnummer`=?,`email`=?,`reanimatiestatus`=?,`nationaliteit`=?,`afdeling`=?,`burgelijkestaat`=?,`foto`=? WHERE `naam`=?;");
@@ -89,6 +118,10 @@ trait Client
         return false;
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfClientStoryExistsByClientId($id): bool
     {
         $result = DatabaseConnection::getConn()->prepare("
@@ -108,6 +141,10 @@ trait Client
         }
     }
 
+    /**
+     * @param int $clientid
+     * @return bool
+     */
     public function checkIfMedischOverzichtExistsByClientId($clientid): bool
     {
         $result = DatabaseConnection::getConn()->prepare("
@@ -125,6 +162,10 @@ trait Client
         }
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfCarePlanExistsByClientId($id): bool
     {
         $result = DatabaseConnection::getConn()->prepare("
@@ -143,6 +184,10 @@ trait Client
         }
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getClientStoryByClientId($id): array
     {
         $result = DatabaseConnection::getConn()->prepare("
@@ -159,6 +204,10 @@ trait Client
         return (array) $result->get_result()->fetch_array();
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getCarePlanByClientId($id): array
     {
         $result = DatabaseConnection::getConn()->prepare("
@@ -173,6 +222,10 @@ trait Client
         return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getVerzorgerregelByClientId($id): array
     {
         $result = DatabaseConnection::getConn()->prepare("
@@ -186,6 +239,10 @@ trait Client
         return $result->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    /**
+     * @param int $id
+     * @return string
+     */
     public function getAdmissionDateByClientId($id): string
     {
         $result = DatabaseConnection::getConn()->prepare("
@@ -208,6 +265,10 @@ trait Client
         }
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getMedischOverzichtByClientId($id): array
     {
         $result = DatabaseConnection::getConn()->prepare("
@@ -233,6 +294,10 @@ trait Client
         }
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfClientExistsById(int $id): bool
     {
         $result = $this->getClientById($id);
@@ -240,6 +305,10 @@ trait Client
         return sizeof((array) $result) > 0;
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function checkIfClientExistsByName(string $name): bool
     {
         $result = $this->getClientByName($name);
@@ -247,6 +316,10 @@ trait Client
         return sizeof((array) $result) > 0;
     }
 
+    /**
+     * @param int $ClientId
+     * @return array
+     */
     public function getClientById($ClientId): array
     {
         $result = DatabaseConnection::getConn()->prepare("SELECT c.*, a.naam as afdeling FROM client c LEFT JOIN afdelingen a on a.id = c.afdeling_id WHERE c.id =?;");
@@ -256,6 +329,10 @@ trait Client
         return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
     }
 
+    /**
+     * @param string $name
+     * @return array
+     */
     public function getClientByName($name): array
     {
         $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE naam = ?;");
@@ -265,6 +342,10 @@ trait Client
         return (array) $result->get_result()->fetch_array();
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getVerzorgersById($id): array
     {
         $result = DatabaseConnection::getConn()->prepare("
@@ -278,6 +359,11 @@ trait Client
         return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
     }
 
+    /**
+     * @param int $id
+     * @param 'clientRelations'|'contactPersonen'|'medischOverzicht'|'verzorgersArr'|string $type
+     * @return array|false
+     */
     public function getPatientGegevens($id, $type)
     {
         if ($type == 'clientRelations') {
