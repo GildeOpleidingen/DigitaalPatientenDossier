@@ -1,234 +1,29 @@
 <?php
-session_start();
-
-include '../../includes/auth.php';
-include '../../database/DatabaseConnection.php';
-include '../../models/autoload.php';
+include_once '../../models/autoload.php';
+Auth::requireLogin();
 
 $Main = new Main();
 
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 4);
-$boolArrayObservatie = isset($antwoorden['observatie']) ? str_split($antwoorden['observatie']) : [];
+$clientId = $_SESSION['clientId'];
+$antwoorden = $Main->getAnswers($clientId, 4);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
-    // Haal alle antwoorden uit het formulier
-   $voedingCheckbox = $_POST['voedingCheckbox'] ?? 0;
-   $voeding = $voedingCheckbox != 0 && $Main->CheckValue($_POST['voeding'], 0, 4) ? strval($_POST['voeding']) : null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
 
-    $aankledenCheckbox = $_POST['aankledenCheckbox'] ?? 0;
+    PatroonModel::saveAnswers(
+        (int)$_SESSION['clientId'],
+        (int)$_SESSION['loggedin_id'],
+        4,
+        $_POST
+    );
 
-    $aankleden =  $aankledenCheckbox != 0 && $Main->CheckValue($_POST['aankleden'], 0, 4) ? $_POST['aankleden'] :   null;
-
-    $alg_mobiliteitCheckbox = $_POST['alg_mobiliteitCheckbox'] ?? 0;
-    $alg_mobiliteit = $alg_mobiliteitCheckbox != 0 && $Main->CheckValue($_POST['alg_mobiliteit'], 0, 4) ? strval($_POST['alg_mobiliteit']) : null;
-    $kokenCheckbox = $_POST['kokenCheckbox'] ?? 0;
-    $koken = $kokenCheckbox != 0 && $Main->CheckValue($_POST['koken'], 0, 4)? strval($_POST['koken']) : null;
-    $huishoudenCheckbox = $_POST['huishoudenCheckbox'] ?? 0;
-    $huishouden = $huishoudenCheckbox != 0 && $Main->CheckValue($_POST['huishouden'], 0, 4)? strval($_POST['huishouden']) : null;
-    $financienCheckbox = $_POST['financienCheckbox'] ?? 0;
-    $financien = $financienCheckbox != 0 && $Main->CheckValue($_POST['financien'], 0, 4) ? strval($_POST['financien']) : null;
-    $verzorgingCheckbox = $_POST['verzorgingCheckbox'] ?? 0; 
-    $verzorging = $verzorgingCheckbox != 0 && $Main->CheckValue($_POST['verzorging'], 0, 4)? strval($_POST['verzorging']) : null;
-    $badenCheckbox = $_POST['badenCheckbox'] ?? 0;
-    $baden = $badenCheckbox != 0 && $Main->CheckValue($_POST['baden'], 0, 4)? strval($_POST['baden']) : null;
-    $toiletgangCheckbox = $_POST['toiletgangCheckbox'] ?? 0;
-    $toiletgang = $toiletgangCheckbox != 0 && $Main->CheckValue($_POST['toiletgang'], 0, 4)? strval($_POST['toiletgang']) : null;
-    $uit_bed_komenCheckbox = $_POST['uit_bed_komenCheckbox'] ?? 0;
-    $uit_bed_komen = $uit_bed_komenCheckbox != 0 && $Main->CheckValue($_POST['uit_bed_komen'], 0, 4)? strval($_POST['uit_bed_komen']) : null;
-    $winkelenCheckbox = $_POST['winkelenCheckbox'] ?? 0;
-    $winkelen = $winkelenCheckbox != 0 && $Main->CheckValue($_POST['winkelen'], 0, 4)? strval($_POST['winkelen']) : null;
-    $tijd_voor_uzelf_nodig = $_POST['tijd_voor_uzelf_nodig'] ?? 0;
-    $tijd_voor_uzelf_nodig_blijktuit = strval($_POST['tijd_voor_uzelf_nodig_blijktuit']);
-    $dagelijkse_activiteiten = strval($_POST['dagelijkse_activiteiten']);
-    $dagelijkse_gewoontes = $_POST['dagelijkse_gewoontes'] ?? 0;
-    $dagelijkse_gewoontes_welke = strval($_POST['dagelijkse_gewoontes_welke'] );
-    $lichamelijke_beperking = $_POST['lichamelijke_beperking'] ?? 0;
-    $lichamelijke_beperking_welke = strval($_POST['lichamelijke_beperking_welke'] );
-    $vermoeidheids_klachten = $_POST['vermoeidheids_klachten'] ?? 0;
-    $passiever = $_POST['passiever'] ?? 0;
-    $passiever_blijktuit = strval($_POST['passiever_blijktuit']);
-    $problemen_starten_dag = $_POST['problemen_starten_dag'] ?? 0;
-    $problemen_starten_dag_blijktuit = strval($_POST['problemen_starten_dag_blijktuit']);
-    $hobbys = $_POST['hobbys'] ?? 0;
-    $hobbys_bestedingstijd = strval($_POST['hobbys_bestedingstijd']);
-    $activiteiten_weggevallen = $_POST['activiteiten_weggevallen'] ?? 0;
-    $activiteiten_weggevallen_welke = strval($_POST['activiteiten_weggevallen_welke']);
-
-    // array van checkboxes van observatie tab
-    $observatie = "";
-    for ($i = 1; $i <= 10; $i++) {
-        $observatie .= isset($_POST["observatie$i"]) && $_POST["observatie$i"] == 1 ? "1" : "0";
-    }
-
-     //Haal vragenlijst ID op.
-    $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-    // kijken of patroon10 bestaat door te kijken naar vragenlijst id
-    $result = DatabaseConnection::getConn()->prepare("
-                    SELECT p.id
-                    FROM patroon04activiteiten p
-                    WHERE p.vragenlijstid =  ?");
-    $result->bind_param("i", $vragenlijstId);
-    $result->execute();
-    $result = $result->get_result()->fetch_assoc();
-
-     unset($_SESSION['patroonerror']);
-
- if ($result != null) {
-        //update
-        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon04activiteiten` 
-        SET 
-            `voeding`= ?,
-            `aankleden`= ?,
-            `alg_mobiliteit`= ?,
-            `koken`= ?,
-            `huishouden` = ?,
-            `financien`= ?,
-            `verzorging`= ?,
-            `baden`= ?,
-            `toiletgang`= ?,
-            `uit_bed_komen`= ?,
-            `winkelen` = ?,
-            `tijd_voor_uzelf_nodig` = ?,
-            `tijd_voor_uzelf_nodig_blijktuit`= ?,
-            `dagelijkse_activiteiten`= ?,
-            `dagelijkse_gewoontes`= ?,
-            `dagelijkse_gewoontes_welke`= ?,
-            `lichamelijke_beperking`= ?,
-            `lichamelijke_beperking_welke`= ?,
-            `vermoeidheids_klachten`= ?,
-            `passiever`= ?,
-            `passiever_blijktuit`= ?,
-            `problemen_starten_dag` = ?,
-            `problemen_starten_dag_blijktuit`= ?,
-            `hobbys`= ?,
-            `hobbys_bestedingstijd`= ?,
-            `activiteiten_weggevallen`= ?,
-            `activiteiten_weggevallen_welke`= ?,
-            `observatie`= ?
-        WHERE `vragenlijstid`=?");
-        if ($result1) {
-            $result1->bind_param("iiiiiiiiiiiissssssssssssssssi", 
-                $voeding, 
-                $aankleden,
-                $alg_mobiliteit,
-                $koken,
-                $huishouden,
-                $financien,
-                $verzorging,
-                $baden,
-                $toiletgang,
-                $uit_bed_komen,
-                $winkelen,
-                $tijd_voor_uzelf_nodig,
-                $tijd_voor_uzelf_nodig_blijktuit,
-                $dagelijkse_activiteiten,
-                $dagelijkse_gewoontes,
-                $dagelijkse_gewoontes_welke,
-                $lichamelijke_beperking,
-                $lichamelijke_beperking_welke,
-                $vermoeidheids_klachten,
-                $passiever,
-                $passiever_blijktuit,
-                $problemen_starten_dag,
-                $problemen_starten_dag_blijktuit,
-                $hobbys,
-                $hobbys_bestedingstijd,
-                $activiteiten_weggevallen,
-                $activiteiten_weggevallen_welke,
-                    $observatie,
-                 $vragenlijstId);
-            $result1->execute();
-
-
-        } else {
-             // Display the alert box on next of previous page
-            $_SESSION['patroonerror'] = 'Er ging iets fout (wijziging), wijzigingen zijn NIET opgeslagen.';
-            $_SESSION['patroonnr'] = '04. activiteitenpatroon';
-        }
-    } else {
-        //hier insert je alle data in patroon02
-        try{
-            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon04activiteiten`(
-    
-            vragenlijstid, 
-                voeding,
-                aankleden,
-                `alg_mobiliteit`,
-                `koken`,
-                `huishouden`, 
-                `financien`,
-                `verzorging`,
-                `baden`,
-                `toiletgang`, 
-                `uit_bed_komen`,
-                `winkelen`, 
-                `tijd_voor_uzelf_nodig`, 
-                `tijd_voor_uzelf_nodig_blijktuit`, 
-                `dagelijkse_activiteiten`, 
-                `dagelijkse_gewoontes`,
-                `dagelijkse_gewoontes_welke`,
-                `lichamelijke_beperking`,
-                `lichamelijke_beperking_welke`,
-                `vermoeidheids_klachten`,
-                `passiever`,
-                `passiever_blijktuit`,
-                `problemen_starten_dag`,
-                `problemen_starten_dag_blijktuit`,
-                `hobbys`,
-                `hobbys_bestedingstijd`,
-                `activiteiten_weggevallen`,
-                `activiteiten_weggevallen_welke`,
-                `observatie`) 
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $result2->bind_param("iiiiiiiiiiiiissssssssssssssss", 
-
-            $vragenlijstId,
-                $voeding, 
-                $aankleden,
-                $alg_mobiliteit,
-                $koken,
-                $huishouden,
-                $financien,
-                $verzorging,
-                $baden,
-                $toiletgang,
-                $uit_bed_komen,
-                $winkelen,
-                $tijd_voor_uzelf_nodig,
-                $tijd_voor_uzelf_nodig_blijktuit,
-                $dagelijkse_activiteiten,
-                $dagelijkse_gewoontes,
-                $dagelijkse_gewoontes_welke,
-                $lichamelijke_beperking,
-                $lichamelijke_beperking_welke,
-                $vermoeidheids_klachten,
-                $passiever,
-                $passiever_blijktuit,
-                $problemen_starten_dag,
-                $problemen_starten_dag_blijktuit,
-                $hobbys,
-                $hobbys_bestedingstijd,
-                $activiteiten_weggevallen,
-                $activiteiten_weggevallen_welke,
-                $observatie);
-            $result2->execute();
-            $result2 = $result2->get_result();
-        } catch (Exception $e) {
-            // Display the alert box on next of previous page
-            $_SESSION['patroonerror'] = 'Er ging iets fout (toevoegen), wijzigingen zijn NIET opgeslagen.';
-            $_SESSION['patroonnr'] = '04. activiteitenpatroon';
-        }
-    }
-    
-
-    if ($_POST['navbutton'] === 'next') {
-        header('Location: patroon05.php');
-        exit;
-    }
-
-    if ($_POST['navbutton'] === 'prev') {
-        header('Location: patroon03.php');
-        exit;
+    // Navigation
+    switch ($_POST['navbutton']) {
+        case 'next':
+            header("Location: patroon05.php");
+            exit;
+        case 'prev':
+            header("Location: patroon03.php");
+            exit;
     }
 }
 ?>
@@ -249,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
 </head>
 
 <body style="overflow: hidden;">
-    <form action="" method="post">
+    <form action="" method="post" data-client-id="<?= htmlspecialchars((string)($_SESSION['clientId'] ?? '')) ?>">
         <div class="main">
             <?php
             include '../../includes/n-header.php';
@@ -521,37 +316,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                 <div class="observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[0]) && $boolArrayObservatie[0] == 1 ? "checked" : "" ?> value="1" name="observatie1">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 0) ?> value="1" name="observatie1">
                                             <p>(Dreigend) verminderd activiteitsvermogen</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[1]) && $boolArrayObservatie[1] == 1 ? "checked" : "" ?> value="1" name="observatie2">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 1) ?> value="1" name="observatie2">
                                             <p>Oververmoeidheid</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[2]) && $boolArrayObservatie[2] == 1 ? "checked" : "" ?> value="1" name="observatie3">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 2) ?> value="1" name="observatie3">
                                             <p>Mobiliteitstekort</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[3]) && $boolArrayObservatie[3] == 1 ? "checked" : "" ?> value="1" name="observatie4">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 3) ?> value="1" name="observatie4">
                                             <p>Ontspanningstekort</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[4]) && $boolArrayObservatie[4] == 1 ? "checked" : "" ?> value="1" name="observatie5">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 4) ?> value="1" name="observatie5">
                                             <p>Moeheid</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[5]) && $boolArrayObservatie[5] == 1? "checked" : "" ?> value="1" name="observatie6">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 5) ?> value="1" name="observatie6">
                                             <p>Verminderd huishoudvermogen</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[6]) && $boolArrayObservatie[6] == 1 ? "checked" : "" ?> value="1" name="observatie7">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 6) ?> value="1" name="observatie7">
                                             <p>Volledig tekort aan persoonlijke zorg</p>
                                         </div>
                                     </div>
@@ -561,22 +356,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                         <p>Zelfstandigheidstekort in:</p>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[7]) && $boolArrayObservatie[7] == 1 ? "checked" : "" ?> value="1" name="observatie8">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 7) ?> value="1" name="observatie8">
                                             <p>Wassen</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[8]) && $boolArrayObservatie[8] == 1 ? "checked" : "" ?> value="1" name="observatie9">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 8) ?> value="1" name="observatie9">
                                             <p>Kleding/verzorging</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[9]) && $boolArrayObservatie[9] == 1 ? "checked" : "" ?> value="1" name="observatie10">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 9) ?> value="1" name="observatie10">
                                             <p>Eten</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= isset($boolArrayObservatie[10]) && $boolArrayObservatie[10] == 1  ? "checked" : "" ?> value="1" name="observatie11">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 10) ?> value="1" name="observatie11">
                                             <p>Toiletgang</p>
                                         </div>
                                     </div>
@@ -596,6 +391,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script src="../../assets/js/form-autosave.js"></script>
 </body>
 
 </html>

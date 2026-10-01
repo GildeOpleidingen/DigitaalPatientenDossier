@@ -1,7 +1,16 @@
 <?php
 spl_autoload_register(function ($class_naam) {
-    $file = __DIR__ . '/' . str_replace('\\', '/', $class_naam) . '.php';
-    if (file_exists($file)) {
-        require_once $file;
+    $sanitized = str_replace('\\', '/', $class_naam);
+
+    $modelFile = __DIR__ . '/' . $sanitized . '.php';
+    if (file_exists($modelFile)) {
+        require_once $modelFile;
+        return;
+    }
+
+    $dbFile = __DIR__ . '/../database/' . $sanitized . '.php';
+    if (file_exists($dbFile)) {
+        require_once $dbFile;
+        return;
     }
 });

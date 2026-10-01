@@ -1,166 +1,31 @@
 <?php
-session_start();
-include '../../includes/auth.php';
-include '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
+Auth::requireLogin();
+
 $Main = new Main();
 
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 9);
+$clientId = $_SESSION['clientId'];
+$antwoorden = $Main->getAnswers($clientId, 9);
 
-$boolArrayGerichtheid = isset($antwoorden['seksuele_gerichtheid']) && $antwoorden['seksuele_gerichtheid'] != null ? str_split($antwoorden['seksuele_gerichtheid']) : [];
-$boolArrayObservatie = isset($antwoorden['observatie']) && $antwoorden['observatie'] != null ? str_split($antwoorden['observatie']) : [];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
-    //Lees ingevulde gegevens.
-    $verandering_seksuele_beleving = $_POST['verandering_seksuele_beleving'] ?? 0;
-    $verandering_seksuele_beleving_door = strval($_POST['verandering_seksuele_beleving_door']);
+    PatroonModel::saveAnswers(
+        (int)$_SESSION['clientId'],
+        (int)$_SESSION['loggedin_id'],
+        9,
+        $_POST
+    );
 
-    $verandering_seksueel_gedrag = $_POST['verandering_seksueel_gedrag'] ?? 0;
-    $wisselende_contacten = $_POST['wisselende_contacten'] ?? 0;
-    $veilig_vrijen = $_POST['veilig_vrijen'] ?? 0;
-    $anticonceptiemiddel = $_POST['anticonceptiemiddel'] ?? 0;
-    $anticonceptiemiddel_welke =strval($_POST['anticonceptiemiddel_welke']) ;
-    $anticonceptiemiddel_problemen = $_POST['anticonceptiemiddel_problemen'] ?? 0;
-    
-    // array van checkboxes van seksuele gerichtheid tab
-    $arr = array(!empty($_POST['gerichtheid1']), !empty($_POST['gerichtheid2']), !empty($_POST['gerichtheid3']));
-    $seksuele_gerichtheid = $Main->convertBoolArrayToString($arr);
-    
-    $seksuele_gerichtheid_problemen = $_POST['seksuele_gerichtheid_problemen'] ?? 0;
-
-    $soa = $_POST['soa'];
-    $soa_welke = strval($_POST['soa_welke']);
-
-    // array van checkboxes van observatie tab
-    $arr = array(!empty($_POST['observatie1']), !empty($_POST['observatie2']), !empty($_POST['observatie3']), !empty($_POST['observatie4']));
-    $observatie = $Main->convertBoolArrayToString($arr);
-
-    //Haal vragenlijst ID op.
-    $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-    // kijken of patroon10 bestaat door te kijken naar vragenlijst id
-    $result = DatabaseConnection::getConn()->prepare("
-                    SELECT p.id
-                    FROM patroon09seksualiteitvoorplanting p
-                    WHERE p.vragenlijstid =  ?");
-    $result->bind_param("i", $vragenlijstId);
-    $result->execute();
-    $result = $result->get_result()->fetch_assoc();
-
-    unset($_SESSION['patroonerror']);
-
-    //opslaan in database.
-    if ($result != null) {
-        //update
-        $result1 = DatabaseConnection::getConn()->prepare("UPDATE `patroon09seksualiteitvoorplanting`
-            SET
-            `verandering_seksuele_beleving` = ?,
-            `verandering_seksuele_beleving_door`= ?,
-            `verandering_seksueel_gedrag`= ?,
-            `wisselende_contacten`= ?,
-            `veilig_vrijen`= ?,
-            `anticonceptiemiddel`= ?,
-            `anticonceptiemiddel_welke`= ?,
-            `anticonceptiemiddel_problemen`= ?,
-            `seksuele_gerichtheid`= ?,
-            `seksuele_gerichtheid_problemen`= ?,
-            `soa`= ?,
-            `soa_welke`= ?,
-            `observatie`= ?
-            WHERE `vragenlijstid`=?");
-        if ($result1) {
-            $result1->bind_param(
-                "isiiiisisiissi",
-                $verandering_seksuele_beleving,
-                $verandering_seksuele_beleving_door,
-                $verandering_seksueel_gedrag,
-                $wisselende_contacten,
-                $veilig_vrijen,
-                $anticonceptiemiddel,
-                $anticonceptiemiddel_welke,
-                $anticonceptiemiddel_problemen,
-                $seksuele_gerichtheid,
-                $seksuele_gerichtheid_problemen,
-                $soa,
-                $soa_welke,
-                $observatie,
-                $vragenlijstId
-            );
-            $result1->execute();
-        } else {
-            // Handle error
-            echo "Error preparing statement: " . DatabaseConnection::getConn()->error;
-        }
-    } else {
-        try {
-            $result2 = DatabaseConnection::getConn()->prepare("INSERT INTO `patroon09seksualiteitvoorplanting`(
-                    `vragenlijstid`,
-                    `verandering_seksuele_beleving`,
-                    `verandering_seksuele_beleving_door`,
-                    `verandering_seksueel_gedrag`,
-                    `wisselende_contacten`,
-                    `veilig_vrijen`,
-                    `anticonceptiemiddel`,
-                    `anticonceptiemiddel_welke`,
-                    `anticonceptiemiddel_problemen`,
-                    `seksuele_gerichtheid`,
-                    `seksuele_gerichtheid_problemen`,
-                    `soa`,
-                    `soa_welke`,
-                    `observatie`)
-                VALUES (
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?)");
-            $result2->bind_param(
-                "iisiiiisisiiss",
-                $vragenlijstId,
-                $verandering_seksuele_beleving,
-                $verandering_seksuele_beleving_door,
-                $verandering_seksueel_gedrag,
-                $wisselende_contacten,
-                $veilig_vrijen,
-                $anticonceptiemiddel,
-                $anticonceptiemiddel_welke,
-                $anticonceptiemiddel_problemen,
-                $seksuele_gerichtheid,
-                $seksuele_gerichtheid_problemen,
-                $soa,
-                $soa_welke,
-                $observatie
-            );
-
-            $result2->execute();
-            $result2 = $result2->get_result();
-        } catch (Exception $e) {
-            // Display the alert box on next of previous page
-            $_SESSION['patroonerror'] = 'Er ging iets fout, wijzigingen zijn NIET opgeslagen.';
-            $_SESSION['patroonnr'] = '9. Seksualiteits- en voorplantingspatroon';
-        }
+    // Navigation
+    switch ($_POST['navbutton']) {
+        case 'next':
+            header("Location: patroon10.php");
+            exit;
+        case 'prev':
+            header("Location: patroon08.php");
+            exit;
     }
-
-    switch ($_REQUEST['navbutton']) {
-        case 'next': //action for next here
-            header('Location: patroon10.php');
-            break;
-
-        case 'prev': //action for previous here
-            header('Location: patroon08.php');
-            break;
-    }
-    exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -179,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
 </head>
 
 <body style="overflow: hidden;">
-    <form action="" method="post">
+    <form action="" method="post" data-client-id="<?= htmlspecialchars((string)($_SESSION['clientId'] ?? '')) ?>">
         <div class="main">
             <?php
             include '../../includes/n-header.php';
@@ -301,21 +166,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                     <div class="observation">
                                         <div class="question">
                                             <div class="observe"><input type="checkbox"
-                                                    <?= (isset($boolArrayGerichtheid[0]) && $boolArrayGerichtheid[0] == '1') ? "checked" : "" ?>
+                                                    <?= PatroonModel::isChecked($antwoorden['seksuele_gerichtheid'], 0) ?>
                                                     name="gerichtheid1">
                                                 <p>Heteroseksueel</p>
                                             </div>
                                         </div>
                                         <div class="question">
                                             <div class="observe"><input type="checkbox"
-                                                    <?= (isset($boolArrayGerichtheid[1]) && $boolArrayGerichtheid[1] == '1') ? "checked" : "" ?>
+                                                    <?= PatroonModel::isChecked($antwoorden['seksuele_gerichtheid'], 1) ?>
                                                     name="gerichtheid2">
                                                 <p>Biseksueel</p>
                                             </div>
                                         </div>
                                         <div class="question">
                                             <div class="observe"><input type="checkbox"
-                                                    <?= (isset($boolArrayGerichtheid[2]) && $boolArrayGerichtheid[2] == '1') ? "checked" : "" ?>
+                                                    <?= PatroonModel::isChecked($antwoorden['seksuele_gerichtheid'], 2) ?>
                                                     name="gerichtheid3">
                                                 <p>Homoseksueel</p>
                                             </div>
@@ -359,22 +224,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
                                 <div class="observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[0]) && $boolArrayObservatie[0] == '1') ? "checked" : "" ?> name="observatie1">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 0) ?> name="observatie1">
                                             <p>Gewijzigde seksuele gewoonten</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[1]) && $boolArrayObservatie[1] == '1') ? "checked" : "" ?> name="observatie2">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 1) ?> name="observatie2">
                                             <p>Seksueel disfunctioneren</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[2]) && $boolArrayObservatie[2] == '1') ? "checked" : "" ?> name="observatie3">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 2) ?> name="observatie3">
                                             <p>Verkrachtingssyndroom gecompliceerde vorm</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" <?= (isset($boolArrayObservatie[3]) && $boolArrayObservatie[3] == '1') ? "checked" : "" ?> name="observatie4">
+                                        <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['observatie'], 3) ?> name="observatie4">
                                             <p>Verkrachtingssyndroom stille vorm</p>
                                         </div>
                                     </div>
@@ -394,6 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['navbutton'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script src="../../assets/js/form-autosave.js"></script>
 </body>
 
 </html>

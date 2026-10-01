@@ -1,142 +1,30 @@
 <?php
-session_start();
-include '../../includes/auth.php';
-require '../../database/DatabaseConnection.php';
-require_once '../../models/autoload.php';
+include_once '../../models/autoload.php';
+Auth::requireLogin();
 
 $Main = new Main();
-$db = DatabaseConnection::getConn();
 
-// --- 1. Ophalen eerder opgeslagen antwoorden ---
-$antwoorden = $Main->getPatternAnswers($_SESSION['clientId'], 2);
-$boolArrayObservatie = isset($antwoorden['observatie'])
-    ? str_split($antwoorden['observatie'])
-    : array_fill(0, 6, 0);
+$clientId = $_SESSION['clientId'];
+$antwoorden = $Main->getAnswers($clientId, 2);
 
-// --- 2. Formulier verwerken ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
 
-    // Veilig ophalen waarden
-    $eetlust           = intval($_POST['eetlust'] ?? 0);
-    $dieet             = intval($_POST['dieet'] ?? 0);
-    $dieetWelk         = trim($_POST['dieet_welk'] ?? "");
-    $gewichtVerandert  = intval($_POST['gewicht_verandert'] ?? 0);
-    $moeilijkSlikken   = intval($_POST['moeilijk_slikken'] ?? 0);
-    $gebitsProblemen   = intval($_POST['gebitsproblemen'] ?? 0);
-    $gebitsProthese    = intval($_POST['gebitsprothese'] ?? 0);
-    $huidProblemen     = intval($_POST['huidproblemen'] ?? 0);
-    $gevoel            = intval($_POST['gevoel'] ?? 0);
+    PatroonModel::saveAnswers(
+        (int)$_SESSION['clientId'],
+        (int)$_SESSION['loggedin_id'],
+        2,
+        $_POST
+    );
 
-    // Observatie array (6 checkboxes → string zoals "101010")
-    $observatieArray = [];
-    for ($i = 1; $i <= 6; $i++) {
-        $observatieArray[] = isset($_POST["observatie$i"]) && $_POST["observatie$i"] == 1 ? "1" : "0";
-    }
-    $observatie = implode("", $observatieArray);
-
-    $medewerkerId = $_SESSION['loggedin_id'];
-    try {
-        // --- 3. Ophalen of er al een vragenlijst bestaat ---
-        $stmt = $db->prepare("
-            SELECT vl.id 
-            FROM vragenlijst vl 
-            JOIN verzorgerregel vr ON vr.id = vl.verzorgerregelid
-            WHERE vr.clientid = ?
-        ");
-        $stmt->bind_param("i", $_SESSION['clientId']);
-        $stmt->execute();
-        $row = $stmt->get_result()->fetch_assoc();
-
-        $vragenlijstId = $Main->getVragenlijstId($_SESSION['clientId'], $_SESSION['loggedin_id']);
-        // --- 5. UPDATE of INSERT ---
-        if (!empty($antwoorden['vragenlijstid'])) {
-
-            // UPDATE
-            $stmt = $db->prepare("
-                UPDATE patroon02voedingstofwisseling
-                SET 
-                    eetlust=?, 
-                    dieet=?, 
-                    dieet_welk=?, 
-                    gewicht_verandert=?, 
-                    moeilijk_slikken=?, 
-                    gebitsproblemen=?, 
-                    gebitsprothese=?, 
-                    huidproblemen=?, 
-                    gevoel=?, 
-                    observatie=?
-                WHERE vragenlijstid=?
-            ");
-
-            $stmt->bind_param(
-                "iisiiiiisii",
-                $eetlust,
-                $dieet,
-                $dieetWelk,
-                $gewichtVerandert,
-                $moeilijkSlikken,
-                $gebitsProblemen,
-                $gebitsProthese,
-                $huidProblemen,
-                $gevoel,
-                $observatie,
-                $vragenlijstId
-            );
-
-        } else {
-
-            // INSERT
-            $stmt = $db->prepare("
-                INSERT INTO patroon02voedingstofwisseling
-                (
-                    vragenlijstid,
-                    eetlust,
-                    dieet,
-                    dieet_welk,
-                    gewicht_verandert,
-                    moeilijk_slikken,
-                    gebitsproblemen,
-                    gebitsprothese,
-                    huidproblemen,
-                    gevoel,
-                    observatie
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ");
-
-            $stmt->bind_param(
-                "iiisiiiiiss",
-                $vragenlijstId,
-                $eetlust,
-                $dieet,
-                $dieetWelk,
-                $gewichtVerandert,
-                $moeilijkSlikken,
-                $gebitsProblemen,
-                $gebitsProthese,
-                $huidProblemen,
-                $gevoel,
-                $observatie
-            );
-        }
-
-        $stmt->execute();
-
-        // --- 6. Navigatie ---
-        if ($_POST['navbutton'] === "next") {
+    // Navigation
+    switch ($_POST['navbutton']) {
+        case 'next':
             header("Location: patroon03.php");
-        } else {
+            exit;
+        case 'prev':
             header("Location: patroon01.php");
-        }
-        exit;
-    } catch (Exception $e) {
-            echo "Fout bij opslaan: " . $e->getMessage();
+            exit;
     }
-}
-
-// Functie om XSS te voorkomen
-function e($v) {
-    return htmlspecialchars($v ?? "", ENT_QUOTES, "UTF-8");
 }
 ?>
 <!DOCTYPE html>
@@ -155,7 +43,7 @@ function e($v) {
 </head>
 
 <body style="overflow: hidden;">
-    <form method="POST">
+    <form method="POST" data-client-id="<?= htmlspecialchars((string)($_SESSION['clientId'] ?? '')) ?>">
         <div class="main">
             <?php
             include '../../includes/n-header.php';
@@ -288,32 +176,32 @@ function e($v) {
                                 <div class=" observation">
                                     <h2>Verpleegkundige observatie bij dit patroon</h2>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie1" <?= isset($boolArrayObservatie[0]) && $boolArrayObservatie[0] == 1 ? "checked" : "" ?>>
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie1" <?= PatroonModel::isChecked($antwoorden['observatie'], 0) ?>>
                                             <p>(Dreigend) voedingsteveel (zwaarlijvigheid)</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie2" <?= isset($boolArrayObservatie[1]) && $boolArrayObservatie[1] == 1 ? "checked" : "" ?>>
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie2" <?= PatroonModel::isChecked($antwoorden['observatie'], 1) ?>>
                                             <p>Voedingstekort</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie3" <?= isset($boolArrayObservatie[2]) && $boolArrayObservatie[2] == 1 ? "checked" : "" ?>>
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie3" <?= PatroonModel::isChecked($antwoorden['observatie'], 2) ?>>
                                             <p>(Dreigend) vochttekort</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie4" <?= isset($boolArrayObservatie[3]) && $boolArrayObservatie[3] == 1 ? "checked" : "" ?>>
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie4" <?= PatroonModel::isChecked($antwoorden['observatie'], 3) ?>>
                                             <p>Falende warmteregulatie</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie5" <?= isset($boolArrayObservatie[4]) && $boolArrayObservatie[4] == 1 ? "checked" : "" ?>>
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie5" <?= PatroonModel::isChecked($antwoorden['observatie'], 4) ?>>
                                             <p>Aspiratiegevaar</p>
                                         </div>
                                     </div>
                                     <div class="question">
-                                        <div class="observe"><input type="checkbox" value="1" name="observatie6" <?= isset($boolArrayObservatie[5]) && $boolArrayObservatie[5] == 1 ? "checked" : "" ?>>
+                                        <div class="observe"><input type="checkbox" value="1" name="observatie6" <?= PatroonModel::isChecked($antwoorden['observatie'], 5) ?>>
                                             <p>(Dreigende) huiddefect</p>
                                         </div>
                                     </div>
@@ -330,6 +218,7 @@ function e($v) {
     </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../assets/js/form-autosave.js"></script>
 
 </body>
 </html>
