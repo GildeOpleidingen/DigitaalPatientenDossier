@@ -120,11 +120,16 @@ $medewerker = $result->get_result()->fetch_assoc();
                         if ($value2 === $currentDir) {
                             $dir = "../..";
                             break;
-                        } else if ($currentDir === "clientpagina" || $currentDir === "Register") {
+                        } else if ($currentDir === "clientpagina" || $currentDir === "register") {
                             $dir = "../..";
                         }
                     }
-                    echo "<li><a href='$dir/$value/$key.php?id=$id' class='$selected' id='$key'>".ucfirst($value)."</a></li>";
+                    if ($currentDir === "register" && $key == "dashboard") {
+                        echo "<li><a href='$dir/$key.php?id=$id' class='$selected' id='$key'>".ucfirst($value)."</a></li>";
+                    }
+                    else {
+                        echo "<li><a href='$dir/$value/$key.php?id=$id' class='$selected' id='$key'>".ucfirst($value)."</a></li>";
+                    }
                 }
                 ?>
             </ul>
