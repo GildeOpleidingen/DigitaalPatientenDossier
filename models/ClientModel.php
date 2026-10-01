@@ -12,8 +12,6 @@ class ClientModel
         $this->db = $db ?? DatabaseConnection::getConn();
     }
 
-    // ── Query Helpers ────────────────────────────────────────────────
-
     /**
      * @param string $sql
      * @param string $types
@@ -127,8 +125,6 @@ class ClientModel
         }
     }
 
-    // ── Client Lookups ───────────────────────────────────────────────
-
     /**
      * @param int $id
      * @return array|null
@@ -186,8 +182,6 @@ class ClientModel
         ", "s", $name);
     }
 
-    // ── Care Relations (verzorgerregel) ──────────────────────────────
-
     /**
      * @param int $clientId
      * @param int $employeeId
@@ -215,8 +209,6 @@ class ClientModel
     }
 
     /**
-     * Backward-compatibility alias for checkIfCareRelationExists.
-     *
      * @param int $clientId
      * @param int $medewerkerId
      * @return bool
@@ -238,8 +230,6 @@ class ClientModel
     }
 
     /**
-     * Backward-compatibility alias for getCareRelationsByClientId.
-     *
      * @param int $id
      * @return array
      */
@@ -260,8 +250,6 @@ class ClientModel
     }
 
     /**
-     * Backward-compatibility alias for getCaregiversById.
-     *
      * @param int $id
      * @return array
      */
@@ -269,8 +257,6 @@ class ClientModel
     {
         return $this->getCaregiversById((int)$id);
     }
-
-    // ── Patient Data ─────────────────────────────────────────────────
 
     /**
      * @param int $id
@@ -300,8 +286,6 @@ class ClientModel
     }
 
     /**
-     * Backward-compatibility alias for getPatientData.
-     *
      * @param int $id
      * @param 'clientRelations'|'contactPersonen'|'medischOverzicht'|'verzorgersArr'|string $type
      * @return array
@@ -310,8 +294,6 @@ class ClientModel
     {
         return $this->getPatientData((int)$id, (string)$type);
     }
-
-    // ── Medical Overview ─────────────────────────────────────────────
 
     /**
      * @param int $id
@@ -336,8 +318,6 @@ class ClientModel
     }
 
     /**
-     * Backward-compatibility alias for getMedicalOverviewByClientId.
-     *
      * @param int $id
      * @return array
      */
@@ -383,8 +363,6 @@ class ClientModel
     }
 
     /**
-     * Backward-compatibility alias for checkIfMedicalOverviewExistsByClientId.
-     *
      * @param int $clientid
      * @return bool
      */
@@ -392,8 +370,6 @@ class ClientModel
     {
         return $this->checkIfMedicalOverviewExistsByClientId((int)$clientid);
     }
-
-    // ── Client Story ─────────────────────────────────────────────────
 
     /**
      * @param int $id
@@ -499,8 +475,6 @@ class ClientModel
         return (int) $this->db->insert_id;
     }
 
-    // ── Care Plan ────────────────────────────────────────────────────
-
     /**
      * @param int $id
      * @return bool
@@ -530,8 +504,6 @@ class ClientModel
             LIMIT 1
         ", "i", $id) ?? [];
     }
-
-    // ── Client Update / Insert ───────────────────────────────────────
 
     /**
      * @param string $name

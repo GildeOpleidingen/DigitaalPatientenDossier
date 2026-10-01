@@ -81,18 +81,24 @@ class Main
         return $this->clientModel->getById((int)$clientId);
     }
 
+    /**
+     * @param int $clientId
+     * @param int $employeeId
+     * @return bool
+     */
     public function checkIfCareRelationExists(int $clientId, int $employeeId): bool
     {
         return $this->clientModel->checkIfCareRelationExists($clientId, $employeeId);
     }
 
+    /**
+     * @param int $clientId
+     * @return array
+     */
     public function getMedicalOverviewByClientId(int $clientId): array
     {
         return $this->clientModel->getMedicalOverviewByClientId($clientId);
     }
-    // ==========================================
-    // PatroonModel Functions
-    // ==========================================
 
     /**
      * @param int $clientId
