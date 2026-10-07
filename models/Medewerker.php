@@ -1,6 +1,15 @@
 <?php
 trait Medewerker
 {
+    /**
+     * @param string $naam
+     * @param string $klas
+     * @param string|null $foto
+     * @param string $email
+     * @param string $telefoonnummer
+     * @param string $wachtwoord
+     * @return bool
+     */
     public function updateMedewerker($naam, $klas, $foto, $email, $telefoonnummer, $wachtwoord): bool
     {
         $conn = DatabaseConnection::getConn();
@@ -20,6 +29,10 @@ trait Medewerker
         return false;
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function checkIfMedewerkerExistsById($id): bool
     {
         $result = $this->getMedewerkerById($id);
@@ -29,6 +42,10 @@ trait Medewerker
         return true;
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function checkIfMedewerkerExistsByName($name): bool
     {
         $result = $this->getMedewerkerByName($name);
@@ -38,6 +55,10 @@ trait Medewerker
         return true;
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getMedewerkerById($id): array
     {
         $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE id = ?;");
@@ -47,6 +68,10 @@ trait Medewerker
         return $result->get_result()->fetch_array();
     }
 
+    /**
+     * @param string $name
+     * @return array
+     */
     public function getMedewerkerByName($name): array
     {
         $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE naam = ?;");

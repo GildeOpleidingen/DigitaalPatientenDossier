@@ -42,6 +42,11 @@ Voor de database connectie te fixen:
 - kopieer de content van `default-config.php` naar `config.php`
 - vul de credentials van je database in `config.php`
 
+Voor frontend libraries (Bootstrap & jQuery):
+- installeer Node & npm (`sudo apt install nodejs npm`)
+- voer uit: `npm install`
+- genereer de assets: `npm run build:assets`
+
 ```diff
 ! PUSH GEEN DATABASE CREDENTIALS NAAR DE REPOSITORY
 ```

@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/../models/Auth.php';
+Auth::requireAdmin();
 include '../database/DatabaseConnection.php';
 
 // Zorg ervoor dat je de ID van de client hebt om te bewerken
@@ -73,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Bewerken</title>
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
     <style>
         #preview {
             max-width: 150px;
