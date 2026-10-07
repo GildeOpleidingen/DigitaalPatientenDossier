@@ -9,7 +9,7 @@ $patroonTypes = $Main->getPatternTypes();
 
 if (isset($_GET['pt'])) {
     $patroonId = $_GET['pt'];
-    $patroonType = $Main->getPatternType($patroonId);
+    $patroonType = $Main->getPatternType($_SESSION['clientId'],$patroonId);
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $Main->insertCarePlan($_SESSION['clientId'], date('Y-m-d h:i:s'), $patroonTypes[$patroonId-1][0], $_POST['p'], $_POST['e'], $_POST['s'], $_POST['doelen'], $_POST['interventies'], $_POST['evaluatiedoelen']);
         header("Location: zorgplan.php?pt=$patroonId");

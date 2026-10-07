@@ -113,10 +113,10 @@ trait Patroon
         return $result->fetch_all(MYSQLI_NUM);
     }
 
-    public function getPatternType($patternId): ?array
+    public function getPatternType($clientId, $patternId): ?array
     {
-        $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `zorgplan` WHERE patroontypeid = ?");
-        $result->bind_param("i", $patternId);
+        $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `zorgplan` WHERE patroontypeid = ? AND clientid = ?");
+        $result->bind_param("ii", $patternId, $clientId);
         $result->execute();
         return $result->get_result()->fetch_array(MYSQLI_ASSOC);
     }
