@@ -2,7 +2,7 @@
 session_start();
 require_once('../../includes/auth.php');
 include '../../database/DatabaseConnection.php';
-include_once '../../classes/Main.php';
+include_once '../../models/autoload.php';
 $Main = new Main();
 
 $patroonTypes = $Main->getPatternTypes();
@@ -23,7 +23,7 @@ if (isset($_GET['pt'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="zorgplan.css">
+    <link rel="stylesheet" href="../../assets/css/client/zorgplan.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <title>Zorgplan</title>
 </head>
@@ -36,7 +36,7 @@ if (isset($_GET['pt'])) {
         <?php include_once '../../includes/n-sidebar.php'; ?>
 
         <div class="content">
-            <div class="mt-5 mb-3 bg-white p-3">
+            <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
                 <div class="card-text">
                 <?php if (!isset($patroonId)) { ?>
                     <?php if($Main->getMedischOverzichtByClientId($_SESSION['clientId'])){ ?>

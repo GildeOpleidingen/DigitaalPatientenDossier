@@ -111,7 +111,7 @@
 <div class="sidebar">
     <?php
     include_once '../../database/DatabaseConnection.php';
-    include_once '../../classes/Main.php';
+    include_once '../../models/autoload.php';
     $Main = new Main();
 
     $clientId = $_SESSION['clientId'];

@@ -1,0 +1,1 @@
+ALTER TABLE `client` ADD `deleted` INT NOT NULL AFTER `afdeling_id`;

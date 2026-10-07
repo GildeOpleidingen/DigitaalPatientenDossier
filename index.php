@@ -1,61 +1,106 @@
 <?php
 session_start();
-if (isset($_SESSION['loggedin_id'])) {
-    header("Location: dashboard.php?id={$_SESSION['loggedin_id']}");
-}
 include 'database/DatabaseConnection.php';
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (!empty($_POST['e-mail']) && !empty($_POST['password'])) {
-        $email = $_POST['e-mail'];
-        $password = $_POST['password'];
 
-        $result = DatabaseConnection::getConn()->prepare("SELECT id, naam, wachtwoord, rol FROM medewerker WHERE email = ?");
-        $result->bind_param("s", $email);
-        $result->execute();
-        $result = $result->get_result();
+// Als gebruiker al is ingelogd, stuur naar dashboard
+if (isset($_SESSION['loggedin_id'])) {
+    header("Location: dashboard.php");
+    exit;
+}
+
+// Controleer of formulier is verzonden
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_POST['email']) && !empty($_POST['wachtwoord'])) {
+
+        $email = $_POST['email'];
+        $wachtwoord = $_POST['wachtwoord'];
+
+        // Bereid query voor
+        $stmt = DatabaseConnection::getConn()->prepare("SELECT id, naam, wachtwoord, rol FROM medewerker WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $row = mysqli_fetch_array($result);
-            if ($row['wachtwoord'] == password_verify($password, $row['wachtwoord'])) {
+            $row = $result->fetch_assoc();
+
+            // Controleer wachtwoord correct
+            if (password_verify($wachtwoord, $row['wachtwoord'])) {
+
+                // Zet sessiegegevens
                 $_SESSION['loggedin_id'] = $row['id'];
                 $_SESSION['loggedin_naam'] = $row['naam'];
+                $_SESSION['isAdmin'] = ($row['rol'] === 'beheerder');
                 $_SESSION['rol'] = $row['rol'];
-                header("Location: dashboard.php?id={$row['id']}");
+
+                header("Location: dashboard.php");
+                exit;
             } else {
-                $error = "Het wachtwoord is onjuist.";
+                $_SESSION['error'] = "Het wachtwoord of e-mailadres is onjuist.";
             }
         } else {
-            $error = "Er bestaat geen account met dit e-mailadres.";
+            $_SESSION['error'] = "Er bestaat geen account met dit e-mailadres.";
         }
+
+        $stmt->close();
     } else {
-        $error = "Vul alle velden in.";
+        $_SESSION['error'] = "Vul alle velden in.";
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
-<link rel="stylesheet" href="assets/css/login.css">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <title>Inloggen - DPD</title>
 </head>
 
-<body style="background: #00365E">
-    <center>
-        <div class="loginbox">
-            <img src="assets/images/gildezorgcollege.png" alt="gildezorgcollege">
-            <p style="color: red;"><?= $error ?? ""; ?></p>
-            <form method="post">
-                <h1>E-mail</h1>
-                <input type="text" name="e-mail">
-                <h1>Password</h1>
-                <input type="password" name="password">
-                <br>
-                <button>Login</button>
-            </form>
+<body style="background-color: #00365E;">
+    <section>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                    <div class="card border border-light-subtle rounded-3 shadow-sm">
+                        <div class="card-body p-3 p-md-4 p-xl-5">
+                            <div class="text-center mb-3">
+                                <a href="#!" class="mb-3">
+                                    <img src="assets/images/logo.png" alt="Logo" class="img-fluid">
+                                </a>
+                            </div>
+                            <form action="" method="POST" class="needs-validation" novalidate>
+                                <?php if(isset($_SESSION['error'])): ?>
+                                    <div class="alert alert-danger" role="alert">
+                                        <?= htmlspecialchars($_SESSION['error']); ?>
+                                    </div>
+                                    <?php unset($_SESSION['error']); ?>
+                                <?php endif; ?>
+
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" name="email" placeholder="name@example.com" required>
+                                    <label for="email">E-mailadres</label>
+                                    <div class="invalid-feedback">Voer een e-mailadres in.</div>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control" name="wachtwoord" placeholder="Wachtwoord" required>
+                                    <label for="wachtwoord">Wachtwoord</label>
+                                    <div class="invalid-feedback">Voer een wachtwoord in.</div>
+                                </div>
+
+                                <div class="d-grid my-3">
+                                    <button class="btn btn-primary btn-lg w-100" type="submit">Inloggen</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </center>
+    </section>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

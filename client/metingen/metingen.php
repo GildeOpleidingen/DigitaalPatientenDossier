@@ -2,8 +2,8 @@
 session_start();
 require_once('../../includes/auth.php');
 include '../../database/DatabaseConnection.php';
-include_once '../../classes/Main.php';
-$Metingen = new Metingen();
+require '../../models/autoload.php';
+$Meting = new Meting();
 
 $clientId = $_SESSION['clientId'];
 
@@ -33,7 +33,7 @@ $metingtijden->bind_param("i", $_SESSION['clientId']);
 $metingtijden->execute();
 $metingtijden = $metingtijden->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$metingen = $Metingen->getMeting($metingtijden);
+$metingen = $Meting->getMeting($metingtijden);
 
 foreach ($metingen[1] as $meting) {
     foreach ($meting as $data) {
@@ -85,8 +85,14 @@ foreach ($metingen[1] as $meting) {
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Metingen</title>
-    <link rel="stylesheet" href="metingen.css">
-    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/css/client/metingen.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+          rel="stylesheet" 
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
+          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -98,19 +104,23 @@ foreach ($metingen[1] as $meting) {
         include_once '../../includes/n-sidebar.php';
         ?>
         <div class="content">
-            <div class="mt-5 mb-3 bg-white p-3">
+            <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
+                <?php if(isset($_SESSION['succes'])){ ?>
+                <div class="mb-3 alert alert-success" role="alert">
+                    <?php echo $_SESSION['succes']; ?>
+                </div>
+                <?php unset($_SESSION['succes']); } ?>
                 <p class="card-text">
                 <div>
-                    <?php echo '<a href="metingeninvullen.php?id=' . $clientId . '"><button type="button" class="btn btn-primary">Metingen invullen</button></a>'; ?>
-                    <?php echo '<a href="metingen.php?id=' . $clientId . '"><button type="button" class="btn btn-secondary">Metingen bekijken</button></a>'; ?>
+                    <?php echo '<a href="metingen-invullen.php"><button type="button" class="btn btn-primary mb-3">Metingen invullen</button></a>'; ?>
                 </div>
                 <form id="patientForm">
-                    <div class="table table-striped">
+                    <div class="table table-bordered">
                         <table>
                             <th>Tijd</th>
                             <?php
                             foreach ($metingen[0] as $tijd) {
-                                echo "<th class='p-3'>$tijd</th>";
+                                echo "<th class='p-3 text-center'>$tijd</th>";
                             }
                             ?>
 
@@ -172,7 +182,7 @@ foreach ($metingen[1] as $meting) {
                                             if ($value == 0) {
                                                 echo "<td></td>";
                                             } else {
-                                                $matchingValue = $Metingen->vindGelijkeWaarde($bloeddrukhoog, $time);
+                                                $matchingValue = $Meting->vindGelijkeWaarde($bloeddrukhoog, $time);
                                                 echo "<td class='text-center'>$matchingValue/$value</td>";
                                             }
                                         }
@@ -280,12 +290,25 @@ foreach ($metingen[1] as $meting) {
                                     }
                                 }
                                 ?>
+
+                            </tr>
+                            <tr>
+                                <th>
+                                <?php 
+                                foreach ($metingtijden as $meting) {
+                                    echo "<td class='text-center'><a href='meting.php?m=".$meting['id']."' class='text-decoration-none'><i class='fa-solid fa-pen-to-square'></i></a></td>";
+                                }
+                                ?>
+                                </th>
                             </tr>
                         </table>
                     </div>
                 </form>
             </div>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+            crossorigin="anonymous"></script> 
 </body>
 
 </html>

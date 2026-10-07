@@ -18,21 +18,20 @@ Voor de database connectie te fixen:
 - Dit controleren en indien akkoord door het team. Mergen naar main.
 
 Als de code in test staat wordt dit beschikbaar op de volgende url.
-test.digitaalpatientendossier.gds.local
+digitaalpatientendossier-test.gdcs.nl
 
 Als de code in main staat wordt dit beschikbaar op de volgende url.
-digitaalpatientendossier.gds.local
+digitaalpatientendossier.gdcs.nl
 
 Om phpmyadmin te benaderen via de url.
-pma.digitaalpatientendossier.gds.local
+phpmyadmin.gdcs.nl
 
 # Deployment
-Deployment worden geregeld door GitHub Actions
-Er zijn op dit moment twee workflows.
-Eentje voor de test omgeving
-Eentje voor de productie omgeving.
-
-Deze staan in de map .github/workflows/
+Deployment worden geregeld door jenkins (jenkins.gdcs.nl)
+Er zijn op dit moment drie workflows.
+Eentje voor de dev omgeving https://digitaalpatientendossier-dev.gdcs.nl/
+Eentje voor de test omgeving https://digitaalpatientendossier-test.gdcs.nl/
+Eentje voor de productie omgeving. https://digitaalpatientendossier.gdcs.nl/
 
 # Inloggen
 Deze hash kan je bij je medewerker als wachtwoord neerzetten.

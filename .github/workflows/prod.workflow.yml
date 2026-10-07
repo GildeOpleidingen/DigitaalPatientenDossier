@@ -10,6 +10,24 @@ on:
   workflow_dispatch:
 
 jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # If you wish to fail your job when the Quality Gate is red, uncomment the
+      # following lines. This would typically be used to fail a deployment.
+      # - uses: SonarSource/sonarqube-quality-gate-action@v1
+      #   timeout-minutes: 5
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   # Single deploy job since we're just deploying
   deploy:
     runs-on: 'self-hosted'
@@ -22,19 +40,22 @@ jobs:
           rm -rf .git
           rm -rf .gitignore
 
+      - name: Clean target directory
+        run: 
+          rm -rf /var/www/digitaalpatientendossier.gds.local/html/*
+
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.3.1
         with:
           # Artifact name
           name: 'digitaalpatientendossier'
           path: .
-          
+
       - name: Download a Build Artifact
-        uses: actions/download-artifact@v4.1.4
+        uses: actions/download-artifact@v4.1.7
         with:
           # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
           name: 'digitaalpatientendossier'
           # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
           path: '/var/www/digitaalpatientendossier.gds.local/html/'
-          
           
