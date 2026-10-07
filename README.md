@@ -20,6 +20,21 @@ https://github.com/GildeOpleidingen/DigitaalPatientenDossier/issues/371
 //    public static string $db = "dpd_dev"; of dpd of dpv_test
 ```
 
+Credentials voor Single Sign On
+
+Toepassing id: 80f1311f-f684-42da-ae68-187bdef53c79
+Object id: ffa71678-5102-4fcc-8991-5ccdc45f7abb
+Email:wessel@devgdcsxyz.onmicrosoft.com
+Wachtwoord: Gocu576574
+CallBack URL: http://localhost/oauth/callback.php
+
+Map-id (tenant-id):9b017957-8a64-4bca-9b6e-88b47b5f0b40
+Geheim-ID : 31dd2480-8bd4-44ec-b49b-b74f9d927073
+secret: q7K8Q~MwdFex6q2lpyoKA~1-7rzZyiGyWLi1iaf6
+
+OAuth 2.0-verificatie-eindpunt (v2): https://login.microsoftonline.com/9b017957-8a64-4bca-9b6e-88b47b5f0b40/oauth2/v2.0/authorize
+Token-eindpunt OAuth 2.0 (v2): https://login.microsoftonline.com/9b017957-8a64-4bca-9b6e-88b47b5f0b40/oauth2/v2.0/token
+
 # Digitaal Patienten Dossier
 
 Voor de database connectie te fixen:
@@ -94,9 +109,9 @@ Wachtwoord (voor iedereen hetzelfde) = "Gilde123".
 # Inloggen PHPmyAdmin
 Ga naar https://phpmyadmin.gdcs.nl/index.php (LET OP: Je moet verbonden zijn met de Gilde 1.09 wifi, anders kom je niet op de site)
 
-De username zou autmatisch al ingevuld moeten zijn als de pagina ingeladen is, als dit niet zo is vul je "dpd" in het username vakje in.
+De username zou autmatisch al ingevuld moeten zijn als de pagina ingeladen is, als dit niet zo is vul je "dpd_user" in het username vakje in.
 
-Voor het wachtwoord kopieer en plak je het volgende stukje tekst in het wachtwoord vakje: "A]3__CQB0klPDyd4".
+Voor het wachtwoord kopieer en plak je het volgende stukje tekst in het wachtwoord vakje: "q220@Wgz0]I9uq!J".
 
 # Inloggen (niet meer relevant)
 Deze hash kan je bij je medewerker als wachtwoord neerzetten.
