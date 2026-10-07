@@ -1,9 +1,13 @@
 Installatie:
 1. Kopieer het bestand `default-config.php` en verander de naam `default-config.php` => `config.php` en verander waarden in het bestand.
+2. Installeer en genereer de frontend assets:
+   npm install
+   npm run build:assets
 
 Requirements:
 sudo apt install mysql-server
 sudo apt install apache2
+sudo apt install nodejs npm
 
 sudo apt-get install php-mbstring	
 sudo apt install php-xml

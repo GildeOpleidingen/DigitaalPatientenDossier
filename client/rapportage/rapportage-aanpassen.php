@@ -41,7 +41,7 @@ if (isset($_POST['aanpassen'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../assets/css/client/rapportage.css">
-    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css">
     <title>Rapportage</title>
 </head>
 
@@ -77,7 +77,7 @@ if (isset($_POST['aanpassen'])) {
             </div>
         </div>
 </body>
-<script src="../../assets/js/jquery.min.js"></script>
+<script src="../../assets/vendor/jquery/jquery.min.js"></script>
 <script src="../../assets/js/validatie.js"></script>
 
 </html>

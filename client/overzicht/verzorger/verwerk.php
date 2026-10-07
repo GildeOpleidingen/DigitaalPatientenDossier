@@ -10,7 +10,7 @@ $id = $_SESSION['loggedin_id'];
 $clientId = $_POST['clientId'];
 
 if (!$clientId) {
-    header("Location: ../verzorgers.php?id=$clientId");
+    header("Location: ../../verzorgers/verzorgers.php?id=$clientId");
     return;
 }
 

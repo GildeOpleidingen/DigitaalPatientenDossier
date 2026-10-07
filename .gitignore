@@ -28,6 +28,7 @@ config.local.php
 /vendor/
 composer.phar
 node_modules/
+assets/vendor/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
