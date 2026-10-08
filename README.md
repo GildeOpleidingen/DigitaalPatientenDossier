@@ -12,12 +12,13 @@ https://github.com/GildeOpleidingen/DigitaalPatientenDossier/issues/347
 Ga naar de database van `dpd->vragenlijst->afnamedatumtijd` en zet op `null`
 https://github.com/GildeOpleidingen/DigitaalPatientenDossier/issues/371
 
-# Credentials
-```php
-//    public static string $host = "10.250.0.103";
-//    public static string $username = "dpd_user";
-//    public static string $pass = "q220@Wgz0]I9uq!J"; 
-//    public static string $db = "dpd_dev"; of dpd of dpv_test
+# Database Credentials (.env)
+```env
+DB_HOST=10.250.0.103
+DB_USER=dpd_user
+DB_PASS="q220@Wgz0]I9uq!J"
+DB_NAME=dpd_dev # of dpd of dpd_test
+DB_PORT=3306
 ```
 
 Credentials voor Single Sign On
@@ -37,15 +38,14 @@ Token-eindpunt OAuth 2.0 (v2): https://login.microsoftonline.com/9b017957-8a64-4
 
 # Digitaal Patienten Dossier
 
-Voor de database connectie te fixen:
-- maak een nieuwe file genaamd `config.php` in de root folder
-- kopieer de content van `default-config.php` naar `config.php`
-- vul de credentials van je database in `config.php`
+Voor de database connectie te configureren:
+- kopieer het sjabloonbestand: `cp .env.example .env`
+- vul je eigen database credentials in binnen `.env`
 
-Voor frontend libraries (Bootstrap & jQuery):
-- installeer Node & npm (`sudo apt install nodejs npm`)
-- voer uit: `npm install`
-- genereer de assets: `npm run build:assets`
+Noodzakelijk voor Bootstrap en frontend libraries:
+- installeer Node.js & npm (`sudo apt install nodejs npm`)
+- voer `npm install` uit
+- voer `npm run build:assets` uit (kopieert Bootstrap en JS bestanden naar `assets/vendor/`)
 
 ```diff
 ! PUSH GEEN DATABASE CREDENTIALS NAAR DE REPOSITORY

@@ -27,10 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['isAdmin'] = ($user['rol'] === 'beheerder');
             $_SESSION['rol'] = $user['rol'];
 
-            // 🔧 Tijdelijk: zet vaste cliënt-ID voor test
-            // (verwijder dit later als je cliënt-selectiepagina maakt)
-            $_SESSION['clientId'] = 1;
-
+            // 🔧 
             header("Location: dashboard.php");
             exit;
         } else {

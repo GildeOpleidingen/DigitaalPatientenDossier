@@ -93,7 +93,6 @@ foreach ($clientRelations as $relation) {
             </div>
         </div>
 
-        <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

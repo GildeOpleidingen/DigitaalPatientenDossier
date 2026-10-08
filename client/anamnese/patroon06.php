@@ -451,7 +451,6 @@ function e($v)
         </div>
     </form>
 
-    <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../../assets/js/form-autosave.js"></script>
 </body>
 

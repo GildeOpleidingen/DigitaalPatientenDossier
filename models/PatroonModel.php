@@ -593,14 +593,15 @@ class PatroonModel
     }
 
     /**
+     * @param int $clientId
      * @param int $patternId
      * @return array|null
      */
-    public static function getPatternType(int $patternId): ?array
+    public static function getPatternType(int $clientId, int $patternId): ?array
     {
         try {
-            $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM `zorgplan` WHERE patroontypeid = ?");
-            $stmt->bind_param("i", $patternId);
+            $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM `zorgplan` WHERE clientid = ? AND patroontypeid = ?");
+            $stmt->bind_param("ii", $clientId, $patternId);
             $stmt->execute();
             $result = $stmt->get_result()->fetch_assoc();
 

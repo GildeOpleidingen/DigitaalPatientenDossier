@@ -119,12 +119,20 @@ class Main
     }
 
     /**
-     * @param int $patternId
+     * @param int $param1
+     * @param int|null $param2
      * @return array|null
      */
-    public function getPatternType(int $patternId): ?array
+    public function getPatternType(int $param1, ?int $param2 = null): ?array
     {
-        return PatroonModel::getPatternType($patternId);
+        if ($param2 === null) {
+            $clientId = (int)($_SESSION['clientId'] ?? 0);
+            $patternId = $param1;
+        } else {
+            $clientId = $param1;
+            $patternId = $param2;
+        }
+        return PatroonModel::getPatternType($clientId, $patternId);
     }
 
     /**

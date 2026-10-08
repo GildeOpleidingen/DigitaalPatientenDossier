@@ -216,7 +216,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
             </div>
     </form>
 
-<script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="../../assets/js/form-autosave.js"></script>
 
 </body>

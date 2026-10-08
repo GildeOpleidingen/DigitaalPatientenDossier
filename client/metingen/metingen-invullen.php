@@ -179,7 +179,6 @@ $asisstent_bool = $grens_asistent->get_result()->fetch_array()[0];
                 </form>
 
             </div>
-            <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

@@ -69,7 +69,6 @@ if ($client == null) {
         </div>
     </div>
     </div>
-    <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
