@@ -12,14 +12,18 @@ $medewerker = $result->get_result()->fetch_assoc();
 ?>
 <style>
 
-    .profile-pic{
-   display: inline-block;
-   vertical-align: middle;
-    width: 50px;
-    height: 50px;
-    overflow: hidden;
-   border-radius: 50%;
-}
+    .profile-pic {
+        display: inline-block;
+        vertical-align: middle;
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .profile-menu .dropdown-toggle {
+        cursor: pointer;
+    }
 
 .profile-pic img{
    width: 100%;
@@ -39,9 +43,7 @@ $medewerker = $result->get_result()->fetch_assoc();
   border-bottom: 0.3em solid;
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand" href="/dashboard.php">
@@ -76,20 +78,23 @@ $medewerker = $result->get_result()->fetch_assoc();
                 }
             }
             ?>
-            <span class="ps-3 align"></span>
-                <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="profile-pic">
-                            <img src="data:image/png;base64,<?php echo base64_encode($medewerker['foto']); ?>" alt="Profile Picture">
-                        </div>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item fw-bold"><?= $medewerker['naam'] ?></a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="../../../uitloggen.php">Uitloggen</a></li>
-                    </ul>
-                </div>
-            </span>
+            <li class="nav-item dropdown profile-menu ms-3">
+                <a class="nav-link dropdown-toggle d-flex align-items-center p-0" href="javascript:void(0)" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="profile-pic">
+                        <?php
+                        $avatarSrc = !empty($medewerker['foto'])
+                            ? 'data:image/png;base64,' . base64_encode($medewerker['foto'])
+                            : '/assets/images/blank-avatar-photo-place-holder-600nw-1095249842.webp';
+                        ?>
+                        <img src="<?= $avatarSrc ?>" alt="Profielfoto">
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="profileDropdown">
+                    <li><span class="dropdown-item-text fw-bold text-dark"><?= htmlspecialchars($medewerker['naam'] ?? 'Gebruiker') ?></span></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="/uitloggen.php"><i class="fa fa-sign-out me-2"></i>Uitloggen</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>

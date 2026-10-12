@@ -1,6 +1,10 @@
 <?php
 trait Afdeling
 {
+    /**
+     * @param string $afdeling
+     * @return int
+     */
     public function getAfdelingIDByName($afdeling): int
     {
         $result = DatabaseConnection::getConn()->prepare("

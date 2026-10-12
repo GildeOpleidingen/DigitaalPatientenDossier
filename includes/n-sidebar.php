@@ -2,10 +2,11 @@
 include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 $Main = new Main();
+$ClientModel = new ClientModel();
 
 $clientId = $_SESSION['clientId'];
 $medewerkerId = $_SESSION['loggedin_id'];
-$row1 = $Main->getClientById($clientId);
+$row1 = $ClientModel->getById($clientId);
 ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
@@ -66,7 +67,6 @@ $row1 = $Main->getClientById($clientId);
                         if ($key === 'verzorgers' && $medewerkerId != 4) {
 
                             continue;
-
                         }
                         $value = lcfirst($value);
                         $valueTekst = ucfirst($value);

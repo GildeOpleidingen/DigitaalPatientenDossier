@@ -16,13 +16,14 @@ Token-eindpunt OAuth 2.0 (v2): https://login.microsoftonline.com/9b017957-8a64-4
 
 # DigitaalPatientenDossier
 
-Voor de database connectie te fixen:
-- maak een nieuwe file genaamd `config.php` in de root folder
-- kopieer de content van `default-config.php` naar `config.php`
-- vul de credentials van je database in `config.php`
-- Verwijder alle comments en whitespaces voor de <?php tag
+Voor de database connectie te configureren:
+- kopieer het sjabloonbestand: `cp .env.example .env`
+- vul je eigen database credentials in binnen `.env`
 
-## Push aub geen database credentials meer naar de repository
+Noodzakelijk voor Bootstrap en frontend libraries:
+- installeer Node.js & npm (`sudo apt install nodejs npm`)
+- voer `npm install` uit
+- voer `npm run build:assets` uit (kopieert Bootstrap en JS bestanden naar `assets/vendor/`)
 
 # Werkwijze
 
@@ -43,8 +44,27 @@ Om phpmyadmin te benaderen via de url.
 phpmyadmin.gdcs.nl
 
 # Deployment
-Deployment worden geregeld door jenkins (jenkins.gdcs.nl)
-Er zijn op dit moment drie workflows.
-Eentje voor de dev omgeving https://digitaalpatientendossier-dev.gdcs.nl/
-Eentje voor de test omgeving https://digitaalpatientendossier-test.gdcs.nl/
-Eentje voor de productie omgeving. https://digitaalpatientendossier.gdcs.nl/
+Deployment worden geregeld door GitHub Actions
+Er zijn op dit moment twee workflows.
+Eentje voor de test omgeving
+Eentje voor de productie omgeving.
+
+Deze staan in de map .github/workflows/
+
+# Inloggen Digitaal Patienten Dossier
+Ga naar https://digitaalpatientendossier.gdcs.nl/index.php (LET OP: Je moet verbonden zijn met de GDCS wifi, anders kom je niet op de site).
+
+Als je wilt inloggen als admin vul je de volgende gegevens in die in vaultwarden staan.
+
+# Inloggen PHPmyAdmin
+Ga naar https://phpmyadmin.gdcs.nl/index.php (LET OP: Je moet verbonden zijn met GDCS, anders kom je niet op de site)
+
+De username zou automatisch al ingevuld moeten zijn als de pagina ingeladen is, als dit niet zo is vul je "dpd_test, dpd_dev of dpd" in het username vakje in.
+
+Check het wachtwoord in vaultwarden.
+
+# Inloggen (niet meer relevant)
+Deze hash kan je bij je medewerker als wachtwoord neerzetten.
+in VAULTWARDEN
+
+

@@ -5,6 +5,7 @@ include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 
 $Main = new Main();
+$ClientModel = new ClientModel();
 
 // Controleer of de gebruiker is ingelogd
 $loggedInId = $_SESSION['loggedin_id'] ?? null;
@@ -21,7 +22,7 @@ if (!$clientId) {
 }
 
 // Haal clientgegevens op
-$client = $_SESSION['client'] = $Main->getClientById($clientId);
+$client = $_SESSION['client'] = $ClientModel->getClientById($clientId);
 if (!$client) {
     header("Location: ../client.php");
     exit;

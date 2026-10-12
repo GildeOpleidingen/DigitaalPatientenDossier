@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'database/DatabaseConnection.php';
+include 'models/autoload.php';
 
 // Als gebruiker al is ingelogd, stuur naar dashboard
 if (isset($_SESSION['loggedin_id'])) {
@@ -8,53 +9,41 @@ if (isset($_SESSION['loggedin_id'])) {
     exit;
 }
 
+$email = '';
+
 // Controleer of formulier is verzonden
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_POST['email']) && !empty($_POST['wachtwoord'])) {
+    $email = trim($_POST['email'] ?? '');
+    $wachtwoord = $_POST['wachtwoord'] ?? '';
 
-        $email = $_POST['email'];
-        $wachtwoord = $_POST['wachtwoord'];
-
-        // Bereid query voor
-        $stmt = DatabaseConnection::getConn()->prepare("SELECT id, naam, wachtwoord, rol FROM medewerker WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-
-            // Controleer wachtwoord correct
-            if (password_verify($wachtwoord, $row['wachtwoord'])) {
-
-                // Zet sessiegegevens
-                $_SESSION['loggedin_id'] = $row['id'];
-                $_SESSION['loggedin_naam'] = $row['naam'];
-                $_SESSION['isAdmin'] = ($row['rol'] === 'beheerder');
-                $_SESSION['rol'] = $row['rol'];
-
-                header("Location: dashboard.php");
-                exit;
-            } else {
-                $_SESSION['error'] = "Het wachtwoord of e-mailadres is onjuist.";
-            }
-        } else {
-            $_SESSION['error'] = "Er bestaat geen account met dit e-mailadres.";
-        }
-
-        $stmt->close();
-    } else {
+    if (empty($email) || empty($wachtwoord)) {
         $_SESSION['error'] = "Vul alle velden in.";
+    } else {
+        $user = MedewerkerModel::authenticate($email, $wachtwoord);
+
+        if ($user) {
+            $_SESSION['loggedin_id'] = $user['id'];
+            $_SESSION['loggedin_naam'] = $user['naam'];
+            $_SESSION['isAdmin'] = ($user['rol'] === 'beheerder');
+            $_SESSION['rol'] = $user['rol'];
+
+            // 🔧 
+            header("Location: dashboard.php");
+            exit;
+        } else {
+            $_SESSION['error'] = "Het wachtwoord of e-mailadres is onjuist.";
+        }
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/login.css">
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
     <title>Inloggen - DPD</title>
 </head>
@@ -72,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </a>
                             </div>
                             <form action="" method="POST" class="needs-validation" novalidate>
-                                <?php if(isset($_SESSION['error'])): ?>
+                                <?php if (isset($_SESSION['error'])): ?>
                                     <div class="alert alert-danger" role="alert">
                                         <?= htmlspecialchars($_SESSION['error']); ?>
                                     </div>
@@ -80,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endif; ?>
 
                                 <div class="form-floating mb-3">
-                                    <input type="email" class="form-control" name="email" placeholder="name@example.com" required>
+                                    <input type="email" class="form-control" name="email" placeholder="name@example.com" value="<?= htmlspecialchars($email); ?>" required>
                                     <label for="email">E-mailadres</label>
                                     <div class="invalid-feedback">Voer een e-mailadres in.</div>
                                 </div>
@@ -101,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </section>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
