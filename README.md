@@ -1,26 +1,3 @@
-# Database fixes
-```diff
-- HIGH PRIORITY!
-```
-Graag deze kolommen aanpassen. 
-
-## Fix voor issue #347
-Ga naar de database van `dpd->medischoverzicht->opnamedatum` en zet op `null`
-https://github.com/GildeOpleidingen/DigitaalPatientenDossier/issues/347
-
-## Fix voor issue #371
-Ga naar de database van `dpd->vragenlijst->afnamedatumtijd` en zet op `null`
-https://github.com/GildeOpleidingen/DigitaalPatientenDossier/issues/371
-
-# Database Credentials (.env)
-```env
-DB_HOST=10.250.0.103
-DB_USER=dpd_user
-DB_PASS="q220@Wgz0]I9uq!J"
-DB_NAME=dpd_dev # of dpd of dpd_test
-DB_PORT=3306
-```
-
 Credentials voor Single Sign On
 
 Toepassing id: 80f1311f-f684-42da-ae68-187bdef53c79
@@ -60,13 +37,13 @@ Noodzakelijk voor Bootstrap en frontend libraries:
 - Dit controleren en indien akkoord door het team. Mergen naar main.
 
 Als de code in test staat wordt dit beschikbaar op de volgende url.
-test.digitaalpatientendossier.gds.local
+test.digitaalpatientendossier.gdcs.local
 
 Als de code in main staat wordt dit beschikbaar op de volgende url.
-digitaalpatientendossier.gds.local
+digitaalpatientendossier.gdcs.local
 
 Om phpmyadmin te benaderen via de url.
-pma.digitaalpatientendossier.gds.local
+pma.digitaalpatientendossier.gdcs.local
 
 # Backlog
 
@@ -87,7 +64,7 @@ Eentje voor de productie omgeving.
 Deze staan in de map .github/workflows/
 
 # Inloggen Digitaal Patienten Dossier
-Ga naar https://digitaalpatientendossier.gdcs.nl/index.php (LET OP: Je moet verbonden zijn met de Gilde 1.09 wifi, anders kom je niet op de site).
+Ga naar https://digitaalpatientendossier.gdcs.nl/index.php (LET OP: Je moet verbonden zijn met de GDCS wifi, anders kom je niet op de site).
 
 Als je wil inloggen als admin vul je de volgende gegevens in: 
 
@@ -107,11 +84,11 @@ E-mailadres 3 (Jackie Williamson) = "jackie.williamson@example.com".
 Wachtwoord (voor iedereen hetzelfde) = "Gilde123".
 
 # Inloggen PHPmyAdmin
-Ga naar https://phpmyadmin.gdcs.nl/index.php (LET OP: Je moet verbonden zijn met de Gilde 1.09 wifi, anders kom je niet op de site)
+Ga naar https://phpmyadmin.gdcs.nl/index.php (LET OP: Je moet verbonden zijn met GDCS, anders kom je niet op de site)
 
-De username zou autmatisch al ingevuld moeten zijn als de pagina ingeladen is, als dit niet zo is vul je "dpd_user" in het username vakje in.
+De username zou automatisch al ingevuld moeten zijn als de pagina ingeladen is, als dit niet zo is vul je "dpd_test, dpd_dev of dpd" in het username vakje in.
 
-Voor het wachtwoord kopieer en plak je het volgende stukje tekst in het wachtwoord vakje: "q220@Wgz0]I9uq!J".
+Check het wachtwoord in vaultwarden.
 
 # Inloggen (niet meer relevant)
 Deze hash kan je bij je medewerker als wachtwoord neerzetten.
