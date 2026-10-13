@@ -13,10 +13,10 @@ if ($clientId <= 0) {
 $_SESSION['clientId'] = $clientId;
 
 $client = $ClientModel->getById($clientId);
-$clientRelations = $ClientModel->getVerzorgerregelByClientId($clientId);
+$clientRelations = $ClientModel->getCareRelationsByClientId($clientId);
 $verzorgers = [];
 foreach ($clientRelations as $relation) {
-    $verzorger = $ClientModel->getVerzorgersById($relation['medewerkerid']);
+    $verzorger = $ClientModel->getCaregiversById($relation['medewerkerid']);
     array_push($verzorgers, $verzorger);
 }
 ?>
@@ -27,10 +27,7 @@ foreach ($clientRelations as $relation) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../assets/css/client/overzicht.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -59,7 +56,7 @@ foreach ($clientRelations as $relation) {
                 <h2 class="lead text-primary">Medische voorgeschiedenis</h2>
                 <p class="text">
                     <?php
-                    $mv = $ClientModel->getMedischOverzichtByClientId($clientId)['medischevoorgeschiedenis'];
+                    $mv = $ClientModel->getMedicalOverviewByClientId($clientId)['medischevoorgeschiedenis'];
                     if ($mv) {
                         echo $mv;
                     } else {
@@ -71,7 +68,7 @@ foreach ($clientRelations as $relation) {
                 <h2 class="lead text-primary">Allergieën</h2>
                 <p class="text">
                     <?php
-                    $allergieen = $ClientModel->getMedischOverzichtByClientId($clientId)['alergieen'];
+                    $allergieen = $ClientModel->getMedicalOverviewByClientId($clientId)['alergieen'];
                     if ($allergieen) {
                         echo $allergieen;
                     } else {
@@ -83,7 +80,7 @@ foreach ($clientRelations as $relation) {
                 <h2 class="lead text-primary">Medicatie</h2>
                 <p class="text">
                     <?php
-                    $medicatie = $ClientModel->getMedischOverzichtByClientId($clientId)['medicatie'];
+                    $medicatie = $ClientModel->getMedicalOverviewByClientId($clientId)['medicatie'];
                     if ($medicatie) {
                         echo $medicatie;
                     } else {
@@ -96,9 +93,6 @@ foreach ($clientRelations as $relation) {
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
 </body>
 
 </html>

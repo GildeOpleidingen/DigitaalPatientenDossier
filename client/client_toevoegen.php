@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //koppel nieuw client aan huidige medewerker
         $newClientId = DatabaseConnection::getConn()->insert_id;
         $stmt->close();
-        $Main->CheckIfVerzorgregelExists($newClientId, $_SESSION['loggedin_id']);
+        $Main->checkIfCareRelationExists($newClientId, $_SESSION['loggedin_id']);
         header('Location: client.php');
         exit;
     } else {
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nieuwe Client Toevoegen</title>
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
 </head>
 
 <body>

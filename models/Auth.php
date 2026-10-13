@@ -1,13 +1,9 @@
 <?php
 
-/**
- * Centrale Auth klasse voor sessiebeheer, inlogcontrole en rollen.
- * Voorkomt breekbare relatieve paden.
- */
 class Auth
 {
     /**
-     * Start de sessie veilig als deze nog niet gestart is.
+     * @return void
      */
     public static function startSession(): void
     {
@@ -17,8 +13,7 @@ class Auth
     }
 
     /**
-     * Haalt het ID van de ingelogde gebruiker op.
-     * Geeft null terug als de gebruiker niet is ingelogd.
+     * @return int|null
      */
     public static function id(): ?int
     {
@@ -27,8 +22,7 @@ class Auth
     }
 
     /**
-     * Controleert of de gebruiker is ingelogd.
-     * Stuurt niet-ingelogde bezoekers direct door naar het inlogscherm /index.php ipv de echte website of een error.
+     * @return void
      */
     public static function requireLogin(): void
     {
@@ -39,8 +33,7 @@ class Auth
     }
 
     /**
-     * Controleert of de ingelogde gebruiker de rol 'beheerder' heeft.
-     * Geeft true terug voor beheerders en false voor studenten/medewerkers of niet-ingelogden.
+     * @return bool
      */
     public static function isAdmin(): bool
     {
@@ -48,9 +41,8 @@ class Auth
     }
 
     /**
-     * Controleert of iemand is ingelogd én beheerder is.
-     * Voorkomt dat studenten via directe URL's patiënten kunnen bewerken.
-     * Niet-beheerders worden doorgestuurd naar het overzicht.
+     * @param string $redirect
+     * @return void
      */
     public static function requireAdmin(string $redirect = '/client/client.php'): void
     {
@@ -62,8 +54,7 @@ class Auth
     }
 
     /**
-     * Haalt een array op met de gegevens van de huidige ingelogde gebruiker.
-     * Geeft null terug als er niemand is ingelogd.
+     * @return array|null
      */
     public static function user(): ?array
     {

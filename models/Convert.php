@@ -1,6 +1,11 @@
 <?php
 trait Convert
 {
+    /**
+     * @param string $numbers
+     * @param int $index
+     * @return bool|null
+     */
     public function convertNumToBool($numbers, $index = 0): ?bool
     {
         if ($index < mb_strlen($numbers)) {
@@ -16,6 +21,10 @@ trait Convert
         return null;
     }
 
+    /**
+     * @param string $numbers
+     * @return bool[]
+     */
     public function convertNumToBoolArray($numbers): array
     {
         $numArr = str_split($numbers);
@@ -32,6 +41,10 @@ trait Convert
         return $boolArr;
     }
 
+    /**
+     * @param bool[] $boolArr
+     * @return string
+     */
     public function convertBoolArrayToString($boolArr): string
     {
         $numbers = '';

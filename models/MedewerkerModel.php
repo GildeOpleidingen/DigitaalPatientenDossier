@@ -2,6 +2,10 @@
 
 class MedewerkerModel
 {
+    /**
+     * @param int $id
+     * @return array|null
+     */
     public static function findById(int $id): ?array
     {
         try {
@@ -17,6 +21,10 @@ class MedewerkerModel
         }
     }
 
+    /**
+     * @param string $email
+     * @return array|null
+     */
     public static function findByEmail(string $email): ?array
     {
         try {
@@ -32,6 +40,11 @@ class MedewerkerModel
         }
     }
 
+    /**
+     * @param string $email
+     * @param string $wachtwoord
+     * @return array|null
+     */
     public static function authenticate(string $email, string $wachtwoord): ?array
     {
         $user = self::findByEmail($email);
@@ -43,6 +56,16 @@ class MedewerkerModel
         return null;
     }
 
+    /**
+     * @param int $id
+     * @param string $name
+     * @param string $class
+     * @param string|null $photo
+     * @param string $email
+     * @param string $phoneNumber
+     * @param string $password
+     * @return bool
+     */
     public static function update(int $id, string $name, string $class, ?string $photo, string $email, string $phoneNumber, string $password): bool
     {
         try {

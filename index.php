@@ -27,10 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['isAdmin'] = ($user['rol'] === 'beheerder');
             $_SESSION['rol'] = $user['rol'];
 
-            // 🔧 Tijdelijk: zet vaste cliënt-ID voor test
-            // (verwijder dit later als je cliënt-selectiepagina maakt)
-            $_SESSION['clientId'] = 1;
-
+            // 🔧 
             header("Location: dashboard.php");
             exit;
         } else {
@@ -46,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/login.css">
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
     <title>Inloggen - DPD</title>
 </head>
@@ -93,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </section>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

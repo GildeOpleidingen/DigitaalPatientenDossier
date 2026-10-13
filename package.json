@@ -1,0 +1,33 @@
+{
+  "name": "digitaalpatientendossier",
+  "version": "1.0.0",
+  "description": "```diff\r - HIGH PRIORITY!\r ```\r Graag deze kolommen aanpassen.",
+  "main": "index.js",
+  "scripts": {
+    "copy:bootstrap-css": "copyfiles -f node_modules/bootstrap/dist/css/bootstrap.min.css* assets/vendor/bootstrap/css",
+    "copy:bootstrap-js": "copyfiles -f node_modules/bootstrap/dist/js/bootstrap.bundle.min.js* assets/vendor/bootstrap/js",
+    "copy:jquery": "copyfiles -f node_modules/jquery/dist/jquery.min.js* assets/vendor/jquery",
+    "build:assets": "npm run copy:bootstrap-css && npm run copy:bootstrap-js && npm run copy:jquery",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GildeOpleidingen/DigitaalPatientenDossier.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/GildeOpleidingen/DigitaalPatientenDossier/issues"
+  },
+  "homepage": "https://github.com/GildeOpleidingen/DigitaalPatientenDossier#readme",
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.8",
+    "jquery": "^4.0.0"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1"
+  }
+}

@@ -9,14 +9,14 @@ body {
     background-color: #00365E !important;
 }
 
-.main{
+.main {
     display: flex;
     flex-direction: row;
     height: 100vh;
     width: 100%;
 }
 
-.content{
+.content {
     height: 100%;
     width: 100%;
     background-color: #00365E;
@@ -24,19 +24,22 @@ body {
     padding-top: 100px;
 }
 
-.card i {
-    color: white;
+.card-patroon {
+    transition: 0.2s ease-in-out;
+    border-left: 5px solid #00365E;
+    background-color: #ffffff;
+    cursor: pointer;
 }
 
-.card:hover {
-    transition: 0.3s ease-in-out;
-    background-color: #DE0069;
-    border: 1px solid #DE0069;
-    transform: scale(1.01);
-    color: white;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;}
+.card-patroon:hover {
+    transition: 0.2s ease-in-out;
+    background-color: #DE0069 !important;
+    border-color: #DE0069 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
 
-.card:hover i {
-    transition: 0.3s ease-in-out;
-    color: white;
+.card-patroon:hover span,
+.card-patroon:hover i {
+    color: #ffffff !important;
 }
