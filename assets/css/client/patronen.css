@@ -108,11 +108,23 @@ textarea{
     display: block;
 }
 
-input[type = "radio"] {
-    cursor: pointer;
+input[type="text"], textarea {
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 2px solid #00365E;
+    border-radius: 3px;
 }
 
-.question-answer{
+input[type="checkbox"], input[type="radio"] {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+    cursor: pointer;
+    flex-shrink: 0 !important;
+    
+}.question-answer{
     display: flex;
     gap: 5px;
     align-items: center;
