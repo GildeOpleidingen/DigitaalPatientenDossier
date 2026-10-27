@@ -14,7 +14,7 @@ if($isAdmin === false){
     $result->execute();
     $links = $result->get_result()->fetch_all();
 } else{
-    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE (isDeleted = 0 OR isDeleted IS NULL)");
+    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE (is_deleted = 0 OR is_deleted IS NULL)");
     $result->execute();
     $links = $result->get_result()->fetch_all();
 }
@@ -76,7 +76,7 @@ if($isAdmin === false){
                        $client = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM client WHERE id=$link[0]")->fetch_array();
 
                         if ($isAdmin === true) {
-                            $admin = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM medewerker WHERE id=$link[0] AND (isDeleted = 0 OR isDeleted IS NULL)")->fetch_array();
+                            $admin = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM medewerker WHERE id=$link[0] AND (is_deleted = 0 OR is_deleted IS NULL)")->fetch_array();
                             if (!$admin) {
                                 continue;
                             }

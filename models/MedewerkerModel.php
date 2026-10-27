@@ -14,7 +14,7 @@ class MedewerkerModel
     public ?string $wachtwoord = null;
     public string $grens_assistent = '0';
     public string $rol = 'medewerker';
-    public ?int $isDeleted = 0;
+    public ?int $is_deleted = 0;
 
     /**
      * @param array|mysqli|null $attributesOrDb
@@ -47,7 +47,8 @@ class MedewerkerModel
         if (isset($data['wachtwoord'])) $this->wachtwoord = (string)$data['wachtwoord'];
         if (isset($data['grens_assistent'])) $this->grens_assistent = (string)$data['grens_assistent'];
         if (isset($data['rol'])) $this->rol = (string)$data['rol'];
-        if (isset($data['isDeleted'])) $this->isDeleted = (int)$data['isDeleted'];
+        if (isset($data['is_deleted'])) $this->is_deleted = (int)$data['is_deleted'];
+        elseif (isset($data['isDeleted'])) $this->is_deleted = (int)$data['isDeleted'];
 
         return $this;
     }
@@ -67,7 +68,7 @@ class MedewerkerModel
             'wachtwoord'      => $this->wachtwoord,
             'grens_assistent' => $this->grens_assistent,
             'rol'             => $this->rol,
-            'isDeleted'       => $this->isDeleted,
+            'is_deleted'      => $this->is_deleted,
         ];
     }
 
@@ -97,10 +98,10 @@ class MedewerkerModel
             // Uniciteitscontrole op e-mailadres
             try {
                 if ($isUpdate && $this->id !== null) {
-                    $stmt = $this->db->prepare("SELECT id FROM `medewerker` WHERE `email` = ? AND `id` != ? AND (isDeleted = 0 OR isDeleted IS NULL) LIMIT 1;");
+                    $stmt = $this->db->prepare("SELECT id FROM `medewerker` WHERE `email` = ? AND `id` != ? AND (is_deleted = 0 OR is_deleted IS NULL) LIMIT 1;");
                     $stmt->bind_param("si", $this->email, $this->id);
                 } else {
-                    $stmt = $this->db->prepare("SELECT id FROM `medewerker` WHERE `email` = ? AND (isDeleted = 0 OR isDeleted IS NULL) LIMIT 1;");
+                    $stmt = $this->db->prepare("SELECT id FROM `medewerker` WHERE `email` = ? AND (is_deleted = 0 OR is_deleted IS NULL) LIMIT 1;");
                     $stmt->bind_param("s", $this->email);
                 }
                 if ($stmt) {
@@ -157,7 +158,7 @@ class MedewerkerModel
 
         try {
             $cleanPhone = !empty($this->telefoonnummer) ? preg_replace('/\D/', '', $this->telefoonnummer) : null;
-            $isDeleted = 0;
+            $is_deleted = 0;
 
             // Hash wachtwoord indien nog niet gehasht
             $passwordHash = $this->wachtwoord;
@@ -167,7 +168,7 @@ class MedewerkerModel
 
             $stmt = $this->db->prepare("
                 INSERT INTO `medewerker` (
-                    `naam`, `klas`, `foto`, `email`, `telefoonnummer`, `wachtwoord`, `rol`, `grens_assistent`, `isDeleted`
+                    `naam`, `klas`, `foto`, `email`, `telefoonnummer`, `wachtwoord`, `rol`, `grens_assistent`, `is_deleted`
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
 
@@ -186,7 +187,7 @@ class MedewerkerModel
                 $passwordHash,
                 $this->rol,
                 $this->grens_assistent,
-                $isDeleted
+                $is_deleted
             );
 
             if ($this->foto !== null) {
@@ -390,7 +391,8 @@ class MedewerkerModel
     {
         $user = self::findByEmail($email);
 
-        if ($user && empty($user['isDeleted']) && !empty($user['wachtwoord']) && password_verify($wachtwoord, $user['wachtwoord'])) {
+        $isDeleted = (int)($user['is_deleted'] ?? $user['isDeleted'] ?? 0);
+        if ($user && $isDeleted === 0 && !empty($user['wachtwoord']) && password_verify($wachtwoord, $user['wachtwoord'])) {
             return $user;
         }
 
@@ -405,7 +407,7 @@ class MedewerkerModel
     {
         try {
             $stmt = DatabaseConnection::getConn()->prepare(
-                "UPDATE `medewerker` SET `isDeleted` = 1 WHERE `id` = ?;"
+                "UPDATE `medewerker` SET `is_deleted` = 1 WHERE `id` = ?;"
             );
             if (!$stmt) return false;
             $stmt->bind_param("i", $id);

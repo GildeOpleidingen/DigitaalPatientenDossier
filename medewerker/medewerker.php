@@ -9,14 +9,14 @@ if (!isset($_GET['q'])) {
     $items = $conn
         ->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol 
                  FROM medewerker 
-                 WHERE (isDeleted = 0 OR isDeleted IS NULL);")
+                 WHERE (is_deleted = 0 OR is_deleted IS NULL);")
         ->fetch_all(MYSQLI_ASSOC);
 } else {
     $q = $conn->real_escape_string(trim($_GET['q']));
     $items = $conn
         ->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol 
                  FROM medewerker 
-                 WHERE (isDeleted = 0 OR isDeleted IS NULL)
+                 WHERE (is_deleted = 0 OR is_deleted IS NULL)
                  AND (naam LIKE '%$q%' 
                  OR klas LIKE '%$q%' 
                  OR email LIKE '%$q%' 

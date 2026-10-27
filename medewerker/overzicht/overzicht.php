@@ -16,7 +16,7 @@ $verzorger->bind_param("i", $medewerkerid);
 $verzorger->execute();
 $verzorger = $verzorger->get_result()->fetch_assoc();
 
-if (!$verzorger || (int)($verzorger['isDeleted'] ?? 0) === 1) {
+if (!$verzorger || (int)($verzorger['is_deleted'] ?? $verzorger['isDeleted'] ?? 0) === 1) {
     header("Location: ../medewerker.php");
     exit;
 }

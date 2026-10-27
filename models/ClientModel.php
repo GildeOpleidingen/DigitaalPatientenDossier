@@ -19,7 +19,7 @@ class ClientModel
     public ?int $afdeling_id = null;
     public string $burgelijkestaat = 'ongehuwd';
     public ?string $foto = null;
-    public int $deleted = 0;
+    public int $is_deleted = 0;
 
     /**
      * @param array|mysqli|null $attributesOrDb
@@ -58,7 +58,8 @@ class ClientModel
         elseif (isset($data['afdeling'])) $this->afdeling_id = !empty($data['afdeling']) ? (int)$data['afdeling'] : null;
         if (isset($data['burgelijkestaat'])) $this->burgelijkestaat = (string)$data['burgelijkestaat'];
         if (array_key_exists('foto', $data)) $this->foto = $data['foto'];
-        if (isset($data['deleted'])) $this->deleted = (int)$data['deleted'];
+        if (isset($data['is_deleted'])) $this->is_deleted = (int)$data['is_deleted'];
+        elseif (isset($data['deleted'])) $this->is_deleted = (int)$data['deleted'];
 
         return $this;
     }
@@ -83,7 +84,7 @@ class ClientModel
             'afdeling_id'      => $this->afdeling_id,
             'burgelijkestaat'  => $this->burgelijkestaat,
             'foto'             => $this->foto,
-            'deleted'          => $this->deleted,
+            'is_deleted'       => $this->is_deleted,
         ];
     }
 
@@ -147,13 +148,13 @@ class ClientModel
 
         try {
             $cleanPhone = !empty($this->telefoonnummer) ? preg_replace('/\D/', '', $this->telefoonnummer) : '';
-            $deleted = 0;
+            $is_deleted = 0;
 
             $stmt = $this->db->prepare("
                 INSERT INTO client (
                     naam, geslacht, adres, postcode, woonplaats, telefoonnummer,
                     email, geboortedatum, reanimatiestatus, nationaliteit,
-                    burgelijkestaat, foto, afdeling_id, deleted
+                    burgelijkestaat, foto, afdeling_id, is_deleted
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
 
@@ -177,7 +178,7 @@ class ClientModel
                 $this->burgelijkestaat,
                 $this->foto,
                 $this->afdeling_id,
-                $deleted
+                $is_deleted
             );
 
             if ($this->foto !== null) {
@@ -567,7 +568,7 @@ class ClientModel
                 SELECT m.*
                 FROM medewerker m
                 JOIN verzorgerregel vr ON m.id = vr.medewerkerid
-                WHERE vr.clientid = ? AND (m.isDeleted = 0 OR m.isDeleted IS NULL)
+                WHERE vr.clientid = ? AND (m.is_deleted = 0 OR m.is_deleted IS NULL)
             ",
             default => null,
         };
