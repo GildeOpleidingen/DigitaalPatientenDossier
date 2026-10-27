@@ -14,7 +14,7 @@ if($isAdmin === false){
     $result->execute();
     $links = $result->get_result()->fetch_all();
 } else{
-    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");
+    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE (isDeleted = 0 OR isDeleted IS NULL)");
     $result->execute();
     $links = $result->get_result()->fetch_all();
 }
@@ -76,7 +76,10 @@ if($isAdmin === false){
                        $client = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM client WHERE id=$link[0]")->fetch_array();
 
                         if ($isAdmin === true) {
-                            $admin = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM medewerker WHERE id=$link[0]")->fetch_array();
+                            $admin = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM medewerker WHERE id=$link[0] AND (isDeleted = 0 OR isDeleted IS NULL)")->fetch_array();
+                            if (!$admin) {
+                                continue;
+                            }
                         }
 
                         if ($client[2] == null && $isAdmin === false) {
@@ -100,9 +103,12 @@ if($isAdmin === false){
                         echo '<div class="col-lg-3 col-md-6 col-sm-12 mb-3">';
 
                         if ($isAdmin === true) {
-                        
+                            $imgHtml = !empty($admin[2])
+                                ? '<img src="data:image/jpeg;base64,' . base64_encode($admin[2]) . '" class="card-img-top" style="height: 200px; object-fit: cover;" alt="...">'
+                                : '<svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" text-anchor="middle" fill="#dee2e6" dy=".3em">Geen foto beschikbaar</text></svg>';
+
                             echo '<a href="medewerker/overzicht/overzicht.php?id='.$admin[0].'" class="card border-0 rounded-0 shadow-sm text-decoration-none">
-                                    <img src="data:image/jpeg;base64,' . base64_encode($admin[2]) . '" class="card-img-top" style="height: 200px; object-fit: cover;" alt="...">
+                                    ' . $imgHtml . '
                                     <div class="card-body">
                                         <h5 class="card-title">'.$admin[1].'</h5>
                                     </div>

@@ -3,12 +3,13 @@ if (!isset($_SESSION['loggedin_id'])) {
     header("Location: ../index.php");
 }
 
-$id = $_SESSION['loggedin_id'];
+$headerLoggedInId = (int)$_SESSION['loggedin_id'];
 
-$result = DatabaseConnection::getConn()->prepare("SELECT naam, foto FROM medewerker WHERE id = ?");
-$result->bind_param("i", $id);
-$result->execute();
-$medewerker = $result->get_result()->fetch_assoc();
+$headerUserStmt = DatabaseConnection::getConn()->prepare("SELECT naam, foto FROM medewerker WHERE id = ?");
+$headerUserStmt->bind_param("i", $headerLoggedInId);
+$headerUserStmt->execute();
+$headerUser = $headerUserStmt->get_result()->fetch_assoc();
+$headerUserStmt->close();
 ?>
 <style>
 
@@ -27,8 +28,9 @@ $medewerker = $result->get_result()->fetch_assoc();
 
 .profile-pic img{
    width: 100%;
-   height: auto;
+   height: 100%;
    object-fit: cover;
+   object-position: center;
 }
 .profile-menu .dropdown-menu {
   right: 0;
@@ -82,15 +84,15 @@ $medewerker = $result->get_result()->fetch_assoc();
                 <a class="nav-link dropdown-toggle d-flex align-items-center p-0" href="javascript:void(0)" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="profile-pic">
                         <?php
-                        $avatarSrc = !empty($medewerker['foto'])
-                            ? 'data:image/png;base64,' . base64_encode($medewerker['foto'])
+                        $avatarSrc = !empty($headerUser['foto'])
+                            ? 'data:image/png;base64,' . base64_encode($headerUser['foto'])
                             : '/assets/images/blank-avatar-photo-place-holder-600nw-1095249842.webp';
                         ?>
                         <img src="<?= $avatarSrc ?>" alt="Profielfoto">
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="profileDropdown">
-                    <li><span class="dropdown-item-text fw-bold text-dark"><?= htmlspecialchars($medewerker['naam'] ?? 'Gebruiker') ?></span></li>
+                    <li><span class="dropdown-item-text fw-bold text-dark"><?= htmlspecialchars($headerUser['naam'] ?? 'Gebruiker') ?></span></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item text-danger" href="/uitloggen.php"><i class="fa fa-sign-out me-2"></i>Uitloggen</a></li>
                 </ul>
