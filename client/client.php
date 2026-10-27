@@ -31,11 +31,33 @@ if (!isset($_GET['q'])) {
     $items = $items->get_result()->fetch_all();
 
 } else {
-    $q = $conn->real_escape_string($_GET['q']); // extra veiligheid tegen SQL-injectie
-    $items = $conn->query("SELECT id, naam, woonplaats, geboortedatum 
-                           FROM client 
-                           WHERE deleted = 0 
-                           AND (naam LIKE '%$q%' OR woonplaats LIKE '%$q%' OR geboortedatum LIKE '%$q%');")->fetch_all();
+    $q = trim($_GET['q']);
+    $searchTerm = '%' . $q . '%';
+
+    if ($isAdmin) {
+        // Admin toont alle clients die matchen met zoekopdracht
+        $stmt = $conn->prepare("
+            SELECT client.id, naam, woonplaats, geboortedatum 
+            FROM client 
+            WHERE deleted = 0 
+              AND (naam LIKE ? OR woonplaats LIKE ? OR geboortedatum LIKE ?);
+        ");
+        $stmt->bind_param("sss", $searchTerm, $searchTerm, $searchTerm);
+    } else {
+        // Medewerker toont alleen zijn gekoppelde clients die matchen met zoekopdracht
+        $stmt = $conn->prepare("
+            SELECT client.id, naam, woonplaats, geboortedatum 
+            FROM client 
+            INNER JOIN verzorgerregel ON client.id = verzorgerregel.clientid 
+            WHERE deleted = 0 
+              AND verzorgerregel.medewerkerid = ? 
+              AND (naam LIKE ? OR woonplaats LIKE ? OR geboortedatum LIKE ?);
+        ");
+        $stmt->bind_param("isss", $medewerkerId, $searchTerm, $searchTerm, $searchTerm);
+    }
+
+    $stmt->execute();
+    $items = $stmt->get_result()->fetch_all();
 }
 ?>
 
