@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>Bent u gelovig?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input class="radio" type="radio" value="1" name="gelovig" <?= (isset($antwoorden['gelovig']) && $antwoorden['gelovig'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="gelovig" <?= PatroonModel::isRadioChecked($antwoorden['gelovig'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                             <div class="checkfield">
                                                 <div class="question">
@@ -96,12 +96,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                                 <div class="question">
                                                     <div class="observe"><input type="checkbox" <?= PatroonModel::isChecked($antwoorden['geloof_welk'], 5) ?> name="geloof6">
                                                         <p>Anders, namelijk:</p>
-                                                    </div><textarea rows="1" cols="25" type="text" name="geloof_anders"><?= isset($antwoorden['geloof_anders']) ? $antwoorden['geloof_anders'] : '' ?></textarea>
+                                                    </div><textarea rows="1" cols="25" type="text" name="geloof_anders"><?= isset($antwoorden['geloof_anders']) ? htmlspecialchars($antwoorden['geloof_anders']) : '' ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="gelovig" <?= (!isset($antwoorden['gelovig']) || $antwoorden['gelovig'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gelovig" <?= PatroonModel::isRadioChecked($antwoorden['gelovig'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -110,11 +110,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>- Heeft u behoefte aan religieuze activiteiten?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="behoefte_religieuze_activiteit" <?= (isset($antwoorden['behoefte_religieuze_activiteit']) && $antwoorden['behoefte_religieuze_activiteit'] =='1') ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="behoefte_religieuze_activiteit" <?= PatroonModel::isRadioChecked($antwoorden['behoefte_religieuze_activiteit'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="behoefte_religieuze_activiteit" <?= (!isset($antwoorden['behoefte_religieuze_activiteit']) || $antwoorden['behoefte_religieuze_activiteit'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="behoefte_religieuze_activiteit" <?= PatroonModel::isRadioChecked($antwoorden['behoefte_religieuze_activiteit'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -123,45 +123,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>- Zijn er gebruiken ten aanzien van uw geloofsovertuiging waar rekening mee gehouden moet worden?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input class="radio" type="radio" value="1" name="gebruiken_tav_geloofsovertuiging" <?= (isset($antwoorden['gebruiken_tav_geloofsovertuiging']) && $antwoorden['gebruiken_tav_geloofsovertuiging'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="gebruiken_tav_geloofsovertuiging" <?= PatroonModel::isRadioChecked($antwoorden['gebruiken_tav_geloofsovertuiging'] ?? null, 1) ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="welke?" name="gebruiken_tav_geloofsovertuiging_welke"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_welke']) ? $antwoorden['gebruiken_tav_geloofsovertuiging_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="welke?" name="gebruiken_tav_geloofsovertuiging_welke"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_welke']) ? htmlspecialchars($antwoorden['gebruiken_tav_geloofsovertuiging_welke']) : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="gebruiken_tav_geloofsovertuiging" <?= (!isset($antwoorden['gebruiken_tav_geloofsovertuiging']) || $antwoorden['gebruiken_tav_geloofsovertuiging'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gebruiken_tav_geloofsovertuiging" <?= PatroonModel::isRadioChecked($antwoorden['gebruiken_tav_geloofsovertuiging'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Ja, wanneer?</p><textarea rows="1" cols="25" type="text" name="gebruiken_tav_geloofsovertuiging_wanneer"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_wanneer']) ? $antwoorden['gebruiken_tav_geloofsovertuiging_wanneer'] : '' ?></textarea>
+                                    <p>Ja, wanneer?</p><textarea rows="1" cols="25" type="text" name="gebruiken_tav_geloofsovertuiging_wanneer"><?= isset($antwoorden['gebruiken_tav_geloofsovertuiging_wanneer']) ? htmlspecialchars($antwoorden['gebruiken_tav_geloofsovertuiging_wanneer']) : '' ?></textarea>
                                 </div>
                                 <div class="question">
                                     <p>Komen uw waarden en normen overeen met maatschappelijke waarden en normen?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="overeenkomst_waarden_normen" <?= (isset($antwoorden['overeenkomst_waarden_normen']) && $antwoorden['overeenkomst_waarden_normen'] == '1') ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="overeenkomst_waarden_normen" <?= PatroonModel::isRadioChecked($antwoorden['overeenkomst_waarden_normen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="overeenkomst_waarden_normen" <?= (!isset($antwoorden['overeenkomst_waarden_normen']) || $antwoorden['overeenkomst_waarden_normen'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="overeenkomst_waarden_normen" <?= PatroonModel::isRadioChecked($antwoorden['overeenkomst_waarden_normen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="question">
-                                    <p>Wat is uw ethische achtergrond?</p><textarea rows="1" cols="25" type="text" name="etnische_achtergrond"><?= isset($antwoorden['etnische_achtergrond']) ? $antwoorden['etnische_achtergrond'] : '' ?></textarea>
+                                    <p>Wat is uw ethische achtergrond?</p><textarea rows="1" cols="25" type="text" name="etnische_achtergrond"><?= isset($antwoorden['etnische_achtergrond']) ? htmlspecialchars($antwoorden['etnische_achtergrond']) : '' ?></textarea>
                                 </div>
                                 <div class="question">
                                     <p>- Zijn er gebruiken met betrekking tot uw ethische achtergrond waar rekening mee gehouden moet worden?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input class="radio" type="radio" value="1" name="gebruiken_mbt_etnische_achtergrond" <?= (isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) && $antwoorden['gebruiken_mbt_etnische_achtergrond'] =='1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="gebruiken_mbt_etnische_achtergrond" <?= PatroonModel::isRadioChecked($antwoorden['gebruiken_mbt_etnische_achtergrond'] ?? null, 1) ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="welke?" name="gebruiken_mbt_etnische_achtergrond_welke"><?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond_welke']) ? $antwoorden['gebruiken_mbt_etnische_achtergrond_welke'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="welke?" name="gebruiken_mbt_etnische_achtergrond_welke"><?= isset($antwoorden['gebruiken_mbt_etnische_achtergrond_welke']) ? htmlspecialchars($antwoorden['gebruiken_mbt_etnische_achtergrond_welke']) : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="gebruiken_mbt_etnische_achtergrond" <?= (!isset($antwoorden['gebruiken_mbt_etnische_achtergrond']) || $antwoorden['gebruiken_mbt_etnische_achtergrond'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gebruiken_mbt_etnische_achtergrond" <?= PatroonModel::isRadioChecked($antwoorden['gebruiken_mbt_etnische_achtergrond'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>

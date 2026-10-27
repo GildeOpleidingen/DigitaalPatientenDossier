@@ -60,15 +60,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>Hoe is uw eetlust nu?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="0" name="eetlust" <?= $antwoorden['eetlust'] == 0 ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="eetlust" <?= PatroonModel::isRadioChecked($antwoorden['eetlust'] ?? null, 0) ?>>
                                             <label>Normaal</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="1" name="eetlust" <?= $antwoorden['eetlust'] == 1 ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="eetlust" <?= PatroonModel::isRadioChecked($antwoorden['eetlust'] ?? null, 1) ?>>
                                             <label>Slecht</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="2" name="eetlust" <?= $antwoorden['eetlust'] == 2 ? "checked" : ""  ?>>
+                                            <input type="radio" value="2" name="eetlust" <?= PatroonModel::isRadioChecked($antwoorden['eetlust'] ?? null, 2) ?>>
                                             <label>Overmatig</label>
                                         </p>
                                     </div>
@@ -77,13 +77,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>- Heeft u een dieet?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input class="radio" type="radio" value="1" name="dieet" <?= $antwoorden['dieet'] == 1 ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="dieet" <?= PatroonModel::isRadioChecked($antwoorden['dieet'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" class="checkfield" type="text" name="dieet_welk"
-                                                placeholder="en wel?"><?= isset($antwoorden['dieet_welk']) ? $antwoorden['dieet_welk'] : '' ?></textarea>
+                                                placeholder="en wel?"><?= isset($antwoorden['dieet_welk']) ? htmlspecialchars($antwoorden['dieet_welk']) : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="dieet" <?= $antwoorden['dieet'] == 0 ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="dieet" <?= PatroonModel::isRadioChecked($antwoorden['dieet'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -92,11 +92,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>- Is uw gewicht de laatste tijd veranderd?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="gewicht_verandert" <?= $antwoorden['gewicht_verandert'] == 1 ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="gewicht_verandert" <?= PatroonModel::isRadioChecked($antwoorden['gewicht_verandert'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="gewicht_verandert" <?= $antwoorden['gewicht_verandert'] == 0 ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gewicht_verandert" <?= PatroonModel::isRadioChecked($antwoorden['gewicht_verandert'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -105,11 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>Heeft u moeite met slikken?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="moeilijk_slikken" <?= $antwoorden['moeilijk_slikken'] == 1 ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="moeilijk_slikken" <?= PatroonModel::isRadioChecked($antwoorden['moeilijk_slikken'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="moeilijk_slikken" <?= $antwoorden['moeilijk_slikken'] == 0 ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="moeilijk_slikken" <?= PatroonModel::isRadioChecked($antwoorden['moeilijk_slikken'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -118,11 +118,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>Heeft u gebitsproblemen?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="gebitsproblemen" <?= $antwoorden['gebitsproblemen'] == 1 ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="gebitsproblemen" <?= PatroonModel::isRadioChecked($antwoorden['gebitsproblemen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="gebitsproblemen" <?= $antwoorden['gebitsproblemen'] == 0 ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gebitsproblemen" <?= PatroonModel::isRadioChecked($antwoorden['gebitsproblemen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -131,11 +131,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>- Heeft u een gebitsprothese?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="gebitsprothese" <?= $antwoorden['gebitsprothese'] == 1 ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="gebitsprothese" <?= PatroonModel::isRadioChecked($antwoorden['gebitsprothese'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="gebitsprothese" <?= $antwoorden['gebitsprothese'] == 0 ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gebitsprothese" <?= PatroonModel::isRadioChecked($antwoorden['gebitsprothese'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -144,11 +144,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>Heeft u huidproblemen?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="huidproblemen" <?= $antwoorden['huidproblemen'] == 1 ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="huidproblemen" <?= PatroonModel::isRadioChecked($antwoorden['huidproblemen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="huidproblemen" <?= $antwoorden['huidproblemen'] == 0 ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="huidproblemen" <?= PatroonModel::isRadioChecked($antwoorden['huidproblemen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -157,15 +157,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>Heeft u het koud of warm?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="0" name="gevoel" <?= $antwoorden['gevoel'] == 0 ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gevoel" <?= PatroonModel::isRadioChecked($antwoorden['gevoel'] ?? null, 0) ?>>
                                             <label>Normaal</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="1" name="gevoel" <?= $antwoorden['gevoel'] == 1 ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="gevoel" <?= PatroonModel::isRadioChecked($antwoorden['gevoel'] ?? null, 1) ?>>
                                             <label>Koud</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="2" name="gevoel" <?= $antwoorden['gevoel'] == 2 ? "checked" : "" ?>>
+                                            <input type="radio" value="2" name="gevoel" <?= PatroonModel::isRadioChecked($antwoorden['gevoel'] ?? null, 2) ?>>
                                             <label>Warm</label>
                                         </p>
                                     </div>

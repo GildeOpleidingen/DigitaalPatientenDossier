@@ -64,12 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>Is er in de afgelopen periode verandering in de de duur van uw slaap gekomen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input class="radio" type="radio" value="1" name="verandering_inslaaptijd" <?= (isset($antwoorden['verandering_inslaaptijd']) && $antwoorden['verandering_inslaaptijd'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="verandering_inslaaptijd" <?= PatroonModel::isRadioChecked($antwoorden['verandering_inslaaptijd'] ?? null, 1) ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="verandering_inslaaptijd_blijktuit"><?= isset($antwoorden['verandering_inslaaptijd_blijktuit']) ? $antwoorden['verandering_inslaaptijd_blijktuit'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="verandering_inslaaptijd_blijktuit"><?= isset($antwoorden['verandering_inslaaptijd_blijktuit']) ? htmlspecialchars($antwoorden['verandering_inslaaptijd_blijktuit']) : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="verandering_inslaaptijd" <?= (!isset($antwoorden['verandering_inslaaptijd']) || $antwoorden['verandering_inslaaptijd'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="verandering_inslaaptijd" <?= PatroonModel::isRadioChecked($antwoorden['verandering_inslaaptijd'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -78,12 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>- Is er verandering ontstaan in de kwaliteit van uw slaap (in- en/of doorslaapprobleem)?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input class="radio" type="radio" value="1" name="verandering_kwaliteit_slapen" <?= (isset($antwoorden['verandering_kwaliteit_slapen']) && $antwoorden['verandering_kwaliteit_slapen'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="verandering_kwaliteit_slapen" <?= PatroonModel::isRadioChecked($antwoorden['verandering_kwaliteit_slapen'] ?? null, 1) ?>>
                                             <label>Ja</label>
-                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="verandering_kwaliteit_slapen_blijktuit"><?= isset($antwoorden['verandering_kwaliteit_slapen_blijktuit']) ? $antwoorden['verandering_kwaliteit_slapen_blijktuit'] : '' ?></textarea>
+                                            <textarea rows="1" cols="25" class="checkfield" type="text" placeholder="en wel?" name="verandering_kwaliteit_slapen_blijktuit"><?= isset($antwoorden['verandering_kwaliteit_slapen_blijktuit']) ? htmlspecialchars($antwoorden['verandering_kwaliteit_slapen_blijktuit']) : '' ?></textarea>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="verandering_kwaliteit_slapen" <?= (!isset($antwoorden['verandering_kwaliteit_slapen']) || $antwoorden['verandering_kwaliteit_slapen'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="verandering_kwaliteit_slapen" <?= PatroonModel::isRadioChecked($antwoorden['verandering_kwaliteit_slapen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>- Doet u iets om (in) te kunnen slapen?</p>
                                     <div class="checkboxes">
                                         <div class="question-answer">
-                                            <input class="radio" type="radio" value="1" name="gebruik_inslaapmiddel" <?= (isset($antwoorden['gebruik_inslaapmiddel']) && $antwoorden['gebruik_inslaapmiddel'] == '1') ? "checked" : "" ?>>
+                                            <input class="radio" type="radio" value="1" name="gebruik_inslaapmiddel" <?= PatroonModel::isRadioChecked($antwoorden['gebruik_inslaapmiddel'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                             <div class="checkfield">
                                                 <div class="question">
@@ -124,24 +124,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                             </div>
                                         </div>
                                         <p>
-                                            <input type="radio" value="0" name="gebruik_inslaapmiddel" <?= (!isset($antwoorden['gebruik_inslaapmiddel']) || $antwoorden['gebruik_inslaapmiddel'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gebruik_inslaapmiddel" <?= PatroonModel::isRadioChecked($antwoorden['gebruik_inslaapmiddel'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="question">
                                     <p>- Hoe lang slaapt u nomaal?</p>
-                                    <p><input type="number" step=0.5 min="0" max="24" value="<?= isset($antwoorden['slaapduur']) ? $antwoorden['slaapduur'] : '' ?>" name="slaapduur"> uur</p>
+                                    <p><input type="number" step=0.5 min="0" max="24" value="<?= isset($antwoorden['slaapduur']) ? htmlspecialchars((string)$antwoorden['slaapduur']) : '' ?>" name="slaapduur"> uur</p>
                                 </div>
                                 <div class="question">
                                     <p>- Voelt u zich uitgerust als u wakker wordt?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="uitgerust_wakker" <?= (isset($antwoorden['uitgerust_wakker']) && $antwoorden['uitgerust_wakker'] == '1') ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="uitgerust_wakker" <?= PatroonModel::isRadioChecked($antwoorden['uitgerust_wakker'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="uitgerust_wakker" <?= (!isset($antwoorden['uitgerust_wakker']) || $antwoorden['uitgerust_wakker'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="uitgerust_wakker" <?= PatroonModel::isRadioChecked($antwoorden['uitgerust_wakker'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -150,11 +150,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>Heeft u last van dromen, nachtmerries?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="dromen_nachtmerries" <?= (isset($antwoorden['dromen_nachtmerries']) && $antwoorden['dromen_nachtmerries'] == '1') ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="dromen_nachtmerries" <?= PatroonModel::isRadioChecked($antwoorden['dromen_nachtmerries'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="dromen_nachtmerries" <?= (!isset($antwoorden['dromen_nachtmerries']) || $antwoorden['dromen_nachtmerries'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="dromen_nachtmerries" <?= PatroonModel::isRadioChecked($antwoorden['dromen_nachtmerries'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -163,11 +163,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>- Neemt u rustperioden overdag?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="rustperiodes_overdag" <?= (isset($antwoorden['rustperiodes_overdag']) && $antwoorden['rustperiodes_overdag'] == '1') ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="rustperiodes_overdag" <?= PatroonModel::isRadioChecked($antwoorden['rustperiodes_overdag'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="rustperiodes_overdag" <?= (!isset($antwoorden['rustperiodes_overdag']) || $antwoorden['rustperiodes_overdag'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="rustperiodes_overdag" <?= PatroonModel::isRadioChecked($antwoorden['rustperiodes_overdag'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -176,11 +176,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
                                     <p>- Kunt u zich gemakkelijk ontspannen?</p>
                                     <div class="checkboxes">
                                         <p>
-                                            <input type="radio" value="1" name="gemakkelijk_ontspannen" <?= (isset($antwoorden['gemakkelijk_ontspannen']) && $antwoorden['gemakkelijk_ontspannen'] == '1') ? "checked" : "" ?>>
+                                            <input type="radio" value="1" name="gemakkelijk_ontspannen" <?= PatroonModel::isRadioChecked($antwoorden['gemakkelijk_ontspannen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
-                                            <input type="radio" value="0" name="gemakkelijk_ontspannen" <?= (!isset($antwoorden['gemakkelijk_ontspannen']) || $antwoorden['gemakkelijk_ontspannen'] == '0') ? "checked" : "" ?>>
+                                            <input type="radio" value="0" name="gemakkelijk_ontspannen" <?= PatroonModel::isRadioChecked($antwoorden['gemakkelijk_ontspannen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
