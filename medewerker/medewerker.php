@@ -3,19 +3,24 @@ session_start();
 require_once('../includes/auth.php');
 include '../database/DatabaseConnection.php';
 
+$conn = DatabaseConnection::getConn();
+
 if (!isset($_GET['q'])) {
-    $items = DatabaseConnection::getConn()
-        ->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol FROM medewerker;")
-        ->fetch_all(MYSQLI_ASSOC);
-} else {
-    $q = $_GET['q'];
-    $items = DatabaseConnection::getConn()
+    $items = $conn
         ->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol 
                  FROM medewerker 
-                 WHERE naam LIKE '%$q%' 
+                 WHERE (isDeleted = 0 OR isDeleted IS NULL);")
+        ->fetch_all(MYSQLI_ASSOC);
+} else {
+    $q = $conn->real_escape_string(trim($_GET['q']));
+    $items = $conn
+        ->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol 
+                 FROM medewerker 
+                 WHERE (isDeleted = 0 OR isDeleted IS NULL)
+                 AND (naam LIKE '%$q%' 
                  OR klas LIKE '%$q%' 
                  OR email LIKE '%$q%' 
-                 OR telefoonnummer LIKE '%$q%';")
+                 OR telefoonnummer LIKE '%$q%');")
         ->fetch_all(MYSQLI_ASSOC);
 }
 ?>
@@ -42,6 +47,22 @@ if (!isset($_GET['q'])) {
         <div class="content">
             <div class="mt-4 mb-3 p-3">
 
+                <?php if (!empty($_SESSION['success'])): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?= htmlspecialchars($_SESSION['success']); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php unset($_SESSION['success']); ?>
+                <?php endif; ?>
+
+                <?php if (!empty($_SESSION['error'])): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <?= htmlspecialchars($_SESSION['error']); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
+
                 <?php
                 if (isset($_GET['q'])) {
                     echo "
@@ -52,7 +73,7 @@ if (!isset($_GET['q'])) {
                 ?>
 
                 <!-- NIEUWE KNOP -->
-                <a href="../medewerker/register/register.php"
+                <a href="medewerker_toevoegen.php"
                     class="btn btn-primary mb-3">
                     <i class="fa fa-plus"></i> Medewerker toevoegen
                 </a>
@@ -74,12 +95,16 @@ if (!isset($_GET['q'])) {
                         <th>Klas</th>
                         <th>E-mail</th>
                         <th>Telefoonnummer</th>
+                        <?php if (Auth::isAdmin()): ?>
+                            <th>Acties</th>
+                        <?php endif; ?>
                     </tr>
 
                     <?php
                     if (count($items) == 0) {
+                        $colspan = Auth::isAdmin() ? 5 : 4;
                         echo "<tr>
-                            <td colspan='4' class='text-center'>
+                            <td colspan='{$colspan}' class='text-center'>
                                 Geen resultaten gevonden.
                             </td>
                           </tr>";
@@ -93,12 +118,32 @@ if (!isset($_GET['q'])) {
                         echo "<tr>";
                         echo "<td class='row1'>
                             <a href='overzicht/overzicht.php?id={$row['id']}'>
-                                {$row['naam']}
+                                " . htmlspecialchars($row['naam']) . "
                             </a>
                           </td>";
-                        echo "<td class='row1'>{$row['klas']}</td>";
-                        echo "<td class='row1'>{$row['email']}</td>";
-                        echo "<td class='row1'>{$row['telefoonnummer']}</td>";
+                        echo "<td class='row1'>" . htmlspecialchars($row['klas']) . "</td>";
+                        echo "<td class='row1'>" . htmlspecialchars($row['email'] ?? '') . "</td>";
+                        echo "<td class='row1'>" . htmlspecialchars($row['telefoonnummer'] ?? '') . "</td>";
+
+                        if (Auth::isAdmin()) {
+                            echo "<td class='row1'>";
+                            echo "<a href='medewerker_bewerken.php?id={$row['id']}' 
+                                     class='btn btn-warning btn-sm me-1'>
+                                     <i class='fa fa-pencil'></i> Bewerken
+                                  </a>";
+                            if ((int)$row['id'] !== (int)$_SESSION['loggedin_id']) {
+                                $safeName = htmlspecialchars(addslashes($row['naam']), ENT_QUOTES);
+                                echo "<a href='medewerker_verwijderen.php?id={$row['id']}' 
+                                         class='btn btn-danger btn-sm' 
+                                         onclick=\"return confirm('Weet je zeker dat je medewerker \\'{$safeName}\\' wilt verwijderen?');\">
+                                         <i class='fa fa-trash'></i> Verwijder
+                                      </a>";
+                            } else {
+                                echo "<span class='badge bg-secondary'>Huidig account</span>";
+                            }
+                            echo "</td>";
+                        }
+
                         echo "</tr>";
                     }
                     ?>
