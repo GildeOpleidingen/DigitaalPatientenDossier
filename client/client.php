@@ -84,13 +84,15 @@ if (!isset($_GET['q'])) {
     <div class="main">
         <div class="content">
             <div class="mt-4 mb-3 p-3">
-                <p class="card-text">
-                    <?php
-                    if (isset($_GET['q'])) {
-                        echo "<a href='client.php' class='text-decoration-none text-white fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Terug naar overzicht</a>";
-                    }
-                    ?>
-                    <button onclick="window.location.href='client_toevoegen.php'">Client Toevoegen</button>
+                <?php if (isset($_GET['q'])): ?>
+                    <a href="client.php" class="text-decoration-none text-white fw-bold d-block mb-3">
+                        <i class="fa-xs fa-solid fa-arrow-left"></i> Terug naar overzicht
+                    </a>
+                <?php endif; ?>
+
+                <a href="client_toevoegen.php" class="btn btn-primary mb-3">
+                    <i class="fa fa-plus me-1"></i> Cliënt toevoegen
+                </a>
                 <form action="" method="GET">
                     <div class="input-group mb-3">
                         <input type="text" name="q" class="form-control" placeholder="Zoeken...">
