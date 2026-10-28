@@ -14,7 +14,7 @@ if (!isset($_GET['q'])) {
         $items = $conn->prepare("
         SELECT client.id, naam, woonplaats, geboortedatum
         FROM client
-        WHERE deleted = 0;
+        WHERE (is_deleted = 0 OR is_deleted IS NULL);
     ");
     } else {
         // mederwerker toont alleen zijn clients
@@ -22,7 +22,7 @@ if (!isset($_GET['q'])) {
         SELECT client.id, naam, woonplaats, geboortedatum
         FROM client
         LEFT JOIN verzorgerregel ON client.id = verzorgerregel.clientid
-        WHERE deleted = 0 AND verzorgerregel.medewerkerid = ?;
+        WHERE (is_deleted = 0 OR is_deleted IS NULL) AND verzorgerregel.medewerkerid = ?;
     ");
         $items->bind_param("i", $medewerkerId);
     }
@@ -31,11 +31,33 @@ if (!isset($_GET['q'])) {
     $items = $items->get_result()->fetch_all();
 
 } else {
-    $q = $conn->real_escape_string($_GET['q']); // extra veiligheid tegen SQL-injectie
-    $items = $conn->query("SELECT id, naam, woonplaats, geboortedatum 
-                           FROM client 
-                           WHERE deleted = 0 
-                           AND (naam LIKE '%$q%' OR woonplaats LIKE '%$q%' OR geboortedatum LIKE '%$q%');")->fetch_all();
+    $q = trim($_GET['q']);
+    $searchTerm = '%' . $q . '%';
+
+    if ($isAdmin) {
+        // Admin toont alle clients die matchen met zoekopdracht
+        $stmt = $conn->prepare("
+            SELECT client.id, naam, woonplaats, geboortedatum 
+            FROM client 
+            WHERE (is_deleted = 0 OR is_deleted IS NULL) 
+              AND (naam LIKE ? OR woonplaats LIKE ? OR geboortedatum LIKE ?);
+        ");
+        $stmt->bind_param("sss", $searchTerm, $searchTerm, $searchTerm);
+    } else {
+        // Medewerker toont alleen zijn gekoppelde clients die matchen met zoekopdracht
+        $stmt = $conn->prepare("
+            SELECT client.id, naam, woonplaats, geboortedatum 
+            FROM client 
+            INNER JOIN verzorgerregel ON client.id = verzorgerregel.clientid 
+            WHERE (is_deleted = 0 OR is_deleted IS NULL) 
+              AND verzorgerregel.medewerkerid = ? 
+              AND (naam LIKE ? OR woonplaats LIKE ? OR geboortedatum LIKE ?);
+        ");
+        $stmt->bind_param("isss", $medewerkerId, $searchTerm, $searchTerm, $searchTerm);
+    }
+
+    $stmt->execute();
+    $items = $stmt->get_result()->fetch_all();
 }
 ?>
 
@@ -62,13 +84,15 @@ if (!isset($_GET['q'])) {
     <div class="main">
         <div class="content">
             <div class="mt-4 mb-3 p-3">
-                <p class="card-text">
-                    <?php
-                    if (isset($_GET['q'])) {
-                        echo "<a href='client.php' class='text-decoration-none text-white fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Terug naar overzicht</a>";
-                    }
-                    ?>
-                    <button onclick="window.location.href='client_toevoegen.php'">Client Toevoegen</button>
+                <?php if (isset($_GET['q'])): ?>
+                    <a href="client.php" class="text-decoration-none text-white fw-bold d-block mb-3">
+                        <i class="fa-xs fa-solid fa-arrow-left"></i> Terug naar overzicht
+                    </a>
+                <?php endif; ?>
+
+                <a href="client_toevoegen.php" class="btn btn-primary mb-3">
+                    <i class="fa fa-plus me-1"></i> Cliënt toevoegen
+                </a>
                 <form action="" method="GET">
                     <div class="input-group mb-3">
                         <input type="text" name="q" class="form-control" placeholder="Zoeken...">

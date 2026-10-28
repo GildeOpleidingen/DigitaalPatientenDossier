@@ -8,49 +8,6 @@ class Main
      * @param int $id
      * @return array|null
      */
-    public function findById(int $id): ?array
-    {
-        return MedewerkerModel::findById($id);
-    }
-
-    /**
-     * @param string $email
-     * @return array|null
-     */
-    public function findByEmail(string $email): ?array
-    {
-        return MedewerkerModel::findByEmail($email);
-    }
-
-    /**
-     * @param string $email
-     * @param string $wachtwoord
-     * @return array|null
-     */
-    public function authenticate(string $email, string $wachtwoord): ?array
-    {
-        return MedewerkerModel::authenticate($email, $wachtwoord);
-    }
-
-    /**
-     * @param int $id
-     * @param string $name
-     * @param string $class
-     * @param string|null $photo
-     * @param string $email
-     * @param string $phoneNumber
-     * @param string $password
-     * @return bool
-     */
-    public function update(int $id, string $name, string $class, ?string $photo, string $email, string $phoneNumber, string $password): bool
-    {
-        return MedewerkerModel::update($id, $name, $class, $photo, $email, $phoneNumber, $password);
-    }
-
-    /**
-     * @param int $id
-     * @return array|null
-     */
     public function getMedewerkerById(int $id): ?array
     {
         return MedewerkerModel::findById($id);

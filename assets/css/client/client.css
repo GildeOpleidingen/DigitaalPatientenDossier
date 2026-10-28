@@ -24,13 +24,21 @@ body {
     padding-top: 100px;
 }
 
-select{
+select:not(.form-select){
     width: 70px;
     height: 30px;
     border: 2px solid #00365E;
     border-radius: 3px;
     color: #00365E;
-    border: 2px solid #00365E;
+}
+
+.form-select {
+    height: 38px !important;
+    min-height: 38px !important;
+    line-height: 1.5 !important;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem !important;
+    vertical-align: middle !important;
+    font-family: "Inter Tight", sans-serif !important;
 }
 
 .overzicht{

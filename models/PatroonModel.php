@@ -434,11 +434,11 @@ class PatroonModel
             $val = $data[$column] ?? null;
 
             if ($type === 'i') {
-                $cleanedValue = ($val === '' || $val === null) ? 0 : (int)$val;
+                $cleanedValue = ($val === '' || $val === null) ? null : (int)$val;
             } elseif ($type === 'd') {
-                $cleanedValue = ($val === '' || $val === null) ? 0.0 : (float)$val;
+                $cleanedValue = ($val === '' || $val === null) ? null : (float)$val;
             } else {
-                $cleanedValue = ($val === null) ? '' : trim((string)$val);
+                $cleanedValue = ($val === null) ? null : trim((string)$val);
             }
 
             $columns[] = $column;
@@ -542,7 +542,7 @@ class PatroonModel
         $defaults = [];
         if ($metadata) {
             foreach ($metadata as $col => $type) {
-                $defaults[$col] = ($col === 'observatie') ? "00000000000000000000" : "";
+                $defaults[$col] = ($col === 'observatie') ? "00000000000000000000" : null;
             }
         }
         return $defaults;
@@ -661,5 +661,18 @@ class PatroonModel
     public static function isChecked(?string $bitstring, int $index): string
     {
         return (isset($bitstring[$index]) && $bitstring[$index] === '1') ? 'checked' : '';
+    }
+
+    /**
+     * @param mixed $value
+     * @param int|string $expected
+     * @return string
+     */
+    public static function isRadioChecked(mixed $value, int|string $expected): string
+    {
+        if ($value === null || $value === '') {
+            return '';
+        }
+        return ((string)$value === (string)$expected) ? 'checked' : '';
     }
 }

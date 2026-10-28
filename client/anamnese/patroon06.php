@@ -62,12 +62,12 @@ function e($v)
                                     <div class="checkboxes">
                                         <p>
                                             <input type="radio" value="1" name="moeilijk_horen"
-                                                <?= isset($antwoorden['moeilijk_horen']) && $antwoorden['moeilijk_horen'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['moeilijk_horen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
                                             <input type="radio" value="0" name="moeilijk_horen"
-                                                <?= isset($antwoorden['moeilijk_horen']) && $antwoorden['moeilijk_horen'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['moeilijk_horen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -79,14 +79,14 @@ function e($v)
                                     <div class="checkboxes">
                                         <div class="question-answer">
                                             <input class="radio" type="radio" value="1" name="hoort_stemmen"
-                                                <?= isset($antwoorden['hoort_stemmen']) && $antwoorden['hoort_stemmen'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['hoort_stemmen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" class="checkfield" name="hoort_stemmen_wat"
                                                 placeholder="wat hoort u?"><?= e($antwoorden['hoort_stemmen_wat'] ?? "") ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="hoort_stemmen"
-                                                <?= isset($antwoorden['hoort_stemmen']) && $antwoorden['hoort_stemmen'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['hoort_stemmen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -97,12 +97,12 @@ function e($v)
                                     <div class="checkboxes">
                                         <p>
                                             <input type="radio" value="1" name="moeite_met_zien"
-                                                <?= isset($antwoorden['moeite_met_zien']) && $antwoorden['moeite_met_zien'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['moeite_met_zien'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
                                             <input type="radio" value="0" name="moeite_met_zien"
-                                                <?= isset($antwoorden['moeite_met_zien']) && $antwoorden['moeite_met_zien'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['moeite_met_zien'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -114,14 +114,14 @@ function e($v)
                                     <div class="checkboxes">
                                         <div class="question-answer">
                                             <input class="radio" type="radio" value="1" name="ziet_dingen"
-                                                <?= isset($antwoorden['ziet_dingen']) && $antwoorden['ziet_dingen'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['ziet_dingen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" class="checkfield" name="ziet_dingen_wat"
                                                 placeholder="wat ziet u?"><?= e($antwoorden['ziet_dingen_wat'] ?? "") ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="ziet_dingen"
-                                                <?= isset($antwoorden['ziet_dingen']) && $antwoorden['ziet_dingen'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['ziet_dingen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -133,7 +133,7 @@ function e($v)
                                     <div class="checkboxes">
                                         <div class="question-answer">
                                             <input class="radio" type="radio" value="1" name="ruikt_iets_onverklaarbaar"
-                                                <?= isset($antwoorden['ruikt_iets_onverklaarbaar']) && $antwoorden['ruikt_iets_onverklaarbaar'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['ruikt_iets_onverklaarbaar'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" class="checkfield"
                                                 name="ruikt_iets_onverklaarbaar_wat"
@@ -141,7 +141,7 @@ function e($v)
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="ruikt_iets_onverklaarbaar"
-                                                <?= isset($antwoorden['ruikt_iets_onverklaarbaar']) && $antwoorden['ruikt_iets_onverklaarbaar'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['ruikt_iets_onverklaarbaar'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -152,12 +152,12 @@ function e($v)
                                     <div class="checkboxes">
                                         <p>
                                             <input type="radio" value="1" name="verandering_denken"
-                                                <?= isset($antwoorden['verandering_denken']) && $antwoorden['verandering_denken'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['verandering_denken'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
                                             <input type="radio" value="0" name="verandering_denken"
-                                                <?= isset($antwoorden['verandering_denken']) && $antwoorden['verandering_denken'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['verandering_denken'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -168,12 +168,12 @@ function e($v)
                                     <div class="checkboxes">
                                         <p>
                                             <input type="radio" value="1" name="moeite_spreken"
-                                                <?= isset($antwoorden['moeite_spreken']) && $antwoorden['moeite_spreken'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['moeite_spreken'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
                                             <input type="radio" value="0" name="moeite_spreken"
-                                                <?= isset($antwoorden['moeite_spreken']) && $antwoorden['moeite_spreken'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['moeite_spreken'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -191,12 +191,12 @@ function e($v)
                                     <div class="checkboxes">
                                         <p>
                                             <input type="radio" value="1" name="verandering_concentratievermogen"
-                                                <?= isset($antwoorden['verandering_concentratievermogen']) && $antwoorden['verandering_concentratievermogen'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['verandering_concentratievermogen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
                                             <input type="radio" value="0" name="verandering_concentratievermogen"
-                                                <?= isset($antwoorden['verandering_concentratievermogen']) && $antwoorden['verandering_concentratievermogen'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['verandering_concentratievermogen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -207,12 +207,12 @@ function e($v)
                                     <div class="checkboxes">
                                         <p>
                                             <input type="radio" value="1" name="moeilijker_beslissen"
-                                                <?= isset($antwoorden['moeilijker_beslissen']) && $antwoorden['moeilijker_beslissen'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['moeilijker_beslissen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
                                             <input type="radio" value="0" name="moeilijker_beslissen"
-                                                <?= isset($antwoorden['moeilijker_beslissen']) && $antwoorden['moeilijker_beslissen'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['moeilijker_beslissen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -223,12 +223,12 @@ function e($v)
                                     <div class="checkboxes">
                                         <p>
                                             <input type="radio" value="1" name="verandering_geheugen"
-                                                <?= isset($antwoorden['verandering_geheugen']) && $antwoorden['verandering_geheugen'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['verandering_geheugen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
                                             <input type="radio" value="0" name="verandering_geheugen"
-                                                <?= isset($antwoorden['verandering_geheugen']) && $antwoorden['verandering_geheugen'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['verandering_geheugen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -239,12 +239,12 @@ function e($v)
                                     <div class="checkboxes">
                                         <p>
                                             <input type="radio" value="1" name="verandering_orientatie"
-                                                <?= isset($antwoorden['verandering_orientatie']) && $antwoorden['verandering_orientatie'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['verandering_orientatie'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
                                             <input type="radio" value="0" name="verandering_orientatie"
-                                                <?= isset($antwoorden['verandering_orientatie']) && $antwoorden['verandering_orientatie'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['verandering_orientatie'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -256,14 +256,14 @@ function e($v)
                                     <div class="checkboxes">
                                         <div class="question-answer">
                                             <input class="radio" type="radio" value="1" name="invloed_medicatie"
-                                                <?= isset($antwoorden['invloed_medicatie']) && $antwoorden['invloed_medicatie'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['invloed_medicatie'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                             <textarea rows="1" cols="25" class="checkfield" name="invloed_medicatie_welke"
                                                 placeholder="welke?"><?= e($antwoorden['invloed_medicatie_welke'] ?? "") ?></textarea>
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="invloed_medicatie"
-                                                <?= isset($antwoorden['invloed_medicatie']) && $antwoorden['invloed_medicatie'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['invloed_medicatie'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -274,7 +274,7 @@ function e($v)
                                     <div class="checkboxes">
                                         <div class="question-answer">
                                             <input class="radio" type="radio" value="1" name="gebruikt_middelen"
-                                                <?= isset($antwoorden['gebruikt_middelen']) && $antwoorden['gebruikt_middelen'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['gebruikt_middelen'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                             <div class="checkfield">
                                                 <div class="question">
@@ -320,7 +320,7 @@ function e($v)
                                         </div>
                                         <p>
                                             <input type="radio" value="0" name="gebruikt_middelen"
-                                                <?= isset($antwoorden['gebruikt_middelen']) && $antwoorden['gebruikt_middelen'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['gebruikt_middelen'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>
@@ -331,12 +331,12 @@ function e($v)
                                     <div class="checkboxes">
                                         <p>
                                             <input type="radio" value="1" name="pijnklachten"
-                                                <?= isset($antwoorden['pijnklachten']) && $antwoorden['pijnklachten'] == 1 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['pijnklachten'] ?? null, 1) ?>>
                                             <label>Ja</label>
                                         </p>
                                         <p>
                                             <input type="radio" value="0" name="pijnklachten"
-                                                <?= isset($antwoorden['pijnklachten']) && $antwoorden['pijnklachten'] == 0 ? "checked" : "" ?>>
+                                                <?= PatroonModel::isRadioChecked($antwoorden['pijnklachten'] ?? null, 0) ?>>
                                             <label>Nee</label>
                                         </p>
                                     </div>

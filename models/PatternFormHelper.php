@@ -86,6 +86,7 @@ class PatternFormHelper
         $alertBox = $alert ? "<div class='alert alert-danger mb-3'>$alert</div>" : "";
         $prevBtn  = $prevUrl ? "<button name='navbutton' class='btn btn-secondary' type='submit' value='prev'>Vorige</button>" : "";
         $nextBtn  = $nextUrl ? "<button name='navbutton' class='btn btn-secondary' type='submit' value='next'>Volgende</button>" : "";
+        $clientId = htmlspecialchars((string)($_SESSION['clientId'] ?? ''));
 
         return "<!DOCTYPE html>
 <html lang='nl'>
@@ -96,7 +97,7 @@ class PatternFormHelper
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'>
 </head>
 <body style='overflow: hidden;'>
-    <form method='POST'>
+    <form method='POST' data-client-id='$clientId'>
         <div class='main'>
             $header
             $sidebar
@@ -114,6 +115,7 @@ class PatternFormHelper
             </div>
         </div>
     </form>
+    <script src='../../assets/js/form-autosave.js'></script>
 </body>
 </html>";
     }
