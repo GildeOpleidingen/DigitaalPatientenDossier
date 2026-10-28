@@ -20,7 +20,7 @@ if (!Auth::isAdmin()) {
     exit;
 }
 
-$medewerkers = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE (is_deleted = 0 OR is_deleted IS NULL)");
+$medewerkers = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE is_deleted = 0");
 $medewerkers->execute();
 $medewerkers = $medewerkers->get_result()->fetch_all(MYSQLI_ASSOC);
 

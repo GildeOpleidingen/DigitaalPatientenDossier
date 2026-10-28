@@ -19,7 +19,7 @@ if ($id <= 0) {
 $medewerkerModel = new MedewerkerModel();
 $targetMedewerker = MedewerkerModel::findById($id);
 
-if (!$targetMedewerker || (int)($targetMedewerker['is_deleted'] ?? $targetMedewerker['isDeleted'] ?? 0) === 1) {
+if (!$targetMedewerker || (int)($targetMedewerker['is_deleted'] ?? 0) === 1) {
     $_SESSION['error'] = "Medewerker niet gevonden of is reeds verwijderd.";
     header("Location: /medewerker/medewerker.php");
     exit;

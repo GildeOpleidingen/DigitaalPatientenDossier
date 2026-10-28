@@ -48,7 +48,6 @@ class MedewerkerModel
         if (isset($data['grens_assistent'])) $this->grens_assistent = (string)$data['grens_assistent'];
         if (isset($data['rol'])) $this->rol = (string)$data['rol'];
         if (isset($data['is_deleted'])) $this->is_deleted = (int)$data['is_deleted'];
-        elseif (isset($data['isDeleted'])) $this->is_deleted = (int)$data['isDeleted'];
 
         return $this;
     }
@@ -98,10 +97,10 @@ class MedewerkerModel
             // Uniciteitscontrole op e-mailadres
             try {
                 if ($isUpdate && $this->id !== null) {
-                    $stmt = $this->db->prepare("SELECT id FROM `medewerker` WHERE `email` = ? AND `id` != ? AND (is_deleted = 0 OR is_deleted IS NULL) LIMIT 1;");
+                    $stmt = $this->db->prepare("SELECT id FROM `medewerker` WHERE `email` = ? AND `id` != ? AND is_deleted = 0 LIMIT 1;");
                     $stmt->bind_param("si", $this->email, $this->id);
                 } else {
-                    $stmt = $this->db->prepare("SELECT id FROM `medewerker` WHERE `email` = ? AND (is_deleted = 0 OR is_deleted IS NULL) LIMIT 1;");
+                    $stmt = $this->db->prepare("SELECT id FROM `medewerker` WHERE `email` = ? AND is_deleted = 0 LIMIT 1;");
                     $stmt->bind_param("s", $this->email);
                 }
                 if ($stmt) {
@@ -391,7 +390,7 @@ class MedewerkerModel
     {
         $user = self::findByEmail($email);
 
-        $isDeleted = (int)($user['is_deleted'] ?? $user['isDeleted'] ?? 0);
+        $isDeleted = (int)($user['is_deleted'] ?? 0);
         if ($user && $isDeleted === 0 && !empty($user['wachtwoord']) && password_verify($wachtwoord, $user['wachtwoord'])) {
             return $user;
         }
