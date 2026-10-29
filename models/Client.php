@@ -401,7 +401,7 @@ trait Client
             SELECT m.* 
             FROM medewerker m
             JOIN verzorgerregel vr ON m.id = vr.medewerkerid
-            WHERE vr.clientid = ? AND (m.is_deleted = 0 OR m.is_deleted IS NULL)
+            WHERE vr.clientid = ? AND m.is_deleted = 0
             ");
 
             $result->bind_param("i", $id);

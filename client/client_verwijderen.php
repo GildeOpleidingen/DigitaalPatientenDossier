@@ -12,7 +12,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $conn = DatabaseConnection::getConn();
 
     // Soft delete: markeer als verwijderd
-    $stmt = $conn->prepare("UPDATE client SET deleted = 1 WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE client SET is_deleted = 1 WHERE id = ?");
     $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {

@@ -14,7 +14,7 @@ if (!isset($_GET['q'])) {
         $items = $conn->prepare("
         SELECT client.id, naam, woonplaats, geboortedatum
         FROM client
-        WHERE (is_deleted = 0 OR is_deleted IS NULL);
+        WHERE is_deleted = 0;
     ");
     } else {
         // mederwerker toont alleen zijn clients
@@ -22,7 +22,7 @@ if (!isset($_GET['q'])) {
         SELECT client.id, naam, woonplaats, geboortedatum
         FROM client
         LEFT JOIN verzorgerregel ON client.id = verzorgerregel.clientid
-        WHERE (is_deleted = 0 OR is_deleted IS NULL) AND verzorgerregel.medewerkerid = ?;
+        WHERE is_deleted = 0 AND verzorgerregel.medewerkerid = ?;
     ");
         $items->bind_param("i", $medewerkerId);
     }
@@ -39,7 +39,7 @@ if (!isset($_GET['q'])) {
         $stmt = $conn->prepare("
             SELECT client.id, naam, woonplaats, geboortedatum 
             FROM client 
-            WHERE (is_deleted = 0 OR is_deleted IS NULL) 
+            WHERE is_deleted = 0 
               AND (naam LIKE ? OR woonplaats LIKE ? OR geboortedatum LIKE ?);
         ");
         $stmt->bind_param("sss", $searchTerm, $searchTerm, $searchTerm);
@@ -49,7 +49,7 @@ if (!isset($_GET['q'])) {
             SELECT client.id, naam, woonplaats, geboortedatum 
             FROM client 
             INNER JOIN verzorgerregel ON client.id = verzorgerregel.clientid 
-            WHERE (is_deleted = 0 OR is_deleted IS NULL) 
+            WHERE is_deleted = 0 
               AND verzorgerregel.medewerkerid = ? 
               AND (naam LIKE ? OR woonplaats LIKE ? OR geboortedatum LIKE ?);
         ");

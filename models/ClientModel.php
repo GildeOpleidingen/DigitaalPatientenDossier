@@ -59,7 +59,6 @@ class ClientModel
         if (isset($data['burgelijkestaat'])) $this->burgelijkestaat = (string)$data['burgelijkestaat'];
         if (array_key_exists('foto', $data)) $this->foto = $data['foto'];
         if (isset($data['is_deleted'])) $this->is_deleted = (int)$data['is_deleted'];
-        elseif (isset($data['deleted'])) $this->is_deleted = (int)$data['deleted'];
 
         return $this;
     }
@@ -568,7 +567,7 @@ class ClientModel
                 SELECT m.*
                 FROM medewerker m
                 JOIN verzorgerregel vr ON m.id = vr.medewerkerid
-                WHERE vr.clientid = ? AND (m.is_deleted = 0 OR m.is_deleted IS NULL)
+                WHERE vr.clientid = ? AND m.is_deleted = 0
             ",
             default => null,
         };
