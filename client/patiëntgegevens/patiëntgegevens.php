@@ -37,6 +37,7 @@ foreach ($clientRelations as $relation) {
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Overzicht van <?= $client['naam'] ?></title>
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
 </head>
 
 <body>
@@ -94,12 +95,13 @@ foreach ($clientRelations as $relation) {
                         <a href="../verzorgers/verzorgers.php?id=<?= $_GET['id'] ?>" style="text-decoration: underline dotted;">
                             <strong class="text-primary">Verzorgers:</strong>
                         </a>
-                        <?php $i = 0 ?>
-                        <?php foreach ($verzorgers as $key => $verzorger) { ?>
-                            <?php $verzorgerNamen[$i] = $verzorger['naam']; ?>
-                            <?php $i++ ?>
-                        <?php } ?>
-                        <p><?php echo join(", ", $verzorgerNamen); ?></p>
+                        <?php 
+                        $verzorgerNamen = [];
+                        foreach ($verzorgers as $key => $verzorger) {
+                            $verzorgerNamen[] = $verzorger['naam'];
+                        } 
+                        ?>
+                        <p><?php echo !empty($verzorgerNamen) ? join(", ", $verzorgerNamen) : 'Geen verzorgers gekoppeld'; ?></p>
                     </div>
                 </div>
                 </p>

@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('Europe/Amsterdam');
+
 spl_autoload_register(function ($class_naam) {
     $sanitized = str_replace('\\', '/', $class_naam);
 

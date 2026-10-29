@@ -8,18 +8,19 @@ $Main = new Main();
 $ClientModel = new ClientModel();
 
 // Controleer of de gebruiker is ingelogd
-$loggedInId = $_SESSION['loggedin_id'] ?? null;
+$loggedInId = Auth::id() ?? $_SESSION['loggedin_id'] ?? null;
 if (!$loggedInId) {
-    header("Location: ../index.php");
+    header("Location: /index.php");
     exit;
 }
 
-// Controleer of er een client is geselecteerd
-$clientId = $_SESSION['clientId'] ?? null;
+// Controleer of er een client is geselecteerd (via GET of SESSION)
+$clientId = isset($_GET['id']) ? (int)$_GET['id'] : ($_SESSION['clientId'] ?? null);
 if (!$clientId) {
     header("Location: ../client.php");
     exit;
 }
+$_SESSION['clientId'] = $clientId;
 
 // Haal clientgegevens op
 $client = $_SESSION['client'] = $ClientModel->getClientById($clientId);
@@ -31,16 +32,26 @@ if (!$client) {
 // Controleer of er een verzorgerregel bestaat voor deze client en medewerker
 $conn = DatabaseConnection::getConn();
 $stmt = $conn->prepare(
-    "SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?"
+    "SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ? LIMIT 1"
 );
 $stmt->bind_param("ii", $clientId, $loggedInId);
 $stmt->execute();
 $result = $stmt->get_result();
-if (!$result) {
-    header("Location: ../client.php");
-    exit;
+$row = $result ? $result->fetch_assoc() : null;
+
+if ($row) {
+    $verzorgerregelId = (int)$row['id'];
+} else {
+    // Koppel medewerker automatisch als verzorger als die nog niet bestaat
+    $insertStmt = $conn->prepare(
+        "INSERT INTO verzorgerregel (clientid, medewerkerid) VALUES (?, ?)"
+    );
+    $insertStmt->bind_param("ii", $clientId, $loggedInId);
+    $insertStmt->execute();
+    $verzorgerregelId = (int)$insertStmt->insert_id;
+    $insertStmt->close();
 }
-$verzorgerregelId = $result->fetch_assoc()['id'];
+$stmt->close();
 // Maak een nieuwe lege rapportage aan
 $tijd = date('Y-m-d H:i:s');
 $rapport = "";

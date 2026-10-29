@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once '../../database/DatabaseConnection.php';
+include_once '../../models/autoload.php';
 
 $rapportageId = $_GET['id'];
 
@@ -42,6 +43,7 @@ if (isset($_POST['aanpassen'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../assets/css/client/rapportage.css">
     <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
     <title>Rapportage</title>
 </head>
 
@@ -65,14 +67,14 @@ if (isset($_POST['aanpassen'])) {
                         <?php } ?>
                         <input type="hidden" value="<?= $rapportage['id'] ?>" name="rapportageId">
                         <div class="rapportage flex-grow-1">
-                            <div class="display-5 text-primary mb-3">Rapportage aanpassen van <?= $rapportage['datumtijd'] ?> (<?= $rapportage['id'] ?>)</div>
+                            <div class="display-5 text-primary mb-3">Rapportage aanpassen van <?= $rapportage['datumtijd'] ?></div>
                             <div class="mb-3">
                                 <textarea name="inhoud" id="rapportage" rows="16" placeholder="Rapportage" class="form-control" required><?= $rapportage['inhoud'] ?></textarea>
                             </div>
                         </div>
                     </div>
                     <button type="submit" name="aanpassen" class="btn btn-secondary w-100 mt-3">Aanpassen</button>
-                     <a href="rapportage.php" class="btn btn-secondary mt-3">Terug</a>
+                    <a href="rapportage.php" class="btn btn-secondary mt-3">Terug</a>
                 </form>
             </div>
         </div>

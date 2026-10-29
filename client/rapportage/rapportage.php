@@ -8,7 +8,7 @@ $ClientModel = new ClientModel();
 $clientId = $_SESSION['clientId'];
 
 $client = $_SESSION['client'] = $ClientModel->getClientById($clientId);
-$rapportages = DatabaseConnection::getConn()->prepare("SELECT r.*, vr.id AS verzorgerregel_id FROM rapport r LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id WHERE vr.clientid = ?;");
+$rapportages = DatabaseConnection::getConn()->prepare("SELECT r.*, vr.id AS verzorgerregel_id FROM rapport r LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id WHERE vr.clientid = ? ORDER BY r.datumtijd DESC;");
 $rapportages->bind_param("i", $clientId);
 $rapportages->execute();
 $rapportages = $rapportages->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -30,6 +30,7 @@ include '../../includes/n-header.php';
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Rapportage van <?= $client['naam'] ?></title>
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
 </head>
 
 <body>
@@ -45,8 +46,20 @@ include '../../includes/n-header.php';
                 <h1>Rapportages</h1>
                 <a href='rapportage-nieuw.php?id=<?= $clientId ?>' class='btn btn-primary'>Nieuwe rapportage</a>
                 <?php
+                $maanden = [
+                    1 => 'januari', 2 => 'februari', 3 => 'maart', 4 => 'april',
+                    5 => 'mei', 6 => 'juni', 7 => 'juli', 8 => 'augustus',
+                    9 => 'september', 10 => 'oktober', 11 => 'november', 12 => 'december'
+                ];
+
                 foreach ($rapportages as $rapport) {
-                    echo "<h1>Rapportage van " . $rapport['datumtijd'] . " (" . $rapport['id'] . ")</h1>";
+                    $dt = new DateTime($rapport['datumtijd']);
+                    $dag = $dt->format('d');
+                    $maand = $maanden[(int)$dt->format('n')];
+                    $jaar = $dt->format('Y');
+                    $tijd = $dt->format('H:i');
+
+                    echo "<h1>Rapportage van $dag $maand $jaar om $tijd</h1>";
                     echo "<a href='rapportage-aanpassen.php?id=" . $rapport['id'] . "'>";
                     echo "<button class='btn btn-secondary'>Aanpassen</button>";
                     echo "</a>";
