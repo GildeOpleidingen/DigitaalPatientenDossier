@@ -31,6 +31,7 @@ if (!$verzorger || (int)($verzorger['is_deleted'] ?? 0) === 1) {
     <link rel="Stylesheet" href="../../assets/css/medewerker/overzicht.css">
     <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css">
     <title>Overzicht van <?= $verzorger['naam'] ?></title>
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
 </head>
 
 <body>
