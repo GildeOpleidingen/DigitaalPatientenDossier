@@ -116,11 +116,11 @@ class MedewerkerModel
             }
         }
 
-        // Telefoonnummer validatie: exact 9 cijfers zodat het geen echt nummer kan zijn
+        // Telefoonnummer validatie: maximaal 9 cijfers (geen minimum)
         if (!empty($this->telefoonnummer)) {
             $digits = preg_replace('/\D/', '', $this->telefoonnummer);
-            if (strlen($digits) !== 9) {
-                $errors['telefoonnummer'] = "Het telefoonnummer moet exact 9 cijfers bevatten (zodat het geen echt nummer kan zijn).";
+            if (strlen($digits) > 9) {
+                $errors['telefoonnummer'] = "Het telefoonnummer mag maximaal 9 cijfers bevatten.";
             }
         }
 
