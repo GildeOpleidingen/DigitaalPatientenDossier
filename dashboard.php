@@ -9,7 +9,7 @@ if (!isset($_SESSION['loggedin_id'])) {
     $isAdmin = $_SESSION['isAdmin'];
 }
 if($isAdmin === false){
-    $result = DatabaseConnection::getConn()->prepare("SELECT clientid FROM verzorgerregel WHERE medewerkerid = ?");
+    $result = DatabaseConnection::getConn()->prepare("SELECT clientid FROM verzorgerregel WHERE medewerkerid = ? AND is_deleted = 0");
     $result->bind_param("i", $medewerkerId);
     $result->execute();
     $links = $result->get_result()->fetch_all();
@@ -73,16 +73,21 @@ if($isAdmin === false){
                 <?php
                         }
                         
-                       $client = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM client WHERE id=$link[0]")->fetch_array();
-
                         if ($isAdmin === true) {
-                            $admin = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM medewerker WHERE id=$link[0] AND is_deleted = 0")->fetch_array();
+                            $adminId = (int)$link[0];
+                            $admin = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM medewerker WHERE id = $adminId AND is_deleted = 0")->fetch_array();
                             if (!$admin) {
+                                continue;
+                            }
+                        } else {
+                            $clientId = (int)$link[0];
+                            $client = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM client WHERE id = $clientId AND is_deleted = 0")->fetch_array();
+                            if (!$client) {
                                 continue;
                             }
                         }
 
-                        if ($client[2] == null && $isAdmin === false) {
+                        if ($isAdmin === false && $client[2] == null) {
                             
                             echo '<div class="col-lg-3 col-md-6 col-sm-12 mb-3">
                                 <a href="client/overzicht/overzicht.php?id='.$client[0].'" class="card border-0 rounded-0 shadow-sm text-decoration-none">
