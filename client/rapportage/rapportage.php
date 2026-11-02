@@ -14,9 +14,8 @@ $rapportages->execute();
 $rapportages = $rapportages->get_result()->fetch_all(MYSQLI_ASSOC);
 if ($client == null) {
     header("Location: ../client.php");
+    exit;
 }
-
-include '../../includes/n-header.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +33,9 @@ include '../../includes/n-header.php';
 </head>
 
 <body>
+    <?php
+    include_once '../../includes/n-header.php';
+    ?>
     <div class="main">
 
         <?php

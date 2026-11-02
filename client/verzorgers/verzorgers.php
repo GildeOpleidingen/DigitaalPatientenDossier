@@ -24,17 +24,15 @@ $medewerkers = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker 
 $medewerkers->execute();
 $medewerkers = $medewerkers->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM verzorgerregel WHERE clientid = ?");
+$stmt = DatabaseConnection::getConn()->prepare("SELECT medewerkerid FROM verzorgerregel WHERE clientid = ? AND is_deleted = 0");
 $stmt->bind_param("i", $clientId);
 $stmt->execute();
-$stmt = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$actieveVerzorgers = array_column($stmt->get_result()->fetch_all(MYSQLI_ASSOC), 'medewerkerid');
 
-// Loop door alle medewerkers heen, als de medewerker al in de database staat, zet dan de checked variabele op true
+// Vink alleen actief gekoppelde verzorgers aan
 foreach ($medewerkers as $key => $medewerker) {
-    foreach ($stmt as $relation) {
-        if ($medewerker['id'] == $relation['medewerkerid']) {
-            $medewerkers[$key]['checked'] = true;
-        }
+    if (in_array($medewerker['id'], $actieveVerzorgers)) {
+        $medewerkers[$key]['checked'] = true;
     }
 }
 ?>
@@ -50,6 +48,7 @@ foreach ($medewerkers as $key => $medewerker) {
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Verzorgers van <?= $client['naam'] ?></title>
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
 </head>
 
 <body>
@@ -67,6 +66,12 @@ foreach ($medewerkers as $key => $medewerker) {
                         <?php echo $_SESSION['succes']; ?>
                     </div>
                 <?php unset($_SESSION['succes']);
+                } ?>
+                <?php if (isset($_SESSION['error'])) { ?>
+                    <div class="mb-3 alert alert-danger" role="alert">
+                        <?php echo $_SESSION['error']; ?>
+                    </div>
+                <?php unset($_SESSION['error']);
                 } ?>
                 <a href='../patiëntgegevens/patiëntgegevens.php?id=<?= $clientId ?>' class='mb-3 text-decoration-none text-primary fw-bold'><i class='fa-xs fa-solid fa-arrow-left'></i> Teruggaan</a>
                 <h3>Verzorgers van <?= $client['naam'] ?></h3>

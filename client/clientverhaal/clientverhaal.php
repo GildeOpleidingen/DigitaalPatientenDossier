@@ -73,12 +73,13 @@ if (isset($_POST['clientverhaal-opslaan'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="Stylesheet" href="../../assets/css/client/clientverhaal.css">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
 
     <title>Cliëntverhaal invullen</title>
 </head>
-<?php include '../../includes/n-header.php'; ?>
 
 <body>
+    <?php include '../../includes/n-header.php'; ?>
     <div class="main">
         <?php include '../../includes/n-sidebar.php'; ?>
 

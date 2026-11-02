@@ -137,9 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="text" id="woonplaats" name="woonplaats" class="form-control" value="<?= htmlspecialchars($_POST['woonplaats'] ?? '') ?>" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="telefoonnummer" class="form-label fw-bold small">Telefoonnummer (exact 9 cijfers) <span class="text-danger">*</span></label>
-                            <input type="tel" id="telefoonnummer" name="telefoonnummer" class="form-control" maxlength="9" pattern="\d{9}" placeholder="Bijv. 123456789" value="<?= htmlspecialchars($_POST['telefoonnummer'] ?? '') ?>" required>
-                            <div class="form-text">Voer exact 9 cijfers in zodat dit geen echt telefoonnummer kan zijn.</div>
+                            <label for="telefoonnummer" class="form-label fw-bold small">Telefoonnummer (max 9 cijfers) <span class="text-danger">*</span></label>
+                            <input type="tel" id="telefoonnummer" name="telefoonnummer" class="form-control" maxlength="9" pattern="\d{1,9}" placeholder="Bijv. 123456789" value="<?= htmlspecialchars($_POST['telefoonnummer'] ?? '') ?>" required>
                         </div>
                         <div class="col-md-6">
                             <label for="email" class="form-label fw-bold small">E-mailadres <span class="text-danger">*</span></label>

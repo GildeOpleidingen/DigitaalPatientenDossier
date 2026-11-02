@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['navbutton'])) {
     <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
 </head>
 
 <body style="overflow: hidden;">
