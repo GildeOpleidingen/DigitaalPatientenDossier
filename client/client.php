@@ -1,8 +1,11 @@
 <?php
-session_start();
-$medewerkerId = $_SESSION['loggedin_id'];
-$isAdmin = $_SESSION['isAdmin'];
-include '../database/DatabaseConnection.php';
+include_once '../database/DatabaseConnection.php';
+include_once '../models/autoload.php';
+
+Auth::startSession();
+Auth::requireLogin();
+$medewerkerId = Auth::id();
+$isAdmin = Auth::isAdmin();
 
 $conn = DatabaseConnection::getConn();
 
@@ -22,7 +25,7 @@ if (!isset($_GET['q'])) {
         SELECT client.id, naam, woonplaats, geboortedatum
         FROM client
         LEFT JOIN verzorgerregel ON client.id = verzorgerregel.clientid
-        WHERE is_deleted = 0 AND verzorgerregel.medewerkerid = ?;
+        WHERE client.is_deleted = 0 AND verzorgerregel.medewerkerid = ? AND verzorgerregel.is_deleted = 0;
     ");
         $items->bind_param("i", $medewerkerId);
     }
@@ -49,8 +52,9 @@ if (!isset($_GET['q'])) {
             SELECT client.id, naam, woonplaats, geboortedatum 
             FROM client 
             INNER JOIN verzorgerregel ON client.id = verzorgerregel.clientid 
-            WHERE is_deleted = 0 
+            WHERE client.is_deleted = 0 
               AND verzorgerregel.medewerkerid = ? 
+              AND verzorgerregel.is_deleted = 0
               AND (naam LIKE ? OR woonplaats LIKE ? OR geboortedatum LIKE ?);
         ");
         $stmt->bind_param("isss", $medewerkerId, $searchTerm, $searchTerm, $searchTerm);

@@ -1,55 +1,50 @@
 <?php
-session_start();
 include_once '../../../database/DatabaseConnection.php';
+include_once '../../../models/autoload.php';
 
-if (!isset($_SESSION['loggedin_id'])) {
-    return;
+Auth::startSession();
+Auth::requireAdmin();
+
+$clientId = isset($_POST['clientId']) ? (int)$_POST['clientId'] : 0;
+if ($clientId <= 0) {
+    header("Location: ../../client.php");
+    exit;
 }
 
-$id = $_SESSION['loggedin_id'];
-$clientId = $_POST['clientId'];
-
-if (!$clientId) {
-    header("Location: ../../verzorgers/verzorgers.php?id=$clientId");
-    return;
-}
-
-$verzorgers = $_POST['verzorgers'];
+$verzorgers = $_POST['verzorgers'] ?? [];
 $conn = DatabaseConnection::getConn();
 
-foreach ($verzorgers as $key => $value) {
-    if ($value == 'on') {
-        $stmt = $conn->prepare("INSERT IGNORE INTO verzorgerregel (clientid, medewerkerid) VALUES (?, ?)");
-        $stmt->bind_param("ii", $clientId, $key);
-        $stmt->execute();
-    } else {
-        $queries = [
-            // "DELETE FROM rapport WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?)",
-            // "DELETE FROM patroon01gezondheidsbeleving WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM patroon02voedingstofwisseling WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM patroon03uitscheiding WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM patroon04activiteiten WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM patroon05slaaprust WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM patroon06cognitiewaarneming WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM patroon07zelfbeleving WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM patroon08rollenrelatie WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM patroon09seksualiteitvoorplanting WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM patroon10stressverwerking WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM patroon11waardelevensovertuiging WHERE vragenlijstid IN (SELECT id FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM metingontlasting WHERE metingid IN (SELECT id FROM meting WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM metingurine WHERE metingid IN (SELECT id FROM meting WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))",
-            // "DELETE FROM vragenlijst WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?)",
-            // "DELETE FROM meting WHERE verzorgerregelid IN (SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?)",
-            "DELETE FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?"
-        ];
+// Prepared statements klaarzetten
+$stmtKoppel = $conn->prepare("
+    INSERT INTO verzorgerregel (clientid, medewerkerid, is_deleted)
+    VALUES (?, ?, 0)
+    ON DUPLICATE KEY UPDATE is_deleted = 0
+");
 
-        foreach ($queries as $query) {
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("ii", $clientId, $key);
-            $stmt->execute();
-        }
+$stmtOntkoppel = $conn->prepare("
+    UPDATE verzorgerregel 
+    SET is_deleted = 1 
+    WHERE clientid = ? AND medewerkerid = ?
+");
+
+// Loop door verzorgers: 'on' = koppelen, anders = ontkoppelen
+foreach ($verzorgers as $medewerkerId => $status) {
+    $medewerkerId = (int)$medewerkerId;
+    if ($medewerkerId <= 0) {
+        continue;
+    }
+
+    if ($status === 'on') {
+        $stmtKoppel->bind_param("ii", $clientId, $medewerkerId);
+        $stmtKoppel->execute();
+    } else {
+        $stmtOntkoppel->bind_param("ii", $clientId, $medewerkerId);
+        $stmtOntkoppel->execute();
     }
 }
+
+$stmtKoppel->close();
+$stmtOntkoppel->close();
 
 $_SESSION['succes'] = "Verzorgers zijn succesvol aangepast";
 header("Location: ../../verzorgers/verzorgers.php?id=$clientId");
