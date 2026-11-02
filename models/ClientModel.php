@@ -115,11 +115,11 @@ class ClientModel
             $errors['geslacht'] = "Ongeldig geslacht geselecteerd.";
         }
 
-        // Telefoonnummer validatie: de gebruiker vereist specifiek 9 cijfers zodat het geen echt nummer kan zijn
+        // Telefoonnummer validatie: maximaal 9 cijfers
         if (!empty($this->telefoonnummer)) {
             $digits = preg_replace('/\D/', '', $this->telefoonnummer);
-            if (strlen($digits) !== 9) {
-                $errors['telefoonnummer'] = "Het telefoonnummer moet exact 9 cijfers bevatten.";
+            if (strlen($digits) > 9) {
+                $errors['telefoonnummer'] = "Het telefoonnummer mag maximaal 9 cijfers bevatten.";
             }
         }
 
@@ -512,19 +512,11 @@ class ClientModel
     public function checkIfCareRelationExists(int $clientId, int $employeeId): bool
     {
         try {
-            $exists = $this->queryExists("
-                SELECT id FROM verzorgerregel
-                WHERE clientid = ? AND medewerkerid = ?
+            return $this->execute("
+                INSERT INTO verzorgerregel (clientid, medewerkerid, is_deleted)
+                VALUES (?, ?, 0)
+                ON DUPLICATE KEY UPDATE is_deleted = 0
             ", "ii", $clientId, $employeeId);
-
-            if (!$exists) {
-                return $this->execute("
-                    INSERT INTO verzorgerregel (clientid, medewerkerid)
-                    VALUES (?, ?)
-                ", "ii", $clientId, $employeeId);
-            }
-
-            return true;
         } catch (Exception $e) {
             return false;
         }
@@ -537,7 +529,7 @@ class ClientModel
     public function getCareRelationsByClientId(int $id): array
     {
         return $this->queryAll("
-            SELECT * FROM verzorgerregel WHERE clientid = ?
+            SELECT * FROM verzorgerregel WHERE clientid = ? AND is_deleted = 0
         ", "i", $id);
     }
 
@@ -560,14 +552,14 @@ class ClientModel
     public function getPatientData(int $id, string $type): array
     {
         $sql = match ($type) {
-            'clientRelations'  => "SELECT * FROM verzorgerregel WHERE clientid = ?",
+            'clientRelations'  => "SELECT * FROM verzorgerregel WHERE clientid = ? AND is_deleted = 0",
             'contactPersonen'  => "SELECT * FROM relatie WHERE clientid = ?",
             'medischOverzicht' => "SELECT * FROM medischoverzicht WHERE clientid = ?",
             'verzorgersArr'    => "
                 SELECT m.*
                 FROM medewerker m
                 JOIN verzorgerregel vr ON m.id = vr.medewerkerid
-                WHERE vr.clientid = ? AND m.is_deleted = 0
+                WHERE vr.clientid = ? AND m.is_deleted = 0 AND vr.is_deleted = 0
             ",
             default => null,
         };

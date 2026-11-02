@@ -9,23 +9,13 @@ trait Client
     public function CheckIfVerzorgregelExists($clientId, $medewerkerId)
     {
         try {
-            $result = DatabaseConnection::getConn()->prepare("
-                        SELECT id
-                        FROM verzorgerregel
-                        WHERE clientid = ?
-                        AND medewerkerid = ?");
-            $result->bind_param("ii", $clientId, $medewerkerId);
-            $result->execute();
-
-            if ($result->num_rows == 0) {
-                $result->close();
-                $result = DatabaseConnection::getConn()->prepare("INSERT INTO verzorgerregel (clientid, medewerkerid) VALUES (?, ?)");
-                $result->bind_param("ii", $clientId, $medewerkerId);
-                $result->execute();
-                return true;
-            } else {
-                return true;
-            }
+            $stmt = DatabaseConnection::getConn()->prepare("
+                INSERT INTO verzorgerregel (clientid, medewerkerid, is_deleted)
+                VALUES (?, ?, 0)
+                ON DUPLICATE KEY UPDATE is_deleted = 0
+            ");
+            $stmt->bind_param("ii", $clientId, $medewerkerId);
+            return $stmt->execute();
         } catch (Exception $e) {
             return false;
         }
@@ -231,7 +221,7 @@ trait Client
         $result = DatabaseConnection::getConn()->prepare("
         SELECT *
         FROM verzorgerregel
-        WHERE clientid = ?
+        WHERE clientid = ? AND is_deleted = 0
         ");
 
         $result->bind_param("i", $id);
@@ -370,7 +360,7 @@ trait Client
             $result = DatabaseConnection::getConn()->prepare("
             SELECT * 
             FROM verzorgerregel 
-            WHERE clientid = ?
+            WHERE clientid = ? AND is_deleted = 0
             ");
 
             $result->bind_param("i", $id);
@@ -401,7 +391,7 @@ trait Client
             SELECT m.* 
             FROM medewerker m
             JOIN verzorgerregel vr ON m.id = vr.medewerkerid
-            WHERE vr.clientid = ? AND m.is_deleted = 0
+            WHERE vr.clientid = ? AND m.is_deleted = 0 AND vr.is_deleted = 0
             ");
 
             $result->bind_param("i", $id);
