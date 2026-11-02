@@ -29,5 +29,16 @@ DROP PROCEDURE IF EXISTS `sp_add_is_deleted_to_verzorgerregel`;
 
 -- -----------------------------------------------------------------------
 -- Telefoonnummer aanpassen naar maximaal 9 karakters
+-- Eerst bestaande langere nummers inkorten zodat MySQL niet struikelt over data-afkapping (#1265)
 -- -----------------------------------------------------------------------
+UPDATE `client` 
+SET `telefoonnummer` = LEFT(`telefoonnummer`, 9) 
+WHERE CHAR_LENGTH(`telefoonnummer`) > 9;
+
 ALTER TABLE `client` MODIFY COLUMN `telefoonnummer` VARCHAR(9) NULL;
+
+UPDATE `medewerker` 
+SET `telefoonnummer` = LEFT(`telefoonnummer`, 9) 
+WHERE CHAR_LENGTH(`telefoonnummer`) > 9;
+
+ALTER TABLE `medewerker` MODIFY COLUMN `telefoonnummer` VARCHAR(9) NULL;
