@@ -12,6 +12,16 @@ $headerUser = $headerUserStmt->get_result()->fetch_assoc();
 $headerUserStmt->close();
 ?>
 <style>
+    html {
+        scrollbar-gutter: stable;
+        background-color: #00365E;
+    }
+    body {
+        background-color: #00365E;
+    }
+    .navbar {
+        min-height: 66px;
+    }
 
     .profile-pic {
         display: inline-block;
@@ -45,7 +55,7 @@ $headerUserStmt->close();
   border-bottom: 0.3em solid;
 }
 </style>
-<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand" href="/dashboard.php">
