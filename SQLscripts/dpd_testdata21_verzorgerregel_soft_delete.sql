@@ -1,35 +1,18 @@
 -- =======================================================================
 -- DPD Migration Script 21: Add Soft-Delete to verzorgerregel & Update Telefoonnummer
--- (Idempotent & Safe for any MySQL / MariaDB version in phpMyAdmin)
+-- Geschikt voor directe invoer in phpMyAdmin en MySQL CLI
 -- =======================================================================
 
-DELIMITER $$
-
-DROP PROCEDURE IF EXISTS `sp_add_is_deleted_to_verzorgerregel`$$
-CREATE PROCEDURE `sp_add_is_deleted_to_verzorgerregel`()
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE TABLE_SCHEMA = DATABASE()
-          AND TABLE_NAME = 'verzorgerregel'
-          AND COLUMN_NAME = 'is_deleted'
-    ) THEN
-        ALTER TABLE `verzorgerregel` ADD COLUMN `is_deleted` TINYINT(1) NOT NULL DEFAULT 0;
-    ELSE
-        -- Ensure all existing records are 0 if NULL
-        UPDATE `verzorgerregel` SET `is_deleted` = 0 WHERE `is_deleted` IS NULL;
-        ALTER TABLE `verzorgerregel` MODIFY COLUMN `is_deleted` TINYINT(1) NOT NULL DEFAULT 0;
-    END IF;
-END$$
-
-DELIMITER ;
-
-CALL sp_add_is_deleted_to_verzorgerregel();
-DROP PROCEDURE IF EXISTS `sp_add_is_deleted_to_verzorgerregel`;
+-- -----------------------------------------------------------------------
+-- 1. Voeg 'is_deleted' toe aan verzorgerregel (soft delete van zorgverleners)
+-- MariaDB ondersteunt 'IF NOT EXISTS'. In standaard MySQL kan 'IF NOT EXISTS'
+-- worden weggelaten als de kolom nog niet bestaat.
+-- -----------------------------------------------------------------------
+ALTER TABLE `verzorgerregel` ADD COLUMN IF NOT EXISTS `is_deleted` TINYINT(1) NOT NULL DEFAULT 0;
 
 -- -----------------------------------------------------------------------
--- Telefoonnummer aanpassen naar maximaal 9 karakters
--- Eerst bestaande langere nummers inkorten zodat MySQL niet struikelt over data-afkapping (#1265)
+-- 2. Telefoonnummer aanpassen naar maximaal 9 karakters
+-- Bestaande langere nummers eerst inkorten om #1265 (Data truncated) te voorkomen
 -- -----------------------------------------------------------------------
 UPDATE `client` 
 SET `telefoonnummer` = LEFT(`telefoonnummer`, 9) 

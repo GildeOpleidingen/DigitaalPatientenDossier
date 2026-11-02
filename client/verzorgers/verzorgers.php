@@ -4,13 +4,20 @@ include_once '../../models/autoload.php';
 
 Auth::startSession();
 
-$Main = new Main();
+Auth::requireLogin();
 
-$clientId = $_SESSION['clientId'] ?? null;
-$client = $clientId ? $Main->getClientById($clientId) : null;
+$clientId = isset($_GET['id']) ? (int)$_GET['id'] : ($_SESSION['clientId'] ?? null);
+if (!$clientId) {
+    header("Location: ../client.php");
+    exit;
+}
+$_SESSION['clientId'] = (int)$clientId;
 
-if (!isset($clientId) || $client == null) {
-    header("Location: ../../index.php");
+$ClientModel = new ClientModel();
+$client = $ClientModel->getById($clientId);
+
+if (!$client) {
+    header("Location: ../client.php");
     exit;
 }
 
@@ -20,14 +27,45 @@ if (!Auth::isAdmin()) {
     exit;
 }
 
-$medewerkers = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE is_deleted = 0");
-$medewerkers->execute();
-$medewerkers = $medewerkers->get_result()->fetch_all(MYSQLI_ASSOC);
+// Medewerkers ophalen
+$medewerkers = [];
+try {
+    $medStmt = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE is_deleted = 0");
+    if ($medStmt) {
+        $medStmt->execute();
+        $medewerkers = $medStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $medStmt->close();
+    }
+} catch (Throwable $e) {
+    $medStmt = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker");
+    if ($medStmt) {
+        $medStmt->execute();
+        $medewerkers = $medStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $medStmt->close();
+    }
+}
 
-$stmt = DatabaseConnection::getConn()->prepare("SELECT medewerkerid FROM verzorgerregel WHERE clientid = ? AND is_deleted = 0");
-$stmt->bind_param("i", $clientId);
-$stmt->execute();
-$actieveVerzorgers = array_column($stmt->get_result()->fetch_all(MYSQLI_ASSOC), 'medewerkerid');
+// Actieve verzorgers ophalen (met fallback indien is_deleted nog niet aanwezig is)
+$actieveVerzorgers = [];
+try {
+    $stmt = DatabaseConnection::getConn()->prepare("SELECT medewerkerid FROM verzorgerregel WHERE clientid = ? AND is_deleted = 0");
+    if ($stmt) {
+        $stmt->bind_param("i", $clientId);
+        $stmt->execute();
+        $actieveVerzorgers = array_column($stmt->get_result()->fetch_all(MYSQLI_ASSOC), 'medewerkerid');
+        $stmt->close();
+    } else {
+        throw new Exception("Kolom is_deleted ontbreekt in verzorgerregel");
+    }
+} catch (Throwable $e) {
+    $stmt = DatabaseConnection::getConn()->prepare("SELECT medewerkerid FROM verzorgerregel WHERE clientid = ?");
+    if ($stmt) {
+        $stmt->bind_param("i", $clientId);
+        $stmt->execute();
+        $actieveVerzorgers = array_column($stmt->get_result()->fetch_all(MYSQLI_ASSOC), 'medewerkerid');
+        $stmt->close();
+    }
+}
 
 // Vink alleen actief gekoppelde verzorgers aan
 foreach ($medewerkers as $key => $medewerker) {
