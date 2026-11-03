@@ -1,6 +1,10 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['loggedin_id'])) {
-    header("Location: ../index.php");
+    header("Location: /index.php");
+    exit;
 }
 
 $headerLoggedInId = (int)$_SESSION['loggedin_id'];
@@ -83,7 +87,7 @@ $headerUserStmt->close();
                 // Gebruik absolute paden
                 if ($key == "dashboard") {
                     echo "<li class='nav-item'><a href='/dashboard.php' class='nav-link $active' id='$key'>" . ucfirst($value) . "</a></li>";
-                } else if ($key == "medewerker" && $_SESSION['rol'] != 'beheerder' ) {
+                } else if ($key == "medewerker" && ($_SESSION['rol'] ?? '') !== 'beheerder') {
 
                 } else {
                     echo "<li class='nav-item'><a href='/{$value}/{$key}.php' class='nav-link $active' id='$key'>" . ucfirst($value) . "</a></li>";

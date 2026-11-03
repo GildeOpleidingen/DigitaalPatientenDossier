@@ -9,9 +9,9 @@ $ClientModel = new ClientModel();
 
 $currentPage = basename($_SERVER['PHP_SELF'], ".php");
 
-// Op rapportage-aanpassen is $_GET['id'] het rapportage-ID, NIET het client-ID!
-if ($currentPage === 'rapportage-aanpassen') {
-    $clientId = $_SESSION['clientId'] ?? null;
+// Op rapportage-aanpassen en rapportage-nieuw gebruiken we het geverifieerde cliënt-ID
+if ($currentPage === 'rapportage-aanpassen' || $currentPage === 'rapportage-nieuw') {
+    $clientId = $clientId ?? ($_SESSION['clientId'] ?? null);
 } else {
     $clientId = isset($_GET['id']) ? (int)$_GET['id'] : ($_SESSION['clientId'] ?? null);
     if ($clientId) {

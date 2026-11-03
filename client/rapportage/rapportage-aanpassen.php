@@ -1,18 +1,22 @@
 <?php
-session_start();
 include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 
-$rapportageId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+Auth::startSession();
+Auth::requireLogin();
+
+// Haal rapportage-ID op (ondersteun zowel rapport_id als id parameter)
+$rapportageId = isset($_GET['rapport_id']) ? (int)$_GET['rapport_id'] : (isset($_GET['id']) ? (int)$_GET['id'] : 0);
 if ($rapportageId <= 0) {
     header("Location: ../client.php");
     exit;
 }
 
 $stmt = DatabaseConnection::getConn()->prepare("
-    SELECT r.*, vr.clientid 
+    SELECT r.*, vr.clientid, m.naam AS medewerker_naam 
     FROM rapport r 
     LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id 
+    LEFT JOIN medewerker m ON vr.medewerkerid = m.id 
     WHERE r.id = ?
 ");
 $stmt->bind_param("i", $rapportageId);
@@ -20,33 +24,58 @@ $stmt->execute();
 $rapportage = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
-if ($rapportage == null) {
+if (!$rapportage) {
     header("Location: ../client.php");
     exit;
 }
 
-// Zorg dat het echte client-ID in de sessie staat
-$clientId = !empty($rapportage['clientid']) ? (int)$rapportage['clientid'] : ($_SESSION['clientId'] ?? null);
-if ($clientId) {
-    $_SESSION['clientId'] = $clientId;
+// Bepaal het échte client-ID via de gekoppelde verzorgerregel
+$clientId = !empty($rapportage['clientid']) ? (int)$rapportage['clientid'] : (isset($_GET['id']) ? (int)$_GET['id'] : ($_SESSION['clientId'] ?? null));
+if (!$clientId) {
+    header("Location: ../client.php");
+    exit;
+}
+$_SESSION['clientId'] = $clientId;
+
+$ClientModel = new ClientModel();
+$client = $ClientModel->getById($clientId);
+if (!$client) {
+    $client = $ClientModel->getClientById($clientId);
 }
 
-if (isset($_POST['aanpassen'])) {
-    $rapportageInhoud = $_POST['inhoud'];
-    $rapportageId = $_POST['rapportageId'];
+$error = null;
 
-    $rapportageInhoud = nl2br($rapportageInhoud);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aanpassen'])) {
+    $rapportageInhoud = trim($_POST['inhoud'] ?? '');
+    $postRapportId = (int)($_POST['rapportageId'] ?? $rapportageId);
 
-    $tijd = date('Y-m-d H:i:s');
-    $stmt = DatabaseConnection::getConn()->prepare("UPDATE rapport SET inhoud = ?, datumtijd = ? WHERE id = ?");
-    $stmt->bind_param("ssi", $rapportageInhoud, $tijd, $rapportageId);
-    $stmt->execute();
-    $stmt->close();
+    if (empty($rapportageInhoud)) {
+        $error = "De rapportage mag niet leeg zijn.";
+    } else {
+        // Schoon eventuele oude <br /> tags op zodat platte tekst wordt opgeslagen
+        $schoneTekst = str_replace(['<br />', '<br>', '<br/>'], "\n", $rapportageInhoud);
+        $tijd = date('Y-m-d H:i:s');
 
-    $_SESSION['succes'] = 'Rapportage aangepast.';
-    header("Location: ./rapportage-aanpassen.php?id=$rapportageId");
-    exit();
+        $updateStmt = DatabaseConnection::getConn()->prepare("UPDATE rapport SET inhoud = ?, datumtijd = ? WHERE id = ?");
+        if ($updateStmt) {
+            $updateStmt->bind_param("ssi", $schoneTekst, $tijd, $postRapportId);
+            $updateStmt->execute();
+            $updateStmt->close();
+
+            $_SESSION['succes'] = 'Rapportage succesvol bijgewerkt.';
+            header("Location: rapportage.php?id=" . $clientId);
+            exit;
+        } else {
+            $error = "Databasefout bij het bijwerken van de rapportage.";
+        }
+    }
 }
+
+// Formateer datum van het rapport voor de titel
+$dt = new DateTime($rapportage['datumtijd']);
+$datumFormat = $dt->format('d-m-Y H:i');
+$auteur = !empty($rapportage['medewerker_naam']) ? htmlspecialchars($rapportage['medewerker_naam']) : 'Zorgverlener';
+$inhoudWaarde = str_replace(['<br />', '<br>', '<br/>'], "\n", $rapportage['inhoud']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,8 +85,11 @@ if (isset($_POST['aanpassen'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="Stylesheet" href="../../assets/css/client/rapportage.css">
     <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Rapportage aanpassen - <?= htmlspecialchars($client['naam'] ?? '') ?></title>
     <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
-    <title>Rapportage</title>
 </head>
 
 <body>
@@ -69,28 +101,38 @@ if (isset($_POST['aanpassen'])) {
         include_once '../../includes/n-sidebar.php';
         ?>
         <div class="content">
-            <div class="mt-4 mb-3 bg-white p-3 d-flex flex-column" style="height: 96%; overflow: auto;">
-                <form method="POST" class="needs-validation flex-grow-1 d-flex flex-column" novalidate>
-                    <div class="flex-grow-1 d-flex flex-column">
-                        <?php if (isset($_SESSION['succes'])) { ?>
-                            <div class="alert alert-success" role="alert">
-                                <?= $_SESSION['succes'] ?>
-                            </div>
-                            <?php unset($_SESSION['error']); ?>
-                        <?php } ?>
-                        <input type="hidden" value="<?= $rapportage['id'] ?>" name="rapportageId">
-                        <div class="rapportage flex-grow-1">
-                            <div class="display-5 text-primary mb-3">Rapportage aanpassen van <?= $rapportage['datumtijd'] ?></div>
-                            <div class="mb-3">
-                                <textarea name="inhoud" id="rapportage" rows="16" placeholder="Rapportage" class="form-control" required><?= $rapportage['inhoud'] ?></textarea>
-                            </div>
-                        </div>
+            <div class="mt-4 mb-3 bg-white p-4 rounded shadow-sm d-flex flex-column" style="height: 96%; overflow: auto;">
+                <div class="mb-3">
+                    <h1 class="h3 text-dark mb-1">Rapportage aanpassen</h1>
+                    <div class="text-muted small">
+                        Oorspronkelijk aangemaakt op <strong><?= $datumFormat ?></strong> door <strong><?= $auteur ?></strong>
                     </div>
-                    <button type="submit" name="aanpassen" class="btn btn-secondary w-100 mt-3">Aanpassen</button>
-                    <a href="rapportage.php?id=<?= $clientId ?>" class="btn btn-secondary mt-3">Terug</a>
+                </div>
+
+                <?php if ($error) { ?>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fa fa-exclamation-triangle me-2"></i><?= htmlspecialchars($error) ?>
+                    </div>
+                <?php } ?>
+
+                <form method="POST" class="needs-validation flex-grow-1 d-flex flex-column" novalidate>
+                    <input type="hidden" value="<?= (int)$rapportage['id'] ?>" name="rapportageId">
+                    
+                    <div class="mb-3 flex-grow-1 d-flex flex-column">
+                        <label for="rapportage" class="form-label fw-bold">Inhoud rapportage <span class="text-danger">*</span></label>
+                        <textarea name="inhoud" id="rapportage" rows="14" placeholder="Typ hier de rapportage..." class="form-control flex-grow-1" required><?= htmlspecialchars($inhoudWaarde) ?></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="submit" name="aanpassen" class="btn btn-primary px-4">
+                            <i class="fa fa-save me-1"></i>Aanpassingen opslaan
+                        </button>
+                        <a href="rapportage.php?id=<?= $clientId ?>" class="btn btn-secondary px-3">Terug naar overzicht</a>
+                    </div>
                 </form>
             </div>
         </div>
+    </div>
 </body>
 <script src="../../assets/vendor/jquery/jquery.min.js"></script>
 <script src="../../assets/js/validatie.js"></script>
