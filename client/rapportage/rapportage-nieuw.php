@@ -36,41 +36,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['opslaan'])) {
     if (empty($inhoud)) {
         $error = "De rapportage mag niet leeg zijn.";
     } else {
-        $conn = DatabaseConnection::getConn();
+        $pdo = DatabaseConnection::getPdo();
 
         // Zorg dat er een actieve verzorgerregel bestaat voor deze client en medewerker
-        $stmt = $conn->prepare("
+        $stmtKoppel = $pdo->prepare("
             INSERT INTO verzorgerregel (clientid, medewerkerid, is_deleted)
-            VALUES (?, ?, 0)
+            VALUES (:clientId, :medewerkerId, 0)
             ON DUPLICATE KEY UPDATE is_deleted = 0
         ");
-        if ($stmt) {
-            $stmt->bind_param("ii", $clientId, $loggedInId);
-            $stmt->execute();
-            $stmt->close();
-        }
+        $stmtKoppel->execute([
+            'clientId'     => $clientId,
+            'medewerkerId' => $loggedInId
+        ]);
 
-        $stmtId = $conn->prepare("SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ? ORDER BY id DESC LIMIT 1");
-        $stmtId->bind_param("ii", $clientId, $loggedInId);
-        $stmtId->execute();
-        $vrRow = $stmtId->get_result()->fetch_assoc();
-        $verzorgerregelId = $vrRow ? (int)$vrRow['id'] : 0;
-        $stmtId->close();
+        $stmtId = $pdo->prepare("
+            SELECT id 
+            FROM verzorgerregel 
+            WHERE clientid = :clientId AND medewerkerid = :medewerkerId 
+            ORDER BY id DESC 
+            LIMIT 1
+        ");
+        $stmtId->execute([
+            'clientId'     => $clientId,
+            'medewerkerId' => $loggedInId
+        ]);
+        $verzorgerregelId = (int)$stmtId->fetchColumn();
 
         if ($verzorgerregelId > 0) {
             $tijd = date('Y-m-d H:i:s');
-            $stmtRapport = $conn->prepare("INSERT INTO rapport (verzorgerregelid, datumtijd, inhoud) VALUES (?, ?, ?)");
-            if ($stmtRapport) {
-                $stmtRapport->bind_param("iss", $verzorgerregelId, $tijd, $inhoud);
-                $stmtRapport->execute();
-                $stmtRapport->close();
+            $stmtRapport = $pdo->prepare("
+                INSERT INTO rapport (verzorgerregelid, datumtijd, inhoud) 
+                VALUES (:verzorgerregelId, :datumtijd, :inhoud)
+            ");
+            $stmtRapport->execute([
+                'verzorgerregelId' => $verzorgerregelId,
+                'datumtijd'        => $tijd,
+                'inhoud'           => $inhoud
+            ]);
 
-                $_SESSION['succes'] = 'Nieuwe rapportage succesvol opgeslagen.';
-                header("Location: rapportage.php?id=" . $clientId);
-                exit;
-            } else {
-                $error = "Databasefout bij het opslaan van de rapportage.";
-            }
+            $_SESSION['succes'] = 'Nieuwe rapportage succesvol opgeslagen.';
+            header("Location: rapportage.php?id=" . $clientId);
+            exit;
         } else {
             $error = "Kon geen actieve zorgrelatie aanmaken.";
         }

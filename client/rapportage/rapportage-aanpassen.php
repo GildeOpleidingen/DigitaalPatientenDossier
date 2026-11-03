@@ -12,17 +12,19 @@ if ($rapportageId <= 0) {
     exit;
 }
 
-$stmt = DatabaseConnection::getConn()->prepare("
-    SELECT r.*, vr.clientid, m.naam AS medewerker_naam 
-    FROM rapport r 
-    LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id 
-    LEFT JOIN medewerker m ON vr.medewerkerid = m.id 
-    WHERE r.id = ?
+$pdo = DatabaseConnection::getPdo();
+$stmt = $pdo->prepare("
+    SELECT 
+        rapport.*,
+        verzorgerregel.clientid,
+        medewerker.naam AS medewerker_naam
+    FROM rapport
+    LEFT JOIN verzorgerregel ON rapport.verzorgerregelid = verzorgerregel.id
+    LEFT JOIN medewerker     ON verzorgerregel.medewerkerid = medewerker.id
+    WHERE rapport.id = :rapportId
 ");
-$stmt->bind_param("i", $rapportageId);
-$stmt->execute();
-$rapportage = $stmt->get_result()->fetch_assoc();
-$stmt->close();
+$stmt->execute(['rapportId' => $rapportageId]);
+$rapportage = $stmt->fetch();
 
 if (!$rapportage) {
     header("Location: ../client.php");
@@ -56,18 +58,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aanpassen'])) {
         $schoneTekst = str_replace(['<br />', '<br>', '<br/>'], "\n", $rapportageInhoud);
         $tijd = date('Y-m-d H:i:s');
 
-        $updateStmt = DatabaseConnection::getConn()->prepare("UPDATE rapport SET inhoud = ?, datumtijd = ? WHERE id = ?");
-        if ($updateStmt) {
-            $updateStmt->bind_param("ssi", $schoneTekst, $tijd, $postRapportId);
-            $updateStmt->execute();
-            $updateStmt->close();
+        $updateStmt = $pdo->prepare("
+            UPDATE rapport 
+            SET inhoud = :inhoud, datumtijd = :datumtijd 
+            WHERE id = :rapportId
+        ");
+        $updateStmt->execute([
+            'inhoud'    => $schoneTekst,
+            'datumtijd' => $tijd,
+            'rapportId' => $postRapportId
+        ]);
 
-            $_SESSION['succes'] = 'Rapportage succesvol bijgewerkt.';
-            header("Location: rapportage.php?id=" . $clientId);
-            exit;
-        } else {
-            $error = "Databasefout bij het bijwerken van de rapportage.";
-        }
+        $_SESSION['succes'] = 'Rapportage succesvol bijgewerkt.';
+        header("Location: rapportage.php?id=" . $clientId);
+        exit;
     }
 }
 

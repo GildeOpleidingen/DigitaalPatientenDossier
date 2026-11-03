@@ -22,21 +22,20 @@ if (!$client || empty($client)) {
 }
 $_SESSION['client'] = $client;
 
-$rapportages = [];
-$stmt = DatabaseConnection::getConn()->prepare("
-    SELECT r.*, vr.id AS verzorgerregel_id, m.naam AS medewerker_naam 
-    FROM rapport r 
-    LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id 
-    LEFT JOIN medewerker m ON vr.medewerkerid = m.id 
-    WHERE vr.clientid = ? 
-    ORDER BY r.datumtijd DESC
+$pdo = DatabaseConnection::getPdo();
+$stmt = $pdo->prepare("
+    SELECT 
+        rapport.*,
+        verzorgerregel.id AS verzorgerregel_id,
+        medewerker.naam   AS medewerker_naam
+    FROM rapport
+    LEFT JOIN verzorgerregel ON rapport.verzorgerregelid = verzorgerregel.id
+    LEFT JOIN medewerker     ON verzorgerregel.medewerkerid = medewerker.id
+    WHERE verzorgerregel.clientid = :clientId
+    ORDER BY rapport.datumtijd DESC
 ");
-if ($stmt) {
-    $stmt->bind_param("i", $clientId);
-    $stmt->execute();
-    $rapportages = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    $stmt->close();
-}
+$stmt->execute(['clientId' => $clientId]);
+$rapportages = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -109,11 +108,11 @@ if ($stmt) {
 
                     // Schoon inhoud op en kort in met '...' indien te lang
                     $schoneInhoud = trim(str_replace(['<br />', '<br>', '<br/>'], "\n", $rapport['inhoud']));
-                    $maxTekens = 160;
+                    $maxTekens = 400;
                     $isTeLang = mb_strlen($schoneInhoud) > $maxTekens;
                     $korteInhoud = $isTeLang ? rtrim(mb_substr($schoneInhoud, 0, $maxTekens)) . '...' : $schoneInhoud;
 
-                    echo "<div class='card mb-3 shadow-sm border-0' border-left: 4px solid #00365E !important;'>";
+                    echo "<div class='card mb-3 shadow-sm border-0' style='border-left: 4px solid #00365E !important;'>";
                     echo "  <div class='card-header d-flex justify-content-between align-items-center bg-light py-2'>";
                     echo "    <div>";
                     echo "      <span class='fw-bold text-primary fs-5'>$dag $maand $jaar om $tijd</span>";
@@ -125,7 +124,7 @@ if ($stmt) {
                     echo "  </div>";
                     echo "  <div class='card-body py-3'>";
                     if (!empty($korteInhoud)) {
-                        echo "    <p class='card-text mb-0 text-dark' style='max-width: 850px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: break-word;'>";
+                        echo "    <p class='card-text mb-0 text-dark' style='max-width: 95%; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: break-word;'>";
                         echo htmlspecialchars($korteInhoud);
                         echo "    </p>";
                     } else {
