@@ -3,19 +3,32 @@ session_start();
 include_once '../../database/DatabaseConnection.php';
 include_once '../../models/autoload.php';
 
-$rapportageId = $_GET['id'];
+$rapportageId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+if ($rapportageId <= 0) {
+    header("Location: ../client.php");
+    exit;
+}
 
-$rapportage = DatabaseConnection::getConn()->prepare("SELECT * FROM rapport WHERE id = ?");
-$rapportage->bind_param("i", $rapportageId);
-$rapportage->execute();
-$rapportage = $rapportage->get_result()->fetch_assoc();
+$stmt = DatabaseConnection::getConn()->prepare("
+    SELECT r.*, vr.clientid 
+    FROM rapport r 
+    LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id 
+    WHERE r.id = ?
+");
+$stmt->bind_param("i", $rapportageId);
+$stmt->execute();
+$rapportage = $stmt->get_result()->fetch_assoc();
+$stmt->close();
 
 if ($rapportage == null) {
     header("Location: ../client.php");
+    exit;
 }
 
-if (!$rapportageId) {
-    header("Location: ../client.php");
+// Zorg dat het echte client-ID in de sessie staat
+$clientId = !empty($rapportage['clientid']) ? (int)$rapportage['clientid'] : ($_SESSION['clientId'] ?? null);
+if ($clientId) {
+    $_SESSION['clientId'] = $clientId;
 }
 
 if (isset($_POST['aanpassen'])) {
@@ -74,7 +87,7 @@ if (isset($_POST['aanpassen'])) {
                         </div>
                     </div>
                     <button type="submit" name="aanpassen" class="btn btn-secondary w-100 mt-3">Aanpassen</button>
-                    <a href="rapportage.php" class="btn btn-secondary mt-3">Terug</a>
+                    <a href="rapportage.php?id=<?= $clientId ?>" class="btn btn-secondary mt-3">Terug</a>
                 </form>
             </div>
         </div>

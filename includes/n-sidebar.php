@@ -7,9 +7,16 @@ Auth::startSession();
 $Main = new Main();
 $ClientModel = new ClientModel();
 
-$clientId = isset($_GET['id']) ? (int)$_GET['id'] : ($_SESSION['clientId'] ?? null);
-if ($clientId) {
-    $_SESSION['clientId'] = (int)$clientId;
+$currentPage = basename($_SERVER['PHP_SELF'], ".php");
+
+// Op rapportage-aanpassen is $_GET['id'] het rapportage-ID, NIET het client-ID!
+if ($currentPage === 'rapportage-aanpassen') {
+    $clientId = $_SESSION['clientId'] ?? null;
+} else {
+    $clientId = isset($_GET['id']) ? (int)$_GET['id'] : ($_SESSION['clientId'] ?? null);
+    if ($clientId) {
+        $_SESSION['clientId'] = (int)$clientId;
+    }
 }
 
 $medewerkerId = $_SESSION['loggedin_id'] ?? null;
@@ -71,7 +78,6 @@ $row1 = $clientId ? $ClientModel->getById((int)$clientId) : null;
                         "verzorgers" => "verzorgers"
                     );
 
-                    $currentPage = basename($_SERVER['PHP_SELF'], ".php");
                     foreach ($pages as $key => $value) {
                         if ($key === 'verzorgers' && !Auth::isAdmin()) {
                             continue;

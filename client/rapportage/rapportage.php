@@ -5,16 +5,36 @@ include_once '../../models/autoload.php';
 $Main = new Main();
 $ClientModel = new ClientModel();
 
-$clientId = $_SESSION['clientId'];
-
-$client = $_SESSION['client'] = $ClientModel->getClientById($clientId);
-$rapportages = DatabaseConnection::getConn()->prepare("SELECT r.*, vr.id AS verzorgerregel_id FROM rapport r LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id WHERE vr.clientid = ? ORDER BY r.datumtijd DESC;");
-$rapportages->bind_param("i", $clientId);
-$rapportages->execute();
-$rapportages = $rapportages->get_result()->fetch_all(MYSQLI_ASSOC);
-if ($client == null) {
+$clientId = isset($_GET['id']) ? (int)$_GET['id'] : ($_SESSION['clientId'] ?? null);
+if (!$clientId) {
     header("Location: ../client.php");
     exit;
+}
+$_SESSION['clientId'] = (int)$clientId;
+
+$client = $ClientModel->getById($clientId);
+if (!$client) {
+    $client = $ClientModel->getClientById($clientId);
+}
+if (!$client || empty($client)) {
+    header("Location: ../client.php");
+    exit;
+}
+$_SESSION['client'] = $client;
+
+$rapportages = [];
+$stmt = DatabaseConnection::getConn()->prepare("
+    SELECT r.*, vr.id AS verzorgerregel_id 
+    FROM rapport r 
+    LEFT JOIN verzorgerregel vr ON r.verzorgerregelid = vr.id 
+    WHERE vr.clientid = ? 
+    ORDER BY r.datumtijd DESC
+");
+if ($stmt) {
+    $stmt->bind_param("i", $clientId);
+    $stmt->execute();
+    $rapportages = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $stmt->close();
 }
 ?>
 <!DOCTYPE html>
@@ -44,10 +64,13 @@ if ($client == null) {
 
         <div class="content">
             <div class="mt-4 mb-3 bg-white p-3" style="height: 96%; overflow: auto;">
-                <p class="card-text">
-                <h1>Rapportages</h1>
-                <a href='rapportage-nieuw.php?id=<?= $clientId ?>' class='btn btn-primary'>Nieuwe rapportage</a>
+                <h1 class="mb-3">Rapportages van <?= htmlspecialchars($client['naam']) ?></h1>
+                <a href='rapportage-nieuw.php?id=<?= $clientId ?>' class='btn btn-primary mb-3'>Nieuwe rapportage</a>
                 <?php
+                if (empty($rapportages)) {
+                    echo "<p class='text-muted mt-2'>Er zijn nog geen rapportages voor deze cliënt.</p>";
+                }
+
                 $maanden = [
                     1 => 'januari', 2 => 'februari', 3 => 'maart', 4 => 'april',
                     5 => 'mei', 6 => 'juni', 7 => 'juli', 8 => 'augustus',
