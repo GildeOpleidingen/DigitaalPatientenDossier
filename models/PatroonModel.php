@@ -9,20 +9,18 @@ class PatroonModel
     private static function findQuestionnaireId(int $clientId): ?int
     {
         try {
-            $conn = DatabaseConnection::getConn();
-
-            $stmt = $conn->prepare("
+            $stmt = DatabaseConnection::getPdo()->prepare("
                 SELECT vragenlijst.id
                 FROM vragenlijst
                 INNER JOIN verzorgerregel ON verzorgerregel.id = vragenlijst.verzorgerregelid
-                WHERE verzorgerregel.clientid = ?
+                WHERE verzorgerregel.clientid = :clientId
+                LIMIT 1
             ");
-            $stmt->bind_param("i", $clientId);
-            $stmt->execute();
-            $result = $stmt->get_result()->fetch_assoc();
+            $stmt->execute(['clientId' => $clientId]);
+            $res = $stmt->fetchColumn();
 
-            return $result ? (int) $result['id'] : null;
-        } catch (mysqli_sql_exception $e) {
+            return $res !== false ? (int)$res : null;
+        } catch (PDOException $e) {
             error_log("PatroonModel::findQuestionnaireId error: " . $e->getMessage());
             return null;
         }
@@ -36,17 +34,20 @@ class PatroonModel
     private static function createQuestionnaire(int $clientId, int $employeeId): ?int
     {
         try {
-            $conn = DatabaseConnection::getConn();
+            $pdo = DatabaseConnection::getPdo();
 
-            $stmt = $conn->prepare("
-                INSERT INTO `vragenlijst` (`verzorgerregelid`)
-                VALUES ((SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?))
+            $stmt = $pdo->prepare("
+                INSERT INTO vragenlijst (verzorgerregelid)
+                VALUES ((SELECT id FROM verzorgerregel WHERE clientid = :clientId AND medewerkerid = :medewerkerId LIMIT 1))
             ");
-            $stmt->bind_param("ii", $clientId, $employeeId);
-            $stmt->execute();
+            $stmt->execute([
+                'clientId'     => $clientId,
+                'medewerkerId' => $employeeId
+            ]);
 
-            return $conn->insert_id ? (int) $conn->insert_id : null;
-        } catch (mysqli_sql_exception $e) {
+            $id = (int)$pdo->lastInsertId();
+            return $id > 0 ? $id : null;
+        } catch (PDOException $e) {
             error_log("PatroonModel::createQuestionnaire error: " . $e->getMessage());
             return null;
         }
@@ -364,11 +365,11 @@ class PatroonModel
         }
 
         try {
-            $conn = DatabaseConnection::getConn();
-            return self::hasRecord($conn, $tableName, $questionnaireId)
-                ? self::executeUpdate($conn, $tableName, $questionnaireId, $columns, $types, $values)
-                : self::executeInsert($conn, $tableName, $questionnaireId, $columns, $types, $values);
-        } catch (mysqli_sql_exception $e) {
+            $pdo = DatabaseConnection::getPdo();
+            return self::hasRecord($pdo, $tableName, $questionnaireId)
+                ? self::executeUpdate($pdo, $tableName, $questionnaireId, $columns, $values)
+                : self::executeInsert($pdo, $tableName, $questionnaireId, $columns, $values);
+        } catch (PDOException $e) {
             error_log("PatroonModel::saveAnswers error: " . $e->getMessage());
             return false;
         }
@@ -450,31 +451,27 @@ class PatroonModel
     }
 
     /**
-     * @param mysqli $conn
+     * @param PDO $pdo
      * @param string $tableName
      * @param int $questionnaireId
      * @return bool
      */
-    private static function hasRecord(mysqli $conn, string $tableName, int $questionnaireId): bool
+    private static function hasRecord(PDO $pdo, string $tableName, int $questionnaireId): bool
     {
-        $stmt = $conn->prepare("SELECT id FROM `$tableName` WHERE `vragenlijstid` = ? LIMIT 1");
-        $stmt->bind_param("i", $questionnaireId);
-        $stmt->execute();
-
-        $row = $stmt->get_result()->fetch_assoc();
-        return $row !== null;
+        $stmt = $pdo->prepare("SELECT id FROM `$tableName` WHERE `vragenlijstid` = :qid LIMIT 1");
+        $stmt->execute(['qid' => $questionnaireId]);
+        return (bool)$stmt->fetch();
     }
 
     /**
-     * @param mysqli $conn
+     * @param PDO $pdo
      * @param string $tableName
      * @param int $questionnaireId
      * @param array $columns
-     * @param string $types
      * @param array $values
      * @return bool
      */
-    private static function executeUpdate(mysqli $conn, string $tableName, int $questionnaireId, array $columns, string $types, array $values): bool
+    private static function executeUpdate(PDO $pdo, string $tableName, int $questionnaireId, array $columns, array $values): bool
     {
         // 1. Build the "`column` = ?" pairs
         $setParts = [];
@@ -485,32 +482,28 @@ class PatroonModel
 
         // 2. Prepare the UPDATE query
         $sql = "UPDATE `$tableName` SET $setClause WHERE `vragenlijstid` = ?";
-        $stmt = $conn->prepare($sql);
+        $stmt = $pdo->prepare($sql);
 
-        // 3. Attach questionnaireId as the final integer parameter for WHERE
-        $types = $types . "i";
+        // 3. Attach questionnaireId as the final parameter for WHERE
         $values[] = $questionnaireId;
 
-        // 4. Bind parameters and execute
-        $stmt->bind_param($types, ...$values);
-        return $stmt->execute();
+        // 4. Execute
+        return $stmt->execute(array_values($values));
     }
 
     /**
-     * @param mysqli $conn
+     * @param PDO $pdo
      * @param string $tableName
      * @param int $questionnaireId
      * @param array $columns
-     * @param string $types
      * @param array $values
      * @return bool
      */
-    private static function executeInsert(mysqli $conn, string $tableName, int $questionnaireId, array $columns, string $types, array $values): bool
+    private static function executeInsert(PDO $pdo, string $tableName, int $questionnaireId, array $columns, array $values): bool
     {
         // 1. Add 'vragenlijstid' as the very first column and value
         array_unshift($columns, 'vragenlijstid');
         array_unshift($values, $questionnaireId);
-        $types = "i" . $types;
 
         // 2. Build column names (`col1`, `col2`) and question mark placeholders (?, ?)
         $columnNames = [];
@@ -525,11 +518,10 @@ class PatroonModel
 
         // 3. Prepare the INSERT query
         $sql = "INSERT INTO `$tableName` ($columnList) VALUES ($placeholders)";
-        $stmt = $conn->prepare($sql);
+        $stmt = $pdo->prepare($sql);
 
-        // 4. Bind parameters and execute
-        $stmt->bind_param($types, ...$values);
-        return $stmt->execute();
+        // 4. Execute
+        return $stmt->execute(array_values($values));
     }
 
     /**
@@ -566,13 +558,12 @@ class PatroonModel
         }
 
         try {
-            $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM `$tableName` WHERE `vragenlijstid` = ?");
-            $stmt->bind_param("i", $questionnaireId);
-            $stmt->execute();
-            $result = $stmt->get_result()->fetch_assoc();
+            $stmt = DatabaseConnection::getPdo()->prepare("SELECT * FROM `$tableName` WHERE `vragenlijstid` = :qid");
+            $stmt->execute(['qid' => $questionnaireId]);
+            $result = $stmt->fetch();
 
             return $result ?: self::getDefaultAnswers($patternType);
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             error_log("PatroonModel::getAnswers error: " . $e->getMessage());
             return self::getDefaultAnswers($patternType);
         }
@@ -584,9 +575,10 @@ class PatroonModel
     public static function getPatternTypes(): ?array
     {
         try {
-            $result = DatabaseConnection::getConn()->query("SELECT * FROM `patroontype`");
-            return $result ? $result->fetch_all(MYSQLI_NUM) : null;
-        } catch (mysqli_sql_exception $e) {
+            $stmt = DatabaseConnection::getPdo()->query("SELECT * FROM `patroontype`");
+            $rows = $stmt->fetchAll(PDO::FETCH_NUM);
+            return $rows ?: null;
+        } catch (PDOException $e) {
             error_log("PatroonModel::getPatternTypes error: " . $e->getMessage());
             return null;
         }
@@ -600,13 +592,15 @@ class PatroonModel
     public static function getPatternType(int $clientId, int $patternId): ?array
     {
         try {
-            $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM `zorgplan` WHERE clientid = ? AND patroontypeid = ?");
-            $stmt->bind_param("ii", $clientId, $patternId);
-            $stmt->execute();
-            $result = $stmt->get_result()->fetch_assoc();
+            $stmt = DatabaseConnection::getPdo()->prepare("SELECT * FROM `zorgplan` WHERE clientid = :clientId AND patroontypeid = :patternId");
+            $stmt->execute([
+                'clientId'  => $clientId,
+                'patternId' => $patternId
+            ]);
+            $result = $stmt->fetch();
 
             return $result ?: null;
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             error_log("PatroonModel::getPatternType error: " . $e->getMessage());
             return null;
         }

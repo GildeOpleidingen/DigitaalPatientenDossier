@@ -5,16 +5,16 @@ include_once '../../models/autoload.php';
 $Main = new Main();
 $ClientModel = new ClientModel();
 
-$medewerkerid = $_GET['id'];
-if (!isset($medewerkerid)) {
+$medewerkerid = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+if ($medewerkerid <= 0) {
     header("Location: ../../index.php");
     exit;
 }
 
-$verzorger = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE id = ?");
-$verzorger->bind_param("i", $medewerkerid);
-$verzorger->execute();
-$verzorger = $verzorger->get_result()->fetch_assoc();
+$pdo = DatabaseConnection::getPdo();
+$stmt = $pdo->prepare("SELECT * FROM medewerker WHERE id = :id");
+$stmt->execute(['id' => $medewerkerid]);
+$verzorger = $stmt->fetch();
 
 if (!$verzorger || (int)($verzorger['is_deleted'] ?? 0) === 1) {
     header("Location: ../medewerker.php");

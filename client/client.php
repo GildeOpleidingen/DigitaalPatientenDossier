@@ -7,61 +7,73 @@ Auth::requireLogin();
 $medewerkerId = Auth::id();
 $isAdmin = Auth::isAdmin();
 
-$conn = DatabaseConnection::getConn();
+$pdo = DatabaseConnection::getPdo();
 
 if (!isset($_GET['q'])) {
     // Alleen niet-verwijderde cliënten ophalen
     if ($isAdmin) {
         // Admin toont alle clients
-
-        $items = $conn->prepare("
-        SELECT client.id, naam, woonplaats, geboortedatum
-        FROM client
-        WHERE is_deleted = 0;
-    ");
+        $stmt = $pdo->prepare("
+            SELECT client.id, client.naam, client.woonplaats, client.geboortedatum
+            FROM client
+            WHERE client.is_deleted = 0
+            ORDER BY client.naam ASC
+        ");
+        $stmt->execute();
     } else {
-        // mederwerker toont alleen zijn clients
-        $items = $conn->prepare("
-        SELECT client.id, naam, woonplaats, geboortedatum
-        FROM client
-        LEFT JOIN verzorgerregel ON client.id = verzorgerregel.clientid
-        WHERE client.is_deleted = 0 AND verzorgerregel.medewerkerid = ? AND verzorgerregel.is_deleted = 0;
-    ");
-        $items->bind_param("i", $medewerkerId);
+        // Medewerker toont alleen zijn clients
+        $stmt = $pdo->prepare("
+            SELECT client.id, client.naam, client.woonplaats, client.geboortedatum
+            FROM client
+            INNER JOIN verzorgerregel ON client.id = verzorgerregel.clientid
+            WHERE client.is_deleted = 0 
+              AND verzorgerregel.medewerkerid = :medewerkerId 
+              AND verzorgerregel.is_deleted = 0
+            ORDER BY client.naam ASC
+        ");
+        $stmt->execute(['medewerkerId' => $medewerkerId]);
     }
 
-    $items->execute();
-    $items = $items->get_result()->fetch_all();
-
+    $items = $stmt->fetchAll(PDO::FETCH_NUM);
 } else {
     $q = trim($_GET['q']);
     $searchTerm = '%' . $q . '%';
 
     if ($isAdmin) {
         // Admin toont alle clients die matchen met zoekopdracht
-        $stmt = $conn->prepare("
-            SELECT client.id, naam, woonplaats, geboortedatum 
+        $stmt = $pdo->prepare("
+            SELECT client.id, client.naam, client.woonplaats, client.geboortedatum 
             FROM client 
-            WHERE is_deleted = 0 
-              AND (naam LIKE ? OR woonplaats LIKE ? OR geboortedatum LIKE ?);
+            WHERE client.is_deleted = 0 
+              AND (client.naam LIKE :term1 OR client.woonplaats LIKE :term2 OR client.geboortedatum LIKE :term3)
+            ORDER BY client.naam ASC
         ");
-        $stmt->bind_param("sss", $searchTerm, $searchTerm, $searchTerm);
+        $stmt->execute([
+            'term1' => $searchTerm,
+            'term2' => $searchTerm,
+            'term3' => $searchTerm,
+        ]);
     } else {
         // Medewerker toont alleen zijn gekoppelde clients die matchen met zoekopdracht
-        $stmt = $conn->prepare("
-            SELECT client.id, naam, woonplaats, geboortedatum 
+        $stmt = $pdo->prepare("
+            SELECT client.id, client.naam, client.woonplaats, client.geboortedatum 
             FROM client 
             INNER JOIN verzorgerregel ON client.id = verzorgerregel.clientid 
             WHERE client.is_deleted = 0 
-              AND verzorgerregel.medewerkerid = ? 
+              AND verzorgerregel.medewerkerid = :medewerkerId 
               AND verzorgerregel.is_deleted = 0
-              AND (naam LIKE ? OR woonplaats LIKE ? OR geboortedatum LIKE ?);
+              AND (client.naam LIKE :term1 OR client.woonplaats LIKE :term2 OR client.geboortedatum LIKE :term3)
+            ORDER BY client.naam ASC
         ");
-        $stmt->bind_param("isss", $medewerkerId, $searchTerm, $searchTerm, $searchTerm);
+        $stmt->execute([
+            'medewerkerId' => $medewerkerId,
+            'term1'        => $searchTerm,
+            'term2'        => $searchTerm,
+            'term3'        => $searchTerm,
+        ]);
     }
 
-    $stmt->execute();
-    $items = $stmt->get_result()->fetch_all();
+    $items = $stmt->fetchAll(PDO::FETCH_NUM);
 }
 ?>
 
@@ -127,7 +139,7 @@ if (!isset($_GET['q'])) {
                         echo "<td>$row[0]</td>";
                         echo "<td><a href='overzicht/overzicht.php?id=$row[0]'>$row[1]</a></td>";
                         echo "<td>$row[2]</td>";
-                        echo "<td>" . date_create($row[3])->format("d-m-Y") . "</td>";
+                        echo "<td>" . (!empty($row[3]) ? date_create($row[3])->format("d-m-Y") : '-') . "</td>";
                         if ($isAdmin){
                             echo "<td><a href='client_bewerken.php?id=$row[0]' class='btn btn-warning'>Bewerk</a></td>";
                             echo "<td><a href='client_verwijderen.php?id=$row[0]' class='btn btn-danger' onclick='return confirm(\"Weet je zeker dat je deze client wilt verwijderen?\");'>Verwijder</a></td>";

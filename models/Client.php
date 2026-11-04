@@ -9,13 +9,15 @@ trait Client
     public function CheckIfVerzorgregelExists($clientId, $medewerkerId)
     {
         try {
-            $stmt = DatabaseConnection::getConn()->prepare("
+            $stmt = DatabaseConnection::getPdo()->prepare("
                 INSERT INTO verzorgerregel (clientid, medewerkerid, is_deleted)
-                VALUES (?, ?, 0)
+                VALUES (:clientId, :medewerkerId, 0)
                 ON DUPLICATE KEY UPDATE is_deleted = 0
             ");
-            $stmt->bind_param("ii", $clientId, $medewerkerId);
-            return $stmt->execute();
+            return $stmt->execute([
+                'clientId'     => $clientId,
+                'medewerkerId' => $medewerkerId
+            ]);
         } catch (Exception $e) {
             return false;
         }
@@ -34,33 +36,50 @@ trait Client
     {
         $medischOverzicht = $this->getMedischOverzichtByClientId($clientid);
         if ($this->checkIfClientExistsById($clientid) && count($medischOverzicht) > 0) {
+            $pdo = DatabaseConnection::getPdo();
             if (!$this->checkIfClientStoryExistsByClientId($clientid)) {
                 if (!$this->checkIfMedischOverzichtExistsByClientId($clientid)) {
-                    $result = DatabaseConnection::getConn()->prepare("INSERT INTO `medischoverzicht`(`clientid`) VALUES (?);");
-                    $result->bind_param("i", $clientid);
-                    $result->execute();
-
-                    $medischOverzichtId = DatabaseConnection::getConn()->insert_id;
+                    $stmtMo = $pdo->prepare("INSERT INTO medischoverzicht (clientid) VALUES (:clientId)");
+                    $stmtMo->execute(['clientId' => $clientid]);
+                    $medischOverzichtId = (int)$pdo->lastInsertId();
                 } else {
                     $medischOverzicht = $this->getMedischOverzichtByClientId($clientid);
-                    $medischOverzichtId = $medischOverzicht['id'];
+                    $medischOverzichtId = (int)$medischOverzicht['id'];
                 }
 
-                $result = DatabaseConnection::getConn()->prepare("INSERT INTO `clientverhaal`(`id`, `medischoverzichtid`, `foto`, `introductie`, `gezinfamilie`, `belangrijkeinfo`, `hobbies`) VALUES (NULL, ?, ?, ?, ?, ?, ?);");
-                $result->bind_param("isssss", $medischOverzichtId, $foto, $introductie, $familie, $belangrijkeinfo, $hobbies);
-                if ($result->execute()) {
-                    return true;
-                } else {
-                    return "Insert failed: " . $result->error;
-                }
+                $stmt = $pdo->prepare("
+                    INSERT INTO clientverhaal (
+                        medischoverzichtid, foto, introductie, gezinfamilie, belangrijkeinfo, hobbies
+                    ) VALUES (
+                        :medischoverzichtid, :foto, :introductie, :gezinfamilie, :belangrijkeinfo, :hobbies
+                    )
+                ");
+                return $stmt->execute([
+                    'medischoverzichtid' => $medischOverzichtId,
+                    'foto'               => $foto,
+                    'introductie'        => $introductie,
+                    'gezinfamilie'       => $familie,
+                    'belangrijkeinfo'    => $belangrijkeinfo,
+                    'hobbies'            => $hobbies
+                ]);
             } else {
-                $result = DatabaseConnection::getConn()->prepare("UPDATE `clientverhaal` SET `foto`=?,`introductie`=?,`gezinfamilie`=?,`belangrijkeinfo`=?,`hobbies`=? WHERE medischoverzichtid = ?;");
-                $result->bind_param("sssssi", $foto, $introductie, $familie, $belangrijkeinfo, $hobbies, $medischOverzicht['id']);
-                if ($result->execute()) {
-                    return true;
-                } else {
-                    return "Update failed: " . $result->error;
-                }
+                $stmt = $pdo->prepare("
+                    UPDATE clientverhaal 
+                    SET foto = :foto, 
+                        introductie = :introductie, 
+                        gezinfamilie = :gezinfamilie, 
+                        belangrijkeinfo = :belangrijkeinfo, 
+                        hobbies = :hobbies 
+                    WHERE medischoverzichtid = :medischoverzichtid
+                ");
+                return $stmt->execute([
+                    'foto'               => $foto,
+                    'introductie'        => $introductie,
+                    'gezinfamilie'       => $familie,
+                    'belangrijkeinfo'    => $belangrijkeinfo,
+                    'hobbies'            => $hobbies,
+                    'medischoverzichtid' => $medischOverzicht['id']
+                ]);
             }
         } else {
             return false;
@@ -84,25 +103,60 @@ trait Client
      */
     public function updateClient($naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto): bool
     {
-        $result = DatabaseConnection::getConn()->prepare("UPDATE `client` SET `geslacht`=?,`adres`=?,`postcode`=?,`woonplaats`=?,`telefoonnummer`=?,`email`=?,`reanimatiestatus`=?,`nationaliteit`=?,`afdeling`=?,`burgelijkestaat`=?,`foto`=? WHERE `naam`=?;");
-        $result->bind_param("ssssssssssss", $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto, $naam);
-        $result->execute();
+        $pdo = DatabaseConnection::getPdo();
+        $stmt = $pdo->prepare("
+            UPDATE client 
+            SET geslacht = :geslacht, adres = :adres, postcode = :postcode, woonplaats = :woonplaats, 
+                telefoonnummer = :telefoonnummer, email = :email, reanimatiestatus = :reanimatiestatus, 
+                nationaliteit = :nationaliteit, afdeling = :afdeling, burgelijkestaat = :burgelijkestaat, 
+                foto = :foto 
+            WHERE naam = :targetNaam
+        ");
+        $stmt->execute([
+            'geslacht'         => $geslacht,
+            'adres'            => $adres,
+            'postcode'         => $postcode,
+            'woonplaats'       => $woonplaats,
+            'telefoonnummer'   => $telefoonnummer,
+            'email'            => $email,
+            'reanimatiestatus' => $reanimatiestatus,
+            'nationaliteit'    => $nationaliteit,
+            'afdeling'         => $afdeling,
+            'burgelijkestaat'  => $burgelijkestaat,
+            'foto'             => $foto,
+            'targetNaam'       => $naam
+        ]);
 
-        if ($result->affected_rows == 1)
+        if ($stmt->rowCount() > 0) {
             return true;
+        }
 
-        if ($result->affected_rows <= 0) {
-            $query = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE naam= ?");
-            $query->execute();
-            $query = $query->get_result()->fetch_all();
-            $result->bind_param("s", $naam);
-            if (sizeof($query) == 0) {
-                //            DatabaseConnection::getConn()->prepare("INSERT INTO `client`(`naam`, `geslacht`, `adres`, `postcode`, `woonplaats`, `telefoonnummer`, `email`, `reanimatiestatus`, `nationaliteit`, `afdeling`, `burgelijkestaat`, `foto`) VALUES ('$naam','$geslacht','$adres','$postcode','$woonplaats','$telefoonnummer','$email','$reanimatiestatus','$nationaliteit','$afdeling','$burgelijkestaat','$foto');");
-                $result = DatabaseConnection::getConn()->prepare("INSERT INTO `client`(`naam`, `geslacht`, `adres`, `postcode`, `woonplaats`, `telefoonnummer`, `email`, `reanimatiestatus`, `nationaliteit`, `afdeling`, `burgelijkestaat`, `foto`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
-                $result->bind_param("sssssssssss", $naam, $geslacht, $adres, $postcode, $woonplaats, $telefoonnummer, $email, $reanimatiestatus, $nationaliteit, $afdeling, $burgelijkestaat, $foto);
-                $result->execute();
-                return true;
-            }
+        $checkStmt = $pdo->prepare("SELECT id FROM client WHERE naam = :naam");
+        $checkStmt->execute(['naam' => $naam]);
+        if (!$checkStmt->fetch()) {
+            $insertStmt = $pdo->prepare("
+                INSERT INTO client (
+                    naam, geslacht, adres, postcode, woonplaats, telefoonnummer, 
+                    email, reanimatiestatus, nationaliteit, afdeling, burgelijkestaat, foto
+                ) VALUES (
+                    :naam, :geslacht, :adres, :postcode, :woonplaats, :telefoonnummer, 
+                    :email, :reanimatiestatus, :nationaliteit, :afdeling, :burgelijkestaat, :foto
+                )
+            ");
+            return $insertStmt->execute([
+                'naam'             => $naam,
+                'geslacht'         => $geslacht,
+                'adres'            => $adres,
+                'postcode'         => $postcode,
+                'woonplaats'       => $woonplaats,
+                'telefoonnummer'   => $telefoonnummer,
+                'email'            => $email,
+                'reanimatiestatus' => $reanimatiestatus,
+                'nationaliteit'    => $nationaliteit,
+                'afdeling'         => $afdeling,
+                'burgelijkestaat'  => $burgelijkestaat,
+                'foto'             => $foto
+            ]);
         }
 
         return false;
@@ -114,21 +168,17 @@ trait Client
      */
     public function checkIfClientStoryExistsByClientId($id): bool
     {
-        $result = DatabaseConnection::getConn()->prepare("
-        SELECT cv.*
-        FROM client c
-        JOIN medischoverzicht mo on mo.clientid = c.id 
-        JOIN clientverhaal cv on cv.medischoverzichtid = mo.id
-        WHERE c.id = ?
+        $stmt = DatabaseConnection::getPdo()->prepare("
+            SELECT clientverhaal.id
+            FROM client
+            INNER JOIN medischoverzicht ON medischoverzicht.clientid = client.id 
+            INNER JOIN clientverhaal    ON clientverhaal.medischoverzichtid = medischoverzicht.id
+            WHERE client.id = :clientId
+            LIMIT 1
         ");
-        $result->bind_param("i", $id);
-        $result->execute();
+        $stmt->execute(['clientId' => $id]);
 
-        if ($result->get_result()->num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (bool)$stmt->fetch();
     }
 
     /**
@@ -137,19 +187,15 @@ trait Client
      */
     public function checkIfMedischOverzichtExistsByClientId($clientid): bool
     {
-        $result = DatabaseConnection::getConn()->prepare("
-        SELECT *
-        FROM medischoverzicht
-        WHERE clientid = ?
+        $stmt = DatabaseConnection::getPdo()->prepare("
+            SELECT id
+            FROM medischoverzicht
+            WHERE clientid = :clientId
+            LIMIT 1
         ");
-        $result->bind_param("i", $clientid);
-        $result->execute();
+        $stmt->execute(['clientId' => $clientid]);
 
-        if ($result->get_result()->num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (bool)$stmt->fetch();
     }
 
     /**
@@ -158,20 +204,16 @@ trait Client
      */
     public function checkIfCarePlanExistsByClientId($id): bool
     {
-        $result = DatabaseConnection::getConn()->prepare("
-        SELECT cp.*
-        FROM client c
-        JOIN zorgplan cp on cp.clientid = c.id
-        WHERE c.id = ?
+        $stmt = DatabaseConnection::getPdo()->prepare("
+            SELECT zorgplan.id
+            FROM client
+            INNER JOIN zorgplan ON zorgplan.clientid = client.id
+            WHERE client.id = :clientId
+            LIMIT 1
         ");
-        $result->bind_param("i", $id);
-        $result->execute();
+        $stmt->execute(['clientId' => $id]);
 
-        if ($result->get_result()->num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (bool)$stmt->fetch();
     }
 
     /**
@@ -180,18 +222,17 @@ trait Client
      */
     public function getClientStoryByClientId($id): array
     {
-        $result = DatabaseConnection::getConn()->prepare("
-        SELECT cv.*
-        FROM client c
-        JOIN medischoverzicht mo on mo.clientid = c.id 
-        join clientverhaal cv on cv.medischoverzichtid = mo.id
-        where c.id = ?
+        $stmt = DatabaseConnection::getPdo()->prepare("
+            SELECT clientverhaal.*
+            FROM client
+            INNER JOIN medischoverzicht ON medischoverzicht.clientid = client.id 
+            INNER JOIN clientverhaal    ON clientverhaal.medischoverzichtid = medischoverzicht.id
+            WHERE client.id = :clientId
         ");
+        $stmt->execute(['clientId' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_BOTH);
 
-        $result->bind_param("i", $id);
-        $result->execute();
-
-        return (array) $result->get_result()->fetch_array();
+        return $row ?: [];
     }
 
     /**
@@ -200,16 +241,16 @@ trait Client
      */
     public function getCarePlanByClientId($id): array
     {
-        $result = DatabaseConnection::getConn()->prepare("
-        SELECT cp.*
-        FROM client c
-        JOIN zorgplan cp on cp.clientid = c.id
-        WHERE c.id = ?
+        $stmt = DatabaseConnection::getPdo()->prepare("
+            SELECT zorgplan.*
+            FROM client
+            INNER JOIN zorgplan ON zorgplan.clientid = client.id
+            WHERE client.id = :clientId
         ");
+        $stmt->execute(['clientId' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $result->bind_param("i", $id);
-        $result->execute();
-        return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
+        return $row ?: [];
     }
 
     /**
@@ -218,15 +259,14 @@ trait Client
      */
     public function getVerzorgerregelByClientId($id): array
     {
-        $result = DatabaseConnection::getConn()->prepare("
-        SELECT *
-        FROM verzorgerregel
-        WHERE clientid = ? AND is_deleted = 0
+        $stmt = DatabaseConnection::getPdo()->prepare("
+            SELECT *
+            FROM verzorgerregel
+            WHERE clientid = :clientId AND is_deleted = 0
         ");
+        $stmt->execute(['clientId' => $id]);
 
-        $result->bind_param("i", $id);
-        $result->execute();
-        return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -235,24 +275,19 @@ trait Client
      */
     public function getAdmissionDateByClientId($id): string
     {
-        $result = DatabaseConnection::getConn()->prepare("
-        select opnamedatum
-        from medischoverzicht
-        where clientid = ?
+        $stmt = DatabaseConnection::getPdo()->prepare("
+            SELECT opnamedatum
+            FROM medischoverzicht
+            WHERE clientid = :clientId
         ");
-        $result->bind_param("i", $id);
-        $result->execute();
-        $opnamedatum = $result->get_result()->fetch_assoc();
+        $stmt->execute(['clientId' => $id]);
+        $opnamedatum = $stmt->fetchColumn();
 
-        if ($opnamedatum && isset($opnamedatum['opnamedatum'])) {
-            if ($opnamedatum['opnamedatum'] !== '0000-00-00 00:00:00') {
-                return $opnamedatum['opnamedatum'];
-            } else {
-                return "Geen opnamedatum ingevuld";
-            }
-        } else {
-            return "Geen opnamedatum ingevuld";
+        if ($opnamedatum && $opnamedatum !== '0000-00-00 00:00:00') {
+            return $opnamedatum;
         }
+
+        return "Geen opnamedatum ingevuld";
     }
 
     /**
@@ -261,27 +296,25 @@ trait Client
      */
     public function getMedischOverzichtByClientId($id): array
     {
-        $result = DatabaseConnection::getConn()->prepare("
-        SELECT mo.*
-        FROM client c
-        JOIN medischoverzicht mo on mo.clientid = c.id 
-        where c.id = ?
+        $stmt = DatabaseConnection::getPdo()->prepare("
+            SELECT medischoverzicht.*
+            FROM client
+            INNER JOIN medischoverzicht ON medischoverzicht.clientid = client.id 
+            WHERE client.id = :clientId
         ");
+        $stmt->execute(['clientId' => $id]);
+        $mo = $stmt->fetch(PDO::FETCH_BOTH);
 
-        $result->bind_param("i", $id);
-        $result->execute();
-
-        $mo =  (array) $result->get_result()->fetch_array();
-        if ($mo != null) {
+        if (!empty($mo)) {
             return $mo;
-        } else {
-            $legeArray = [];
-            $legeArray["medischevoorgeschiedenis"] = "Geen medische voorgeschiedenis ingevuld";
-            $legeArray["medicatie"] = "Geen medicatie ingevuld";
-            $legeArray["alergieen"] = "Geen allergieën ingevuld";
-            $legeArray["opnamedatum"] = "Geen opnamedatum ingevuld";
-            return $legeArray;
         }
+
+        return [
+            "medischevoorgeschiedenis" => "Geen medische voorgeschiedenis ingevuld",
+            "medicatie"                => "Geen medicatie ingevuld",
+            "alergieen"                => "Geen allergieën ingevuld",
+            "opnamedatum"              => "Geen opnamedatum ingevuld",
+        ];
     }
 
     /**
@@ -312,11 +345,18 @@ trait Client
      */
     public function getClientById($ClientId): array
     {
-        $result = DatabaseConnection::getConn()->prepare("SELECT c.*, a.naam as afdeling FROM client c LEFT JOIN afdelingen a on a.id = c.afdeling_id WHERE c.id =?;");
-        $result->bind_param("i", $ClientId);
-        $result->execute();
+        $stmt = DatabaseConnection::getPdo()->prepare("
+            SELECT 
+                client.*, 
+                afdelingen.naam AS afdeling 
+            FROM client
+            LEFT JOIN afdelingen ON afdelingen.id = client.afdeling_id 
+            WHERE client.id = :clientId
+        ");
+        $stmt->execute(['clientId' => $ClientId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
+        return $row ?: [];
     }
 
     /**
@@ -325,11 +365,11 @@ trait Client
      */
     public function getClientByName($name): array
     {
-        $result = DatabaseConnection::getConn()->prepare("SELECT * FROM `client` WHERE naam = ?;");
-        $result->bind_param("s", $name);
-        $result->execute();
+        $stmt = DatabaseConnection::getPdo()->prepare("SELECT * FROM client WHERE naam = :name");
+        $stmt->execute(['name' => $name]);
+        $row = $stmt->fetch(PDO::FETCH_BOTH);
 
-        return (array) $result->get_result()->fetch_array();
+        return $row ?: [];
     }
 
     /**
@@ -338,15 +378,11 @@ trait Client
      */
     public function getVerzorgersById($id): array
     {
-        $result = DatabaseConnection::getConn()->prepare("
-        SELECT *
-        FROM medewerker
-        WHERE id = ?
-        ");
+        $stmt = DatabaseConnection::getPdo()->prepare("SELECT * FROM medewerker WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $result->bind_param("i", $id);
-        $result->execute();
-        return (array) $result->get_result()->fetch_array(MYSQLI_ASSOC);
+        return $row ?: [];
     }
 
     /**
@@ -356,47 +392,42 @@ trait Client
      */
     public function getPatientGegevens($id, $type)
     {
+        $pdo = DatabaseConnection::getPdo();
         if ($type == 'clientRelations') {
-            $result = DatabaseConnection::getConn()->prepare("
-            SELECT * 
-            FROM verzorgerregel 
-            WHERE clientid = ? AND is_deleted = 0
+            $stmt = $pdo->prepare("
+                SELECT * 
+                FROM verzorgerregel 
+                WHERE clientid = :clientId AND is_deleted = 0
             ");
-
-            $result->bind_param("i", $id);
-            $result->execute();
-            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+            $stmt->execute(['clientId' => $id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } elseif ($type == 'contactPersonen') {
-            $result = DatabaseConnection::getConn()->prepare("
-            SELECT * 
-            FROM relatie 
-            WHERE clientid = ?
+            $stmt = $pdo->prepare("
+                SELECT * 
+                FROM relatie 
+                WHERE clientid = :clientId
             ");
-
-            $result->bind_param("i", $id);
-            $result->execute();
-            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+            $stmt->execute(['clientId' => $id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } elseif ($type == 'medischOverzicht') {
-            $result = DatabaseConnection::getConn()->prepare("
-            SELECT * 
-            FROM medischoverzicht 
-            WHERE clientid = ?
+            $stmt = $pdo->prepare("
+                SELECT * 
+                FROM medischoverzicht 
+                WHERE clientid = :clientId
             ");
-
-            $result->bind_param("i", $id);
-            $result->execute();
-            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+            $stmt->execute(['clientId' => $id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } elseif ($type == 'verzorgersArr') {
-            $result = DatabaseConnection::getConn()->prepare("
-            SELECT m.* 
-            FROM medewerker m
-            JOIN verzorgerregel vr ON m.id = vr.medewerkerid
-            WHERE vr.clientid = ? AND m.is_deleted = 0 AND vr.is_deleted = 0
+            $stmt = $pdo->prepare("
+                SELECT medewerker.* 
+                FROM medewerker
+                INNER JOIN verzorgerregel ON medewerker.id = verzorgerregel.medewerkerid
+                WHERE verzorgerregel.clientid = :clientId 
+                  AND medewerker.is_deleted = 0 
+                  AND verzorgerregel.is_deleted = 0
             ");
-
-            $result->bind_param("i", $id);
-            $result->execute();
-            return $result->get_result()->fetch_all(MYSQLI_ASSOC);
+            $stmt->execute(['clientId' => $id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } else {
             return false;
         }

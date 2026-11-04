@@ -153,12 +153,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="afdeling" class="form-label fw-bold small">Afdeling <span class="text-danger">*</span></label>
                             <select id="afdeling" name="afdeling" class="form-select" required>
                                 <?php
-                                $conn = DatabaseConnection::getConn();
-                                $sqlAfdelingen = "SELECT id, naam FROM afdelingen ORDER BY naam ASC";
-                                $resultAfdelingen = $conn->query($sqlAfdelingen);
+                                $pdo = DatabaseConnection::getPdo();
+                                $stmtAfdelingen = $pdo->query("SELECT id, naam FROM afdelingen ORDER BY naam ASC");
+                                $afdelingen = $stmtAfdelingen ? $stmtAfdelingen->fetchAll() : [];
 
-                                if ($resultAfdelingen && $resultAfdelingen->num_rows > 0) {
-                                    while ($row = $resultAfdelingen->fetch_assoc()) {
+                                if (!empty($afdelingen)) {
+                                    foreach ($afdelingen as $row) {
                                         $selected = (isset($_POST['afdeling']) && (int)$_POST['afdeling'] === (int)$row['id']) ? 'selected' : '';
                                         echo "<option value='" . htmlspecialchars($row['id']) . "' $selected>" . htmlspecialchars($row['naam']) . "</option>";
                                     }

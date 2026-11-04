@@ -23,15 +23,23 @@ $uitscheiding = [];
 $samenstelling = [];
 $hoeveelheid = [];
 
-$samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
+$pdo = DatabaseConnection::getPdo();
 
-$metingtijden = DatabaseConnection::getConn()->prepare("SELECT m.id, m.datumtijd, vr.id as verzorgerregelid, vr.medewerkerid as medewerkerid
-                                                            FROM meting m
-                                                            LEFT JOIN verzorgerregel vr on m.verzorgerregelid = vr.id 
-                                                            WHERE clientid = ? ORDER BY datumtijd ASC");
-$metingtijden->bind_param("i", $_SESSION['clientId']);
-$metingtijden->execute();
-$metingtijden = $metingtijden->get_result()->fetch_all(MYSQLI_ASSOC);
+$samenStellingen = $pdo->query("SELECT id, type, uiterlijk FROM samenstelling")->fetchAll();
+
+$stmtTijden = $pdo->prepare("
+    SELECT 
+        meting.id, 
+        meting.datumtijd, 
+        verzorgerregel.id           AS verzorgerregelid, 
+        verzorgerregel.medewerkerid AS medewerkerid
+    FROM meting
+    LEFT JOIN verzorgerregel ON meting.verzorgerregelid = verzorgerregel.id 
+    WHERE verzorgerregel.clientid = :clientId 
+    ORDER BY meting.datumtijd ASC
+");
+$stmtTijden->execute(['clientId' => (int)$_SESSION['clientId']]);
+$metingtijden = $stmtTijden->fetchAll();
 
 $metingen = $Meting->getMeting($metingtijden);
 

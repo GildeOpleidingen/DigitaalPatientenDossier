@@ -9,11 +9,13 @@ if (!isset($_SESSION['loggedin_id'])) {
 
 $headerLoggedInId = (int)$_SESSION['loggedin_id'];
 
-$headerUserStmt = DatabaseConnection::getConn()->prepare("SELECT naam, foto FROM medewerker WHERE id = ?");
-$headerUserStmt->bind_param("i", $headerLoggedInId);
-$headerUserStmt->execute();
-$headerUser = $headerUserStmt->get_result()->fetch_assoc();
-$headerUserStmt->close();
+$headerUserStmt = DatabaseConnection::getPdo()->prepare("
+    SELECT naam, foto 
+    FROM medewerker 
+    WHERE id = :id
+");
+$headerUserStmt->execute(['id' => $headerLoggedInId]);
+$headerUser = $headerUserStmt->fetch();
 ?>
 <style>
     html {

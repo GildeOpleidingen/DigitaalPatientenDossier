@@ -97,10 +97,14 @@ class Meting
             UNION
             
             (SELECT 'naam' as meting, naam FROM medewerker WHERE id = ?)";
-            $result = DatabaseConnection::getConn()->prepare($query);
-            $result->bind_param("iiiiiiiiiii", $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $metingid, $metingid, $metingid, $medewerkerid);
-            $result->execute();
-            $result = $result->get_result()->fetch_all(MYSQLI_ASSOC);
+            $stmt = DatabaseConnection::getPdo()->prepare($query);
+            $stmt->execute([
+                $verzorgerregelid, $verzorgerregelid, $verzorgerregelid, $verzorgerregelid,
+                $verzorgerregelid, $verzorgerregelid, $verzorgerregelid,
+                $metingid, $metingid, $metingid,
+                $medewerkerid
+            ]);
+            $result = $stmt->fetchAll();
 
             $metingen[] = $result;
         }

@@ -3,25 +3,37 @@ session_start();
 require_once('../includes/auth.php');
 include '../database/DatabaseConnection.php';
 
-$conn = DatabaseConnection::getConn();
+$pdo = DatabaseConnection::getPdo();
 
 if (!isset($_GET['q'])) {
-    $items = $conn
-        ->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol 
-                 FROM medewerker 
-                 WHERE is_deleted = 0;")
-        ->fetch_all(MYSQLI_ASSOC);
+    $stmt = $pdo->prepare("
+        SELECT id, naam, klas, email, telefoonnummer, foto, rol 
+        FROM medewerker 
+        WHERE is_deleted = 0
+        ORDER BY naam ASC
+    ");
+    $stmt->execute();
+    $items = $stmt->fetchAll();
 } else {
-    $q = $conn->real_escape_string(trim($_GET['q']));
-    $items = $conn
-        ->query("SELECT id, naam, klas, email, telefoonnummer, foto, rol 
-                 FROM medewerker 
-                 WHERE is_deleted = 0
-                 AND (naam LIKE '%$q%' 
-                 OR klas LIKE '%$q%' 
-                 OR email LIKE '%$q%' 
-                 OR telefoonnummer LIKE '%$q%');")
-        ->fetch_all(MYSQLI_ASSOC);
+    $q = trim($_GET['q']);
+    $searchTerm = '%' . $q . '%';
+    $stmt = $pdo->prepare("
+        SELECT id, naam, klas, email, telefoonnummer, foto, rol 
+        FROM medewerker 
+        WHERE is_deleted = 0
+          AND (naam LIKE :term1 
+            OR klas LIKE :term2 
+            OR email LIKE :term3 
+            OR telefoonnummer LIKE :term4)
+        ORDER BY naam ASC
+    ");
+    $stmt->execute([
+        'term1' => $searchTerm,
+        'term2' => $searchTerm,
+        'term3' => $searchTerm,
+        'term4' => $searchTerm,
+    ]);
+    $items = $stmt->fetchAll();
 }
 ?>
 <!DOCTYPE html>

@@ -7,18 +7,15 @@ trait Afdeling
      */
     public function getAfdelingIDByName($afdeling): int
     {
-        $result = DatabaseConnection::getConn()->prepare("
+        $stmt = DatabaseConnection::getPdo()->prepare("
             SELECT id
             FROM afdelingen
-            where naam =  ?");
+            WHERE naam = :naam
+            LIMIT 1
+        ");
+        $stmt->execute(['naam' => $afdeling]);
+        $id = $stmt->fetchColumn();
 
-        $result->bind_param("s", $afdeling);
-        $result->execute();
-
-        $afdeling = $result->get_result()->fetch_assoc();
-
-        return $afdeling['id'];
-        
+        return $id !== false ? (int)$id : 0;
     }
-
 }

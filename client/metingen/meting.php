@@ -30,77 +30,80 @@ if (!isset($_GET['m'])) {
     header("Location: metingen.php");
 }
 
-$samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
-$pijnSchalen = DatabaseConnection::getConn()->query("SELECT pijnindex, pijnomschrijving FROM pijnkaart")->fetch_all(MYSQLI_ASSOC);
+$pdo = DatabaseConnection::getPdo();
 
-$query = "
+$samenStellingen = $pdo->query("SELECT id, type, uiterlijk FROM samenstelling")->fetchAll();
+$pijnSchalen = $pdo->query("SELECT pijnindex, pijnomschrijving FROM pijnkaart")->fetchAll();
+
+$metingId = (int)($_GET['m'] ?? 0);
+
+$stmt = $pdo->prepare("
     SELECT 
-        m.*, 
-        mo.*, 
-        mu.* 
-    FROM 
-        meting m
-    LEFT JOIN 
-        metingontlasting mo ON m.id = mo.metingid
-    LEFT JOIN 
-        metingurine mu ON m.id = mu.metingid
-    WHERE 
-        m.id = ?
-";
-if ($stmt = DatabaseConnection::getConn()->prepare($query)) {
-    $stmt->bind_param("i", $_GET['m']);
-    $stmt->execute();
-    $meting = $stmt->get_result()->fetch_assoc();
-} else {
-    $_SESSION['error'] = "Er is iets fout gegaan: " . DatabaseConnection::getConn()->error;
-    header('Location: meting.php');
+        meting.*, 
+        metingontlasting.uitscheiding, 
+        metingontlasting.samenstellingid, 
+        metingurine.hoeveelheid 
+    FROM meting
+    LEFT JOIN metingontlasting ON meting.id = metingontlasting.metingid
+    LEFT JOIN metingurine       ON meting.id = metingurine.metingid
+    WHERE meting.id = :metingId
+");
+$stmt->execute(['metingId' => $metingId]);
+$meting = $stmt->fetch();
+
+if (!$meting) {
+    $_SESSION['error'] = "Meting niet gevonden.";
+    header('Location: metingen.php');
     exit;
 }
 
 if (isset($_POST['metingen_aanpassen'])) {
-    $hartslag = $_POST['hartslag'];
-    $ademhaling = $_POST['ademhaling'];
-    $bloeddruk = $_POST['bloeddruk'];
-    $bloeddruk2 = $_POST['bloeddruk2'];
-    $temperatuur = $_POST['temperatuur'];
-    $vochtinname = $_POST['vochtinname'];
-    $uitscheiding = $_POST['uitscheiding'];
-    $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
-    $uitscheidingUrine = $_POST['uitscheidingUrine'];
-    $pijnschaal = $_POST['pijnschaal'];
+    $hartslag                  = $_POST['hartslag'];
+    $ademhaling                 = $_POST['ademhaling'];
+    $bloeddruklaag              = $_POST['bloeddruk'];
+    $bloeddrukhoog              = $_POST['bloeddruk2'];
+    $temperatuur                = $_POST['temperatuur'];
+    $vochtinname                = $_POST['vochtinname'];
+    $uitscheiding               = $_POST['uitscheiding'];
+    $uitscheidingSamenstelling  = $_POST['uitscheidingSamenstelling'];
+    $uitscheidingUrine          = $_POST['uitscheidingUrine'];
+    $pijnschaal                 = $_POST['pijnschaal'];
 
-    $query = "
-        UPDATE 
-            meting m
-        LEFT JOIN 
-            metingontlasting mo ON m.id = mo.metingid
-        LEFT JOIN 
-            metingurine mu ON m.id = mu.metingid
+    $updateStmt = $pdo->prepare("
+        UPDATE meting
+        LEFT JOIN metingontlasting ON meting.id = metingontlasting.metingid
+        LEFT JOIN metingurine       ON meting.id = metingurine.metingid
         SET 
-            m.hartslag = ?, 
-            m.ademhaling = ?, 
-            m.bloeddrukhoog = ?, 
-            m.bloeddruklaag = ?, 
-            m.temperatuur = ?, 
-            m.vochtinname = ?, 
-            mo.uitscheiding = ?, 
-            mo.samenstellingid = ?, 
-            mu.hoeveelheid = ?, 
-            m.pijn = ?
-        WHERE 
-            m.id = ?";
-    if ($stmt = DatabaseConnection::getConn()->prepare($query)) {
-        $stmt->bind_param("iiiiidiiiii", $hartslag, $ademhaling, $bloeddruk2, $bloeddruk, $temperatuur, $vochtinname, $uitscheiding, $uitscheidingSamenstelling, $uitscheidingUrine, $pijnschaal, $_GET['m']);
-        $stmt->execute();
+            meting.hartslag                  = :hartslag, 
+            meting.ademhaling                 = :ademhaling, 
+            meting.bloeddrukhoog              = :bloeddrukhoog, 
+            meting.bloeddruklaag              = :bloeddruklaag, 
+            meting.temperatuur                = :temperatuur, 
+            meting.vochtinname                = :vochtinname, 
+            metingontlasting.uitscheiding     = :uitscheiding, 
+            metingontlasting.samenstellingid  = :samenstellingid, 
+            metingurine.hoeveelheid           = :urineHoeveelheid, 
+            meting.pijn                       = :pijn
+        WHERE meting.id = :metingId
+    ");
 
-        $_SESSION['succes'] = "Meting is aangepast";
-        header('Location: meting.php?m=' . $_GET['m']);
-        exit;
-    } else {
-        $_SESSION['error'] = "Er is iets fout gegaan bij het voorbereiden van de query: " . DatabaseConnection::getConn()->error;
-        header('Location: meting.php?m=' . $_GET['m']);
-        exit;
-    }
+    $updateStmt->execute([
+        'hartslag'          => $hartslag,
+        'ademhaling'        => $ademhaling,
+        'bloeddrukhoog'     => $bloeddrukhoog,
+        'bloeddruklaag'     => $bloeddruklaag,
+        'temperatuur'       => $temperatuur,
+        'vochtinname'       => $vochtinname,
+        'uitscheiding'      => $uitscheiding,
+        'samenstellingid'   => $uitscheidingSamenstelling,
+        'urineHoeveelheid'  => $uitscheidingUrine,
+        'pijn'              => $pijnschaal,
+        'metingId'          => $metingId
+    ]);
+
+    $_SESSION['succes'] = "Meting is aangepast";
+    header('Location: meting.php?m=' . $metingId);
+    exit;
 }
 
 ?>

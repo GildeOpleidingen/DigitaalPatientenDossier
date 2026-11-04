@@ -21,48 +21,93 @@ if (!isset($_SESSION['loggedin_id'])) {
     header("Location: ../../index.php");
 }
 
-$samenStellingen = DatabaseConnection::getConn()->query("SELECT id, type, uiterlijk FROM samenstelling")->fetch_all(MYSQLI_ASSOC);
-$pijnSchalen = DatabaseConnection::getConn()->query("SELECT pijnindex, pijnomschrijving FROM pijnkaart")->fetch_all(MYSQLI_ASSOC);
+$pdo = DatabaseConnection::getPdo();
+
+$samenStellingen = $pdo->query("SELECT id, type, uiterlijk FROM samenstelling")->fetchAll();
+$pijnSchalen = $pdo->query("SELECT pijnindex, pijnomschrijving FROM pijnkaart")->fetchAll();
 
 if (isset($_POST['metingen_invullen'])) {
-    $hartslag = $_POST['hartslag'];
-    $ademhaling = $_POST['ademhaling'];
-    $bloeddruklaag = $_POST['bloeddruk'];
-    $bloeddrukhoog = $_POST['bloeddruk2'];
-    $temperatuur = $_POST['temperatuur'];
-    $vochtinname = $_POST['vochtinname'];
-    $uitscheiding = $_POST['uitscheiding'];
-    $uitscheidingSamenstelling = $_POST['uitscheidingSamenstelling'];
-    $uitscheidingUrine = $_POST['uitscheidingUrine'];
-    $pijnschaal = $_POST['pijnschaal'];
+    $hartslag                  = $_POST['hartslag'];
+    $ademhaling                 = $_POST['ademhaling'];
+    $bloeddruklaag              = $_POST['bloeddruk'];
+    $bloeddrukhoog              = $_POST['bloeddruk2'];
+    $temperatuur                = $_POST['temperatuur'];
+    $vochtinname                = $_POST['vochtinname'];
+    $uitscheiding               = $_POST['uitscheiding'];
+    $uitscheidingSamenstelling  = $_POST['uitscheidingSamenstelling'];
+    $uitscheidingUrine          = $_POST['uitscheidingUrine'];
+    $pijnschaal                 = $_POST['pijnschaal'];
 
-    $verzorgerregelid = DatabaseConnection::getConn()->prepare("SELECT id FROM verzorgerregel WHERE clientid = ? AND medewerkerid = ?");
-    $verzorgerregelid->bind_param("ii", $clientId, $medewerker_id);
-    $verzorgerregelid->execute();
-    $verzorgerregelid = $verzorgerregelid->get_result()->fetch_array()[0];
+    $stmtVr = $pdo->prepare("
+        SELECT id 
+        FROM verzorgerregel 
+        WHERE clientid = :clientId AND medewerkerid = :medewerkerId 
+        ORDER BY id DESC 
+        LIMIT 1
+    ");
+    $stmtVr->execute([
+        'clientId'     => $clientId,
+        'medewerkerId' => $medewerker_id
+    ]);
+    $verzorgerregelid = (int)$stmtVr->fetchColumn();
+
     $time = date("Y-m-d H:i:s");
 
-    $meting = DatabaseConnection::getConn()->prepare("INSERT INTO meting (verzorgerregelid, datumtijd, hartslag, ademhaling, bloeddruklaag, bloeddrukhoog, temperatuur, vochtinname, pijn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $meting->bind_param("isiiiiiii", $verzorgerregelid, $time, $hartslag, $ademhaling, $bloeddruklaag, $bloeddrukhoog, $temperatuur, $vochtinname, $pijnschaal);
-    $meting->execute();
-    $metingId = $meting->insert_id;
+    $stmtMeting = $pdo->prepare("
+        INSERT INTO meting (
+            verzorgerregelid, datumtijd, hartslag, ademhaling, 
+            bloeddruklaag, bloeddrukhoog, temperatuur, vochtinname, pijn
+        ) VALUES (
+            :verzorgerregelid, :datumtijd, :hartslag, :ademhaling, 
+            :bloeddruklaag, :bloeddrukhoog, :temperatuur, :vochtinname, :pijn
+        )
+    ");
+    $stmtMeting->execute([
+        'verzorgerregelid' => $verzorgerregelid,
+        'datumtijd'        => $time,
+        'hartslag'         => $hartslag,
+        'ademhaling'        => $ademhaling,
+        'bloeddruklaag'     => $bloeddruklaag,
+        'bloeddrukhoog'     => $bloeddrukhoog,
+        'temperatuur'       => $temperatuur,
+        'vochtinname'       => $vochtinname,
+        'pijn'              => $pijnschaal
+    ]);
+    $metingId = (int)$pdo->lastInsertId();
 
-    $metingUrine = DatabaseConnection::getConn()->prepare("INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) VALUES (?, ?, ?)");
-    $metingUrine->bind_param("isi", $metingId, $time, $uitscheidingUrine);
-    $metingUrine->execute();
+    $stmtUrine = $pdo->prepare("
+        INSERT INTO metingurine (metingid, datumtijd, hoeveelheid) 
+        VALUES (:metingid, :datumtijd, :hoeveelheid)
+    ");
+    $stmtUrine->execute([
+        'metingid'    => $metingId,
+        'datumtijd'   => $time,
+        'hoeveelheid' => $uitscheidingUrine
+    ]);
 
-    $metingUrineSamenstelling = DatabaseConnection::getConn()->prepare("INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd, uitscheiding) VALUES (?, ?, ?, ?)");
-    $metingUrineSamenstelling->bind_param("iisi", $metingId, $uitscheidingSamenstelling, $time, $uitscheiding);
-    $metingUrineSamenstelling->execute();
+    $stmtOntlasting = $pdo->prepare("
+        INSERT INTO metingontlasting (metingid, samenstellingid, datumtijd, uitscheiding) 
+        VALUES (:metingid, :samenstellingid, :datumtijd, :uitscheiding)
+    ");
+    $stmtOntlasting->execute([
+        'metingid'        => $metingId,
+        'samenstellingid' => $uitscheidingSamenstelling,
+        'datumtijd'       => $time,
+        'uitscheiding'    => $uitscheiding
+    ]);
 
     $_SESSION['succes'] = "Metingen zijn succesvol ingevuld";
     header("Location: metingen.php");
     exit;
 }
 
-$grens_asistent = DatabaseConnection::getConn()->prepare("SELECT `grens_assistent` FROM `medewerker` WHERE id = $medewerker_id");
-$grens_asistent->execute();
-$asisstent_bool = $grens_asistent->get_result()->fetch_array()[0];
+$stmtGrens = $pdo->prepare("
+    SELECT grens_assistent 
+    FROM medewerker 
+    WHERE id = :medewerkerId
+");
+$stmtGrens->execute(['medewerkerId' => $medewerker_id]);
+$asisstent_bool = $stmtGrens->fetchColumn();
 ?>
 <!doctype html>
 <html lang="en">

@@ -12,13 +12,13 @@ if ($clientId <= 0) {
 }
 
 $verzorgers = $_POST['verzorgers'] ?? [];
-$conn = DatabaseConnection::getConn();
+$pdo = DatabaseConnection::getPdo();
 
 // Controleer of de kolom is_deleted bestaat in verzorgerregel
 $hasSoftDelete = false;
 try {
-    $check = $conn->query("SHOW COLUMNS FROM `verzorgerregel` LIKE 'is_deleted'");
-    if ($check && $check->num_rows > 0) {
+    $check = $pdo->query("SHOW COLUMNS FROM `verzorgerregel` LIKE 'is_deleted'");
+    if ($check && $check->fetch()) {
         $hasSoftDelete = true;
     }
 } catch (Throwable $e) {
@@ -26,26 +26,26 @@ try {
 }
 
 if ($hasSoftDelete) {
-    $stmtKoppel = $conn->prepare("
+    $stmtKoppel = $pdo->prepare("
         INSERT INTO verzorgerregel (clientid, medewerkerid, is_deleted)
-        VALUES (?, ?, 0)
+        VALUES (:clientId, :medewerkerId, 0)
         ON DUPLICATE KEY UPDATE is_deleted = 0
     ");
 
-    $stmtOntkoppel = $conn->prepare("
+    $stmtOntkoppel = $pdo->prepare("
         UPDATE verzorgerregel 
         SET is_deleted = 1 
-        WHERE clientid = ? AND medewerkerid = ?
+        WHERE clientid = :clientId AND medewerkerid = :medewerkerId
     ");
 } else {
-    $stmtKoppel = $conn->prepare("
+    $stmtKoppel = $pdo->prepare("
         INSERT IGNORE INTO verzorgerregel (clientid, medewerkerid)
-        VALUES (?, ?)
+        VALUES (:clientId, :medewerkerId)
     ");
 
-    $stmtOntkoppel = $conn->prepare("
+    $stmtOntkoppel = $pdo->prepare("
         DELETE FROM verzorgerregel 
-        WHERE clientid = ? AND medewerkerid = ?
+        WHERE clientid = :clientId AND medewerkerid = :medewerkerId
     ");
 }
 
@@ -57,23 +57,16 @@ foreach ($verzorgers as $medewerkerId => $status) {
     }
 
     if ($status === 'on') {
-        if ($stmtKoppel) {
-            $stmtKoppel->bind_param("ii", $clientId, $medewerkerId);
-            $stmtKoppel->execute();
-        }
+        $stmtKoppel->execute([
+            'clientId'     => $clientId,
+            'medewerkerId' => $medewerkerId
+        ]);
     } else {
-        if ($stmtOntkoppel) {
-            $stmtOntkoppel->bind_param("ii", $clientId, $medewerkerId);
-            $stmtOntkoppel->execute();
-        }
+        $stmtOntkoppel->execute([
+            'clientId'     => $clientId,
+            'medewerkerId' => $medewerkerId
+        ]);
     }
-}
-
-if ($stmtKoppel) {
-    $stmtKoppel->close();
-}
-if ($stmtOntkoppel) {
-    $stmtOntkoppel->close();
 }
 
 $_SESSION['succes'] = "Verzorgers zijn succesvol aangepast";

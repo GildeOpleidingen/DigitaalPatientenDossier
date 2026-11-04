@@ -2,7 +2,7 @@
 
 class ClientModel
 {
-    private mysqli $db;
+    private PDO $db;
 
     // Client entity properties
     public ?int $id = null;
@@ -22,15 +22,15 @@ class ClientModel
     public int $is_deleted = 0;
 
     /**
-     * @param array|mysqli|null $attributesOrDb
-     * @param mysqli|null $db
+     * @param array|PDO|mysqli|null $attributesOrDb
+     * @param PDO|null $db
      */
-    public function __construct(array|mysqli|null $attributesOrDb = null, ?mysqli $db = null)
+    public function __construct(array|PDO|mysqli|null $attributesOrDb = null, ?PDO $db = null)
     {
-        if ($attributesOrDb instanceof mysqli) {
+        if ($attributesOrDb instanceof PDO) {
             $this->db = $attributesOrDb;
         } else {
-            $this->db = $db ?? DatabaseConnection::getConn();
+            $this->db = $db ?? DatabaseConnection::getPdo();
             if (is_array($attributesOrDb)) {
                 $this->fill($attributesOrDb);
             }
@@ -154,45 +154,32 @@ class ClientModel
                     naam, geslacht, adres, postcode, woonplaats, telefoonnummer,
                     email, geboortedatum, reanimatiestatus, nationaliteit,
                     burgelijkestaat, foto, afdeling_id, is_deleted
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (
+                    :naam, :geslacht, :adres, :postcode, :woonplaats, :telefoonnummer,
+                    :email, :geboortedatum, :reanimatiestatus, :nationaliteit,
+                    :burgelijkestaat, :foto, :afdeling_id, :is_deleted
+                )
             ");
 
-            if (!$stmt) {
-                $errors['db'] = "Database voorbereidingsfout: " . $this->db->error;
-                return false;
-            }
+            $stmt->execute([
+                'naam'             => $this->naam,
+                'geslacht'         => $this->geslacht,
+                'adres'            => $this->adres,
+                'postcode'         => $this->postcode,
+                'woonplaats'       => $this->woonplaats,
+                'telefoonnummer'   => $cleanPhone,
+                'email'            => $this->email,
+                'geboortedatum'    => $this->geboortedatum,
+                'reanimatiestatus' => $this->reanimatiestatus,
+                'nationaliteit'    => $this->nationaliteit,
+                'burgelijkestaat'  => $this->burgelijkestaat,
+                'foto'             => $this->foto,
+                'afdeling_id'      => $this->afdeling_id,
+                'is_deleted'       => $is_deleted
+            ]);
 
-            $stmt->bind_param(
-                "ssssssssssssii",
-                $this->naam,
-                $this->geslacht,
-                $this->adres,
-                $this->postcode,
-                $this->woonplaats,
-                $cleanPhone,
-                $this->email,
-                $this->geboortedatum,
-                $this->reanimatiestatus,
-                $this->nationaliteit,
-                $this->burgelijkestaat,
-                $this->foto,
-                $this->afdeling_id,
-                $is_deleted
-            );
-
-            if ($this->foto !== null) {
-                $stmt->send_long_data(11, $this->foto);
-            }
-
-            if (!$stmt->execute()) {
-                $errors['db'] = "Fout bij opslaan client: " . $stmt->error;
-                $stmt->close();
-                return false;
-            }
-
-            $newId = (int)$this->db->insert_id;
+            $newId = (int)$this->db->lastInsertId();
             $this->id = $newId;
-            $stmt->close();
 
             // Automatische koppeling aan de huidige verzorger/medewerker
             if ($caregiverId !== null) {
@@ -200,15 +187,11 @@ class ClientModel
             }
 
             // Automatische aanmaak van het medisch overzicht zodat dossier & cliëntverhaal direct werken
-            $checkMO = $this->db->prepare("INSERT INTO medischoverzicht (clientid, opnamedatum, opnameindicatie) VALUES (?, NOW(), '')");
-            if ($checkMO) {
-                $checkMO->bind_param("i", $newId);
-                $checkMO->execute();
-                $checkMO->close();
-            }
+            $checkMO = $this->db->prepare("INSERT INTO medischoverzicht (clientid, opnamedatum, opnameindicatie) VALUES (:clientId, NOW(), '')");
+            $checkMO->execute(['clientId' => $newId]);
 
             return $newId;
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             error_log("ClientModel::create error: " . $e->getMessage());
             $errors['db'] = "Databasefout bij opslaan: " . $e->getMessage();
             return false;
@@ -241,62 +224,59 @@ class ClientModel
         try {
             $cleanPhone = !empty($this->telefoonnummer) ? preg_replace('/\D/', '', $this->telefoonnummer) : '';
 
-            // Als er een nieuwe foto is geüpload
             if ($this->foto !== null) {
-                $sql = "UPDATE client SET naam = ?, geslacht = ?, adres = ?, postcode = ?, woonplaats = ?, telefoonnummer = ?, email = ?, geboortedatum = ?, reanimatiestatus = ?, nationaliteit = ?, afdeling_id = ?, burgelijkestaat = ?, foto = ? WHERE id = ?";
-                $stmt = $this->db->prepare($sql);
-                if (!$stmt) {
-                    $errors['db'] = "Database voorbereidingsfout: " . $this->db->error;
-                    return false;
-                }
-                $stmt->bind_param(
-                    "sssssssssssssi",
-                    $this->naam,
-                    $this->geslacht,
-                    $this->adres,
-                    $this->postcode,
-                    $this->woonplaats,
-                    $cleanPhone,
-                    $this->email,
-                    $this->geboortedatum,
-                    $this->reanimatiestatus,
-                    $this->nationaliteit,
-                    $this->afdeling_id,
-                    $this->burgelijkestaat,
-                    $this->foto,
-                    $id
-                );
-                $stmt->send_long_data(12, $this->foto);
+                $stmt = $this->db->prepare("
+                    UPDATE client 
+                    SET naam = :naam, geslacht = :geslacht, adres = :adres, postcode = :postcode, 
+                        woonplaats = :woonplaats, telefoonnummer = :telefoonnummer, email = :email, 
+                        geboortedatum = :geboortedatum, reanimatiestatus = :reanimatiestatus, 
+                        nationaliteit = :nationaliteit, afdeling_id = :afdeling_id, 
+                        burgelijkestaat = :burgelijkestaat, foto = :foto 
+                    WHERE id = :id
+                ");
+                return $stmt->execute([
+                    'naam'             => $this->naam,
+                    'geslacht'         => $this->geslacht,
+                    'adres'            => $this->adres,
+                    'postcode'         => $this->postcode,
+                    'woonplaats'       => $this->woonplaats,
+                    'telefoonnummer'   => $cleanPhone,
+                    'email'            => $this->email,
+                    'geboortedatum'    => $this->geboortedatum,
+                    'reanimatiestatus' => $this->reanimatiestatus,
+                    'nationaliteit'    => $this->nationaliteit,
+                    'afdeling_id'      => $this->afdeling_id,
+                    'burgelijkestaat'  => $this->burgelijkestaat,
+                    'foto'             => $this->foto,
+                    'id'               => $id
+                ]);
             } else {
-                // Foto blijft ongewijzigd
-                $sql = "UPDATE client SET naam = ?, geslacht = ?, adres = ?, postcode = ?, woonplaats = ?, telefoonnummer = ?, email = ?, geboortedatum = ?, reanimatiestatus = ?, nationaliteit = ?, afdeling_id = ?, burgelijkestaat = ? WHERE id = ?";
-                $stmt = $this->db->prepare($sql);
-                if (!$stmt) {
-                    $errors['db'] = "Database voorbereidingsfout: " . $this->db->error;
-                    return false;
-                }
-                $stmt->bind_param(
-                    "ssssssssssssi",
-                    $this->naam,
-                    $this->geslacht,
-                    $this->adres,
-                    $this->postcode,
-                    $this->woonplaats,
-                    $cleanPhone,
-                    $this->email,
-                    $this->geboortedatum,
-                    $this->reanimatiestatus,
-                    $this->nationaliteit,
-                    $this->afdeling_id,
-                    $this->burgelijkestaat,
-                    $id
-                );
+                $stmt = $this->db->prepare("
+                    UPDATE client 
+                    SET naam = :naam, geslacht = :geslacht, adres = :adres, postcode = :postcode, 
+                        woonplaats = :woonplaats, telefoonnummer = :telefoonnummer, email = :email, 
+                        geboortedatum = :geboortedatum, reanimatiestatus = :reanimatiestatus, 
+                        nationaliteit = :nationaliteit, afdeling_id = :afdeling_id, 
+                        burgelijkestaat = :burgelijkestaat 
+                    WHERE id = :id
+                ");
+                return $stmt->execute([
+                    'naam'             => $this->naam,
+                    'geslacht'         => $this->geslacht,
+                    'adres'            => $this->adres,
+                    'postcode'         => $this->postcode,
+                    'woonplaats'       => $this->woonplaats,
+                    'telefoonnummer'   => $cleanPhone,
+                    'email'            => $this->email,
+                    'geboortedatum'    => $this->geboortedatum,
+                    'reanimatiestatus' => $this->reanimatiestatus,
+                    'nationaliteit'    => $this->nationaliteit,
+                    'afdeling_id'      => $this->afdeling_id,
+                    'burgelijkestaat'  => $this->burgelijkestaat,
+                    'id'               => $id
+                ]);
             }
-
-            $success = $stmt->execute();
-            $stmt->close();
-            return $success;
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             error_log("ClientModel::updateById error: " . $e->getMessage());
             $errors['db'] = "Databasefout bij bijwerken: " . $e->getMessage();
             return false;
@@ -344,20 +324,11 @@ class ClientModel
     {
         try {
             $stmt = $this->db->prepare($sql);
-
-            if (!$stmt) {
-                return null;
-            }
-
-            $stmt->bind_param($types, ...$params);
-            $stmt->execute();
-
-            $result = $stmt->get_result();
-            $row    = $result ? $result->fetch_assoc() : null;
-            $stmt->close();
+            $stmt->execute(array_values($params));
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             return $row ?: null;
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             error_log("ClientModel query error: " . $e->getMessage());
             return null;
         }
@@ -373,20 +344,10 @@ class ClientModel
     {
         try {
             $stmt = $this->db->prepare($sql);
+            $stmt->execute(array_values($params));
 
-            if (!$stmt) {
-                return [];
-            }
-
-            $stmt->bind_param($types, ...$params);
-            $stmt->execute();
-
-            $result = $stmt->get_result();
-            $rows   = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
-            $stmt->close();
-
-            return $rows;
-        } catch (mysqli_sql_exception $e) {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
             error_log("ClientModel query error: " . $e->getMessage());
             return [];
         }
@@ -402,20 +363,10 @@ class ClientModel
     {
         try {
             $stmt = $this->db->prepare($sql);
+            $stmt->execute(array_values($params));
 
-            if (!$stmt) {
-                return false;
-            }
-
-            $stmt->bind_param($types, ...$params);
-            $stmt->execute();
-            $stmt->store_result();
-
-            $exists = $stmt->num_rows > 0;
-            $stmt->close();
-
-            return $exists;
-        } catch (mysqli_sql_exception $e) {
+            return (bool)$stmt->fetch();
+        } catch (PDOException $e) {
             error_log("ClientModel query error: " . $e->getMessage());
             return false;
         }
@@ -431,17 +382,8 @@ class ClientModel
     {
         try {
             $stmt = $this->db->prepare($sql);
-
-            if (!$stmt) {
-                return false;
-            }
-
-            $stmt->bind_param($types, ...$params);
-            $success = $stmt->execute();
-            $stmt->close();
-
-            return $success;
-        } catch (mysqli_sql_exception $e) {
+            return $stmt->execute(array_values($params));
+        } catch (PDOException $e) {
             error_log("ClientModel execute error: " . $e->getMessage());
             return false;
         }
@@ -722,7 +664,7 @@ class ClientModel
             return null;
         }
 
-        return (int) $this->db->insert_id;
+        return (int) $this->db->lastInsertId();
     }
 
     /**
@@ -788,37 +730,27 @@ class ClientModel
             $deptId = (!empty($department) && is_numeric($department)) ? (int)$department : null;
             $stmt = $this->db->prepare("
                 UPDATE client
-                SET geslacht = ?, adres = ?, postcode = ?, woonplaats = ?,
-                    telefoonnummer = ?, email = ?, reanimatiestatus = ?,
-                    nationaliteit = ?, afdeling_id = ?, burgelijkestaat = ?, foto = ?
-                WHERE naam = ?
+                SET geslacht = :gender, adres = :address, postcode = :postalCode, woonplaats = :city,
+                    telefoonnummer = :phone, email = :email, reanimatiestatus = :resuscitationStatus,
+                    nationaliteit = :nationality, afdeling_id = :deptId, burgelijkestaat = :maritalStatus, foto = :photo
+                WHERE naam = :name
             ");
+            $stmt->execute([
+                'gender'              => $gender,
+                'address'             => $address,
+                'postalCode'          => $postalCode,
+                'city'                => $city,
+                'phone'               => $phone,
+                'email'               => $email,
+                'resuscitationStatus' => $resuscitationStatus,
+                'nationality'         => $nationality,
+                'deptId'              => $deptId,
+                'maritalStatus'       => $maritalStatus,
+                'photo'               => $photo,
+                'name'                => $name
+            ]);
 
-            if (!$stmt) {
-                return false;
-            }
-
-            $stmt->bind_param(
-                "ssssssssisss",
-                $gender,
-                $address,
-                $postalCode,
-                $city,
-                $phone,
-                $email,
-                $resuscitationStatus,
-                $nationality,
-                $deptId,
-                $maritalStatus,
-                $photo,
-                $name
-            );
-            $stmt->execute();
-
-            $affected = $stmt->affected_rows;
-            $stmt->close();
-
-            if ($affected == 1) {
+            if ($stmt->rowCount() > 0) {
                 return true;
             }
 
@@ -840,7 +772,7 @@ class ClientModel
             }
 
             return false;
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             error_log("ClientModel::updateClient error: " . $e->getMessage());
             return false;
         }

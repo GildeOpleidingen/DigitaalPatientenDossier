@@ -16,14 +16,51 @@ trait Zorgplan
     public function insertCarePlan($clientId, $opsteldatumtijd, $patroontypeid, $P, $E, $S, $doelen, $interventies, $evaluatiedoelen): bool
     {
         if ($this->checkIfClientExistsById($clientId)) {
+            $pdo = DatabaseConnection::getPdo();
             if (!$this->checkIfCarePlanPatternTypeExists($clientId, $patroontypeid)) {
-                $result = DatabaseConnection::getConn()->prepare("INSERT INTO `zorgplan`(`id`, `clientid`, `opsteldatumtijd`, `patroontypeid`, `P`, `E`, `S`, `doelen`, `interventies`, `evaluatiedoelen`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-                $result->bind_param("isissssss", $clientId, $opsteldatumtijd, $patroontypeid, $P, $E, $S, $doelen, $interventies, $evaluatiedoelen);
-                return $result->execute();
+                $stmt = $pdo->prepare("
+                    INSERT INTO zorgplan (
+                        clientid, opsteldatumtijd, patroontypeid, P, E, S, doelen, interventies, evaluatiedoelen
+                    ) VALUES (
+                        :clientId, :opsteldatumtijd, :patroontypeid, :P, :E, :S, :doelen, :interventies, :evaluatiedoelen
+                    )
+                ");
+                return $stmt->execute([
+                    'clientId'         => $clientId,
+                    'opsteldatumtijd'  => $opsteldatumtijd,
+                    'patroontypeid'    => $patroontypeid,
+                    'P'                => $P,
+                    'E'                => $E,
+                    'S'                => $S,
+                    'doelen'           => $doelen,
+                    'interventies'     => $interventies,
+                    'evaluatiedoelen'  => $evaluatiedoelen
+                ]);
             } else {
-                $result = DatabaseConnection::getConn()->prepare("UPDATE `zorgplan` SET `opsteldatumtijd`=?,`patroontypeid`=?,`P`=?,`E`=?,`S`=?,`doelen`=?,`interventies`=?,`evaluatiedoelen`=? WHERE clientid = ? AND patroontypeid = ?;");
-                $result->bind_param("sissssssii", $opsteldatumtijd, $patroontypeid, $P, $E, $S, $doelen, $interventies, $evaluatiedoelen, $clientId, $patroontypeid);
-                return $result->execute();
+                $stmt = $pdo->prepare("
+                    UPDATE zorgplan 
+                    SET opsteldatumtijd = :opsteldatumtijd, 
+                        patroontypeid   = :patroontypeid, 
+                        P               = :P, 
+                        E               = :E, 
+                        S               = :S, 
+                        doelen          = :doelen, 
+                        interventies    = :interventies, 
+                        evaluatiedoelen = :evaluatiedoelen 
+                    WHERE clientid = :clientId AND patroontypeid = :targetPatroontypeid
+                ");
+                return $stmt->execute([
+                    'opsteldatumtijd'     => $opsteldatumtijd,
+                    'patroontypeid'       => $patroontypeid,
+                    'P'                   => $P,
+                    'E'                   => $E,
+                    'S'                   => $S,
+                    'doelen'              => $doelen,
+                    'interventies'        => $interventies,
+                    'evaluatiedoelen'     => $evaluatiedoelen,
+                    'clientId'            => $clientId,
+                    'targetPatroontypeid' => $patroontypeid
+                ]);
             }
         } else {
             return false;
@@ -37,16 +74,18 @@ trait Zorgplan
      */
     public function checkIfCarePlanPatternTypeExists($id, $patternId): bool
     {
-        $result = DatabaseConnection::getConn()->prepare("
-        SELECT cp.*
-        FROM client c
-        JOIN zorgplan cp on cp.clientid = c.id
-        WHERE c.id = ? AND cp.patroontypeid = ?
+        $stmt = DatabaseConnection::getPdo()->prepare("
+            SELECT zorgplan.id
+            FROM client
+            INNER JOIN zorgplan ON zorgplan.clientid = client.id
+            WHERE client.id = :clientId AND zorgplan.patroontypeid = :patternId
+            LIMIT 1
         ");
+        $stmt->execute([
+            'clientId'  => $id,
+            'patternId' => $patternId
+        ]);
 
-        $result->bind_param("ii", $id, $patternId);
-        $result->execute();
-        $carePlan = $result->get_result()->fetch_array(MYSQLI_ASSOC);
-        return sizeof((array) $carePlan) > 0;
+        return (bool)$stmt->fetch();
     }
 }

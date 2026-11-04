@@ -2,7 +2,7 @@
 
 class MedewerkerModel
 {
-    private mysqli $db;
+    private PDO $db;
 
     // Medewerker entity properties
     public ?int $id = null;
@@ -17,15 +17,15 @@ class MedewerkerModel
     public ?int $is_deleted = 0;
 
     /**
-     * @param array|mysqli|null $attributesOrDb
-     * @param mysqli|null $db
+     * @param array|PDO|mysqli|null $attributesOrDb
+     * @param PDO|null $db
      */
-    public function __construct(array|mysqli|null $attributesOrDb = null, ?mysqli $db = null)
+    public function __construct(array|PDO|mysqli|null $attributesOrDb = null, ?PDO $db = null)
     {
-        if ($attributesOrDb instanceof mysqli) {
+        if ($attributesOrDb instanceof PDO) {
             $this->db = $attributesOrDb;
         } else {
-            $this->db = $db ?? DatabaseConnection::getConn();
+            $this->db = $db ?? DatabaseConnection::getPdo();
             if (is_array($attributesOrDb)) {
                 $this->fill($attributesOrDb);
             }
@@ -97,26 +97,21 @@ class MedewerkerModel
             // Uniciteitscontrole op e-mailadres
             try {
                 if ($isUpdate && $this->id !== null) {
-                    $stmt = $this->db->prepare("SELECT id FROM `medewerker` WHERE `email` = ? AND `id` != ? AND is_deleted = 0 LIMIT 1;");
-                    $stmt->bind_param("si", $this->email, $this->id);
+                    $stmt = $this->db->prepare("SELECT id FROM medewerker WHERE email = :email AND id != :id AND is_deleted = 0 LIMIT 1");
+                    $stmt->execute(['email' => $this->email, 'id' => $this->id]);
                 } else {
-                    $stmt = $this->db->prepare("SELECT id FROM `medewerker` WHERE `email` = ? AND is_deleted = 0 LIMIT 1;");
-                    $stmt->bind_param("s", $this->email);
+                    $stmt = $this->db->prepare("SELECT id FROM medewerker WHERE email = :email AND is_deleted = 0 LIMIT 1");
+                    $stmt->execute(['email' => $this->email]);
                 }
-                if ($stmt) {
-                    $stmt->execute();
-                    $stmt->store_result();
-                    if ($stmt->num_rows > 0) {
-                        $errors['email'] = "Er bestaat al een medewerker met dit e-mailadres.";
-                    }
-                    $stmt->close();
+                if ($stmt->fetch()) {
+                    $errors['email'] = "Er bestaat al een medewerker met dit e-mailadres.";
                 }
-            } catch (mysqli_sql_exception $e) {
+            } catch (PDOException $e) {
                 error_log("MedewerkerModel::validate email check error: " . $e->getMessage());
             }
         }
 
-        // Telefoonnummer validatie: maximaal 9 cijfers (geen minimum)
+        // Telefoonnummer validatie: maximaal 9 cijfers
         if (!empty($this->telefoonnummer)) {
             $digits = preg_replace('/\D/', '', $this->telefoonnummer);
             if (strlen($digits) > 9) {
@@ -128,7 +123,6 @@ class MedewerkerModel
         if (!$isUpdate && empty($this->wachtwoord)) {
             $errors['wachtwoord'] = "Wachtwoord is verplicht.";
         } elseif (!empty($this->wachtwoord)) {
-            // Als het wachtwoord een plain text wachtwoord is, controleren op min length 4
             if (password_needs_rehash($this->wachtwoord, PASSWORD_DEFAULT) && strlen($this->wachtwoord) < 4) {
                 $errors['wachtwoord'] = "Het wachtwoord moet minimaal 4 tekens bevatten.";
             }
@@ -166,46 +160,31 @@ class MedewerkerModel
             }
 
             $stmt = $this->db->prepare("
-                INSERT INTO `medewerker` (
-                    `naam`, `klas`, `foto`, `email`, `telefoonnummer`, `wachtwoord`, `rol`, `grens_assistent`, `is_deleted`
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO medewerker (
+                    naam, klas, foto, email, telefoonnummer, wachtwoord, rol, grens_assistent, is_deleted
+                ) VALUES (
+                    :naam, :klas, :foto, :email, :telefoonnummer, :wachtwoord, :rol, :grens_assistent, :is_deleted
+                )
             ");
 
-            if (!$stmt) {
-                $errors['db'] = "Database voorbereidingsfout: " . $this->db->error;
-                return false;
-            }
+            $stmt->execute([
+                'naam'            => $this->naam,
+                'klas'            => $this->klas,
+                'foto'            => $this->foto,
+                'email'           => $this->email,
+                'telefoonnummer'  => $cleanPhone,
+                'wachtwoord'      => $passwordHash,
+                'rol'             => $this->rol,
+                'grens_assistent' => $this->grens_assistent,
+                'is_deleted'      => $is_deleted
+            ]);
 
-            $stmt->bind_param(
-                "ssssssssi",
-                $this->naam,
-                $this->klas,
-                $this->foto,
-                $this->email,
-                $cleanPhone,
-                $passwordHash,
-                $this->rol,
-                $this->grens_assistent,
-                $is_deleted
-            );
-
-            if ($this->foto !== null) {
-                $stmt->send_long_data(2, $this->foto);
-            }
-
-            if (!$stmt->execute()) {
-                $errors['db'] = "Fout bij opslaan medewerker: " . $stmt->error;
-                $stmt->close();
-                return false;
-            }
-
-            $newId = (int)$this->db->insert_id;
+            $newId = (int)$this->db->lastInsertId();
             $this->id = $newId;
             $this->wachtwoord = $passwordHash;
-            $stmt->close();
 
             return $newId;
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             error_log("MedewerkerModel::create error: " . $e->getMessage());
             $errors['db'] = "Databasefout bij opslaan: " . $e->getMessage();
             return false;
@@ -256,49 +235,44 @@ class MedewerkerModel
             $cleanPhone = !empty($this->telefoonnummer) ? preg_replace('/\D/', '', $this->telefoonnummer) : null;
 
             if ($hasNewPhoto) {
-                $sql = "UPDATE `medewerker` SET `naam` = ?, `klas` = ?, `foto` = ?, `email` = ?, `telefoonnummer` = ?, `wachtwoord` = ?, `rol` = ?, `grens_assistent` = ? WHERE `id` = ?";
-                $stmt = $this->db->prepare($sql);
-                if (!$stmt) {
-                    $errors['db'] = "Database voorbereidingsfout: " . $this->db->error;
-                    return false;
-                }
-                $stmt->bind_param(
-                    "ssssssssi",
-                    $this->naam,
-                    $this->klas,
-                    $this->foto,
-                    $this->email,
-                    $cleanPhone,
-                    $this->wachtwoord,
-                    $this->rol,
-                    $this->grens_assistent,
-                    $id
-                );
-                $stmt->send_long_data(2, $this->foto);
+                $stmt = $this->db->prepare("
+                    UPDATE medewerker 
+                    SET naam = :naam, klas = :klas, foto = :foto, email = :email, 
+                        telefoonnummer = :telefoonnummer, wachtwoord = :wachtwoord, 
+                        rol = :rol, grens_assistent = :grens_assistent 
+                    WHERE id = :id
+                ");
+                return $stmt->execute([
+                    'naam'            => $this->naam,
+                    'klas'            => $this->klas,
+                    'foto'            => $this->foto,
+                    'email'           => $this->email,
+                    'telefoonnummer'  => $cleanPhone,
+                    'wachtwoord'      => $this->wachtwoord,
+                    'rol'             => $this->rol,
+                    'grens_assistent' => $this->grens_assistent,
+                    'id'              => $id
+                ]);
             } else {
-                $sql = "UPDATE `medewerker` SET `naam` = ?, `klas` = ?, `email` = ?, `telefoonnummer` = ?, `wachtwoord` = ?, `rol` = ?, `grens_assistent` = ? WHERE `id` = ?";
-                $stmt = $this->db->prepare($sql);
-                if (!$stmt) {
-                    $errors['db'] = "Database voorbereidingsfout: " . $this->db->error;
-                    return false;
-                }
-                $stmt->bind_param(
-                    "sssssssi",
-                    $this->naam,
-                    $this->klas,
-                    $this->email,
-                    $cleanPhone,
-                    $this->wachtwoord,
-                    $this->rol,
-                    $this->grens_assistent,
-                    $id
-                );
+                $stmt = $this->db->prepare("
+                    UPDATE medewerker 
+                    SET naam = :naam, klas = :klas, email = :email, 
+                        telefoonnummer = :telefoonnummer, wachtwoord = :wachtwoord, 
+                        rol = :rol, grens_assistent = :grens_assistent 
+                    WHERE id = :id
+                ");
+                return $stmt->execute([
+                    'naam'            => $this->naam,
+                    'klas'            => $this->klas,
+                    'email'           => $this->email,
+                    'telefoonnummer'  => $cleanPhone,
+                    'wachtwoord'      => $this->wachtwoord,
+                    'rol'             => $this->rol,
+                    'grens_assistent' => $this->grens_assistent,
+                    'id'              => $id
+                ]);
             }
-
-            $success = $stmt->execute();
-            $stmt->close();
-            return $success;
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             error_log("MedewerkerModel::updateById error: " . $e->getMessage());
             $errors['db'] = "Databasefout bij bijwerken: " . $e->getMessage();
             return false;
@@ -346,15 +320,12 @@ class MedewerkerModel
     public static function findById(int $id): ?array
     {
         try {
-            $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE `id` = ?;");
-            if (!$stmt) return null;
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $result = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
+            $stmt = DatabaseConnection::getPdo()->prepare("SELECT * FROM medewerker WHERE id = :id");
+            $stmt->execute(['id' => $id]);
+            $result = $stmt->fetch();
 
             return $result ?: null;
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             error_log("MedewerkerModel::findById error: " . $e->getMessage());
             return null;
         }
@@ -367,15 +338,12 @@ class MedewerkerModel
     public static function findByEmail(string $email): ?array
     {
         try {
-            $stmt = DatabaseConnection::getConn()->prepare("SELECT * FROM `medewerker` WHERE `email` = ?;");
-            if (!$stmt) return null;
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $result = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
+            $stmt = DatabaseConnection::getPdo()->prepare("SELECT * FROM medewerker WHERE email = :email");
+            $stmt->execute(['email' => $email]);
+            $result = $stmt->fetch();
 
             return $result ?: null;
-        } catch (mysqli_sql_exception $e) {
+        } catch (PDOException $e) {
             error_log("MedewerkerModel::findByEmail error: " . $e->getMessage());
             return null;
         }
@@ -405,17 +373,11 @@ class MedewerkerModel
     public static function delete(int $id): bool
     {
         try {
-            $stmt = DatabaseConnection::getConn()->prepare(
-                "UPDATE `medewerker` SET `is_deleted` = 1 WHERE `id` = ?;"
+            $stmt = DatabaseConnection::getPdo()->prepare(
+                "UPDATE medewerker SET is_deleted = 1 WHERE id = :id"
             );
-            if (!$stmt) return false;
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $affected = $stmt->affected_rows >= 0;
-            $stmt->close();
-
-            return $affected;
-        } catch (mysqli_sql_exception $e) {
+            return $stmt->execute(['id' => $id]);
+        } catch (PDOException $e) {
             error_log("MedewerkerModel::delete error: " . $e->getMessage());
             return false;
         }

@@ -8,15 +8,33 @@ if (!isset($_SESSION['loggedin_id'])) {
     $medewerkerId = $_SESSION['loggedin_id'];
     $isAdmin = $_SESSION['isAdmin'];
 }
-if($isAdmin === false){
-    $result = DatabaseConnection::getConn()->prepare("SELECT clientid FROM verzorgerregel WHERE medewerkerid = ? AND is_deleted = 0");
-    $result->bind_param("i", $medewerkerId);
-    $result->execute();
-    $links = $result->get_result()->fetch_all();
-} else{
-    $result = DatabaseConnection::getConn()->prepare("SELECT * FROM medewerker WHERE is_deleted = 0");
-    $result->execute();
-    $links = $result->get_result()->fetch_all();
+$pdo = DatabaseConnection::getPdo();
+
+if ($isAdmin === false) {
+    $stmt = $pdo->prepare("
+        SELECT 
+            client.id, 
+            client.naam, 
+            client.foto 
+        FROM client
+        INNER JOIN verzorgerregel ON client.id = verzorgerregel.clientid
+        WHERE verzorgerregel.medewerkerid = :medewerkerId 
+          AND verzorgerregel.is_deleted = 0 
+          AND client.is_deleted = 0
+    ");
+    $stmt->execute(['medewerkerId' => $medewerkerId]);
+    $links = $stmt->fetchAll(PDO::FETCH_NUM);
+} else {
+    $stmt = $pdo->prepare("
+        SELECT 
+            medewerker.id, 
+            medewerker.naam, 
+            medewerker.foto 
+        FROM medewerker 
+        WHERE medewerker.is_deleted = 0
+    ");
+    $stmt->execute();
+    $links = $stmt->fetchAll(PDO::FETCH_NUM);
 }
 
 
@@ -74,17 +92,9 @@ if($isAdmin === false){
                         }
                         
                         if ($isAdmin === true) {
-                            $adminId = (int)$link[0];
-                            $admin = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM medewerker WHERE id = $adminId AND is_deleted = 0")->fetch_array();
-                            if (!$admin) {
-                                continue;
-                            }
+                            $admin = $link;
                         } else {
-                            $clientId = (int)$link[0];
-                            $client = DatabaseConnection::getConn()->query("SELECT id, naam, foto FROM client WHERE id = $clientId AND is_deleted = 0")->fetch_array();
-                            if (!$client) {
-                                continue;
-                            }
+                            $client = $link;
                         }
 
                         if ($isAdmin === false && $client[2] == null) {
